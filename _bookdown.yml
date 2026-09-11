@@ -5,4 +5,5 @@ output_dir: "docs"
 rmd_files:
   - "index.Rmd"
   - "Chapters/Sample-Chapter.Rmd"
+  - "Chapters/sample2.Rmd"
  
