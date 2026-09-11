@@ -1,0 +1,14 @@
+---
+title: "An Introduction to Mathematical Oncology"
+author: "Rose Abed Musa, Heba Syed, Bryce Morsky, Nishan Mudalige"
+date: ""
+site: bookdown::bookdown_site
+output:
+  bookdown::gitbook
+documentclass: book
+github-repo: nishanmudalige/UTM_FSU_Mathematical_Statistical_Oncology
+---
+
+# Welcome
+
+This is our e-book on mathematical oncology
