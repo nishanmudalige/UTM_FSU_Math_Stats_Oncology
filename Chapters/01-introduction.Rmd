@@ -1,0 +1,159 @@
+# Introduction
+
+## What is a Mathematical Model?
+
+A mathematical model is a numerical representation of a real-world problem. By replacing physical experimentation with mathematical simulations, it allows researchers to evaluate system dynamics and predict future outcomes. 
+
+In oncology, mathematical models provide quantitative frameworks to study how cancer develops, grows, and spreads. Cancer is a complex group of diseases characterized by uncontrollable cell division and tissue invasion. While carcinogenesis—the transformation of normal cells into cancer cells—appears highly stochastic in individuals, clear demographic patterns emerge when examining cancer incidence across populations. 
+
+Historically, mathematical models connected assumptions about cellular transformations with population-level observations:
+
+- **1920s–1940s**: Experiments with chemical carcinogens showed that sequential application of distinct carcinogens produced higher tumor rates than single agents, suggesting a multi-stage process. Charles and Luce-Clausen (1940s) developed one of the earliest quantitative multi-stage models to describe skin tumor development in mice.
+- **1950s**: Armitage and Doll formalized multi-stage carcinogenesis theories, allowing variable mutation rates between sequential cellular transitions. This established mathematical modeling as a vital tool in cancer research.
+
+## Systems of ODEs as Mathematical Models
+
+A system of ordinary differential equations (ODEs) is a set of equations that involves two or more dependent variables that depend on a single independent variable (typically time, $t$). A solution to this system is a set of functions that satisfies each equation on some interval $I$. 
+
+A system of ODEs serves as a mathematical model by describing real-world systems where multiple interacting components evolve over time. For example, in ecology and oncology, coupled ODEs track interdependent population densities over time $t$:
+
+$$\frac{dx}{dt} = f(x,y)$$
+$$\frac{dy}{dt} = g(x,y)$$
+
+Here, $x(t)$ and $y(t)$ represent state variables (such as cell densities), while $f$ and $g$ govern their rates of change.
+
+## Review of Mathematical Concepts
+
+### The Characteristic Equation
+
+For a square matrix $A \in \mathbb{R}^{n \times n}$, the characteristic equation is given by:
+
+$$\det(A - \lambda I) = 0$$
+
+where $I$ is the identity matrix and $\lambda$ represents an eigenvalue. This yields an $n$-degree polynomial whose roots correspond directly to the matrix's eigenvalues $\lambda$. For a $2 \times 2$ matrix, the characteristic polynomial simplifies to:
+
+$$\lambda^2 - \text{tr}(A)\lambda + \det(A) = 0$$
+
+where $\text{tr}(A)$ is the trace and $\det(A)$ is the determinant of matrix $A$.
+
+### The Jacobian Matrix
+
+For a vector-valued function $f: \mathbb{R}^n \to \mathbb{R}^m$ given by $f(x) = (f_1(x), \dots, f_m(x))$, the Jacobian matrix $J$ is the $m \times n$ matrix of first-order partial derivatives:
+
+$$J = \begin{pmatrix}
+\dfrac{\partial f_1}{\partial x_1} & \cdots & \dfrac{\partial f_1}{\partial x_n} \\
+\vdots & \ddots & \vdots \\
+\dfrac{\partial f_m}{\partial x_1} & \cdots & \dfrac{\partial f_m}{\partial x_n}
+\end{pmatrix}$$
+
+When $m = n$ (a square matrix), its determinant $\det(J)$, commonly referred to as the Jacobian, acts as a local scaling factor. The Jacobian plays an essential role in coordinate transformations by describing how areas or volumes stretch, rotate, and distort under a change of variables. In dynamical systems, the Jacobian linearizes non-linear ODEs near equilibrium states.
+
+### Equilibrium Points and Local Stability
+
+An equilibrium point $(x^*, y^*)$ is a state where the rates of change vanish simultaneously:
+
+$$\frac{dx}{dt}\Big|_{(x^*,y^*)} = 0 \quad \text{and} \quad \frac{dy}{dt}\Big|_{(x^*,y^*)} = 0$$
+
+At an equilibrium, there is no net change in either variable. It is important to note that equilibrium does not mean individual processes affecting the system have stopped; rather, opposing rates balance each other exactly. Finding an equilibrium identifies where a system can remain unchanged, but stability analysis determines how the system responds to small disturbances.
+
+To evaluate local stability, we analyze the eigenvalues $\lambda_1, \lambda_2$ of the Jacobian evaluated at $(x^*, y^*)$:
+
+- **Asymptotically Stable Node/Sink**: Both eigenvalues are real and negative ($\lambda_1, \lambda_2 < 0$). Perturbations decay exponentially to equilibrium.
+- **Unstable Node/Source**: Both eigenvalues are real and positive ($\lambda_1, \lambda_2 > 0$). Perturbations grow exponentially away from equilibrium.
+- **Saddle Point (Unstable)**: Eigenvalues are real with opposite signs ($\lambda_1 < 0 < \lambda_2$). Trajectories approach along one stable manifold but diverge along an unstable manifold.
+- **Stable Focus/Spiral**: Complex conjugate eigenvalues with negative real parts ($\text{Re}(\lambda) < 0$). Trajectories spiral inward toward equilibrium.
+- **Unstable Focus/Spiral**: Complex conjugate eigenvalues with positive real parts ($\text{Re}(\lambda) > 0$). Trajectories spiral outward away from equilibrium.
+- **Center**: Purely imaginary eigenvalues ($\text{Re}(\lambda) = 0$). Linearized dynamics exhibit undamped periodic oscillations.
+
+## Illustrative Example: Tumor-Immune Predator-Prey Dynamics
+
+To illustrate these concepts, consider a classic model describing interactions between tumor cells and immune effector cells based on Lotka-Volterra predator-prey dynamics.
+
+### Model Formulation
+
+Define state variables and parameters:
+- $T(t)$: density of tumor cells (Prey)
+- $E(t)$: density of immune effector cells (Predator)
+- $\rho > 0$: intrinsic growth rate of tumor cells
+- $\eta > 0$: rate of immune-mediated tumor cell killing
+- $\alpha > 0$: rate of immune activation stimulated by tumor antigen presence
+- $\delta > 0$: natural decay/death rate of effector cells
+
+Tumor growth increases proportionally to tumor density ($\rho T$) and decreases due to immune killing ($\eta T E$):
+
+\begin{equation}
+\frac{dT}{dt} = \underbrace{\rho T}_\text{tumour growth} - \underbrace{\eta T E}_\text{immune killing}
+(\#eq:PPTumour)
+\end{equation}
+
+Immune effector density increases via tumor stimulation ($\alpha E T$) and decreases via natural decay ($\delta E$):
+
+\begin{equation}
+\frac{dE}{dt} = \underbrace{\alpha E T}_\text{immune activation} - \underbrace{\delta E}_\text{effector decay}
+(\#eq:PPEffector)
+\end{equation}
+
+Together, equations \@ref(eq:PPTumour) and \@ref(eq:PPEffector) form a system of ODEs describing tumor-immune interactions.
+
+### Equilibrium Analysis
+
+Equilibria occur where $\frac{dT}{dt} = 0$ and $\frac{dE}{dt} = 0$:
+
+1. **Trivial Equilibrium** $(T_1, E_1) = (0, 0)$:
+   Corresponds to complete absence of both tumor and tumor-specific immune effector cells.
+
+2. **Coexistence Equilibrium** $(T_2, E_2) = \left(\frac{\delta}{\alpha}, \frac{\rho}{\eta}\right)$:
+   Factoring equation \@ref(eq:PPTumour) for $T \neq 0$ yields $E_2 = \frac{\rho}{\eta}$. Factoring equation \@ref(eq:PPEffector) for $E \neq 0$ yields $T_2 = \frac{\delta}{\alpha}$.
+
+### Jacobian Matrix & Stability
+
+The general Jacobian matrix $J(T,E)$ is:
+
+$$J(T,E) = \begin{pmatrix}
+\rho - \eta E & -\eta T \\
+\alpha E & \alpha T - \delta
+\end{pmatrix}$$
+
+#### Stability of Trivial Equilibrium $(0,0)$
+Evaluating $J$ at $(0,0)$:
+
+$$J(0,0) = \begin{pmatrix}
+\rho & 0 \\
+0 & -\delta
+\end{pmatrix}$$
+
+The eigenvalues are $\lambda_1 = \rho > 0$ and $\lambda_2 = -\delta < 0$. Because the eigenvalues are real with opposite signs, $(0,0)$ is a **saddle point (unstable)**. Biologically, introducing a small tumor population causes initial exponential tumor growth away from the origin.
+
+#### Stability of Coexistence Equilibrium $(T_2, E_2) = \left(\frac{\delta}{\alpha}, \frac{\rho}{\eta}\right)$
+Evaluating $J$ at $(T_2, E_2)$:
+
+$$J(T_2, E_2) = \begin{pmatrix}
+0 & -\dfrac{\delta \eta}{\alpha} \\
+\dfrac{\alpha \rho}{\eta} & 0
+\end{pmatrix}$$
+
+The characteristic equation is $\det(J - \lambda I) = \lambda^2 + \rho \delta = 0$, giving purely imaginary eigenvalues:
+
+$$\lambda_{1,2} = \pm i \sqrt{\rho \delta}$$
+
+Purely imaginary eigenvalues indicate **neutral stability (oscillatory behavior)** around the coexistence point:
+
+$$
+\text{More tumour cells} \longrightarrow \text{More immune activation} \longrightarrow \text{Fewer tumour cells} \longrightarrow \text{Decay of effector cells} \longrightarrow \text{More tumour cells} \cdots
+$$
+
+## Biological Realism and Limitations
+
+While this Lotka-Volterra framework elegantly introduces coupled dynamical systems, several simplified assumptions limit its direct clinical application:
+
+1. **Unbounded Growth & Proportional Activation**:
+   - The model assumes exponential tumor growth ($\rho T$) without spatial or nutrient constraints (e.g., carrying capacity $K$).
+   - The immune stimulation term ($\alpha E T$) increases linearly without bound, failing to reflect receptor saturation or Holling functional responses (e.g., Michaelis-Menten kinetics $\frac{c E T}{m + T}$).
+
+2. **Absence of Homeostatic Immune Baseline**:
+   - In the absence of tumor cells ($T=0$), effector cells decay exponentially to zero ($E(t) = E(0)e^{-\delta t}$). In reality, the human body maintains a constant baseline influx of immune cells ($s > 0$).
+
+3. **Omission of Complex Immunological Factors**:
+   - Real tumor microenvironments involve multiple effector sub-populations (CD8+ T-cells, NK cells, macrophages), immunosuppressive cytokines (TGF-$\beta$, IL-10), immune checkpoints (PD-1/PD-L1), T-cell exhaustion, and healthy tissue toxicity.
+
+These limitations highlight the necessity of interdisciplinary collaboration between mathematicians, computational biologists, and clinical oncologists. Subsequent chapters will introduce logistic growth, saturation kinetics, immune influx, and therapy interventions to construct biologically realistic models.

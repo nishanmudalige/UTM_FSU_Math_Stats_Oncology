@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 Introduction | An Introduction to Mathematical Oncology</title>
+  <meta name="description" content="Chapter 2 Introduction | An Introduction to Mathematical Oncology" />
+  <meta name="generator" content="bookdown 0.48 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 Introduction | An Introduction to Mathematical Oncology" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="nishanmudalige/UTM_FSU_Mathematical_Statistical_Oncology" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 Introduction | An Introduction to Mathematical Oncology" />
+  
+  
+  
+
+<meta name="author" content="Rose Abed Musa, Heba Syed, Bryce Morsky, Nishan Mudalige" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Welcome</a></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#what-is-a-mathematical-model"><i class="fa fa-check"></i><b>2.1</b> What is a Mathematical Model?</a></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#systems-of-odes-as-mathematical-models"><i class="fa fa-check"></i><b>2.2</b> Systems of ODEs as Mathematical Models</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#review-of-mathematical-concepts"><i class="fa fa-check"></i><b>2.3</b> Review of Mathematical Concepts</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="introduction.html"><a href="introduction.html#the-characteristic-equation"><i class="fa fa-check"></i><b>2.3.1</b> The Characteristic Equation</a></li>
+<li class="chapter" data-level="2.3.2" data-path="introduction.html"><a href="introduction.html#the-jacobian-matrix"><i class="fa fa-check"></i><b>2.3.2</b> The Jacobian Matrix</a></li>
+<li class="chapter" data-level="2.3.3" data-path="introduction.html"><a href="introduction.html#equilibrium-points-and-local-stability"><i class="fa fa-check"></i><b>2.3.3</b> Equilibrium Points and Local Stability</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#illustrative-example-tumor-immune-predator-prey-dynamics"><i class="fa fa-check"></i><b>2.4</b> Illustrative Example: Tumor-Immune Predator-Prey Dynamics</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="introduction.html"><a href="introduction.html#model-formulation"><i class="fa fa-check"></i><b>2.4.1</b> Model Formulation</a></li>
+<li class="chapter" data-level="2.4.2" data-path="introduction.html"><a href="introduction.html#equilibrium-analysis"><i class="fa fa-check"></i><b>2.4.2</b> Equilibrium Analysis</a></li>
+<li class="chapter" data-level="2.4.3" data-path="introduction.html"><a href="introduction.html#jacobian-matrix-stability"><i class="fa fa-check"></i><b>2.4.3</b> Jacobian Matrix &amp; Stability</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="introduction.html"><a href="introduction.html#biological-realism-and-limitations"><i class="fa fa-check"></i><b>2.5</b> Biological Realism and Limitations</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">An Introduction to Mathematical Oncology</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="introduction" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">Chapter 2</span> Introduction<a href="introduction.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="what-is-a-mathematical-model" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> What is a Mathematical Model?<a href="introduction.html#what-is-a-mathematical-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A mathematical model is a numerical representation of a real-world problem. By replacing physical experimentation with mathematical simulations, it allows researchers to evaluate system dynamics and predict future outcomes.</p>
+<p>In oncology, mathematical models provide quantitative frameworks to study how cancer develops, grows, and spreads. Cancer is a complex group of diseases characterized by uncontrollable cell division and tissue invasion. While carcinogenesis—the transformation of normal cells into cancer cells—appears highly stochastic in individuals, clear demographic patterns emerge when examining cancer incidence across populations.</p>
+<p>Historically, mathematical models connected assumptions about cellular transformations with population-level observations:</p>
+<ul>
+<li><strong>1920s–1940s</strong>: Experiments with chemical carcinogens showed that sequential application of distinct carcinogens produced higher tumor rates than single agents, suggesting a multi-stage process. Charles and Luce-Clausen (1940s) developed one of the earliest quantitative multi-stage models to describe skin tumor development in mice.</li>
+<li><strong>1950s</strong>: Armitage and Doll formalized multi-stage carcinogenesis theories, allowing variable mutation rates between sequential cellular transitions. This established mathematical modeling as a vital tool in cancer research.</li>
+</ul>
+</div>
+<div id="systems-of-odes-as-mathematical-models" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> Systems of ODEs as Mathematical Models<a href="introduction.html#systems-of-odes-as-mathematical-models" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A system of ordinary differential equations (ODEs) is a set of equations that involves two or more dependent variables that depend on a single independent variable (typically time, <span class="math inline">\(t\)</span>). A solution to this system is a set of functions that satisfies each equation on some interval <span class="math inline">\(I\)</span>.</p>
+<p>A system of ODEs serves as a mathematical model by describing real-world systems where multiple interacting components evolve over time. For example, in ecology and oncology, coupled ODEs track interdependent population densities over time <span class="math inline">\(t\)</span>:</p>
+<p><span class="math display">\[\frac{dx}{dt} = f(x,y)\]</span>
+<span class="math display">\[\frac{dy}{dt} = g(x,y)\]</span></p>
+<p>Here, <span class="math inline">\(x(t)\)</span> and <span class="math inline">\(y(t)\)</span> represent state variables (such as cell densities), while <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> govern their rates of change.</p>
+</div>
+<div id="review-of-mathematical-concepts" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Review of Mathematical Concepts<a href="introduction.html#review-of-mathematical-concepts" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="the-characteristic-equation" class="section level3 hasAnchor" number="2.3.1">
+<h3><span class="header-section-number">2.3.1</span> The Characteristic Equation<a href="introduction.html#the-characteristic-equation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For a square matrix <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span>, the characteristic equation is given by:</p>
+<p><span class="math display">\[\det(A - \lambda I) = 0\]</span></p>
+<p>where <span class="math inline">\(I\)</span> is the identity matrix and <span class="math inline">\(\lambda\)</span> represents an eigenvalue. This yields an <span class="math inline">\(n\)</span>-degree polynomial whose roots correspond directly to the matrix’s eigenvalues <span class="math inline">\(\lambda\)</span>. For a <span class="math inline">\(2 \times 2\)</span> matrix, the characteristic polynomial simplifies to:</p>
+<p><span class="math display">\[\lambda^2 - \text{tr}(A)\lambda + \det(A) = 0\]</span></p>
+<p>where <span class="math inline">\(\text{tr}(A)\)</span> is the trace and <span class="math inline">\(\det(A)\)</span> is the determinant of matrix <span class="math inline">\(A\)</span>.</p>
+</div>
+<div id="the-jacobian-matrix" class="section level3 hasAnchor" number="2.3.2">
+<h3><span class="header-section-number">2.3.2</span> The Jacobian Matrix<a href="introduction.html#the-jacobian-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For a vector-valued function <span class="math inline">\(f: \mathbb{R}^n \to \mathbb{R}^m\)</span> given by <span class="math inline">\(f(x) = (f_1(x), \dots, f_m(x))\)</span>, the Jacobian matrix <span class="math inline">\(J\)</span> is the <span class="math inline">\(m \times n\)</span> matrix of first-order partial derivatives:</p>
+<p><span class="math display">\[J = \begin{pmatrix}
+\dfrac{\partial f_1}{\partial x_1} &amp; \cdots &amp; \dfrac{\partial f_1}{\partial x_n} \\
+\vdots &amp; \ddots &amp; \vdots \\
+\dfrac{\partial f_m}{\partial x_1} &amp; \cdots &amp; \dfrac{\partial f_m}{\partial x_n}
+\end{pmatrix}\]</span></p>
+<p>When <span class="math inline">\(m = n\)</span> (a square matrix), its determinant <span class="math inline">\(\det(J)\)</span>, commonly referred to as the Jacobian, acts as a local scaling factor. The Jacobian plays an essential role in coordinate transformations by describing how areas or volumes stretch, rotate, and distort under a change of variables. In dynamical systems, the Jacobian linearizes non-linear ODEs near equilibrium states.</p>
+</div>
+<div id="equilibrium-points-and-local-stability" class="section level3 hasAnchor" number="2.3.3">
+<h3><span class="header-section-number">2.3.3</span> Equilibrium Points and Local Stability<a href="introduction.html#equilibrium-points-and-local-stability" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>An equilibrium point <span class="math inline">\((x^*, y^*)\)</span> is a state where the rates of change vanish simultaneously:</p>
+<p><span class="math display">\[\frac{dx}{dt}\Big|_{(x^*,y^*)} = 0 \quad \text{and} \quad \frac{dy}{dt}\Big|_{(x^*,y^*)} = 0\]</span></p>
+<p>At an equilibrium, there is no net change in either variable. It is important to note that equilibrium does not mean individual processes affecting the system have stopped; rather, opposing rates balance each other exactly. Finding an equilibrium identifies where a system can remain unchanged, but stability analysis determines how the system responds to small disturbances.</p>
+<p>To evaluate local stability, we analyze the eigenvalues <span class="math inline">\(\lambda_1, \lambda_2\)</span> of the Jacobian evaluated at <span class="math inline">\((x^*, y^*)\)</span>:</p>
+<ul>
+<li><strong>Asymptotically Stable Node/Sink</strong>: Both eigenvalues are real and negative (<span class="math inline">\(\lambda_1, \lambda_2 &lt; 0\)</span>). Perturbations decay exponentially to equilibrium.</li>
+<li><strong>Unstable Node/Source</strong>: Both eigenvalues are real and positive (<span class="math inline">\(\lambda_1, \lambda_2 &gt; 0\)</span>). Perturbations grow exponentially away from equilibrium.</li>
+<li><strong>Saddle Point (Unstable)</strong>: Eigenvalues are real with opposite signs (<span class="math inline">\(\lambda_1 &lt; 0 &lt; \lambda_2\)</span>). Trajectories approach along one stable manifold but diverge along an unstable manifold.</li>
+<li><strong>Stable Focus/Spiral</strong>: Complex conjugate eigenvalues with negative real parts (<span class="math inline">\(\text{Re}(\lambda) &lt; 0\)</span>). Trajectories spiral inward toward equilibrium.</li>
+<li><strong>Unstable Focus/Spiral</strong>: Complex conjugate eigenvalues with positive real parts (<span class="math inline">\(\text{Re}(\lambda) &gt; 0\)</span>). Trajectories spiral outward away from equilibrium.</li>
+<li><strong>Center</strong>: Purely imaginary eigenvalues (<span class="math inline">\(\text{Re}(\lambda) = 0\)</span>). Linearized dynamics exhibit undamped periodic oscillations.</li>
+</ul>
+</div>
+</div>
+<div id="illustrative-example-tumor-immune-predator-prey-dynamics" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> Illustrative Example: Tumor-Immune Predator-Prey Dynamics<a href="introduction.html#illustrative-example-tumor-immune-predator-prey-dynamics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>To illustrate these concepts, consider a classic model describing interactions between tumor cells and immune effector cells based on Lotka-Volterra predator-prey dynamics.</p>
+<div id="model-formulation" class="section level3 hasAnchor" number="2.4.1">
+<h3><span class="header-section-number">2.4.1</span> Model Formulation<a href="introduction.html#model-formulation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Define state variables and parameters:
+- <span class="math inline">\(T(t)\)</span>: density of tumor cells (Prey)
+- <span class="math inline">\(E(t)\)</span>: density of immune effector cells (Predator)
+- <span class="math inline">\(\rho &gt; 0\)</span>: intrinsic growth rate of tumor cells
+- <span class="math inline">\(\eta &gt; 0\)</span>: rate of immune-mediated tumor cell killing
+- <span class="math inline">\(\alpha &gt; 0\)</span>: rate of immune activation stimulated by tumor antigen presence
+- <span class="math inline">\(\delta &gt; 0\)</span>: natural decay/death rate of effector cells</p>
+<p>Tumor growth increases proportionally to tumor density (<span class="math inline">\(\rho T\)</span>) and decreases due to immune killing (<span class="math inline">\(\eta T E\)</span>):</p>
+<p><span class="math display" id="eq:PPTumour">\[\begin{equation}
+\frac{dT}{dt} = \underbrace{\rho T}_\text{tumour growth} - \underbrace{\eta T E}_\text{immune killing}
+\tag{2.1}
+\end{equation}\]</span></p>
+<p>Immune effector density increases via tumor stimulation (<span class="math inline">\(\alpha E T\)</span>) and decreases via natural decay (<span class="math inline">\(\delta E\)</span>):</p>
+<p><span class="math display" id="eq:PPEffector">\[\begin{equation}
+\frac{dE}{dt} = \underbrace{\alpha E T}_\text{immune activation} - \underbrace{\delta E}_\text{effector decay}
+\tag{2.2}
+\end{equation}\]</span></p>
+<p>Together, equations <a href="introduction.html#eq:PPTumour">(2.1)</a> and <a href="introduction.html#eq:PPEffector">(2.2)</a> form a system of ODEs describing tumor-immune interactions.</p>
+</div>
+<div id="equilibrium-analysis" class="section level3 hasAnchor" number="2.4.2">
+<h3><span class="header-section-number">2.4.2</span> Equilibrium Analysis<a href="introduction.html#equilibrium-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Equilibria occur where <span class="math inline">\(\frac{dT}{dt} = 0\)</span> and <span class="math inline">\(\frac{dE}{dt} = 0\)</span>:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Trivial Equilibrium</strong> <span class="math inline">\((T_1, E_1) = (0, 0)\)</span>:
+Corresponds to complete absence of both tumor and tumor-specific immune effector cells.</p></li>
+<li><p><strong>Coexistence Equilibrium</strong> <span class="math inline">\((T_2, E_2) = \left(\frac{\delta}{\alpha}, \frac{\rho}{\eta}\right)\)</span>:
+Factoring equation <a href="introduction.html#eq:PPTumour">(2.1)</a> for <span class="math inline">\(T \neq 0\)</span> yields <span class="math inline">\(E_2 = \frac{\rho}{\eta}\)</span>. Factoring equation <a href="introduction.html#eq:PPEffector">(2.2)</a> for <span class="math inline">\(E \neq 0\)</span> yields <span class="math inline">\(T_2 = \frac{\delta}{\alpha}\)</span>.</p></li>
+</ol>
+</div>
+<div id="jacobian-matrix-stability" class="section level3 hasAnchor" number="2.4.3">
+<h3><span class="header-section-number">2.4.3</span> Jacobian Matrix &amp; Stability<a href="introduction.html#jacobian-matrix-stability" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The general Jacobian matrix <span class="math inline">\(J(T,E)\)</span> is:</p>
+<p><span class="math display">\[J(T,E) = \begin{pmatrix}
+\rho - \eta E &amp; -\eta T \\
+\alpha E &amp; \alpha T - \delta
+\end{pmatrix}\]</span></p>
+<div id="stability-of-trivial-equilibrium-00" class="section level4 hasAnchor" number="2.4.3.1">
+<h4><span class="header-section-number">2.4.3.1</span> Stability of Trivial Equilibrium <span class="math inline">\((0,0)\)</span><a href="introduction.html#stability-of-trivial-equilibrium-00" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Evaluating <span class="math inline">\(J\)</span> at <span class="math inline">\((0,0)\)</span>:</p>
+<p><span class="math display">\[J(0,0) = \begin{pmatrix}
+\rho &amp; 0 \\
+0 &amp; -\delta
+\end{pmatrix}\]</span></p>
+<p>The eigenvalues are <span class="math inline">\(\lambda_1 = \rho &gt; 0\)</span> and <span class="math inline">\(\lambda_2 = -\delta &lt; 0\)</span>. Because the eigenvalues are real with opposite signs, <span class="math inline">\((0,0)\)</span> is a <strong>saddle point (unstable)</strong>. Biologically, introducing a small tumor population causes initial exponential tumor growth away from the origin.</p>
+</div>
+<div id="stability-of-coexistence-equilibrium-t_2-e_2-leftfracdeltaalpha-fracrhoetaright" class="section level4 hasAnchor" number="2.4.3.2">
+<h4><span class="header-section-number">2.4.3.2</span> Stability of Coexistence Equilibrium <span class="math inline">\((T_2, E_2) = \left(\frac{\delta}{\alpha}, \frac{\rho}{\eta}\right)\)</span><a href="introduction.html#stability-of-coexistence-equilibrium-t_2-e_2-leftfracdeltaalpha-fracrhoetaright" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Evaluating <span class="math inline">\(J\)</span> at <span class="math inline">\((T_2, E_2)\)</span>:</p>
+<p><span class="math display">\[J(T_2, E_2) = \begin{pmatrix}
+0 &amp; -\dfrac{\delta \eta}{\alpha} \\
+\dfrac{\alpha \rho}{\eta} &amp; 0
+\end{pmatrix}\]</span></p>
+<p>The characteristic equation is <span class="math inline">\(\det(J - \lambda I) = \lambda^2 + \rho \delta = 0\)</span>, giving purely imaginary eigenvalues:</p>
+<p><span class="math display">\[\lambda_{1,2} = \pm i \sqrt{\rho \delta}\]</span></p>
+<p>Purely imaginary eigenvalues indicate <strong>neutral stability (oscillatory behavior)</strong> around the coexistence point:</p>
+<p><span class="math display">\[
+\text{More tumour cells} \longrightarrow \text{More immune activation} \longrightarrow \text{Fewer tumour cells} \longrightarrow \text{Decay of effector cells} \longrightarrow \text{More tumour cells} \cdots
+\]</span></p>
+</div>
+</div>
+</div>
+<div id="biological-realism-and-limitations" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> Biological Realism and Limitations<a href="introduction.html#biological-realism-and-limitations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>While this Lotka-Volterra framework elegantly introduces coupled dynamical systems, several simplified assumptions limit its direct clinical application:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Unbounded Growth &amp; Proportional Activation</strong>:
+<ul>
+<li>The model assumes exponential tumor growth (<span class="math inline">\(\rho T\)</span>) without spatial or nutrient constraints (e.g., carrying capacity <span class="math inline">\(K\)</span>).</li>
+<li>The immune stimulation term (<span class="math inline">\(\alpha E T\)</span>) increases linearly without bound, failing to reflect receptor saturation or Holling functional responses (e.g., Michaelis-Menten kinetics <span class="math inline">\(\frac{c E T}{m + T}\)</span>).</li>
+</ul></li>
+<li><strong>Absence of Homeostatic Immune Baseline</strong>:
+<ul>
+<li>In the absence of tumor cells (<span class="math inline">\(T=0\)</span>), effector cells decay exponentially to zero (<span class="math inline">\(E(t) = E(0)e^{-\delta t}\)</span>). In reality, the human body maintains a constant baseline influx of immune cells (<span class="math inline">\(s &gt; 0\)</span>).</li>
+</ul></li>
+<li><strong>Omission of Complex Immunological Factors</strong>:
+<ul>
+<li>Real tumor microenvironments involve multiple effector sub-populations (CD8+ T-cells, NK cells, macrophages), immunosuppressive cytokines (TGF-<span class="math inline">\(\beta\)</span>, IL-10), immune checkpoints (PD-1/PD-L1), T-cell exhaustion, and healthy tissue toxicity.</li>
+</ul></li>
+</ol>
+<p>These limitations highlight the necessity of interdisciplinary collaboration between mathematicians, computational biologists, and clinical oncologists. Subsequent chapters will introduce logistic growth, saturation kinetics, immune influx, and therapy interventions to construct biologically realistic models.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
