@@ -1,7 +1,29 @@
 # UTM_FSU_Math_Stats_Oncology
 Repository for UTM and FSU to work on building resources to teach mathematical and statistical oncology
 
-## Aims for Week 2
+## Aims for Week 3 (Sep 24)
+
+  **Rose and Heba**
+  - Include a section of recommended background
+    - Use [UTM FSU Epidemiology book](https://nishanmudalige.github.io/UTM_FSU_Biostats/introduction.html#recommended-background) chapter for ideas
+    - Also include **suggested** background on mathematical and statistical modelling (eg differential equations in math, regression in stats)
+    - Also include **suggested** background on introductory biology
+      - Please include a note that these topics are helpful but not necessary
+    - Start explaining the Kuznetsov model
+    - Try to include references
+    - Include a FEW examples of plots with stability analysis
+      - One covering each case is sufficient
+        - Stable sink
+        - Unstable source
+        - Stable/unstable spirals
+        - Saddles
+        - Elipses
+
+  
+  **Naz and John**
+  - Sketch out a roadmap of chapters
+
+## Aims for Week 2 (Sep 17)
 
 Introduction Chapter:
 
