@@ -23,7 +23,7 @@ Repository for UTM and FSU to work on building resources to teach mathematical a
   
   **Naz and John**
   - Sketch out a roadmap of chapters
-  - Nav will give a 
+  - Nav will give a presentation on an introduction to cancer biology (for Rose, Heba, Dua. Nishan will join if possible)
 
 ## Aims for Week 2 (Sep 17)
 
