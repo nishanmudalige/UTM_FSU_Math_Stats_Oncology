@@ -74,21 +74,18 @@
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Welcome</a></li>
 <li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#what-is-a-mathematical-model"><i class="fa fa-check"></i><b>2.1</b> What is a Mathematical Model?</a></li>
-<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#systems-of-odes-as-mathematical-models"><i class="fa fa-check"></i><b>2.2</b> Systems of ODEs as Mathematical Models</a></li>
-<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#review-of-mathematical-concepts"><i class="fa fa-check"></i><b>2.3</b> Review of Mathematical Concepts</a>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#history-of-mathematical-oncology"><i class="fa fa-check"></i><b>2.1</b> History of Mathematical Oncology</a></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#what-is-a-mathematical-model"><i class="fa fa-check"></i><b>2.2</b> What is a Mathematical Model?</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#systems-of-odes-as-mathematical-models"><i class="fa fa-check"></i><b>2.3</b> Systems of ODEs as Mathematical Models</a></li>
+<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#review-of-mathematical-concepts"><i class="fa fa-check"></i><b>2.4</b> Review of Mathematical Concepts</a>
 <ul>
-<li class="chapter" data-level="2.3.1" data-path="introduction.html"><a href="introduction.html#the-characteristic-equation"><i class="fa fa-check"></i><b>2.3.1</b> The Characteristic Equation</a></li>
-<li class="chapter" data-level="2.3.2" data-path="introduction.html"><a href="introduction.html#the-jacobian-matrix"><i class="fa fa-check"></i><b>2.3.2</b> The Jacobian Matrix</a></li>
-<li class="chapter" data-level="2.3.3" data-path="introduction.html"><a href="introduction.html#equilibrium-points-and-local-stability"><i class="fa fa-check"></i><b>2.3.3</b> Equilibrium Points and Local Stability</a></li>
+<li class="chapter" data-level="2.4.1" data-path="introduction.html"><a href="introduction.html#the-characteristic-equation"><i class="fa fa-check"></i><b>2.4.1</b> The Characteristic Equation</a></li>
+<li class="chapter" data-level="2.4.2" data-path="introduction.html"><a href="introduction.html#the-jacobian-matrix"><i class="fa fa-check"></i><b>2.4.2</b> The Jacobian Matrix</a></li>
+<li class="chapter" data-level="2.4.3" data-path="introduction.html"><a href="introduction.html#equilibrium-points-and-local-stability"><i class="fa fa-check"></i><b>2.4.3</b> Equilibrium Points and Local Stability</a></li>
 </ul></li>
-<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#illustrative-example-tumor-immune-predator-prey-dynamics"><i class="fa fa-check"></i><b>2.4</b> Illustrative Example: Tumor-Immune Predator-Prey Dynamics</a>
-<ul>
-<li class="chapter" data-level="2.4.1" data-path="introduction.html"><a href="introduction.html#model-formulation"><i class="fa fa-check"></i><b>2.4.1</b> Model Formulation</a></li>
-<li class="chapter" data-level="2.4.2" data-path="introduction.html"><a href="introduction.html#equilibrium-analysis"><i class="fa fa-check"></i><b>2.4.2</b> Equilibrium Analysis</a></li>
-<li class="chapter" data-level="2.4.3" data-path="introduction.html"><a href="introduction.html#jacobian-matrix-stability"><i class="fa fa-check"></i><b>2.4.3</b> Jacobian Matrix &amp; Stability</a></li>
-</ul></li>
-<li class="chapter" data-level="2.5" data-path="introduction.html"><a href="introduction.html#biological-realism-and-limitations"><i class="fa fa-check"></i><b>2.5</b> Biological Realism and Limitations</a></li>
+<li class="chapter" data-level="2.5" data-path="introduction.html"><a href="introduction.html#illustrative-example"><i class="fa fa-check"></i><b>2.5</b> Illustrative Example</a></li>
+<li class="chapter" data-level="2.6" data-path="introduction.html"><a href="introduction.html#analysing-this-system"><i class="fa fa-check"></i><b>2.6</b> Analysing this system</a></li>
+<li class="chapter" data-level="2.7" data-path="introduction.html"><a href="introduction.html#limitations"><i class="fa fa-check"></i><b>2.7</b> Limitations</a></li>
 </ul></li>
 </ul>
 
@@ -109,145 +106,144 @@
             <section class="normal" id="section-">
 <div id="introduction" class="section level1 hasAnchor" number="2">
 <h1><span class="header-section-number">Chapter 2</span> Introduction<a href="introduction.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="what-is-a-mathematical-model" class="section level2 hasAnchor" number="2.1">
-<h2><span class="header-section-number">2.1</span> What is a Mathematical Model?<a href="introduction.html#what-is-a-mathematical-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A mathematical model is a numerical representation of a real-world problem. By replacing physical experimentation with mathematical simulations, it allows researchers to evaluate system dynamics and predict future outcomes.</p>
-<p>In oncology, mathematical models provide quantitative frameworks to study how cancer develops, grows, and spreads. Cancer is a complex group of diseases characterized by uncontrollable cell division and tissue invasion. While carcinogenesis—the transformation of normal cells into cancer cells—appears highly stochastic in individuals, clear demographic patterns emerge when examining cancer incidence across populations.</p>
-<p>Historically, mathematical models connected assumptions about cellular transformations with population-level observations:</p>
-<ul>
-<li><strong>1920s–1940s</strong>: Experiments with chemical carcinogens showed that sequential application of distinct carcinogens produced higher tumor rates than single agents, suggesting a multi-stage process. Charles and Luce-Clausen (1940s) developed one of the earliest quantitative multi-stage models to describe skin tumor development in mice.</li>
-<li><strong>1950s</strong>: Armitage and Doll formalized multi-stage carcinogenesis theories, allowing variable mutation rates between sequential cellular transitions. This established mathematical modeling as a vital tool in cancer research.</li>
-</ul>
+<div id="history-of-mathematical-oncology" class="section level2 hasAnchor" number="2.1">
+<h2><span class="header-section-number">2.1</span> History of Mathematical Oncology<a href="introduction.html#history-of-mathematical-oncology" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Cancer is a group of diseases in which abnormal cells divide uncontrollably and can invade nearby tissues. Oncology is the branch of medicine concerned with the diagnosis and treatment of cancer.</p>
+<p>Mathematical models can be used to study how cancer develops, grows, and spreads. By providing quantitative and predictive frameworks, mathematical models allow hypotheses about cancer to be tested and evaluated.</p>
+<p>A carcinogen is any substance that causes cancer. Carcinogenesis is the process by which normal cells are transformed into cancer cells.</p>
+<p>A key observation that motivated many mathematical models of carcinogenesis is cancer incidence. Cancer incidence often increases rapidly with age, while the occurrence of cancer in an individual appears highly stochastic. However, patterns emerge when cancer incidence is examined across populations. These observations contributed to the development of multistage theories of carcinogenesis, which describe cancer development as a sequence of stages or changes in cells.</p>
+<p>Beginning in the 1920s, experiments involving chemical carcinogens provided evidence for the idea that cancer develops through multiple stages. In particular, applying two different carcinogens in sequence often produced higher cancer rates than applying a single carcinogen over time, leading to the two-stage model of carcinogenesis.</p>
+<p>Charles and Luce-Clausen developed one of the first quantitative multistage theories in the 1940s, using a mathematical model to describe the development of skin tumors in mice. Their work demonstrated how mathematical models could be used to connect assumptions about cellular changes with observed cancer incidence.</p>
+<p>Armitage and Doll further developed multistage theory in the 1950s, introducing more general mathematical models that allowed different rates for different stages and treated the stages as sequential cellular changes rather than necessarily genetic mutations. Their work helped establish mathematical modelling as a framework for studying the development of cancer.</p>
 </div>
-<div id="systems-of-odes-as-mathematical-models" class="section level2 hasAnchor" number="2.2">
-<h2><span class="header-section-number">2.2</span> Systems of ODEs as Mathematical Models<a href="introduction.html#systems-of-odes-as-mathematical-models" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A system of ordinary differential equations (ODEs) is a set of equations that involves two or more dependent variables that depend on a single independent variable (typically time, <span class="math inline">\(t\)</span>). A solution to this system is a set of functions that satisfies each equation on some interval <span class="math inline">\(I\)</span>.</p>
-<p>A system of ODEs serves as a mathematical model by describing real-world systems where multiple interacting components evolve over time. For example, in ecology and oncology, coupled ODEs track interdependent population densities over time <span class="math inline">\(t\)</span>:</p>
+<div id="what-is-a-mathematical-model" class="section level2 hasAnchor" number="2.2">
+<h2><span class="header-section-number">2.2</span> What is a Mathematical Model?<a href="introduction.html#what-is-a-mathematical-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A mathematical model is a numerical representation of a real-world problem. By replacing physical experimentation with mathematical simulations, it allows researchers to evaluate system dynamics and predict future outcomes.</p>
+</div>
+<div id="systems-of-odes-as-mathematical-models" class="section level2 hasAnchor" number="2.3">
+<h2><span class="header-section-number">2.3</span> Systems of ODEs as Mathematical Models<a href="introduction.html#systems-of-odes-as-mathematical-models" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A system of ordinary differential equations (ODEs) is a set of equations that involves two or more dependent variables that depend on one independent variable. A solution to this system is a set of functions that satisfies each equation on some interval <span class="math inline">\(I\)</span>. A system of ODEs can serve as a mathematical model by describing real world systems where multiple interacting components evolve over a shared independent variable. For example, in ecology, the Lotka-Volterra predator-prey model uses a system of two coupled ODEs to track the interdependent population sizes of two interacting species over time <span class="math inline">\(t\)</span>.</p>
+<p>Many mathematical models are described using systems of ordinary differential equations (ODEs). It is useful to identify equilibrium points of a system of ODEs and study the stability of the equilibria.</p>
+<p>Consider the following system of ODEs:</p>
 <p><span class="math display">\[\frac{dx}{dt} = f(x,y)\]</span>
 <span class="math display">\[\frac{dy}{dt} = g(x,y)\]</span></p>
-<p>Here, <span class="math inline">\(x(t)\)</span> and <span class="math inline">\(y(t)\)</span> represent state variables (such as cell densities), while <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> govern their rates of change.</p>
 </div>
-<div id="review-of-mathematical-concepts" class="section level2 hasAnchor" number="2.3">
-<h2><span class="header-section-number">2.3</span> Review of Mathematical Concepts<a href="introduction.html#review-of-mathematical-concepts" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="the-characteristic-equation" class="section level3 hasAnchor" number="2.3.1">
-<h3><span class="header-section-number">2.3.1</span> The Characteristic Equation<a href="introduction.html#the-characteristic-equation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>For a square matrix <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span>, the characteristic equation is given by:</p>
-<p><span class="math display">\[\det(A - \lambda I) = 0\]</span></p>
-<p>where <span class="math inline">\(I\)</span> is the identity matrix and <span class="math inline">\(\lambda\)</span> represents an eigenvalue. This yields an <span class="math inline">\(n\)</span>-degree polynomial whose roots correspond directly to the matrix’s eigenvalues <span class="math inline">\(\lambda\)</span>. For a <span class="math inline">\(2 \times 2\)</span> matrix, the characteristic polynomial simplifies to:</p>
-<p><span class="math display">\[\lambda^2 - \text{tr}(A)\lambda + \det(A) = 0\]</span></p>
-<p>where <span class="math inline">\(\text{tr}(A)\)</span> is the trace and <span class="math inline">\(\det(A)\)</span> is the determinant of matrix <span class="math inline">\(A\)</span>.</p>
+<div id="review-of-mathematical-concepts" class="section level2 hasAnchor" number="2.4">
+<h2><span class="header-section-number">2.4</span> Review of Mathematical Concepts<a href="introduction.html#review-of-mathematical-concepts" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="the-characteristic-equation" class="section level3 hasAnchor" number="2.4.1">
+<h3><span class="header-section-number">2.4.1</span> The Characteristic Equation<a href="introduction.html#the-characteristic-equation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For a square matrix <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span>, the characteristic equation is given by <span class="math inline">\(\det(A - \lambda I) = 0\)</span>. This yields an <span class="math inline">\(n\)</span>-degree polynomial whose roots correspond directly to the matrix’s eigenvalues <span class="math inline">\(\lambda\)</span>.</p>
 </div>
-<div id="the-jacobian-matrix" class="section level3 hasAnchor" number="2.3.2">
-<h3><span class="header-section-number">2.3.2</span> The Jacobian Matrix<a href="introduction.html#the-jacobian-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>For a vector-valued function <span class="math inline">\(f: \mathbb{R}^n \to \mathbb{R}^m\)</span> given by <span class="math inline">\(f(x) = (f_1(x), \dots, f_m(x))\)</span>, the Jacobian matrix <span class="math inline">\(J\)</span> is the <span class="math inline">\(m \times n\)</span> matrix of first-order partial derivatives:</p>
+<div id="the-jacobian-matrix" class="section level3 hasAnchor" number="2.4.2">
+<h3><span class="header-section-number">2.4.2</span> The Jacobian Matrix<a href="introduction.html#the-jacobian-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>For a vector-valued function <span class="math inline">\(f: \mathbb{R}^n \to \mathbb{R}^m\)</span> given by <span class="math inline">\(f(x) = (f_1(x), \dots, f_m(x))\)</span> where <span class="math inline">\(x = (x_1, \dots, x_n)\)</span>, the Jacobian matrix <span class="math inline">\(J\)</span> is the <span class="math inline">\(m \times n\)</span> matrix of first-order partial derivatives:</p>
 <p><span class="math display">\[J = \begin{pmatrix}
 \dfrac{\partial f_1}{\partial x_1} &amp; \cdots &amp; \dfrac{\partial f_1}{\partial x_n} \\
 \vdots &amp; \ddots &amp; \vdots \\
 \dfrac{\partial f_m}{\partial x_1} &amp; \cdots &amp; \dfrac{\partial f_m}{\partial x_n}
 \end{pmatrix}\]</span></p>
-<p>When <span class="math inline">\(m = n\)</span> (a square matrix), its determinant <span class="math inline">\(\det(J)\)</span>, commonly referred to as the Jacobian, acts as a local scaling factor. The Jacobian plays an essential role in coordinate transformations by describing how areas or volumes stretch, rotate, and distort under a change of variables. In dynamical systems, the Jacobian linearizes non-linear ODEs near equilibrium states.</p>
+<p>When <span class="math inline">\(m=n\)</span>, i.e., the matrix is square, its determinant, commonly referred to as the Jacobian, acts as a local scaling factor.</p>
+<p>The Jacobian plays an essential role in coordinate transformations by describing how areas or volumes stretch, rotate, and distort under a change of variables.</p>
+<p>Consider the system of ODEs above. The Jacobian matrix of the system is <span class="math display">\[J(x,y)=
+\begin{pmatrix}
+\dfrac{\partial f}{\partial x} &amp;
+\dfrac{\partial f}{\partial y}\\
+\dfrac{\partial g}{\partial x} &amp;
+\dfrac{\partial g}{\partial y}
+\end{pmatrix}\]</span></p>
+<p>This matrix contains the first order partial derivatives of <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span>, describing how small changes in <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> affect the rate of change of the system.</p>
 </div>
-<div id="equilibrium-points-and-local-stability" class="section level3 hasAnchor" number="2.3.3">
-<h3><span class="header-section-number">2.3.3</span> Equilibrium Points and Local Stability<a href="introduction.html#equilibrium-points-and-local-stability" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>An equilibrium point <span class="math inline">\((x^*, y^*)\)</span> is a state where the rates of change vanish simultaneously:</p>
-<p><span class="math display">\[\frac{dx}{dt}\Big|_{(x^*,y^*)} = 0 \quad \text{and} \quad \frac{dy}{dt}\Big|_{(x^*,y^*)} = 0\]</span></p>
-<p>At an equilibrium, there is no net change in either variable. It is important to note that equilibrium does not mean individual processes affecting the system have stopped; rather, opposing rates balance each other exactly. Finding an equilibrium identifies where a system can remain unchanged, but stability analysis determines how the system responds to small disturbances.</p>
-<p>To evaluate local stability, we analyze the eigenvalues <span class="math inline">\(\lambda_1, \lambda_2\)</span> of the Jacobian evaluated at <span class="math inline">\((x^*, y^*)\)</span>:</p>
-<ul>
-<li><strong>Asymptotically Stable Node/Sink</strong>: Both eigenvalues are real and negative (<span class="math inline">\(\lambda_1, \lambda_2 &lt; 0\)</span>). Perturbations decay exponentially to equilibrium.</li>
-<li><strong>Unstable Node/Source</strong>: Both eigenvalues are real and positive (<span class="math inline">\(\lambda_1, \lambda_2 &gt; 0\)</span>). Perturbations grow exponentially away from equilibrium.</li>
-<li><strong>Saddle Point (Unstable)</strong>: Eigenvalues are real with opposite signs (<span class="math inline">\(\lambda_1 &lt; 0 &lt; \lambda_2\)</span>). Trajectories approach along one stable manifold but diverge along an unstable manifold.</li>
-<li><strong>Stable Focus/Spiral</strong>: Complex conjugate eigenvalues with negative real parts (<span class="math inline">\(\text{Re}(\lambda) &lt; 0\)</span>). Trajectories spiral inward toward equilibrium.</li>
-<li><strong>Unstable Focus/Spiral</strong>: Complex conjugate eigenvalues with positive real parts (<span class="math inline">\(\text{Re}(\lambda) &gt; 0\)</span>). Trajectories spiral outward away from equilibrium.</li>
-<li><strong>Center</strong>: Purely imaginary eigenvalues (<span class="math inline">\(\text{Re}(\lambda) = 0\)</span>). Linearized dynamics exhibit undamped periodic oscillations.</li>
-</ul>
+<div id="equilibrium-points-and-local-stability" class="section level3 hasAnchor" number="2.4.3">
+<h3><span class="header-section-number">2.4.3</span> Equilibrium Points and Local Stability<a href="introduction.html#equilibrium-points-and-local-stability" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>An equilibrium point is a point <span class="math inline">\((x^*, y^*)\)</span> such that <span class="math inline">\(\frac{dx}{dt} = 0\)</span> and
+<span class="math inline">\(\frac{dy}{dt} = 0\)</span>. That is, an equilibrium point is a point at which both variables <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> remain constant over time.</p>
+<p>At an equilibrium, there is no net change in either variable. It is important to note that the equilibrium of a system does not mean that individual processes affecting <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> have stopped. Rather, the processes are balancing each other.</p>
+<p>Finding an equilibrium tells us where a system can remain unchanged, but does not tell us what happens if the system is slightly disturbed. Stability describes how a system behaves following a small deviation from an equilibrium.</p>
+<p>An equilibrium is stable if solutions that start sufficiently close to the equilibrium remain close to it. An equilibrium is asymptotically stable, if it is stable and solutions that start sufficiently close will eventually approach the equilibrium. An equilibrium is unstable if it is not stable.</p>
+<p>To study the local stability of an equilibrium <span class="math inline">\((x^*, y^*)\)</span>, we analyse the eigenvalues of <span class="math inline">\(J(x^*, y^*)\)</span>.</p>
+<p>Let <span class="math inline">\(\lambda_1\)</span> and <span class="math inline">\(\lambda_2\)</span> be eigenvalues of <span class="math inline">\(J(x^*, y^*)\)</span>, and <span class="math inline">\((x^*, y^*)\)</span> an equilibrium point.</p>
+<p>If <span class="math inline">\(\lambda_1\)</span> and <span class="math inline">\(\lambda_2\)</span> are both real and negative, then <span class="math inline">\((x^*, y^*)\)</span> is asymptotically stable.</p>
+<p>If <span class="math inline">\(\lambda_1\)</span> and <span class="math inline">\(\lambda_2\)</span> are both real and positive, then <span class="math inline">\((x^*, y^*)\)</span> is unstable.</p>
+<p>If <span class="math inline">\(\lambda _ 1 &lt; 0\)</span> and <span class="math inline">\(\lambda_2 &gt; 0\)</span>, with both being real, then <span class="math inline">\((x^*, y^*)\)</span> is called a saddle point and is unstable.</p>
+<p>If <span class="math inline">\(\lambda_1\)</span> and <span class="math inline">\(\lambda_2\)</span> are both complex with negative real parts, then <span class="math inline">\((x^*, y^*)\)</span> is asymptotically stable.</p>
+<p>If <span class="math inline">\(\lambda_1\)</span> and <span class="math inline">\(\lambda_2\)</span> are both complex with positive real parts, then <span class="math inline">\((x^*, y^*)\)</span> is unstable.</p>
+<p>If <span class="math inline">\(\lambda_1\)</span> and <span class="math inline">\(\lambda_2\)</span> are both purely imaginary, then the linearized system exhibits oscillatory behaviour. Further analysis is required to determine stability.</p>
+<p>Zero eigenvalues require further analysis to determine stability.</p>
 </div>
 </div>
-<div id="illustrative-example-tumor-immune-predator-prey-dynamics" class="section level2 hasAnchor" number="2.4">
-<h2><span class="header-section-number">2.4</span> Illustrative Example: Tumor-Immune Predator-Prey Dynamics<a href="introduction.html#illustrative-example-tumor-immune-predator-prey-dynamics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>To illustrate these concepts, consider a classic model describing interactions between tumor cells and immune effector cells based on Lotka-Volterra predator-prey dynamics.</p>
-<div id="model-formulation" class="section level3 hasAnchor" number="2.4.1">
-<h3><span class="header-section-number">2.4.1</span> Model Formulation<a href="introduction.html#model-formulation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Define state variables and parameters:
-- <span class="math inline">\(T(t)\)</span>: density of tumor cells (Prey)
-- <span class="math inline">\(E(t)\)</span>: density of immune effector cells (Predator)
-- <span class="math inline">\(\rho &gt; 0\)</span>: intrinsic growth rate of tumor cells
-- <span class="math inline">\(\eta &gt; 0\)</span>: rate of immune-mediated tumor cell killing
-- <span class="math inline">\(\alpha &gt; 0\)</span>: rate of immune activation stimulated by tumor antigen presence
-- <span class="math inline">\(\delta &gt; 0\)</span>: natural decay/death rate of effector cells</p>
-<p>Tumor growth increases proportionally to tumor density (<span class="math inline">\(\rho T\)</span>) and decreases due to immune killing (<span class="math inline">\(\eta T E\)</span>):</p>
+<div id="illustrative-example" class="section level2 hasAnchor" number="2.5">
+<h2><span class="header-section-number">2.5</span> Illustrative Example<a href="introduction.html#illustrative-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Consider the following model, describing a simple tumour-immune interaction based on the Lotka-Volterra predator-prey equations.</p>
+<p>Define the following:</p>
+<p><span class="math inline">\(T\)</span>: density of tumour cells,<br />
+<span class="math inline">\(E\)</span>: density of immune system effector cells,<br />
+<span class="math inline">\(\rho\)</span>: growth rate of tumour cells,<br />
+<span class="math inline">\(\eta\)</span>: rate at which effector cells kill tumour cells,<br />
+<span class="math inline">\(\alpha\)</span>: immune activation parameter for effector cells,<br />
+<span class="math inline">\(\delta\)</span>: decay rate of effector cells,<br />
+where <span class="math inline">\(\rho\)</span>, <span class="math inline">\(\eta\)</span>, <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\delta\)</span> <span class="math inline">\(&gt;0\)</span></p>
+<p>To determine the rate of change of tumour cell density, we consider processes that increase and decrease the tumour cell population. We assume that tumour cells grow at a rate proportional to their density. Thus, tumour growth can be described by <span class="math inline">\(\rho T\)</span>.
+Tumour cells are also removed through interactions with immune effector cells. We assume that the rate of immune mediated killing is proportional to tumour cell and effector cell density. Thus, tumour removal
+is described by <span class="math inline">\(\eta T E\)</span>. Combining tumour growth and immune mediated killing processes, we obtain:</p>
 <p><span class="math display" id="eq:PPTumour">\[\begin{equation}
-\frac{dT}{dt} = \underbrace{\rho T}_\text{tumour growth} - \underbrace{\eta T E}_\text{immune killing}
+\frac{dT}{dt} = \underbrace{\rho T }_\text{tumour growth} - \underbrace{\eta T E}_\text{immune mediated killing}
 \tag{2.1}
 \end{equation}\]</span></p>
-<p>Immune effector density increases via tumor stimulation (<span class="math inline">\(\alpha E T\)</span>) and decreases via natural decay (<span class="math inline">\(\delta E\)</span>):</p>
+<p>Similarly, to determine the rate of change of immune effector cell density, we consider processes that increase and decrease the effector cell population. We assume that effector cells decay proportional to their density. Thus, effector cell decay can be described by <span class="math inline">\(\delta E\)</span>. The presence of tumour cells activates an immune response, producing more effector cells. We assume that the rate of effector cell production is proportional to tumour cell density and effector cell density. Therefore, effector cell production is described by <span class="math inline">\(\alpha E T\)</span>. Combining effector cell production and decay processes, we obtain:</p>
 <p><span class="math display" id="eq:PPEffector">\[\begin{equation}
-\frac{dE}{dt} = \underbrace{\alpha E T}_\text{immune activation} - \underbrace{\delta E}_\text{effector decay}
+\frac{dE}{dt} = \underbrace{\alpha E T}_\text{immune activation} - \underbrace{\delta E}_\text{effector cell decay}
 \tag{2.2}
 \end{equation}\]</span></p>
-<p>Together, equations <a href="introduction.html#eq:PPTumour">(2.1)</a> and <a href="introduction.html#eq:PPEffector">(2.2)</a> form a system of ODEs describing tumor-immune interactions.</p>
+<p>Together, equations <a href="introduction.html#eq:PPTumour">(2.1)</a> and <a href="introduction.html#eq:PPEffector">(2.2)</a> form a system of ordinary differential equations that describes the interaction between tumour cells and immune effector cells. We will use this system to review equilibrium points, Jacobian matrices, and stability analysis.</p>
 </div>
-<div id="equilibrium-analysis" class="section level3 hasAnchor" number="2.4.2">
-<h3><span class="header-section-number">2.4.2</span> Equilibrium Analysis<a href="introduction.html#equilibrium-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Equilibria occur where <span class="math inline">\(\frac{dT}{dt} = 0\)</span> and <span class="math inline">\(\frac{dE}{dt} = 0\)</span>:</p>
-<ol style="list-style-type: decimal">
-<li><p><strong>Trivial Equilibrium</strong> <span class="math inline">\((T_1, E_1) = (0, 0)\)</span>:
-Corresponds to complete absence of both tumor and tumor-specific immune effector cells.</p></li>
-<li><p><strong>Coexistence Equilibrium</strong> <span class="math inline">\((T_2, E_2) = \left(\frac{\delta}{\alpha}, \frac{\rho}{\eta}\right)\)</span>:
-Factoring equation <a href="introduction.html#eq:PPTumour">(2.1)</a> for <span class="math inline">\(T \neq 0\)</span> yields <span class="math inline">\(E_2 = \frac{\rho}{\eta}\)</span>. Factoring equation <a href="introduction.html#eq:PPEffector">(2.2)</a> for <span class="math inline">\(E \neq 0\)</span> yields <span class="math inline">\(T_2 = \frac{\delta}{\alpha}\)</span>.</p></li>
-</ol>
-</div>
-<div id="jacobian-matrix-stability" class="section level3 hasAnchor" number="2.4.3">
-<h3><span class="header-section-number">2.4.3</span> Jacobian Matrix &amp; Stability<a href="introduction.html#jacobian-matrix-stability" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>The general Jacobian matrix <span class="math inline">\(J(T,E)\)</span> is:</p>
-<p><span class="math display">\[J(T,E) = \begin{pmatrix}
-\rho - \eta E &amp; -\eta T \\
+<div id="analysing-this-system" class="section level2 hasAnchor" number="2.6">
+<h2><span class="header-section-number">2.6</span> Analysing this system<a href="introduction.html#analysing-this-system" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Recall that an equilibrium is a state where both <span class="math inline">\(\frac{dT}{dt}=0\)</span> and <span class="math inline">\(\frac{dE}{dt}=0\)</span>.</p>
+<p>We first consider the case where <span class="math inline">\(T=0\)</span>, <span class="math inline">\(E=0\)</span>. This is the case where there is no tumour, and no tumour specific immune response by effector cells. By <a href="introduction.html#eq:PPTumour">(2.1)</a> and <a href="introduction.html#eq:PPEffector">(2.2)</a>, it is clear that <span class="math display">\[(T_1,E_1)= (0,0)\]</span> is an equilibrium.</p>
+<p>Now consider the case where <span class="math inline">\(T \neq 0\)</span> and <span class="math inline">\(E \neq 0\)</span>. This describes the case where there is a coexistence with tumour and effector cells. By factoring and setting equation <a href="introduction.html#eq:PPTumour">(2.1)</a> equal to <span class="math inline">\(0\)</span>, we get:</p>
+<p><span class="math display">\[T(\rho - \eta E) =0\]</span></p>
+<p>Since <span class="math inline">\(T\neq 0\)</span>, we get that <span class="math inline">\(E= \frac{\rho}{\eta}\)</span>.</p>
+<p>Similarly, by factoring and setting equation <a href="introduction.html#eq:PPEffector">(2.2)</a> equal to <span class="math inline">\(0\)</span>, we get:</p>
+<p><span class="math display">\[E(\alpha T - \delta) = 0\]</span></p>
+<p>Since <span class="math inline">\(E\neq 0\)</span>, we get that <span class="math inline">\(T=\frac{\delta}{\alpha}\)</span>.</p>
+<p>Thus, <span class="math display">\[(T_2,E_2)=(\frac{\delta}{\alpha},\frac{\rho}{\eta})\]</span> is an equilibrium.</p>
+<p>To analyse the stability around these equilibria, we need to first find the Jacobian matrix. Defining <span class="math inline">\(f(T,E) = \rho T - \eta T E\)</span> and <span class="math inline">\(g(T,E) = \alpha E T - \delta E\)</span>, we get that
+<span class="math display">\[J(T,E) = \begin{pmatrix}
+\rho - \eta E &amp; - \eta T \\
 \alpha E &amp; \alpha T - \delta
 \end{pmatrix}\]</span></p>
-<div id="stability-of-trivial-equilibrium-00" class="section level4 hasAnchor" number="2.4.3.1">
-<h4><span class="header-section-number">2.4.3.1</span> Stability of Trivial Equilibrium <span class="math inline">\((0,0)\)</span><a href="introduction.html#stability-of-trivial-equilibrium-00" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Evaluating <span class="math inline">\(J\)</span> at <span class="math inline">\((0,0)\)</span>:</p>
-<p><span class="math display">\[J(0,0) = \begin{pmatrix}
+<p>We first analyse the stability around the equilibrium <span class="math inline">\((T_1,E_1)= (0,0)\)</span>. Plugging this equilibrium into the Jacobian matrix, we get <span class="math display">\[J(T_1,E_1) = \begin{pmatrix}
 \rho &amp; 0 \\
-0 &amp; -\delta
+0 &amp; - \delta
 \end{pmatrix}\]</span></p>
-<p>The eigenvalues are <span class="math inline">\(\lambda_1 = \rho &gt; 0\)</span> and <span class="math inline">\(\lambda_2 = -\delta &lt; 0\)</span>. Because the eigenvalues are real with opposite signs, <span class="math inline">\((0,0)\)</span> is a <strong>saddle point (unstable)</strong>. Biologically, introducing a small tumor population causes initial exponential tumor growth away from the origin.</p>
-</div>
-<div id="stability-of-coexistence-equilibrium-t_2-e_2-leftfracdeltaalpha-fracrhoetaright" class="section level4 hasAnchor" number="2.4.3.2">
-<h4><span class="header-section-number">2.4.3.2</span> Stability of Coexistence Equilibrium <span class="math inline">\((T_2, E_2) = \left(\frac{\delta}{\alpha}, \frac{\rho}{\eta}\right)\)</span><a href="introduction.html#stability-of-coexistence-equilibrium-t_2-e_2-leftfracdeltaalpha-fracrhoetaright" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>Evaluating <span class="math inline">\(J\)</span> at <span class="math inline">\((T_2, E_2)\)</span>:</p>
-<p><span class="math display">\[J(T_2, E_2) = \begin{pmatrix}
-0 &amp; -\dfrac{\delta \eta}{\alpha} \\
-\dfrac{\alpha \rho}{\eta} &amp; 0
+<p>This matrix has eigenvalues <span class="math inline">\(\rho\)</span> and <span class="math inline">\(-\delta\)</span>.</p>
+<p>The positive eigenvalue <span class="math inline">\(\rho\)</span> indicates that small deviations from the equilibrium grow over time in one direction, causing the system to move away from equilibrium. The negative eigenvalue <span class="math inline">\(-\delta\)</span> indicates that small deviations from the equilibrium decay over time in another direction, causing the system to move towards the equilibrium. Since the eigenvalues have opposite signs, the equilibrium is a saddle point and is unstable.</p>
+<p>Now, we analyse the stability around the equilibrium <span class="math inline">\((T_2,E_2)=(\frac{\delta}{\alpha},\frac{\rho}{\eta})\)</span>. Plugging this equilibrium into the Jacobian matrix, we get
+<span class="math display">\[J(T_2,E_2) = \begin{pmatrix}
+0 &amp; \frac{-\delta \eta}{\alpha} \\
+\frac{\alpha \rho}{\eta}&amp; 0
 \end{pmatrix}\]</span></p>
-<p>The characteristic equation is <span class="math inline">\(\det(J - \lambda I) = \lambda^2 + \rho \delta = 0\)</span>, giving purely imaginary eigenvalues:</p>
-<p><span class="math display">\[\lambda_{1,2} = \pm i \sqrt{\rho \delta}\]</span></p>
-<p>Purely imaginary eigenvalues indicate <strong>neutral stability (oscillatory behavior)</strong> around the coexistence point:</p>
+<p>This matrix has eigenvalues <span class="math inline">\(\pm i \sqrt{\rho \delta}\)</span>. This indicates oscillatory behaviour around the equilibrium.</p>
+<p>This oscillatory behaviour could indicate the following:</p>
 <p><span class="math display">\[
-\text{More tumour cells} \longrightarrow \text{More immune activation} \longrightarrow \text{Fewer tumour cells} \longrightarrow \text{Decay of effector cells} \longrightarrow \text{More tumour cells} \cdots
+\text{More tumour cells}
+\longrightarrow
+\text{More immune response}
+\longrightarrow
+\text{Fewer tumour cells}
+\longrightarrow
+\text{Less immune response}
+\longrightarrow
+\text{More tumour cells}
+\longrightarrow \cdots
 \]</span></p>
 </div>
-</div>
-</div>
-<div id="biological-realism-and-limitations" class="section level2 hasAnchor" number="2.5">
-<h2><span class="header-section-number">2.5</span> Biological Realism and Limitations<a href="introduction.html#biological-realism-and-limitations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>While this Lotka-Volterra framework elegantly introduces coupled dynamical systems, several simplified assumptions limit its direct clinical application:</p>
-<ol style="list-style-type: decimal">
-<li><strong>Unbounded Growth &amp; Proportional Activation</strong>:
-<ul>
-<li>The model assumes exponential tumor growth (<span class="math inline">\(\rho T\)</span>) without spatial or nutrient constraints (e.g., carrying capacity <span class="math inline">\(K\)</span>).</li>
-<li>The immune stimulation term (<span class="math inline">\(\alpha E T\)</span>) increases linearly without bound, failing to reflect receptor saturation or Holling functional responses (e.g., Michaelis-Menten kinetics <span class="math inline">\(\frac{c E T}{m + T}\)</span>).</li>
-</ul></li>
-<li><strong>Absence of Homeostatic Immune Baseline</strong>:
-<ul>
-<li>In the absence of tumor cells (<span class="math inline">\(T=0\)</span>), effector cells decay exponentially to zero (<span class="math inline">\(E(t) = E(0)e^{-\delta t}\)</span>). In reality, the human body maintains a constant baseline influx of immune cells (<span class="math inline">\(s &gt; 0\)</span>).</li>
-</ul></li>
-<li><strong>Omission of Complex Immunological Factors</strong>:
-<ul>
-<li>Real tumor microenvironments involve multiple effector sub-populations (CD8+ T-cells, NK cells, macrophages), immunosuppressive cytokines (TGF-<span class="math inline">\(\beta\)</span>, IL-10), immune checkpoints (PD-1/PD-L1), T-cell exhaustion, and healthy tissue toxicity.</li>
-</ul></li>
-</ol>
-<p>These limitations highlight the necessity of interdisciplinary collaboration between mathematicians, computational biologists, and clinical oncologists. Subsequent chapters will introduce logistic growth, saturation kinetics, immune influx, and therapy interventions to construct biologically realistic models.</p>
+<div id="limitations" class="section level2 hasAnchor" number="2.7">
+<h2><span class="header-section-number">2.7</span> Limitations<a href="introduction.html#limitations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Though this model is simplistic, there are issues in our assumptions, leading to concern about how useful this model is in modelling tumour cell and effector cell interactions. Firstly, the activation term <span class="math inline">\(\alpha\)</span> is simplistic and does not capture the complexities of immune responses to tumour growth. We also assumed proportional growth and decay, which is not realistic.</p>
+<p>Secondly, consider the case where there are no tumour cells (<span class="math inline">\(T=0\)</span>). By <a href="introduction.html#eq:PPEffector">(2.2)</a>, <span class="math inline">\(\frac{dE}{dt}=-\delta E\)</span>. We get that <span class="math inline">\(E(t)= E(0)e^{-\delta t}\)</span>, implying that density of effector cells tends to zero over time. This is unrealistic, as effector cells are constantly present throughout the body.</p>
+<p>Thirdly, we are not modelling many factors that are involved in these tumour-effector cell interactions. This includes different tumour cell types, different effector cell types, and damage to healthy cells.</p>
+<p>Overall, this model simply demonstrates how a system of ordinary differential equations could be used to study tumour cell and effector cell interactions despite its limitations. We will gradually introduce more sophisticated models throughout the text, leading to more realistic models and useful interpretations.</p>
 
 </div>
 </div>
