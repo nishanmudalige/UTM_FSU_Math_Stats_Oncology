@@ -10,9 +10,10 @@ Repository for UTM and FSU to work on building resources to teach mathematical a
     - Also include **suggested** background on introductory biology
       - Please include a note that these topics are helpful but not necessary
     - Start explaining the Kuznetsov model (*High priority*)
-      - Explain simplified version, system of 2 equations corresponding to (4a) and (4b) in paper
+      - Explain **simplified** version, system of 2 equations corresponding to (4a) and (4b) in paper
     - Try to include references
     - Include a FEW examples of plots with stability analysis
+      - Include tikz image of the model
       - One covering each case is sufficient (*Time permitting: low priority*)
         - Stable sink
         - Unstable source
