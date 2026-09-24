@@ -1,10 +1,4 @@
----
-title: "Kuznetsov-draft"
-output:
-  pdf_document: default
-  html_document: default
----
-## The Kuznetsov Tumour–Immune Model
+# The Kuznetsov Tumour–Immune Model
 
 A tumour is an abnormal mass of tissue that forms when cells grow and divide more than they should or do not die when they should. Tumours may be benign (not cancer) or malignant (cancer). Malignant tumours can spread into, or invade, nearby tissues. They can also spread to other parts of the body through the blood and lymph systems. 
 

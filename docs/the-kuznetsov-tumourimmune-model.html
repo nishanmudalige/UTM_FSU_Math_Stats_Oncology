@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 The Kuznetsov Tumour–Immune Model | An Introduction to Mathematical Oncology</title>
+  <meta name="description" content="Chapter 3 The Kuznetsov Tumour–Immune Model | An Introduction to Mathematical Oncology" />
+  <meta name="generator" content="bookdown 0.48 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 The Kuznetsov Tumour–Immune Model | An Introduction to Mathematical Oncology" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="nishanmudalige/UTM_FSU_Mathematical_Statistical_Oncology" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 The Kuznetsov Tumour–Immune Model | An Introduction to Mathematical Oncology" />
+  
+  
+  
+
+<meta name="author" content="Rose Abed Musa, Heba Syed, Bryce Morsky, Nishan Mudalige" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="introduction.html"/>
+<link rel="next" href="references.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Welcome</a></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#recommended-background"><i class="fa fa-check"></i><b>2.1</b> Recommended Background</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="introduction.html"><a href="introduction.html#mathematical-statistical-modelling"><i class="fa fa-check"></i><b>2.1.1</b> Mathematical &amp; Statistical Modelling</a></li>
+<li class="chapter" data-level="2.1.2" data-path="introduction.html"><a href="introduction.html#introductory-biology"><i class="fa fa-check"></i><b>2.1.2</b> Introductory Biology</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#history-of-mathematical-oncology"><i class="fa fa-check"></i><b>2.2</b> History of Mathematical Oncology</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#what-is-a-mathematical-model"><i class="fa fa-check"></i><b>2.3</b> What is a Mathematical Model?</a></li>
+<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#systems-of-odes-as-mathematical-models"><i class="fa fa-check"></i><b>2.4</b> Systems of ODEs as Mathematical Models</a></li>
+<li class="chapter" data-level="2.5" data-path="introduction.html"><a href="introduction.html#review-of-mathematical-concepts"><i class="fa fa-check"></i><b>2.5</b> Review of Mathematical Concepts</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="introduction.html"><a href="introduction.html#the-characteristic-equation"><i class="fa fa-check"></i><b>2.5.1</b> The Characteristic Equation</a></li>
+<li class="chapter" data-level="2.5.2" data-path="introduction.html"><a href="introduction.html#the-jacobian-matrix"><i class="fa fa-check"></i><b>2.5.2</b> The Jacobian Matrix</a></li>
+<li class="chapter" data-level="2.5.3" data-path="introduction.html"><a href="introduction.html#equilibrium-points-and-local-stability"><i class="fa fa-check"></i><b>2.5.3</b> Equilibrium Points and Local Stability</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="introduction.html"><a href="introduction.html#illustrative-example"><i class="fa fa-check"></i><b>2.6</b> Illustrative Example</a></li>
+<li class="chapter" data-level="2.7" data-path="introduction.html"><a href="introduction.html#analysing-this-system"><i class="fa fa-check"></i><b>2.7</b> Analysing this system</a></li>
+<li class="chapter" data-level="2.8" data-path="introduction.html"><a href="introduction.html#limitations"><i class="fa fa-check"></i><b>2.8</b> Limitations</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html"><i class="fa fa-check"></i><b>3</b> The Kuznetsov Tumour–Immune Model</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#analysing-the-kuznetsov-model"><i class="fa fa-check"></i><b>3.1</b> Analysing the Kuznetsov Model</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">An Introduction to Mathematical Oncology</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="the-kuznetsov-tumourimmune-model" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Chapter 3</span> The Kuznetsov Tumour–Immune Model<a href="the-kuznetsov-tumourimmune-model.html#the-kuznetsov-tumourimmune-model" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>A tumour is an abnormal mass of tissue that forms when cells grow and divide more than they should or do not die when they should. Tumours may be benign (not cancer) or malignant (cancer). Malignant tumours can spread into, or invade, nearby tissues. They can also spread to other parts of the body through the blood and lymph systems.</p>
+<p>Tumour cells reproduce and therefore could increase the tumour population. Moreover, tumour cells can also be removed through interactions with immune effector cells. These cells recognize and respond to abnormal cells, including tumour cells. Some examples of these cells are cytotoxic T lymphocytes and natural killer cells.</p>
+<p>Define the following:</p>
+<p><span class="math inline">\(E\)</span>: Number of effector cells located at the tumor site,</p>
+<p><span class="math inline">\(T\)</span>: Number of tumor cells located at the tumor site,</p>
+<p><span class="math inline">\(s\)</span>: Baseline rate at which mature effector cells enter the tumour region,</p>
+<p><span class="math inline">\(p\)</span>: Rate of tumour stimulated effector cell accumulation</p>
+<p><span class="math inline">\(g\)</span>: Saturation parameter for tumour stimulated effector cell accumulation,</p>
+<p><span class="math inline">\(m\)</span>: Rate of effector cell inactivation due to interactions with tumour cells,</p>
+<p><span class="math inline">\(n\)</span>: Rate of tumour cell killing through interactions with effector cells,</p>
+<p><span class="math inline">\(d\)</span>: Rate of ordinary effector cell elimination</p>
+<p><span class="math inline">\(a\)</span>: Maximum growth rate of the tumor cell population,</p>
+<p><span class="math inline">\(b\)</span>: Inverse of maximum carrying capacity,</p>
+<p>where all of the above parameters are constant.</p>
+<p>To determine the rate of change of the effector cell population, we consider processes that increase and decrease the number of effector cells. Effector cells enter the tumour region at baseline rate <span class="math inline">\(s\)</span>. Tumour cells also stimulate the accumulation of effector cells. We assume that this stimulation increases with tumour cell number but eventually saturates, giving the term <span class="math inline">\(\frac{pET}{g+T}\)</span>. The saturation reflects the assumption that the accumulation of effector cells cannot increase indefinitely as tumour size increases, due to biological limitations. Effector cells are also inactivated through interactions with tumour cells at a rate proportional to both <span class="math inline">\(E\)</span> and <span class="math inline">\(T\)</span>, giving the term <span class="math inline">\(mET\)</span>. Finally, effector cells are eliminated naturally at a rate proportional to the size of the population, giving the term <span class="math inline">\(dE\)</span>.</p>
+<p>Combining these processes together, we obtain:</p>
+<p><span class="math display">\[\begin{equation}
+\frac{dE}{dt} = s + \frac{pET}{g+T} - mET -dE
+\label{eq:kuznetsov4a}
+\end{equation}\]</span></p>
+<p>Similarly, to determine the rate of change of the tumour cell population, we consider processes that increase and decrease the number of tumour cells. We assume that tumour cells undergo logistic growth. At low tumour cell numbers, growth is approximately exponential, while at high tumour cell numbers, growth slows due to limitations such as available resources. This gives the logistic growth term <span class="math inline">\(aT(1-bT)\)</span>. Tumour cells are also removed through interactions with immune effector cells. We assume that the rate of tumour cell killing is proportional to both the number of tumour cells and the number of effector cells, giving the term <span class="math inline">\(nET\)</span>. Combining tumour growth and immune mediated killing, we obtain:</p>
+<p><span class="math display">\[\begin{equation}
+\frac{dT}{dt} = aT(1-bT) -nET
+\label{eq:kuznetsov4b}
+\end{equation}\]</span></p>
+<p>Equations <span class="citation">(<a href="#ref-ref"><strong>ref?</strong></a>)</span>(eq:kuznetsov4a) and <span class="citation">(<a href="#ref-ref"><strong>ref?</strong></a>)</span>(eq:kuznetsov4b) form the reduced Kuznetsov tumour immune model. These equations form a system of ODEs describing the interactions between tumour cells and immune effector cells.</p>
+<div id="analysing-the-kuznetsov-model" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Analysing the Kuznetsov Model<a href="the-kuznetsov-tumourimmune-model.html#analysing-the-kuznetsov-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Recall that an equilibrium is a state where both <span class="math inline">\(\frac{dE}{dt}=0\)</span> and <span class="math inline">\(\frac{dT}{dt}=0\)</span>.</p>
+<p>We first consider the case where there are no tumour cells, so <span class="math inline">\(T=0\)</span>. Equation <span class="citation">(<a href="#ref-ref"><strong>ref?</strong></a>)</span>(eq:kuznetsov4a) becomes</p>
+<p><span class="math display">\[
+\frac{dE}{dt}=s-dE.
+\]</span></p>
+<p>Setting this equal to zero and solving for <span class="math inline">\(E\)</span>, we get</p>
+<p><span class="math display">\[
+E=\frac{s}{d}.
+\]</span></p>
+<p>Thus, the tumour free equilibrium is</p>
+<p><span class="math display">\[
+(E_1,T_1)=(\frac{s}{d},0).
+\]</span></p>
+<p>This equilibrium represents a state in which there are no tumour cells, while effector cells remain present due to the continuous baseline influx <span class="math inline">\(s\)</span>.</p>
+<p>We next consider equilibria where both <span class="math inline">\(T\neq0\)</span> and <span class="math inline">\(E\neq0\)</span>. From equation <span class="citation">(<a href="#ref-ref"><strong>ref?</strong></a>)</span>(eq:kuznetsov4b), setting <span class="math inline">\(\frac{dT}{dt}=0\)</span> gives</p>
+<p><span class="math display">\[
+aT(1-bT)-nET=0.
+\]</span></p>
+<p>Factoring out <span class="math inline">\(T\)</span> gives</p>
+<p><span class="math display">\[
+T(a-abT-nE)=0.
+\]</span></p>
+<p>Since <span class="math inline">\(T\neq0\)</span>, we obtain</p>
+<p><span class="math display">\[
+E=\frac{a}{n}(1-bT).
+\]</span></p>
+<p>This is the tumour nullcline for positive tumour cell populations.</p>
+<p>Similarly, setting equation <span class="citation">(<a href="#ref-ref"><strong>ref?</strong></a>)</span>(eq:kuznetsov4a) equal to zero gives</p>
+<p><span class="math display">\[
+s+\frac{pET}{g+T}-mET-dE=0.
+\]</span></p>
+<p>Solving for <span class="math inline">\(E\)</span>, we get</p>
+<p><span class="math display">\[
+E=
+\frac{s(g+T)}
+{d(g+T)+mT(g+T)-pT}.
+\]</span></p>
+<p>This is the effector cell nullcline.</p>
+<p>Therefore, positive equilibrium points occur at the intersections of the two nullclines.</p>
+<p>Depending on the parameter values, the model can have zero, one, two, or three positive equilibrium points.</p>
+<p>To analyse the stability around these equilibria, we first find the Jacobian matrix. Define <span class="math inline">\(f(E,T)= s+\frac{pET}{g+T}-mET-dE\)</span> and <span class="math inline">\(g(E,T)= aT(1-bT)-nET\)</span>.</p>
+<p>The Jacobian matrix is</p>
+<p><span class="math display">\[\begin{pmatrix}
+\frac{pT}{g+T}-mT-d &amp;
+\frac{pgE}{(g+T)^2}-mE \\
+-nT &amp;
+a-2abT-nE
+\end{pmatrix}\]</span></p>
+<p>We first analyse the stability around the tumour free equilibrium.</p>
+<p><span class="math display">\[J(E_1,T_1)=
+\begin{pmatrix}
+-d &amp;
+\frac{ps}{dg}-m\frac{s}{d} \\
+0 &amp;
+a-\frac{ns}{d}
+\end{pmatrix}\]</span></p>
+<p>The eigenvalues of <span class="math inline">\(J(E_1,T_1)\)</span> are <span class="math inline">\(\lambda_1=-d\)</span> and <span class="math inline">\(\lambda_2=a-\frac{ns}{d}.\)</span></p>
+<p>Since <span class="math inline">\(d&gt;0\)</span>, we always have <span class="math inline">\(\lambda_1&lt;0\)</span>. The stability of the tumour free equilibrium therefore depends on the second eigenvalue.</p>
+<p>If <span class="math inline">\(a-\frac{ns}{d}&lt;0\)</span>, then both eigenvalues are negative and the tumour free equilibrium is locally asymptotically stable.</p>
+<p>If <span class="math inline">\(a-\frac{ns}{d}&gt;0\)</span>, the eigenvalues have opposite signs. Therefore, the tumour free equilibrium is a saddle point and is unstable.</p>
+<p>Notice that <span class="math inline">\(a\)</span> represents the maximum tumour growth rate, while <span class="math inline">\(\frac{ns}{d}\)</span> represents the strength of tumour cell removal associated with the baseline effector population. Thus, the local stability of the tumour free state depends on the balance between tumour growth and immune mediated tumour removal.</p>
+<p>Kuznetsov et al. used experimental data from mice to obtain the following parameter values for the model. The parameters <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>, and <span class="math inline">\(s\)</span> were specified based on experimental considerations, while the remaining parameters were estimated by nonlinear least-squares fitting.:</p>
+<p><span class="math display">\[
+s=1.3\times10^4,\quad
+p=0.1245,\quad
+g=2.019\times10^7,\quad
+m=3.422\times10^{-10},
+\]</span></p>
+<p><span class="math display">\[
+n=1.101\times10^{-7},\quad
+d=0.0412,\quad
+a=0.18,\quad
+b=2.0\times10^{-9}.
+\]</span>
+using these, we get that the tumour free equilibrium is <span class="math inline">\((E_1,T_1)=(\frac{s}{d},0)\approx(315534,0)\)</span>.</p>
+<p>Also, <span class="math inline">\(\lambda_1= -d =  -0.0412\)</span> and <span class="math inline">\(\lambda_2= a-\frac{ns}{d} \approx 0.1453\)</span>. Since the eigenvalues have opposite signs, <span class="math inline">\((E_1,T_1)\)</span> is a saddle point and is unstable.</p>
+<p>Now consider the case where <span class="math inline">\(E \neq 0\)</span> and <span class="math inline">\(T \neq 0\)</span>. We will use the estimated parameter values to study stability in this case, since the equilibria depend on parameter values.</p>
+<p>Note that equilibria occur at the intersection of the tumour and effector cell nullclines. That is, they occur when
+<span class="math display">\[
+\frac{a}{n}(1-bT)
+=
+\frac{s(g+T)}
+{d(g+T)+mT(g+T)-pT}.
+\]</span></p>
+<p>Using the estimated values, we get the following equilibria:</p>
+<p><span class="math display">\[
+(E_2,T_2)
+=
+(1.608\times10^6,\;8.186\times10^6),
+\]</span></p>
+<p><span class="math display">\[
+(E_3,T_3)
+=
+(7.585\times10^5,\;2.680\times10^8),
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+(E_4,T_4)
+=
+(1.732\times10^5,\;4.470\times10^8).
+\]</span>
+Now, we analyse the stability around each equilibrium.</p>
+<p><span class="math display">\[
+J(E_2,T_2)
+\approx
+\begin{pmatrix}
+-0.00808 &amp; 0.00447 \\
+-0.90132 &amp; -0.00295
+\end{pmatrix}
+\]</span>
+has eigenvalues <span class="math inline">\(\lambda_1 \approx -0.00552+0.06342i\)</span>
+and <span class="math inline">\(\lambda_2 \approx -0.00552-0.06342i.\)</span> Both eigenvalues are complex with negative real parts, thus the equilibrium <span class="math inline">\((E_2,T_2)\)</span> is a stable focus.</p>
+<p><span class="math display">\[
+J(E_3,T_3)
+\approx
+\begin{pmatrix}
+-0.01714 &amp; -0.000237 \\
+-29.5093 &amp; -0.09649
+\end{pmatrix}
+\]</span>
+has eigenvalues <span class="math inline">\(\lambda_1\approx0.03576\)</span> and <span class="math inline">\(\lambda_2\approx-0.14936.\)</span> Since the eigenvalues have opposite signs, <span class="math inline">\((E_3,T_3)\)</span> is a saddle point and is unstable.</p>
+<p><span class="math display">\[
+J(E_4,T_4)
+\approx
+\begin{pmatrix}
+-0.07505 &amp; -0.0000573 \\
+-49.2175 &amp; -0.16093
+\end{pmatrix}
+\]</span></p>
+<p>has eigenvalues <span class="math inline">\(\lambda_1\approx-0.04970\)</span> and <span class="math inline">\(\lambda_2\approx-0.18628.\)</span></p>
+<p>Since they are both negative, the <span class="math inline">\((E_4,T_4)\)</span> is asymptotically stable.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introduction.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

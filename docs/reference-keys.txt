@@ -15,3 +15,5 @@ equilibrium-points-and-local-stability
 illustrative-example
 analysing-this-system
 limitations
+the-kuznetsov-tumourimmune-model
+analysing-the-kuznetsov-model

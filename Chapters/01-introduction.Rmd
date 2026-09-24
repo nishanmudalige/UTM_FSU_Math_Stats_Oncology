@@ -60,7 +60,7 @@ Beginning in the 1920s, experiments involving chemical carcinogens provided evid
 
 Charles and Luce-Clausen developed one of the first quantitative multistage theories in the 1940s, using a mathematical model to describe the development of skin tumors in mice. Their work demonstrated how mathematical models could be used to connect assumptions about cellular changes with observed cancer incidence.
 
-Armitage and Doll further developed multistage theory in the 1950s [@armitage1954age], introducing more general mathematical models that allowed different rates for different stages and treated the stages as sequential cellular changes rather than necessarily genetic mutations. Their work helped establish mathematical modelling as a framework for studying the development of cancer.
+Armitage and Doll further developed multistage theory in the 1950s, introducing more general mathematical models that allowed different rates for different stages and treated the stages as sequential cellular changes rather than necessarily genetic mutations. Their work helped establish mathematical modelling as a framework for studying the development of cancer.
 
 
 ## What is a Mathematical Model?
