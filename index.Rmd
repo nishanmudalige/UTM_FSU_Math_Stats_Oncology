@@ -4,7 +4,8 @@ author: "Rose Abed Musa, Heba Syed, Bryce Morsky, Nishan Mudalige"
 date: ""
 site: bookdown::bookdown_site
 output:
-  bookdown::gitbook
+  bookdown::gitbook:
+    split_bib: no
 documentclass: book
 github-repo: nishanmudalige/UTM_FSU_Mathematical_Statistical_Oncology
 bibliography: [book.bib]
