@@ -2,6 +2,9 @@ eq:PPTumour
 eq:PPEffector
 welcome
 introduction
+recommended-background
+mathematical-statistical-modelling
+introductory-biology
 history-of-mathematical-oncology
 what-is-a-mathematical-model
 systems-of-odes-as-mathematical-models

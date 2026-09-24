@@ -1,5 +1,51 @@
 # Introduction
 
+## Recommended Background
+
+*Note: While the background topics and prerequisites listed below are helpful for developing a deeper understanding of the material presented in this book, they are not strictly necessary to read and engage with the core material.*
+
+Recommended pre-requisites include introductory calculus, ordinary differential equations, linear algebra, probability and statistics (including statistical modelling), and introductory biology. For review, we suggest the open-access resources below. Specific chapters and topics to be familiar with are noted.
+
+### Mathematical & Statistical Modelling
+
+- **Calculus & Differential Equations:**
+  - Ordinary Differential Equations (ODEs) and systems of ODEs serve as a primary mathematical framework for describing dynamic biological processes, such as tumor cell growth, cell-cell interactions, and decay rates over time.
+  - Recommended Resources:
+    - [Active Calculus](https://activecalculus.org/):
+      - *Active Prelude to Calculus*
+      - *Active Calculus*
+      - *Active Calculus Multivariable*: Chapter 11.9 Change of Variables (for understanding the Jacobian Matrix)
+    - [OpenStax Calculus](https://openstax.org/subjects/math) (Alternative):
+      - *Calculus Volume 1*
+      - *Calculus Volume 2*
+      - *Calculus Volume 3*: Chapter 5.7 Change of Variables in Multiple Integrals (for understanding the Jacobian Matrix)
+
+- **Linear Algebra:**
+  - Systems of linear equations, vectors, matrix operations, determinants, and eigenvalues/eigenvectors, which are fundamental for linearizing nonlinear systems and performing local stability analysis.
+  - Recommended Resource: [Understanding Linear Algebra](https://understandinglinearalgebra.org/home.html)
+    - Chapter 1: Systems of equations
+    - Chapter 2: Vectors, matrices, and linear combinations
+      - 2.1 Vectors and linear combinations
+      - 2.2 Matrix multiplication and linear combinations
+    - Chapter 3: Invertibility, bases, and coordinate systems
+      - 3.4 Determinants
+    - Chapter 4: Eigenvalues and eigenvectors
+    - Basic understanding of complex numbers
+
+- **Probability, Statistics & Statistical Modelling:**
+  - Probability distributions, hypothesis testing, parameter estimation, and statistical modelling techniques such as regression analysis (e.g., linear and logistic regression). These statistical tools enable researchers to fit models to empirical data, quantify parameter uncertainties, and evaluate model performance.
+  - Recommended Resource: [OpenIntro Statistics](https://www.openintro.org/book/os/)
+
+### Introductory Biology
+
+- **Cellular & Cancer Biology:**
+  - Basic cell structures, the cell cycle (mitosis, cell division, and programmed cell death/apoptosis), and fundamental mechanisms of carcinogenesis (the transformation of normal cells into cancer cells).
+- **Tumour Microenvironment & Immune Interactions:**
+  - Basic concepts of tumour growth dynamics, angiogenesis, and host immune interactions (such as immune effector cells recognizing and killing tumour cells).
+- **Genetics & Molecular Biology:**
+  - Basic understanding of DNA replication, gene mutations, gene expression, and clonal evolution during cancer progression.
+
+
 ## History of Mathematical Oncology
 
 Cancer is a group of diseases in which abnormal cells divide uncontrollably and can invade nearby tissues. Oncology is the branch of medicine concerned with the diagnosis and treatment of cancer.
@@ -14,7 +60,7 @@ Beginning in the 1920s, experiments involving chemical carcinogens provided evid
 
 Charles and Luce-Clausen developed one of the first quantitative multistage theories in the 1940s, using a mathematical model to describe the development of skin tumors in mice. Their work demonstrated how mathematical models could be used to connect assumptions about cellular changes with observed cancer incidence.
 
-Armitage and Doll further developed multistage theory in the 1950s, introducing more general mathematical models that allowed different rates for different stages and treated the stages as sequential cellular changes rather than necessarily genetic mutations. Their work helped establish mathematical modelling as a framework for studying the development of cancer.
+Armitage and Doll further developed multistage theory in the 1950s [@armitage1954age], introducing more general mathematical models that allowed different rates for different stages and treated the stages as sequential cellular changes rather than necessarily genetic mutations. Their work helped establish mathematical modelling as a framework for studying the development of cancer.
 
 
 ## What is a Mathematical Model?
