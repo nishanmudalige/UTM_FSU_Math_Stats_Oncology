@@ -1,0 +1,50 @@
+# Apoptosis in Solid Tumor Growth
+
+The simplest mathematical model to discuss the growing of a tumor would be one that only describes the growth and death of cells. Cancer cells grow and divide at a rapid pace, leading to the development of tumors.
+
+Early experimental studies on tumors study the rate of change of the volume, noticing that over time the growth rate decreased and necrotic cores could develop. Necrotic cores occur when cells at the middle of a tumor do not have enough nutrients and die en masse.
+
+Using a differential equation, we can model the tumor growth with regards to the nutrient density.
+
+## Modeling Assumptions
+
+* The tumor stays a sphere and is axisymmetric
+* Nutrient is only consumed by living cells
+* The system is at diffusive equilibrium
+* Cancer cells die when the concentration of nutrient falls below a certain level
+* Cells move towards the center as tumor grows
+
+## Parameters 
+
+$\sigma(r)$: nutrient concentration at radius point, $r$
+$\hat{\sigma}$: nutrient concentration when slowed growth occurs
+$\sigma_i$: critical nutrient concentration, ie $\sigma<\sigma_i$ means that the cells dies
+$\sigma_\infty$: 
+$A$: nutrient consumption rate
+$s$: proliferation rate
+$k$: diffusion constant
+$R_0$: outer radius of tumor
+
+## Model Development
+The model has three separate growth regimes: fast growth, slow growth, and development of the necrotic core. This state of the model depends on the nutrient concentration at $\sigma(0)$, the center of the tumor. 
+
+The proliferation and nutrient consumption of cells is dictated by:
+
+$$
+f(\sigma) = \begin{cases} 1, & \hat{\sigma}\leq \sigma, \\ \frac{\sigma}{\hat{\sigma}}, & \sigma_i < \sigma \leq \hat{\sigma}, \\ 0, & \sigma < \sigma_i. 
+$$
+
+The top case is fast growth, where proliferation and nutrient consumption are unhindered. As $\sigma$ falls below a nutrient concentration, slowed growth begins, and the constants are scaled by the proportion of nutrient available. Lastly, $\sigma$ falls below the critical 
+nutrient concentration, $\sigma_i$, and the cell dies from lack of nutrients.
+
+## Case 1: Fast Growth
+The nutrient concentration can be defined using the diffusion equation in spherical coordinates. Since we assume the problem is axisymmetric and at equilibrium, we are only concerned with the radial coordinate:
+
+$$
+\frac{k}{r^2}\frac{d}{dr}\left[ r^2\frac{d\sigma}{dr}\right] = A, \quad 0 \leq r \leq R_0.
+$$
+
+
+
+
+
