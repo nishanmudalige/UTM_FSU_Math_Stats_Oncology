@@ -6,4 +6,5 @@ rmd_files:
   - "index.Rmd"
   - "Chapters/01-introduction.Rmd"
   - "Chapters/Kuznetsov-draft.Rmd"
+  - "Chapters/Kuznetsov-extension.Rmd"
   - "Chapters/references.Rmd"
