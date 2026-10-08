@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 Extending the Model: An Immune-Resistant Tumor Subpopulation | sample2</title>
+  <meta name="description" content="Chapter 4 Extending the Model: An Immune-Resistant Tumor Subpopulation | sample2" />
+  <meta name="generator" content="bookdown 0.48 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 Extending the Model: An Immune-Resistant Tumor Subpopulation | sample2" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="nishanmudalige/UTM_FSU_Mathematical_Statistical_Oncology" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 Extending the Model: An Immune-Resistant Tumor Subpopulation | sample2" />
+  
+  
+  
+
+<meta name="author" content="Nazanin Mokari &amp; Bryce Morsky" />
+
+
+<meta name="date" content="2026-10-08" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="the-kuznetsov-tumourimmune-model.html"/>
+<link rel="next" href="summary.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Welcome</a></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#recommended-background"><i class="fa fa-check"></i><b>2.1</b> Recommended Background</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="introduction.html"><a href="introduction.html#mathematical-statistical-modelling"><i class="fa fa-check"></i><b>2.1.1</b> Mathematical &amp; Statistical Modelling</a></li>
+<li class="chapter" data-level="2.1.2" data-path="introduction.html"><a href="introduction.html#introductory-biology"><i class="fa fa-check"></i><b>2.1.2</b> Introductory Biology</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#history-of-mathematical-oncology"><i class="fa fa-check"></i><b>2.2</b> History of Mathematical Oncology</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#what-is-a-mathematical-model"><i class="fa fa-check"></i><b>2.3</b> What is a Mathematical Model?</a></li>
+<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#systems-of-odes-as-mathematical-models"><i class="fa fa-check"></i><b>2.4</b> Systems of ODEs as Mathematical Models</a></li>
+<li class="chapter" data-level="2.5" data-path="introduction.html"><a href="introduction.html#review-of-mathematical-concepts"><i class="fa fa-check"></i><b>2.5</b> Review of Mathematical Concepts</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="introduction.html"><a href="introduction.html#the-characteristic-equation"><i class="fa fa-check"></i><b>2.5.1</b> The Characteristic Equation</a></li>
+<li class="chapter" data-level="2.5.2" data-path="introduction.html"><a href="introduction.html#the-jacobian-matrix"><i class="fa fa-check"></i><b>2.5.2</b> The Jacobian Matrix</a></li>
+<li class="chapter" data-level="2.5.3" data-path="introduction.html"><a href="introduction.html#equilibrium-points-and-local-stability"><i class="fa fa-check"></i><b>2.5.3</b> Equilibrium Points and Local Stability</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="introduction.html"><a href="introduction.html#illustrative-example"><i class="fa fa-check"></i><b>2.6</b> Illustrative Example</a></li>
+<li class="chapter" data-level="2.7" data-path="introduction.html"><a href="introduction.html#analysing-this-system"><i class="fa fa-check"></i><b>2.7</b> Analysing this system</a></li>
+<li class="chapter" data-level="2.8" data-path="introduction.html"><a href="introduction.html#limitations"><i class="fa fa-check"></i><b>2.8</b> Limitations</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html"><i class="fa fa-check"></i><b>3</b> The Kuznetsov Tumour–Immune Model</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#analysing-the-kuznetsov-model"><i class="fa fa-check"></i><b>3.1</b> Analysing the Kuznetsov Model</a></li>
+<li class="chapter" data-level="3.2" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#coexistence-equilibria-root-structure-and-sign-test"><i class="fa fa-check"></i><b>3.2</b> Coexistence equilibria: root structure and sign test</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="sec:resistant.html"><a href="sec:resistant.html"><i class="fa fa-check"></i><b>4</b> Extending the Model: An Immune-Resistant Tumor Subpopulation</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="sec:resistant.html"><a href="sec:resistant.html#motivation-and-model-equations"><i class="fa fa-check"></i><b>4.1</b> Motivation and model equations</a></li>
+<li class="chapter" data-level="4.2" data-path="sec:resistant.html"><a href="sec:resistant.html#mechanistic-derivation-of-theta-rho_t-and-mu_t"><i class="fa fa-check"></i><b>4.2</b> Mechanistic derivation of <span class="math inline">\(\theta\)</span>, <span class="math inline">\(\rho_T\)</span>, and <span class="math inline">\(\mu_T\)</span></a></li>
+<li class="chapter" data-level="4.3" data-path="sec:resistant.html"><a href="sec:resistant.html#equilibria-and-stability"><i class="fa fa-check"></i><b>4.3</b> Equilibria and stability</a></li>
+<li class="chapter" data-level="4.4" data-path="sec:resistant.html"><a href="sec:resistant.html#root-structure-and-sign-test"><i class="fa fa-check"></i><b>4.4</b> Root structure and sign test</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="summary.html"><a href="summary.html"><i class="fa fa-check"></i><b>5</b> Summary</a></li>
+<li class="chapter" data-level="6" data-path="hello.html"><a href="hello.html"><i class="fa fa-check"></i><b>6</b> Hello</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">sample2</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="sec:resistant" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">Chapter 4</span> Extending the Model: An Immune-Resistant Tumor Subpopulation<a href="sec:resistant.html#sec:resistant" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="motivation-and-model-equations" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Motivation and model equations<a href="sec:resistant.html#motivation-and-model-equations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The Kuznetsov model of Section <span class="math inline">\(\ref{sec:kuznetsov}\)</span> treats the tumor as a single, immunologically uniform population. Real tumors, however, are heterogeneous, and subclones that partially evade immune-mediated killing are a central driver of treatment failure. As a first extension, we equip the tumor cell population <span class="math inline">\(T\)</span> with a degree of immune resistance, benchmarked directly against the Kuznetsov model so that setting the resistance parameters to their “no resistance” values recovers Section <span class="math inline">\(\ref{sec:kuznetsov}\)</span> exactly. The model presented here is the single-subpopulation special case of a more general two-subpopulation (immune-resistant vs. immune-sensitive, with optional chemotherapy resistance) model developed in , to which we refer the reader for the full treatment, including both immune-evasion mechanisms considered simultaneously with chemotherapy.</p>
+<p>We assume resistance carries a growth-rate cost <span class="math inline">\(\zeta&gt;0\)</span>, so the resistant population’s growth rate is <span class="math inline">\(\alpha_T=\alpha-\zeta\)</span> rather than the wild-type rate <span class="math inline">\(\alpha\)</span>, and confers a benefit <span class="math inline">\(\theta\in[0,1]\)</span> that reduces the effectiveness of effector-mediated killing (<span class="math inline">\(\theta=1\)</span> recovers full susceptibility, i.e. no resistance). Writing <span class="math inline">\(E\)</span> for the effector population and <span class="math inline">\(\kappa=1/\beta\)</span> for the carrying capacity, the dynamics are
+This is structurally identical to <span class="math inline">\(\eqref{eq:kuz_ODEs}\)</span>: tumor growth is logistic and suppressed by effector-mediated killing at rate <span class="math inline">\(\theta E\)</span>; effectors are produced at baseline rate <span class="math inline">\(\sigma\)</span>, activated through a saturating term with parameters <span class="math inline">\(\rho_T,\eta\)</span>, exhausted or inactivated by the tumor at rate <span class="math inline">\(\mu_T\)</span>, and die naturally at rate <span class="math inline">\(\delta\)</span>. The only change is that the activation and inactivation parameters, <span class="math inline">\(\rho_T\)</span> and <span class="math inline">\(\mu_T\)</span>, and the effective growth rate <span class="math inline">\(\alpha_T\)</span> and kill-rate reduction <span class="math inline">\(\theta\)</span>, now depend on the resistance mechanism the tumor employs, as derived mechanistically below. Setting <span class="math inline">\(\theta=1\)</span>, <span class="math inline">\(\alpha_T=\alpha\)</span>, <span class="math inline">\(\rho_T=\rho\)</span>, <span class="math inline">\(\mu_T=\mu\)</span> recovers <span class="math inline">\(\eqref{eq:kuz_ODEs}\)</span> exactly, confirming this is a proper extension rather than a different model.</p>
+</div>
+<div id="mechanistic-derivation-of-theta-rho_t-and-mu_t" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Mechanistic derivation of <span class="math inline">\(\theta\)</span>, <span class="math inline">\(\rho_T\)</span>, and <span class="math inline">\(\mu_T\)</span><a href="sec:resistant.html#mechanistic-derivation-of-theta-rho_t-and-mu_t" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>As in the Kuznetsov model, effectors and tumor cells transiently bind to form a conjugate <span class="math inline">\(C\)</span>, which then dissociates leaving either cell undamaged, the tumor cell lethally hit, or the effector cell inactivated (Figure <span class="math inline">\(\ref{fig:red_ET_diagram}\)</span>). Immune resistance is modeled as a change in the rates governing this reaction scheme relative to a wild-type (non-resistant) baseline, denoted with a superscript <span class="math inline">\((0)\)</span>.</p>
+<p>Assuming the conjugate dynamics equilibrate on a fast time scale relative to cell division and death (the same quasi-steady-state argument used in to derive <span class="math inline">\(\eqref{eq:kuz_ODEs}\)</span> from the underlying reaction scheme), we have <span class="math inline">\(C = \Gamma E T\)</span> with <span class="math inline">\(\Gamma = \gamma_1/(\gamma_{-1}+\gamma_2+\gamma_3)\)</span>. After rescaling by the wild-type reference rate <span class="math inline">\(\gamma_2^{(0)}\Gamma^{(0)}\)</span>, the reduced system <span class="math inline">\(\eqref{eq:red_ODEs}\)</span> follows with
+<span class="math display">\[\begin{equation}
+    \theta = \frac{\gamma_2\Gamma}{\gamma_2^{(0)}\Gamma^{(0)}}, \qquad \rho_T=\rho\,\frac{\Gamma}{\Gamma^{(0)}}, \qquad \mu_T = \frac{\gamma_3\Gamma}{\gamma_2^{(0)}\Gamma^{(0)}}.
+\end{equation}\]</span></p>
+<p>We consider two concrete resistance mechanisms:</p>
+<p>The distinction between the two mechanisms is therefore whether resistance acts on the of an effector–tumor encounter (checkpoint evasion) or on the of encounter itself (reduced antigen presentation). Table <span class="math inline">\(\ref{tbl:red_param}\)</span> summarizes the parameters of the extended model, reusing the Kuznetsov baseline values from Table <span class="math inline">\(\ref{tbl:kuz_param}\)</span> for all quantities unrelated to resistance.</p>
+</div>
+<div id="equilibria-and-stability" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Equilibria and stability<a href="sec:resistant.html#equilibria-and-stability" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The system <span class="math inline">\(\eqref{eq:red_ODEs}\)</span> admits a tumor-free equilibrium <span class="math inline">\(\mathcal{E}_0 = (0, \sigma/\delta)\)</span> – identical in form to the Kuznetsov tumor-free state, since resistance only affects the dynamics once <span class="math inline">\(T&gt;0\)</span> – and, when it exists, a tumor-present equilibrium <span class="math inline">\(\mathcal{E}_1=(T^*,E^*)\)</span> with <span class="math inline">\(T^*&gt;0\)</span>. Exactly as in Section <span class="math inline">\(\ref{sec:kuznetsov}\)</span>, the Jacobian at <span class="math inline">\(\mathcal{E}_0\)</span> is triangular, with eigenvalues
+<span class="math display">\[\begin{equation}
+    \lambda_1 = \alpha_T - \theta\,\frac{\sigma}{\delta}, \qquad \lambda_2 = -\delta,
+\end{equation}\]</span>
+giving the following direct generalization of Proposition <span class="math inline">\(\ref{prop_kuz_tumorfree}\)</span>.</p>
+<p>At a tumor-present equilibrium, <span class="math inline">\(T^*\)</span> and <span class="math inline">\(E^*\)</span> satisfy
+<span class="math display">\[\begin{equation}
+    E^* = \alpha_T\left(1-\frac{T^*}{\kappa}\right) = \frac{\sigma}{\dfrac{\rho_T T^*}{T^*+\eta} - \mu_T T^* - \delta}. \label{eq:red_eq_condition}
+\end{equation}\]</span></p>
+</div>
+<div id="root-structure-and-sign-test" class="section level2 hasAnchor" number="4.4">
+<h2><span class="header-section-number">4.4</span> Root structure and sign test<a href="sec:resistant.html#root-structure-and-sign-test" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Clearing denominators in Equation <span class="math inline">\(\eqref{eq:red_eq_condition}\)</span>, exactly as was done for the Kuznetsov model in Section <span class="math inline">\(\ref{sec:kuznetsov}\)</span>, gives the cubic polynomial
+<span class="math display">\[\begin{equation}
+    F(T^*) = B_3 T^{*3} + B_2 T^{*2} + B_1 T^* + B_0 = 0, \label{eq:red_cubic}
+\end{equation}\]</span>
+with coefficients
+One can check directly that <span class="math inline">\(B_i = \alpha_T\kappa\,C_i&#39;\)</span> for <span class="math inline">\(i=0,\dots,3\)</span>, where <span class="math inline">\(C_i&#39;\)</span> denotes the Kuznetsov coefficient <span class="math inline">\(C_i\)</span> of Section <span class="math inline">\(\ref{sec:kuznetsov}\)</span> with <span class="math inline">\((\alpha,\rho,\mu,\beta)\)</span> replaced by <span class="math inline">\((\alpha_T,\rho_T,\mu_T,1/\kappa)\)</span>. Since multiplying a polynomial by the positive constant <span class="math inline">\(\alpha_T\kappa\)</span> does not change its roots, <span class="math inline">\(\eqref{eq:red_cubic}\)</span> has exactly the same positive-root structure as the Kuznetsov cubic with resistant parameters substituted in – confirming that resistance enters the equilibrium problem only by remapping the same three parameters that already governed the wild-type dynamics. The same four-step sign test from Section <span class="math inline">\(\ref{sec:kuznetsov}\)</span> therefore applies verbatim:</p>
+<p>As before, the sign sequence <span class="math inline">\((+,-,+,-)\)</span> has three sign changes, so Descartes’ Rule predicts either one or three positive roots of <span class="math inline">\(\eqref{eq:red_cubic}\)</span>, with three being the generic case – the hallmark of bistability between a low- and a high-tumor-burden resistant equilibrium. This is exactly the qualitative structure established for the Kuznetsov model in Section <span class="math inline">\(\ref{sec:kuznetsov}\)</span>, now shown to persist under both forms of immune resistance considered here, provided effector activation continues to dominate tumor-induced exhaustion (<span class="math inline">\(\rho_T&gt;\mu_T\eta+\delta\)</span>) at the resistant phenotype’s parameter values.</p>
+<p>The Jacobian at <span class="math inline">\(\mathcal{E}_1\)</span> is
+<span class="math display">\[\begin{equation}
+    J(\mathcal{E}_1) = \begin{pmatrix}
+        -\dfrac{\alpha_T}{\kappa}T^* &amp; -\theta T^* \\[8pt]
+        E^*\left(\dfrac{\rho_T\eta}{(T^*+\eta)^2} - \mu_T\right) &amp; -\dfrac{\sigma}{E^*}
+    \end{pmatrix},
+\end{equation}\]</span>
+with <span class="math inline">\(\mathop{\mathrm{tr}}(J(\mathcal{E}_1))&lt;0\)</span> and
+<span class="math display">\[\begin{equation}
+    \det(J(\mathcal{E}_1)) = \frac{\alpha_T\sigma}{\kappa E^*}T^* + \left(\frac{\rho_T\eta}{(T^*+\eta)^2}-\mu_T\right)\theta E^* T^*.
+\end{equation}\]</span>
+As in the wild-type model, <span class="math inline">\(\mathcal{E}_1\)</span> is stable whenever <span class="math inline">\(\det(J(\mathcal{E}_1))&gt;0\)</span>, which holds in particular if <span class="math inline">\(\rho_T\eta/(T^*+\eta)^2 &gt; \mu_T\)</span>; otherwise, bistability between a low- and high-tumor-burden resistant equilibrium arises via the usual saddle-node bifurcation structure, consistent with the three-root sign-test result above.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="the-kuznetsov-tumourimmune-model.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="summary.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

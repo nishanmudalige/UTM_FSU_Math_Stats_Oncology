@@ -17,3 +17,11 @@ analysing-this-system
 limitations
 the-kuznetsov-tumourimmune-model
 analysing-the-kuznetsov-model
+coexistence-equilibria-root-structure-and-sign-test
+sec:resistant
+motivation-and-model-equations
+mechanistic-derivation-of-theta-rho_t-and-mu_t
+equilibria-and-stability
+root-structure-and-sign-test
+summary
+hello
