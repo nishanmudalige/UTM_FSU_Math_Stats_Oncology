@@ -1,6 +1,17 @@
 # UTM_FSU_Math_Stats_Oncology
 Repository for UTM and FSU to work on building resources to teach mathematical and statistical oncology
 
+## Aims for Week 5 (Oct 15)
+
+- [ ] Everyone: Help John complete the chapter on the model in spherical coordinates
+- [ ] Everyone: Start the agent based model (ABM) chapter
+- [ ] Heba: Read the papers on ABM
+- [ ] Maria: Read the papers on ABM
+- [ ] Heba: summarize ABM model paper (John's paper + Bryce's papers in slack) in a separate folder on GitHub
+- [ ] Maria: summarize ABM model paper (John's paper + Bryce's papers in slack) in a separate folder on GitHub
+- [ ] Everyone: Coordinate to keep branch reasonably clean. Help each other with merges where necessary (Contact Heba for merge conflicts).
+
+
 ## Aims for Week 3 (Sep 24)
 
   **Rose and Heba**
