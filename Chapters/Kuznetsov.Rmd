@@ -1,11 +1,6 @@
----
-title: "Kuznetsov-draft"
-output:
-  pdf_document: default
-  html_document: default
----
-## The Kuznetsov Tumour–Immune Model
+# The Kuznetsov Tumour–Immune Model
 
+## The Simple Kuznetsov Model
 A tumour is an abnormal mass of tissue that forms when cells grow and divide more than they should or do not die when they should. Tumours may be benign (not cancer) or malignant (cancer). Malignant tumours can spread into, or invade, nearby tissues. They can also spread to other parts of the body through the blood and lymph systems. 
 
 Tumour cells reproduce and therefore could increase the tumour population. Moreover, tumour cells can also be removed through interactions with immune effector cells. These cells recognize and respond to abnormal cells, including tumour cells. Some examples of these cells are cytotoxic T lymphocytes and natural killer cells. 
@@ -35,12 +30,12 @@ $b$: Inverse of maximum carrying capacity,
 where all of the above parameters are constant. 
 
   To determine the rate of change of the effector cell population, we consider processes that increase and decrease the number of effector cells. Effector cells enter the tumour region at baseline rate $s$. Tumour cells also stimulate the accumulation of effector cells. We assume that this stimulation increases with tumour cell number but eventually saturates, giving the term $\frac{pET}{g+T}$. The saturation reflects the assumption that the accumulation of effector cells cannot increase indefinitely as tumour size increases, due to biological limitations. Effector cells are also inactivated through interactions with tumour cells at a rate proportional to both $E$ and $T$, giving the term $mET$. Finally, effector cells are eliminated naturally at a rate proportional to the size of the population, giving the term $dE$.
-  
+
 Combining these processes together, we obtain: 
 
 \begin{equation}
 \frac{dE}{dt} = s + \frac{pET}{g+T} - mET -dE
-\label{eq:kuznetsov4a}
+(\#eq:kuznetsov4a)
 \end{equation}
 
 
@@ -48,16 +43,16 @@ Similarly, to determine the rate of change of the tumour cell population, we con
 
 \begin{equation}
 \frac{dT}{dt} = aT(1-bT) -nET
-\label{eq:kuznetsov4b}
+(\#eq:kuznetsov4b)
 \end{equation}
 
-Equations @ref(eq:kuznetsov4a) and @ref(eq:kuznetsov4b) form the reduced Kuznetsov tumour immune model. These equations form a system of ODEs describing the interactions between tumour cells and immune effector cells. 
+Equations \@ref(eq:kuznetsov4a) and \@ref(eq:kuznetsov4b) form the reduced Kuznetsov tumour immune model. These equations form a system of ODEs describing the interactions between tumour cells and immune effector cells. 
 
 ## Analysing the Kuznetsov Model
 
 Recall that an equilibrium is a state where both $\frac{dE}{dt}=0$ and $\frac{dT}{dt}=0$.
 
-We first consider the case where there are no tumour cells, so $T=0$. Equation @ref(eq:kuznetsov4a) becomes
+We first consider the case where there are no tumour cells, so $T=0$. Equation \@ref(eq:kuznetsov4a) becomes
 
 $$
 \frac{dE}{dt}=s-dE.
@@ -77,7 +72,7 @@ $$
 
 This equilibrium represents a state in which there are no tumour cells, while effector cells remain present due to the continuous baseline influx $s$.
 
-We next consider equilibria where both $T\neq0$ and $E\neq0$. From equation @ref(eq:kuznetsov4b), setting $\frac{dT}{dt}=0$ gives
+We next consider equilibria where both $T\neq0$ and $E\neq0$. From equation \@ref(eq:kuznetsov4b), setting $\frac{dT}{dt}=0$ gives
 
 $$
 aT(1-bT)-nET=0.
@@ -97,7 +92,7 @@ $$
 
 This is the tumour nullcline for positive tumour cell populations.
 
-Similarly, setting equation @ref(eq:kuznetsov4a) equal to zero gives
+Similarly, setting equation \@ref(eq:kuznetsov4a) equal to zero gives
 
 $$
 s+\frac{pET}{g+T}-mET-dE=0.
@@ -235,3 +230,324 @@ $$
 has eigenvalues $\lambda_1\approx-0.04970$ and $\lambda_2\approx-0.18628.$
 
 Since they are both negative, the $(E_4,T_4)$ is asymptotically stable.
+
+
+## Coexistence equilibria: root structure and sign test
+
+A tumor-present equilibrium satisfies both nullclines of \@ref(eq:kuznetsov4a) and \@ref(eq:kuznetsov4b) simultaneously:
+\begin{equation}
+    x = f(y) \equiv \frac{s}{d+m y - \dfrac{p y}{g+y}}, \qquad x = g(y) \equiv a(1-b y).
+\end{equation}
+Setting $f(y)=g(y)$ and clearing the denominator $(g+y)$ yields a cubic polynomial in $y$ (Kuznetsov et al.'s Equation 8):
+\begin{equation}
+    C_3 y^3 + C_2 y^2 + C_1 y + C_0 = 0, (\#eq:kuz_cubic)
+\end{equation}
+with
+\begin{subequations}
+\begin{align}
+    C_0 &= g\left(\frac{s}{a}-d\right), \\
+    C_1 &= \frac{s}{a} + p - mg - d + dgb, \\
+    C_2 &= -m + (mg+d-p)b, \\
+    C_3 &= mb.
+\end{align}
+\end{subequations}
+Each positive real root $y^*$ of \@ref(eq:kuz_cubic) corresponds to a biologically admissible tumor-present equilibrium. Rather than solving the cubic directly, we can bound -- and in this case pin down -- the number of positive roots purely from the \emph{signs} of its coefficients, using Descartes' Rule of Signs: the number of positive real roots of a real polynomial is either equal to the number of sign changes in its ordered coefficient sequence, or less than that by an even number.
+
+**Step 1: Sign of $C_3$.** Since $m,b>0$, we always have $C_3 = mb>0$.
+
+**Step 2: Sign of $C_0$.** Directly from its definition, $C_0>0 \iff s/a > d \iff s/d > a$ -- exactly the tumor-free stability condition of Proposition \ref{prop_kuz_tumorfree}. So $C_0<0$ precisely when the tumor-free state is unstable, which is the regime of interest, since it is the regime in which a tumor-present equilibrium must exist (by the Intermediate Value Theorem: the cubic $F(y) = C_3y^3+C_2y^2+C_1y+C_0$ satisfies $F(0)=C_0<0$ and $F(y)\to+\infty$ as $y\to\infty$, so it has at least one positive root).
+
+**Step 3: Sign of $C_2$.** Suppose effector activation dominates exhaustion in the sense that $p > mg+d$ -- this holds for the fitted parameters in Table \ref{tbl:kuz_param} and is a standing assumption in \cite{kuznetsov94}. Then $mg+d-p<0$, so $C_2 = -m + (mg+d-p)b$ is the sum of two negative terms: $C_2<0$ for every $b>0$.
+
+**Step 4: Sign of $C_1$.** Under the same condition $p>mg+d$, and since $s/a>0$ and $dgb>0$,
+\[
+C_1 = \frac{s}{a} + \underbrace{(p-mg-d)}_{>0} + dgb > 0.
+\]
+
+**Putting it together.** With $C_0<0$, $C_1>0$, $C_2<0$, $C_3>0$, the ordered coefficient sequence is $(+,-,+,-)$ (reading from $C_3$ down to $C_0$), which has three sign changes. By Descartes' Rule, the cubic \@ref(eq:kuz_cubic) therefore has either three or one positive real roots. Since we have already shown (Step 2) that at least one positive root always exists in this regime, and since three is the generic, structurally stable count predicted by the sign pattern, the system typically admits \emph{three} coexistence equilibria -- producing, together with the unstable tumor-free state, a total of four steady states and the characteristic bistable "dormant tumor" / "tumor escape" structure that is the central result of \cite{kuznetsov94}. Descartes' Rule alone cannot distinguish the three-root case from the (non-generic) one-root case within this sign pattern; a finer tool, a Sturm sequence built from $C_0,C_1,C_2$ and the auxiliary quantities $S=C_2C_1-9C_3C_0$, $T=2C_2S/R-3C_3S^2/R^2-C_1$, and $R=2C_2^2-6C_3C_1$, is needed to certify the exact count in borderline cases; see \cite{kuznetsov94} for the full Sturm-sequence table.
+
+**Checking the fitted parameters.** Using the values in Table \ref{tbl:kuz_param}: $mg+d = (0.00311)(20.19)+0.3743 \approx 0.437$, which is indeed less than $p=1.131$, confirming Steps 3--4. And $s/d = 0.1181/0.3743 \approx 0.316$, which is less than $a=1.636$, confirming the tumor-free state is unstable (Step 2). The sign sequence is therefore $(+,-,+,-)$ as derived above, correctly predicting the three coexistence equilibria -- the "dormant tumor" state, a saddle, and the "tumor escape" state -- that \cite{kuznetsov94} finds numerically and uses to build their bifurcation diagram and phase portrait.
+
+## Extending the Model: An Immune-Resistant Tumor Subpopulation {#sec:resistant}
+
+
+The Kuznetsov model of Section \ref{sec:kuznetsov} treats the tumor as a single, immunologically uniform population. Real tumors, however, are heterogeneous, and subclones that partially evade immune-mediated killing are a central driver of treatment failure. As a first extension, we equip the tumor cell population $T$ with a degree of immune resistance, benchmarked directly against the Kuznetsov model so that setting the resistance parameters to their "no resistance" values recovers Section \ref{sec:kuznetsov} exactly. The model presented here is the single-subpopulation special case of a more general two-subpopulation (immune-resistant vs.\ immune-sensitive, with optional chemotherapy resistance) model developed in \cite{mokari26}, to which we refer the reader for the full treatment, including both immune-evasion mechanisms considered simultaneously with chemotherapy.
+
+We assume resistance carries a growth-rate cost $\zeta>0$, so the resistant population's growth rate is $a_T=a-\zeta$ rather than the wild-type rate $a$, and confers a benefit $\theta\in[0,1]$ that reduces the effectiveness of effector-mediated killing ($\theta=1$ recovers full susceptibility, i.e.\ no resistance). Writing $E$ for the effector population and $\kappa=1/b$ for the carrying capacity, the dynamics are
+\begin{subequations}
+\begin{align}
+    \dot{T} &= \left(a_T\left(1-\frac{T}{\kappa}\right) - \theta E\right)T, (\#eq:red_ODEs_T)\\
+    \dot{E} &= \left(\frac{p_T T}{T+g} - m_T T - d\right)E + s. (\#eq:red_ODEs_E)
+\end{align}
+\end{subequations}
+This is structurally identical to \@ref(eq:kuznetsov4a) and \@ref(eq:kuznetsov4b): tumor growth is logistic and suppressed by effector-mediated killing at rate $\theta E$; effectors are produced at baseline rate $s$, activated through a saturating term with parameters $p_T,g$, exhausted or inactivated by the tumor at rate $m_T$, and die naturally at rate $d$. The only change is that the activation and inactivation parameters, $p_T$ and $m_T$, and the effective growth rate $a_T$ and kill-rate reduction $\theta$, now depend on the resistance mechanism the tumor employs, as derived mechanistically below. Setting $\theta=1$, $a_T=a$, $p_T=p$, $m_T=m$ recovers \@ref(eq:kuznetsov4a) and \@ref(eq:kuznetsov4b) exactly, confirming this is a proper extension rather than a different model.
+
+### Mechanistic derivation of $\theta$, $p_T$, and $m_T$
+
+As in the Kuznetsov model, effectors and tumor cells transiently bind to form a conjugate $C$, which then dissociates leaving either cell undamaged, the tumor cell lethally hit, or the effector cell inactivated (Figure \ref{fig:red_ET_diagram}). Immune resistance is modeled as a change in the rates governing this reaction scheme relative to a wild-type (non-resistant) baseline, denoted with a superscript $(0)$.
+
+```{=latex}
+\begin{figure}[ht!]
+    \centering
+    \begin{tikzpicture}[baseline=(C.base), >=Stealth, node distance=20mm]
+    \node (ET) {$E+T$};
+    \node (C)  [right=of ET] {$C$};
+    \node (ETs) [right=20mm of C, yshift=7mm] {$E+T^\dagger$};
+    \node (EsT) [right=20mm of C, yshift=-7mm] {$E^\dagger+T$};
+
+    \draw[->] ([yshift=2pt]ET.east) -- node[above] {$\gamma_1$} ([yshift=2pt]C.west);
+    \draw[->] ([yshift=-2pt]C.west) -- node[below] {$\gamma_{-1}$} ([yshift=-2pt]ET.east);
+
+    \draw[->] (C) -- node[above] {$\gamma_2$} (ETs);
+    \draw[->] (C) -- node[below] {$\gamma_3$} (EsT);
+    \end{tikzpicture}
+\caption{Tumor ($T$) and effector ($E$) cells combine into a conjugate ($C$), which then dissociates leaving either one or no cells damaged (damaged cells marked $\dagger$). Rates of these reactions are $\gamma_j$ for $j=-1,1,2,3$: binding ($\gamma_1$), unbinding without damage ($\gamma_{-1}$), tumor-cell lysis ($\gamma_2$), and effector inactivation ($\gamma_3$).}
+\label{fig:red_ET_diagram}
+\end{figure}
+```
+
+Assuming the conjugate dynamics equilibrate on a fast time scale relative to cell division and death (the same quasi-steady-state argument used in \cite{kuznetsov94} to derive \@ref(eq:kuznetsov4a) and \@ref(eq:kuznetsov4b) from the underlying reaction scheme), we have $C = \Gamma E T$ with $\Gamma = \gamma_1/(\gamma_{-1}+\gamma_2+\gamma_3)$. After rescaling by the wild-type reference rate $\gamma_2^{(0)}\Gamma^{(0)}$, the reduced system \@ref(eq:red_ODEs_T) and \@ref(eq:red_ODEs_E) follows with
+\begin{equation}
+    \theta = \frac{\gamma_2\Gamma}{\gamma_2^{(0)}\Gamma^{(0)}}, \qquad p_T=p\,\frac{\Gamma}{\Gamma^{(0)}}, \qquad m_T = \frac{\gamma_3\Gamma}{\gamma_2^{(0)}\Gamma^{(0)}}.
+\end{equation}
+
+We consider two concrete resistance mechanisms:
+
+\begin{itemize}
+    \item \textbf{Immune checkpoint evasion.} The tumor cell gains a receptor (e.g.\ PD-L1) that, once an effector is bound, reduces the probability the conjugate resolves in the tumor cell's death and instead redirects it toward inactivating the effector. Binding itself is unaffected ($\gamma_1=\gamma_1^{(0)}$, so $\Gamma=\Gamma^{(0)}$), giving
+    \[
+        p_T=p, \qquad m_T = m+\phi(1-\theta),
+    \]
+    where $\phi\in[0,1]$ is the fraction of failed-lysis events that are redirected into damaging the effector instead.
+    \item \textbf{Reduced antigen presentation.} The tumor cell instead lowers the rate at which effectors recognize and bind to it in the first place, $\gamma_1=\theta\gamma_1^{(0)}$, so $\Gamma=\theta\Gamma^{(0)}$. This scales both activation and inactivation of effectors proportionally:
+    \[
+        p_T=\theta p, \qquad m_T=\theta m.
+    \]
+\end{itemize}
+The distinction between the two mechanisms is therefore whether resistance acts on the \emph{outcome} of an effector--tumor encounter (checkpoint evasion) or on the \emph{rate} of encounter itself (reduced antigen presentation). Table \ref{tbl:red_param} summarizes the parameters of the extended model, reusing the Kuznetsov baseline values from Table \ref{tbl:kuz_param} for all quantities unrelated to resistance.
+
+\begin{table}[!htb]
+\begin{center}
+\begin{tabular}{ccl}
+\toprule
+\textbf{Parameter} & \textbf{Default value} & \textbf{Definition} \\
+\midrule
+$a$ & $1.636$ & Basic (wild-type) tumor growth rate \\
+$a_T=a-\zeta$ & ---- & Resistant population's growth rate \\
+$\zeta$ & $0.4908$ & Growth-rate cost of resistance \\
+$d$ & $0.3743$ & Effector death rate \\
+$g$ & $20.19$ & Saturation parameter \\
+$\theta$ & --- & Effector kill-rate reduction (benefit of resistance) \\
+$\kappa=1/b$ & $500$ & Carrying capacity \\
+$m$ & $0.00311$ & Baseline (wild-type) inactivation rate \\
+$p$ & $1.131$ & Baseline (wild-type) activation rate \\
+$s$ & $0.1181$ & Effector birth rate \\
+$\phi$ & $0.00311$ & Immune checkpoint inactivation weight \\
+$T$ & --- & $10^6$ immune-resistant tumor cells \\
+$E$ & --- & $10^6$ effectors \\
+\bottomrule
+\end{tabular}
+\caption{Summary of parameter definitions and default values for the immune-resistant-tumor model \@ref(eq:red_ODEs_T) and \@ref(eq:red_ODEs_E).} \label{tbl:red_param}
+\end{center}
+\end{table}
+
+### Equilibria and stability of the extended model
+
+The system \@ref(eq:red_ODEs_T) and \@ref(eq:red_ODEs_E) admits a tumor-free equilibrium $\mathcal{E}_0 = (0, s/d)$ -- identical in form to the Kuznetsov tumor-free state, since resistance only affects the dynamics once $T>0$ -- and, when it exists, a tumor-present equilibrium $\mathcal{E}_1=(T^*,E^*)$ with $T^*>0$. Exactly as in Section \ref{sec:kuznetsov}, the Jacobian at $\mathcal{E}_0$ is triangular, with eigenvalues
+\begin{equation}
+    \lambda_1 = a_T - \theta\,\frac{s}{d}, \qquad \lambda_2 = -d,
+\end{equation}
+giving the following direct generalization of Proposition \ref{prop_kuz_tumorfree}.
+
+\begin{proposition}\label{prop_red_1}
+The tumor-free equilibrium $\mathcal{E}_0=(0,s/d)$ of the immune-resistant model \@ref(eq:red_ODEs_T) and \@ref(eq:red_ODEs_E) is stable if and only if
+\[
+\frac{s}{d} > \frac{a_T}{\theta}.
+\]
+Setting $\theta=1$ and $a_T=a$ recovers exactly the Kuznetsov condition $s/d>a$ of Proposition \ref{prop_kuz_tumorfree}. Since $\theta\le1$ and resistance typically also reduces $a_T$ below $a$, the net effect of resistance on this threshold depends on whether the growth-rate cost $\zeta$ or the killing-effectiveness benefit $1-\theta$ dominates.
+\end{proposition}
+
+At a tumor-present equilibrium, $T^*$ and $E^*$ satisfy
+\begin{equation}
+    E^* = a_T\left(1-\frac{T^*}{\kappa}\right) = \frac{s}{\dfrac{p_T T^*}{T^*+g} - m_T T^* - d}. (\#eq:red_eq_condition)
+\end{equation}
+
+### Root structure and sign test
+
+Clearing denominators in Equation \@ref(eq:red_eq_condition), exactly as was done for the Kuznetsov model in Section \ref{sec:kuznetsov}, gives the cubic polynomial
+\begin{equation}
+    F(T^*) = B_3 T^{*3} + B_2 T^{*2} + B_1 T^* + B_0 = 0, (\#eq:red_cubic)
+\end{equation}
+with coefficients
+\begin{subequations}
+\begin{align}
+    B_0 &= \kappa g\left(s-a_Td\right), \\
+    B_1 &= \kappa a_T(p_T-gm_T-d) + a_Tgd + \kappa s, \\
+    B_2 &= a_Tm_T(g-\kappa) + a_T(d-p_T), \\
+    B_3 &= a_Tm_T.
+\end{align}
+\end{subequations}
+One can check directly that $B_i = a_T\kappa\,C_i'$ for $i=0,\dots,3$, where $C_i'$ denotes the Kuznetsov coefficient $C_i$ of Section \ref{sec:kuznetsov} with $(a,p,m,b)$ replaced by $(a_T,p_T,m_T,1/\kappa)$. Since multiplying a polynomial by the positive constant $a_T\kappa$ does not change its roots, \@ref(eq:red_cubic) has exactly the same positive-root structure as the Kuznetsov cubic with resistant parameters substituted in -- confirming that resistance enters the equilibrium problem only by remapping the same three parameters that already governed the wild-type dynamics. The same four-step sign test from Section \ref{sec:kuznetsov} therefore applies verbatim:
+
+\begin{itemize}
+    \item[(i)] $B_3=a_Tm_T>0$ always, since $a_T,m_T>0$.
+    \item[(ii)] $B_0>0 \iff s/d>a_T$, which (recalling $\theta\le1$) is implied by, but slightly weaker than, the tumor-free stability condition of Proposition \ref{prop_red_1}. We again focus on $B_0<0$, the regime in which a tumor-present equilibrium is guaranteed to exist.
+    \item[(iii)] If $p_T>m_Tg+d$ (effector activation dominates exhaustion, the same standing assumption used for the wild-type model) and $\kappa>g$, then $B_2 = a_Tm_T(g-\kappa)+a_T(d-p_T)<0$, since both terms are negative.
+    \item[(iv)] Under the same condition, $B_1 = \kappa a_T(p_T-gm_T-d)+a_Tgd+\kappa s>0$, since every term is positive.
+\end{itemize}
+As before, the sign sequence $(+,-,+,-)$ has three sign changes, so Descartes' Rule predicts either one or three positive roots of \@ref(eq:red_cubic), with three being the generic case -- the hallmark of bistability between a low- and a high-tumor-burden resistant equilibrium. This is exactly the qualitative structure established for the Kuznetsov model in Section \ref{sec:kuznetsov}, now shown to persist under both forms of immune resistance considered here, provided effector activation continues to dominate tumor-induced exhaustion ($p_T>m_Tg+d$) at the resistant phenotype's parameter values.
+
+The Jacobian at $\mathcal{E}_1$ is
+\begin{equation}
+    J(\mathcal{E}_1) = \begin{pmatrix}
+        -\dfrac{a_T}{\kappa}T^* & -\theta T^* \\[8pt]
+        E^*\left(\dfrac{p_Tg}{(T^*+g)^2} - m_T\right) & -\dfrac{s}{E^*}
+    \end{pmatrix},
+\end{equation}
+with $\tr(J(\mathcal{E}_1))<0$ and
+\begin{equation}
+    \det(J(\mathcal{E}_1)) = \frac{a_Ts}{\kappa E^*}T^* + \left(\frac{p_Tg}{(T^*+g)^2}-m_T\right)\theta E^* T^*.
+\end{equation}
+As in the wild-type model, $\mathcal{E}_1$ is stable whenever $\det(J(\mathcal{E}_1))>0$, which holds in particular if $p_Tg/(T^*+g)^2 > m_T$; otherwise, bistability between a low- and high-tumor-burden resistant equilibrium arises via the usual saddle-node bifurcation structure, consistent with the three-root sign-test result above.
+
+## Bifurcation Analysis
+
+So far, we have studied the equilibria and stability of the Kuznetsov tumour-immune model for fixed parameter values. However, the qualitative behaviour of the system may change when one or more model parameters are varied. Parameters such as tumour growth rates, immune response strength, and immune evasion may differ between individuals or change over time. Hence, it is important to consider how the model may change when we vary the parameters.
+
+A bifurcation occurs when a small change in a parameter causes a qualitative change in the behaviour of a dynamical system. These changes may include the appearance or disappearance of equilibrium points, or a change in the stability of an equilibrium. 
+
+For the Kuznetsov model, parameters such as the maximum tumour growth rate $a$, the tumour killing rate $n$, and the rate of tumour-stimulated effector accumulation $p$ may be treated as bifurcation parameters. Varying these parameters allows us to study how changes in tumour growth or immune activity affect the equilibria of the system. In particular, the parameter $\theta$ represents the effectiveness of immune-mediated tumour killing relative to the original tumour population. A decrease in $\theta$ therefore corresponds to increased immune resistance. By varying $\theta$, we can examine whether increasing tumour resistance changes the number or stability of the equilibria.
+
+Bifurcation diagrams provide information that cannot be obtained from a single phase plane plot. A phase plane describes the behaviour of the system for one fixed set of parameters, whereas a bifurcation diagram describes how the long-term behaviour of the system changes across a range of parameter values.
+
+
+
+
+
+
+
+
+```{r biffurcation, echo=FALSE, fig.cap="Simulated tumour growth over 30 days.", out.width="100%"}
+
+fontname <- "CMU Serif"
+fonts <- systemfonts::system_fonts()
+if (!any(fonts$family == fontname)) stop("CMU Serif not found. Install CMU fonts or change fontname.")
+cat("Using font:", fontname, " -> ", systemfonts::match_font(fontname)$path, "\n")
+
+# Parameters
+c_par <- 0.4908
+alpha2 <- 1.636
+eta <- 20.19
+kappa <- 500.0
+delta <- 0.3743
+rho <- 1.131
+sigma <- 0.1181
+mu <- 0.00311
+alpha1 <- alpha2 - c_par
+
+# T1-only nullcline
+f_T1 <- function(T1, theta1) {
+  (alpha1 / theta1) * (1 - T1 / kappa) *
+    ((rho * T1) / (T1 + eta) - (mu * (2 - theta1)) * T1 - delta) + sigma
+}
+
+# Effector-population equilibrium on the T1-only branch
+E_T1_only <- function(T1, theta1) (alpha1 / theta1) * (1 - T1 / kappa)
+
+# Real parts of the Jacobian eigenvalues
+J_T1_only <- function(T1, theta1) {
+  E <- E_T1_only(T1, theta1)
+  J <- matrix(c(
+    -alpha1 * (T1 / kappa), -alpha1 * (T1 / kappa), -theta1 * T1,
+    0, alpha2 * (1 - T1 / kappa) - E, 0,
+    E * ((rho * eta) / (T1 + eta)^2 - mu * (2 - theta1)),
+    E * ((rho * eta) / (T1 + eta)^2 - mu),
+    -sigma / E
+  ), nrow = 3, byrow = TRUE)
+  Re(eigen(J, only.values = TRUE)$values)
+}
+
+# All roots on [a, b]: scan a fine grid for sign changes, refine with uniroot
+# (stand-in for Roots.find_zeros)
+find_zeros <- function(f, a, b, n = 5000) {
+  x <- seq(a, b, length.out = n)
+  y <- f(x)
+  roots <- x[y == 0]
+  idx <- which(head(y, -1) * tail(y, -1) < 0)
+  for (i in idx) {
+    roots <- c(roots, uniroot(f, c(x[i], x[i + 1]), tol = 1e-12)$root)
+  }
+  sort(roots)
+}
+
+# Bifurcation sweep over theta_1
+theta1_range <- seq(1e-3, 1.0, length.out = 1000)
+Tmin <- 1e-6
+Tmax <- kappa - 1e-6
+
+res <- do.call(rbind, lapply(theta1_range, function(th) {
+  r <- find_zeros(function(T1) f_T1(T1, th), Tmin, Tmax)
+  if (length(r) == 0) return(NULL)
+  data.frame(
+    theta1 = th,
+    T1 = r,
+    E1 = E_T1_only(r, th),
+    stable = vapply(r, function(T1) all(J_T1_only(T1, th) < 0), logical(1))
+  )
+}))
+res$stability <- factor(ifelse(res$stable, "Stable", "Unstable"),
+                        levels = c("Stable", "Unstable"))
+# Draw unstable points first so stable points sit on top (matches plotting order)
+res <- res[order(res$stable), ]
+
+cols <- c(Stable = "#14b835", Unstable = "#87ed9c" )
+
+base_theme <- theme_bw(base_size = 35, base_family = fontname) +
+  theme(
+    panel.border = element_blank(),
+    axis.line = element_line(colour = "black"),
+    axis.text = element_text(colour = "black"),
+    legend.position = "none",
+    axis.title.x = element_blank(),
+    plot.background = element_rect(fill = "white", colour = NA)
+  )
+
+p1 <- ggplot(res, aes(theta1, T1, colour = stability)) +
+  geom_point(size = 3) +
+  scale_colour_manual(values = cols) +
+  scale_x_continuous(breaks = seq(0, 1, 0.25)) +
+  scale_y_continuous(breaks = seq(0, 500, 100)) +
+  coord_cartesian(xlim = c(-0.05, 1.05), ylim = c(-5, 505), expand = FALSE) +
+  labs(y = "Tumor Cell Population") +
+  base_theme
+
+p2 <- ggplot(res, aes(theta1, E1, colour = stability)) +
+  geom_point(size = 3) +
+  scale_colour_manual(values = cols) +
+  scale_x_continuous(breaks = seq(0, 1, 0.25)) +
+  scale_y_continuous(position = "right") +
+  coord_cartesian(xlim = c(-0.05, 1.05), ylim = c(-0.05, 4.05), expand = FALSE) +   # clip, don't drop, like Makie limits
+  labs(y = "Effector Cell Population") +
+  base_theme +
+  theme(plot.margin = margin(5.5, 5.5, 5.5, 50))   # ~ colgap!(..., 50)
+
+xlab <- wrap_elements(grid::textGrob(
+  expression("Effector kill rate reduction, " * theta[1]),
+  gp = grid::gpar(fontsize = 35, fontfamily = fontname)
+))
+
+fig <- (p1 | p2) / xlab + plot_layout(heights = c(1, 0.12))
+fig
+```
+
+
+
+
+
+## Summary
+
+Starting from the two-population Kuznetsov tumor--immune model, we showed that its coexistence-equilibrium structure is governed by a cubic polynomial whose coefficient signs -- not its explicit roots -- determine whether the system is monostable or bistable. The same sign-test machinery, applied unchanged after remapping three parameters to account for a resistant phenotype, shows that an immune-resistant tumor subpopulation inherits the same qualitative bistability whenever effector activation continues to dominate tumor-induced exhaustion at the resistant phenotype's parameter values. This worked example illustrates a general strategy for analyzing tumor--immune models in this course: reduce the equilibrium condition to a low-degree polynomial, and use a sign test on its coefficients, rather than brute-force root-finding, to characterize the number and type of biologically admissible steady states.
+
+
+% \bibliography{ref}
+% \bibliographystyle{abbrv}

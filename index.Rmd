@@ -9,6 +9,12 @@ documentclass: book
 github-repo: nishanmudalige/UTM_FSU_Mathematical_Statistical_Oncology
 ---
 
+```{r setup, include=FALSE}
+library(ggplot2)
+library(patchwork)
+library(systemfonts)
+```
+
 # Welcome
 
 This is our e-book on mathematical oncology
