@@ -1,0 +1,7 @@
+---
+title: "Agent-Based Modeling Draft"
+output:
+  pdf_document: default
+  html_document: default
+---
+## Introduction to Agent Based Models
