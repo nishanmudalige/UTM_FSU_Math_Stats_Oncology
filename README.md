@@ -1,6 +1,12 @@
 # UTM_FSU_Math_Stats_Oncology
 Repository for UTM and FSU to work on building resources to teach mathematical and statistical oncology
 
+## Aims for Week 6 (Oct 22)
+- [ ] Heba and Maria: Split up ABM chapter skeleton 
+- [ ] Heba: .. Try to implement ABM for predator-prey in plotly (grid, param values, graph: population) 
+- [ ] Maria: ..
+- [ ] John: Finish Apoptosis Chapter and append to end of Introduction
+
 ## Aims for Week 5 (Oct 15)
 
 - [ ] Everyone: Help John complete the chapter on the model in spherical coordinates
