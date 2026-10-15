@@ -9,12 +9,12 @@ Repository for UTM and FSU to work on building resources to teach mathematical a
 
 ## Aims for Week 5 (Oct 15)
 
-- [ ] Everyone: Help John complete the chapter on the model in spherical coordinates
-- [ ] Everyone: Start the agent based model (ABM) chapter
-- [ ] Heba: Read the papers on ABM
-- [ ] Maria: Read the papers on ABM
-- [ ] Heba: summarize ABM model paper (John's paper + Bryce's papers in slack) in a separate folder on GitHub
-- [ ] Maria: summarize ABM model paper (John's paper + Bryce's papers in slack) in a separate folder on GitHub
+- [X] Everyone: Help John complete the chapter on the model in spherical coordinates
+- [X] Everyone: Start the agent based model (ABM) chapter
+- [X] Heba: Read the papers on ABM
+- [X] Maria: Read the papers on ABM
+- [X] Heba: summarize ABM model paper (John's paper + Bryce's papers in slack) in a separate folder on GitHub
+- [X] Maria: summarize ABM model paper (John's paper + Bryce's papers in slack) in a separate folder on GitHub
 - [ ] Everyone: Coordinate to keep branch reasonably clean. Help each other with merges where necessary (Contact Heba for merge conflicts).
 
 
