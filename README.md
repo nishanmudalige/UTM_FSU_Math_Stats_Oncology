@@ -1,6 +1,11 @@
 # UTM_FSU_Math_Stats_Oncology
 Repository for UTM and FSU to work on building resources to teach mathematical and statistical oncology
 
+## Aims for Week 6
+
+- introduce probability distributions/ background (binomial, normal, t, chi squared)
+- simple linear regression (derive LSE, examples, interpretation of coefficients, r and r^2)
+
 ## Aims for Week 3 (Sep 24)
 
   **Rose and Heba**
