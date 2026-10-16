@@ -139,6 +139,171 @@ If $\lambda_1$ and $\lambda_2$ are both purely imaginary, then the linearized sy
 
 Zero eigenvalues require further analysis to determine stability.
 
+```{r intro-phase-setup, include=FALSE}
+
+phase_plot <- function(A, title, initials, tmax) {
+
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
+
+  par(mar = c(5, 5, 4, 2))
+
+  plot(
+    NA,
+    xlim = c(-4, 4),
+    ylim = c(-4, 4),
+    xlab = "State Variable x",
+    ylab = "State Variable y",
+    main = title,
+    asp = 1,
+    cex.main = 1.3,
+    cex.lab = 1.2,
+    cex.axis = 1
+  )
+
+  grid(col = "gray90")
+
+  dt <- 0.01
+  steps <- round(tmax / dt)
+
+  for (initial in initials) {
+
+    trajectory <- matrix(
+      NA_real_,
+      nrow = steps + 1,
+      ncol = 2
+    )
+
+    trajectory[1, ] <- initial
+
+    for (i in 1:steps) {
+
+      state <- trajectory[i, ]
+
+      k1 <- as.vector(A %*% state)
+      k2 <- as.vector(A %*% (state + dt*k1/2))
+      k3 <- as.vector(A %*% (state + dt*k2/2))
+      k4 <- as.vector(A %*% (state + dt*k3))
+
+      trajectory[i+1, ] <- state +
+        dt*(k1 + 2*k2 + 2*k3 + k4)/6
+    }
+
+    lines(
+      trajectory[,1],
+      trajectory[,2],
+      col = "#2563EB",
+      lwd = 2
+    )
+
+    visible <- which(
+      trajectory[,1] > -3.8 &
+      trajectory[,1] < 3.8 &
+      trajectory[,2] > -3.8 &
+      trajectory[,2] < 3.8
+    )
+
+    if (length(visible) > 20) {
+
+      k <- visible[round(length(visible)*0.45)]
+      j <- min(k + 8, nrow(trajectory))
+
+      arrows(
+        trajectory[k,1],
+        trajectory[k,2],
+        trajectory[j,1],
+        trajectory[j,2],
+        length = 0.09,
+        col = "#2563EB",
+        lwd = 1.5
+      )
+    }
+  }
+
+  points(
+    0, 0,
+    pch = 19,
+    col = "#DC2626",
+    cex = 1.6
+  )
+
+  legend(
+    "topright",
+    legend = c("Trajectories", "Equilibrium"),
+    col = c("#2563EB", "#DC2626"),
+    lty = c(1, NA),
+    pch = c(NA, 19),
+    lwd = c(2, NA),
+    bty = "n",
+    cex = 0.9
+  )
+}
+
+initials <- list(
+  c(-3, -3),
+  c(-3, 2),
+  c(3, 3),
+  c(3, -2),
+  c(-1, 3),
+  c(1, -3),
+  c(-3, 0.5),
+  c(3, 0.5)
+)
+
+A_node <- matrix(
+  c(-0.7, 0,
+    0, -1.5),
+  nrow = 2,
+  byrow = TRUE
+)
+
+A_spiral <- matrix(
+  c(-0.25, -1.4,
+    1.4, -0.25),
+  nrow = 2,
+  byrow = TRUE
+)
+
+A_saddle <- matrix(
+  c(0.7, 0,
+    0, -0.7),
+  nrow = 2,
+  byrow = TRUE
+)
+```
+
+```{r intro-stable-node, echo=FALSE, fig.cap="Phase portrait of an asymptotically stable node.", fig.width=7, fig.height=6, fig.align='center'}
+phase_plot(
+  A_node,
+  "Stable Node Phase Portrait",
+  initials,
+  7
+)
+```
+
+```{r intro-stable-spiral, echo=FALSE, fig.cap="Phase portrait of an asymptotically stable spiral.", fig.width=7, fig.height=6, fig.align='center'}
+phase_plot(
+  A_spiral,
+  "Stable Spiral Phase Portrait",
+  initials,
+  12
+)
+```
+```{r intro-saddle, echo=FALSE, fig.cap="Phase portrait of an unstable saddle point.", fig.width=7, fig.height=6, fig.align='center'}
+phase_plot(
+  A_saddle,
+  "Saddle Point Phase Portrait",
+  initials,
+  4
+)
+```
+
+### Visualizing equilibrium stability
+
+Phase portraits provide a visual representation of the behaviour of solutions to a system of differential equations. Each trajectory represents the evolution of the system from a particular initial condition. Figures \@ref(fig:intro-stable-node), \@ref(fig:intro-stable-spiral), and \@ref(fig:intro-saddle) illustrate three different types of equilibria, with the red point representing the equilibrium at the origin.
+
+In Figure \@ref(fig:intro-stable-node), trajectories approach the equilibrium without oscillating, illustrating an asymptotically stable node. In Figure \@ref(fig:intro-stable-spiral), trajectories spiral inward toward the equilibrium, illustrating an asymptotically stable spiral. In contrast, Figure \@ref(fig:intro-saddle) shows a saddle point, where some trajectories approach the equilibrium along one direction while others move away from it. These examples demonstrate how the eigenvalues of the Jacobian matrix can be used to understand the local behaviour of a dynamical system near an equilibrium. 
+
 
 ## Illustrative Example
 
@@ -232,6 +397,113 @@ $$
 \longrightarrow \cdots
 $$
 
+### Phase portrait of the Lotka–Volterra tumour–immune model
+
+Figure \@ref(fig:intro-lotka-volterra) illustrates the behaviour of the Lotka–Volterra tumour–immune model using the parameter values $\rho=1.1$, $\eta=0.4$, $\alpha=0.1$, and $\delta=0.4$. Recall that the model has two equilibria: the tumour-free equilibrium $(0,0)$ and the coexistence equilibrium $(\frac{\delta}{\alpha},\frac{\rho}{\eta})=(4,2.75)$. The blue curves represent solutions corresponding to different initial tumour and effector cell densities, while the red point represents the coexistence equilibrium.
+
+Notice that the trajectories form closed curves around the coexistence equilibrium, illustrating oscillatory behaviour in both populations. As the tumour population increases, the presence of more tumour cells stimulates the accumulation of effector cells. As the effector population increases, more tumour cells are eliminated, causing the tumour population to decrease. Consequently, the effector population also begins to decrease, allowing tumour cells to increase again. This cycle repeats over time. Unlike an asymptotically stable equilibrium, solutions do not approach the coexistence equilibrium. Instead, they continue to oscillate around it, illustrating the neutral stability of the coexistence equilibrium in this particular model. 
+
+```{r intro-lotka-volterra, echo=FALSE, fig.cap="Phase portrait of the Lotka–Volterra tumour–immune model, illustrating oscillatory behaviour around the coexistence equilibrium.", fig.width=7.5, fig.height=6, fig.align='center'}
+
+# Model parameters
+rho <- 1.1
+eta <- 0.4
+alpha <- 0.1
+delta <- 0.4
+
+# Lotka-Volterra tumour-immune equations
+lotka_volterra <- function(T, E) {
+  dT <- rho*T - eta*T*E
+  dE <- alpha*T*E - delta*E
+  return(c(dT, dE))
+}
+
+# Time settings
+dt <- 0.01
+steps <- 10000
+
+# Initial populations
+initial_conditions <- list(
+  c(4, 1.3),
+  c(5, 1.2),
+  c(6, 1.1),
+  c(7, 1.0),
+  c(8, 0.9)
+)
+
+# Create phase plot
+plot(
+  NA,
+  xlim = c(0, 12),
+  ylim = c(0, 9),
+  xlab = "Tumour Cell Density",
+  ylab = "Effector Cell Density",
+  main = "Lotka-Volterra Tumour-Immune Phase Portrait",
+  cex.main = 1.1,
+  cex.lab = 1.1,
+  las = 1
+)
+
+grid(col = "gray92")
+
+# Solve and plot trajectories
+for (initial in initial_conditions) {
+
+  T <- numeric(steps + 1)
+  E <- numeric(steps + 1)
+
+  T[1] <- initial[1]
+  E[1] <- initial[2]
+
+  for (i in 1:steps) {
+
+    k1 <- lotka_volterra(T[i], E[i])
+
+    k2 <- lotka_volterra(
+      T[i] + dt*k1[1]/2,
+      E[i] + dt*k1[2]/2
+    )
+
+    k3 <- lotka_volterra(
+      T[i] + dt*k2[1]/2,
+      E[i] + dt*k2[2]/2
+    )
+
+    k4 <- lotka_volterra(
+      T[i] + dt*k3[1],
+      E[i] + dt*k3[2]
+    )
+
+    T[i+1] <- T[i] + dt/6 *
+      (k1[1] + 2*k2[1] + 2*k3[1] + k4[1])
+
+    E[i+1] <- E[i] + dt/6 *
+      (k1[2] + 2*k2[2] + 2*k3[2] + k4[2])
+  }
+
+  lines(T, E, col = "blue", lwd = 2)
+}
+
+# Coexistence equilibrium
+T_eq <- delta/alpha
+E_eq <- rho/eta
+
+points(
+  T_eq, E_eq,
+  col = "red",
+  pch = 19,
+  cex = 1.5
+)
+
+legend(
+  "topright",
+  legend = c("Trajectories", "Equilibrium"),
+  col = c("blue", "red"),
+  lty = c(1, NA),
+  pch = c(NA, 19),
+  bty = "n"
+)
+``` 
 ## Limitations 
 
 Though this model is simplistic, there are issues in our assumptions, leading to concern about how useful this model is in modelling tumour cell and effector cell interactions. Firstly, the activation term $\alpha$ is simplistic and does not capture the complexities of immune responses to tumour growth. We also assumed proportional growth and decay, which is not realistic.

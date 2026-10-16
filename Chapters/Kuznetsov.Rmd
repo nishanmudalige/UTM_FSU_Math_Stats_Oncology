@@ -27,7 +27,7 @@ $a$: Maximum growth rate of the tumor cell population,
 
 $b$: Inverse of maximum carrying capacity,  
 
-where all of the above parameters are constant. 
+where all of the above parameters are positive. 
 
   To determine the rate of change of the effector cell population, we consider processes that increase and decrease the number of effector cells. Effector cells enter the tumour region at baseline rate $s$. Tumour cells also stimulate the accumulation of effector cells. We assume that this stimulation increases with tumour cell number but eventually saturates, giving the term $\frac{pET}{g+T}$. The saturation reflects the assumption that the accumulation of effector cells cannot increase indefinitely as tumour size increases, due to biological limitations. Effector cells are also inactivated through interactions with tumour cells at a rate proportional to both $E$ and $T$, giving the term $mET$. Finally, effector cells are eliminated naturally at a rate proportional to the size of the population, giving the term $dE$.
 
@@ -147,9 +147,9 @@ If $a-\frac{ns}{d}>0$, the eigenvalues have opposite signs. Therefore, the tumou
 
 Notice that $a$ represents the maximum tumour growth rate, while $\frac{ns}{d}$ represents the strength of tumour cell removal associated with the baseline effector population. Thus, the local stability of the tumour free state depends on the balance between tumour growth and immune mediated tumour removal.
 
-Kuznetsov et al. used experimental data from mice to obtain the following parameter values for the model. The parameters $a$, $b$, and $s$ were specified based on experimental considerations, while the remaining parameters were estimated by nonlinear least-squares fitting.:
+Kuznetsov et al. used experimental data from mice to obtain the following parameter values for the model. The parameters $a$, $b$, and $s$ were specified based on experimental considerations, while the remaining parameters were estimated by nonlinear least-squares fitting.
 
-```{r kuz-param, results='asis'}
+```{r kuz-param, results='asis', echo = FALSE}
 knitr::kable(
   data.frame(
     Parameter = c('$s$', '$p$', '$g$', '$m$', '$n$', '$d$', '$a$', '$b$'),
@@ -233,6 +233,130 @@ has eigenvalues $\lambda_1\approx-0.04970$ and $\lambda_2\approx-0.18628.$
 
 Since they are both negative, the $(E_4,T_4)$ is asymptotically stable.
 
+### Phase portrait of the original Kuznetsov model
+
+Figure \@ref(fig:kz-phase-original) shows the phase portrait of the Kuznetsov model using the estimated parameter values introduced earlier. The horizontal axis measures tumour cells in units of $10^8$, while the vertical axis measures effector cells in units of $10^5$. The blue curves represent solutions to the system of differential equations, while the marked points represent equilibria.
+
+Our stability analysis identified two locally asymptotically stable coexistence equilibria, separated by an unstable saddle point. The phase portrait illustrates how the long-term behaviour of the system depends on its initial state. Some trajectories move toward the smaller tumour equilibrium, where a relatively large effector cell population is present. Other trajectories move toward the larger tumour equilibrium, where fewer effector cells remain.
+
+This behaviour illustrates an important property of the model: the same system can exhibit different long-term outcomes depending on the initial tumour and immune cell populations. In particular, the model allows both a state in which the immune response limits tumour growth and a state in which a large tumour population persists despite the presence of immune cells.
+```{r kz-phase-original, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Phase portrait of the original Kuznetsov tumour–immune model.", fig.width=7.5, fig.height=6, fig.align='center'}
+
+library(deSolve)
+
+simple <- function(t, state, p) {
+  T <- state["T"]
+  E <- state["E"]
+  with(as.list(p), {
+    dT <- a*T*(1-b*T) - n*E*T
+    dE <- s + p_rate*E*T/(g+T) - m*E*T - d*E
+    list(c(T = dT, E = dE))
+  })
+}
+
+p1 <- c(
+  s = 1.3e4,
+  p_rate = 0.1245,
+  g = 2.019e7,
+  m = 3.422e-10,
+  n = 1.101e-7,
+  d = 0.0412,
+  a = 0.18,
+  b = 2e-9
+)
+
+E1 <- function(T) {
+  p1["a"]*(1-p1["b"]*T)/p1["n"]
+}
+
+F1 <- function(T) {
+  E <- E1(T)
+  p1["s"] + p1["p_rate"]*E*T/(p1["g"]+T) -
+    p1["m"]*E*T - p1["d"]*E
+}
+
+find_roots <- function(f, lower, upper) {
+  xx <- seq(lower, upper, length.out = 3001)
+  yy <- sapply(xx, f)
+  roots <- numeric(0)
+
+  for (i in 1:(length(xx)-1)) {
+    if (is.finite(yy[i]) && is.finite(yy[i+1]) &&
+        yy[i]*yy[i+1] < 0) {
+      roots <- c(
+        roots,
+        uniroot(f, c(xx[i], xx[i+1]))$root
+      )
+    }
+  }
+  unique(roots)
+}
+
+r1 <- find_roots(F1, 1, 1/p1["b"])
+
+eq1 <- rbind(
+  c(0, p1["s"]/p1["d"]),
+  cbind(r1, sapply(r1, E1))
+)
+
+par(mar = c(5, 5, 4, 2))
+
+plot(
+  NA,
+  xlim = c(0, 5),
+  ylim = c(0, 20),
+  xlab = expression("Tumour Population (" * 10^8 * " cells)"),
+  ylab = expression("Effector Population (" * 10^5 * " cells)"),
+  main = "Simple Kuznetsov Phase Portrait",
+  cex.main = 1.2,
+  cex.lab = 1.1,
+  las = 1
+)
+
+grid(col = "gray92")
+
+initials <- list(
+  c(2e7, 2e5),
+  c(8e7, 4e5),
+  c(1.5e8, 8e5),
+  c(3e8, 5e5)
+)
+
+for (u0 in initials) {
+  sol <- ode(
+    y = c(T = u0[1], E = u0[2]),
+    times = seq(0, 200, length.out = 2000),
+    func = simple,
+    parms = p1,
+    method = "lsoda"
+  )
+
+  lines(
+    sol[, "T"]*1e-8,
+    sol[, "E"]*1e-5,
+    col = "blue",
+    lwd = 2
+  )
+}
+
+points(
+  eq1[,1]*1e-8,
+  eq1[,2]*1e-5,
+  col = "red",
+  pch = 19,
+  cex = 1.4
+)
+
+legend(
+  "topright",
+  legend = c("Trajectories", "Equilibrium"),
+  col = c("blue", "red"),
+  lty = c(1, NA),
+  pch = c(NA, 19),
+  bty = "n"
+)
+```
+
 ## Coexistence equilibria: root structure and sign test
 
 A tumor-present equilibrium satisfies both nullclines of \@ref(eq:kuznetsov4a) and \@ref(eq:kuznetsov4b) simultaneously:
@@ -276,12 +400,12 @@ The Kuznetsov model of Section \@ref(sec:kuznetsov) treats the tumor as a single
 
 We assume resistance carries a growth-rate cost $\zeta>0$, so the resistant population's growth rate is $a_T=a-\zeta$ rather than the wild-type rate $a$, and confers a benefit $\theta\in[0,1]$ that reduces the effectiveness of effector-mediated killing ($\theta=1$ recovers full susceptibility, i.e. no resistance). Writing $E$ for the effector population and $\kappa=1/b$ for the carrying capacity, the dynamics are
 \begin{equation}
-    \dot{T} = \left(a_T\left(1-\frac{T}{\kappa}\right) - \theta E\right)T,
+    \frac{dT}{dt} = \left(a_T\left(1-\frac{T}{\kappa}\right) - \theta E\right)T,
     (\#eq:red-ODEs-T)
 \end{equation}
 
 \begin{equation}
-    \dot{E} = \left(\frac{p_T T}{T+g} - m_T T - d\right)E + s.
+    \frac{dE}{dt} = \left(\frac{p_T T}{T+g} - m_T T - d\right)E + s.
     (\#eq:red-ODEs-E)
 \end{equation}
 This is structurally identical to \@ref(eq:kuznetsov4a) and \@ref(eq:kuznetsov4b): tumor growth is logistic and suppressed by effector-mediated killing at rate $\theta E$; effectors are produced at baseline rate $s$, activated through a saturating term with parameters $p_T,g$, exhausted or inactivated by the tumor at rate $m_T$, and die naturally at rate $d$. The only change is that the activation and inactivation parameters, $p_T$ and $m_T$, and the effective growth rate $a_T$ and kill-rate reduction $\theta$, now depend on the resistance mechanism the tumor employs, as derived mechanistically below. Setting $\theta=1$, $a_T=a$, $p_T=p$, $m_T=m$ recovers \@ref(eq:kuznetsov4a) and \@ref(eq:kuznetsov4b) exactly, confirming this is a proper extension rather than a different model.
@@ -335,7 +459,7 @@ The distinction between the two mechanisms is therefore whether resistance acts 
 
 (ref:red-param-caption) Summary of parameter definitions and default values for the immune-resistant-tumor model \@ref(eq:red-ODEs-T) and \@ref(eq:red-ODEs-E).
 
-```{r red-param, results='asis'}
+```{r red-param, results='asis', echo=FALSE}
 knitr::kable(
   data.frame(
     Parameter = c('$a$', '$a_T=a-\\zeta$', '$\\zeta$', '$d$', '$g$', '$\\theta$', '$\\kappa=1/b$', '$m$', '$p$', '$s$', '$\\phi$', '$T$', '$E$'),
@@ -405,6 +529,132 @@ with $\operatorname{tr}(J(\mathcal{E}_1))<0$ and
 \end{equation*}
 As in the wild-type model, $\mathcal{E}_1$ is stable whenever $\det(J(\mathcal{E}_1))>0$, which holds in particular if $p_Tg/(T^*+g)^2 > m_T$; otherwise, bistability between a low- and high-tumor-burden resistant equilibrium arises via the usual saddle-node bifurcation structure, consistent with the three-root sign-test result above.
 
+### Phase portrait of the immune-resistant model
+
+We now consider the phase portrait of the extended Kuznetsov model to investigate how immune resistance affects the interactions between tumour and effector cells. Figure \@ref(fig:kz-phase-extended) shows the behaviour of the extended system when $\theta=0.7$, corresponding to a reduction in the effectiveness of immune-mediated tumour killing.
+
+As in the original model, the trajectories illustrate how different initial tumour and effector cell populations can lead to different long term outcomes. For the selected parameter values, the system has three positive coexistence equilibria. Two equilibria are asymptotically stable, while one is a saddle point.
+
+This demonstrates that the introduction of immune resistance does not necessarily eliminate the possibility of maintaining a small tumour population. However, it can influence the balance between tumour growth and immune-mediated killing, potentially affecting which equilibrium the system approaches. The phase portrait provides a visual representation of how immune resistance may influence the long term behaviour of the tumour–immune system.
+
+```{r kz-phase-extended, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Phase portrait of the extended Kuznetsov model under reduced antigen presentation with theta = 0.7.", fig.width=7.5, fig.height=6, fig.align='center'}
+
+library(deSolve)
+
+extended <- function(t, state, p) {
+  T <- state["T"]
+  E <- state["E"]
+  with(as.list(p), {
+    dT <- (alpha_T*(1-T/kappa)-theta*E)*T
+    dE <- (theta*rho*T/(T+eta) -
+             theta*mu*T-delta)*E+sigma
+    list(c(T = dT, E = dE))
+  })
+}
+
+p2 <- c(
+  alpha_T = 1.636-0.4908,
+  theta = 0.7,
+  kappa = 500,
+  rho = 1.131,
+  eta = 20.19,
+  mu = 0.00311,
+  delta = 0.3743,
+  sigma = 0.1181
+)
+
+E2 <- function(T) {
+  p2["alpha_T"]*(1-T/p2["kappa"])/p2["theta"]
+}
+
+F2 <- function(T) {
+  E <- E2(T)
+  (p2["theta"]*p2["rho"]*T/(T+p2["eta"]) -
+     p2["theta"]*p2["mu"]*T -
+     p2["delta"])*E + p2["sigma"]
+}
+
+find_roots <- function(f, lower, upper) {
+  xx <- seq(lower, upper, length.out = 3001)
+  yy <- sapply(xx, f)
+  roots <- numeric(0)
+
+  for (i in 1:(length(xx)-1)) {
+    if (is.finite(yy[i]) && is.finite(yy[i+1]) &&
+        yy[i]*yy[i+1] < 0) {
+      roots <- c(
+        roots,
+        uniroot(f, c(xx[i], xx[i+1]))$root
+      )
+    }
+  }
+  unique(roots)
+}
+
+r2 <- find_roots(F2, 0.001, p2["kappa"])
+
+eq2 <- rbind(
+  c(0, p2["sigma"]/p2["delta"]),
+  cbind(r2, sapply(r2, E2))
+)
+
+par(mar = c(5, 5, 4, 2))
+
+plot(
+  NA,
+  xlim = c(0, 500),
+  ylim = c(0, 2),
+  xlab = "Tumour Population",
+  ylab = "Effector Population",
+  main = "Extended Kuznetsov Phase Portrait",
+  cex.main = 1.2,
+  cex.lab = 1.1,
+  las = 1
+)
+
+grid(col = "gray92")
+
+initials <- list(
+  c(20, 0.4),
+  c(80, 0.8),
+  c(180, 1.3),
+  c(350, 0.5)
+)
+
+for (u0 in initials) {
+  sol <- ode(
+    y = c(T = u0[1], E = u0[2]),
+    times = seq(0, 100, length.out = 2000),
+    func = extended,
+    parms = p2,
+    method = "lsoda"
+  )
+
+  lines(
+    sol[, "T"],
+    sol[, "E"],
+    col = "blue",
+    lwd = 2
+  )
+}
+
+points(
+  eq2[,1],
+  eq2[,2],
+  col = "red",
+  pch = 19,
+  cex = 1.4
+)
+
+legend(
+  "topright",
+  legend = c("Trajectories", "Equilibrium"),
+  col = c("blue", "red"),
+  lty = c(1, NA),
+  pch = c(NA, 19),
+  bty = "n"
+)
+```
 
 ## Bifurcation Analysis
 
@@ -414,129 +664,211 @@ A bifurcation occurs when a small change in a parameter causes a qualitative cha
 
 For the Kuznetsov model, parameters such as the maximum tumour growth rate $a$, the tumour killing rate $n$, and the rate of tumour-stimulated effector accumulation $p$ may be treated as bifurcation parameters. Varying these parameters allows us to study how changes in tumour growth or immune activity affect the equilibria of the system. In particular, the parameter $\theta$ represents the effectiveness of immune-mediated tumour killing relative to the original tumour population. A decrease in $\theta$ therefore corresponds to increased immune resistance. By varying $\theta$, we can examine whether increasing tumour resistance changes the number or stability of the equilibria.
 
-Bifurcation diagrams provide information that cannot be obtained from a single phase plane plot. A phase plane describes the behaviour of the system for one fixed set of parameters, whereas a bifurcation diagram describes how the long-term behaviour of the system changes across a range of parameter values.
+Bifurcation diagrams provide information that cannot be obtained from a single phase plane plot. A phase diagram describes the behaviour of the system for one fixed set of parameters, whereas a bifurcation diagram describes how the long term behaviour of the system changes across a range of parameter values.
 
+```{r kz-bif-original, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Bifurcation diagram of the original Kuznetsov model as the effector source rate varies.", fig.width=11, fig.height=5.5, fig.align='center'}
 
-
-
-
-
-
-
-```{r biffurcation, echo=FALSE, fig.cap="Simulated tumour growth over 30 days.", out.width="100%"}
-
-fontname <- "CMU Serif"
-fonts <- systemfonts::system_fonts()
-if (!any(fonts$family == fontname)) stop("CMU Serif not found. Install CMU fonts or change fontname.")
-cat("Using font:", fontname, " -> ", systemfonts::match_font(fontname)$path, "\n")
-
-# Parameters
-c_par <- 0.4908
-alpha2 <- 1.636
+alpha <- 1.636
 eta <- 20.19
-kappa <- 500.0
+kappa <- 500
 delta <- 0.3743
 rho <- 1.131
-sigma <- 0.1181
 mu <- 0.00311
-alpha1 <- alpha2 - c_par
 
-# T1-only nullcline
-f_T1 <- function(T1, theta1) {
-  (alpha1 / theta1) * (1 - T1 / kappa) *
-    ((rho * T1) / (T1 + eta) - (mu * (2 - theta1)) * T1 - delta) + sigma
-}
+find_roots <- function(f, lower, upper, n = 1000) {
+  x <- seq(lower, upper, length.out = n)
+  y <- vapply(x, f, numeric(1))
+  roots <- numeric(0)
 
-# Effector-population equilibrium on the T1-only branch
-E_T1_only <- function(T1, theta1) (alpha1 / theta1) * (1 - T1 / kappa)
-
-# Real parts of the Jacobian eigenvalues
-J_T1_only <- function(T1, theta1) {
-  E <- E_T1_only(T1, theta1)
-  J <- matrix(c(
-    -alpha1 * (T1 / kappa), -alpha1 * (T1 / kappa), -theta1 * T1,
-    0, alpha2 * (1 - T1 / kappa) - E, 0,
-    E * ((rho * eta) / (T1 + eta)^2 - mu * (2 - theta1)),
-    E * ((rho * eta) / (T1 + eta)^2 - mu),
-    -sigma / E
-  ), nrow = 3, byrow = TRUE)
-  Re(eigen(J, only.values = TRUE)$values)
-}
-
-# All roots on [a, b]: scan a fine grid for sign changes, refine with uniroot
-# (stand-in for Roots.find_zeros)
-find_zeros <- function(f, a, b, n = 5000) {
-  x <- seq(a, b, length.out = n)
-  y <- f(x)
-  roots <- x[y == 0]
-  idx <- which(head(y, -1) * tail(y, -1) < 0)
-  for (i in idx) {
-    roots <- c(roots, uniroot(f, c(x[i], x[i + 1]), tol = 1e-12)$root)
+  for (i in seq_len(n - 1)) {
+    if (is.finite(y[i]) && is.finite(y[i+1]) &&
+        y[i] * y[i+1] < 0) {
+      roots <- c(roots, uniroot(f, c(x[i], x[i+1]))$root)
+    }
   }
-  sort(roots)
+
+  unique(round(roots, 8))
 }
 
-# Bifurcation sweep over theta_1
-theta1_range <- seq(1e-3, 1.0, length.out = 1000)
-Tmin <- 1e-6
-Tmax <- kappa - 1e-6
+get_stability <- function(J) {
+  values <- eigen(J, only.values = TRUE)$values
+  if (all(Re(values) < -1e-8)) "Stable" else "Unstable"
+}
 
-res <- do.call(rbind, lapply(theta1_range, function(th) {
-  r <- find_zeros(function(T1) f_T1(T1, th), Tmin, Tmax)
-  if (length(r) == 0) return(NULL)
-  data.frame(
-    theta1 = th,
-    T1 = r,
-    E1 = E_T1_only(r, th),
-    stable = vapply(r, function(T1) all(J_T1_only(T1, th) < 0), logical(1))
-  )
-}))
-res$stability <- factor(ifelse(res$stable, "Stable", "Unstable"),
-                        levels = c("Stable", "Unstable"))
-# Draw unstable points first so stable points sit on top (matches plotting order)
-res <- res[order(res$stable), ]
+kuznetsov_eq <- function(source) {
 
-cols <- c(Stable = "#14b835", Unstable = "#87ed9c" )
+  E_fun <- function(T) alpha * (1 - T/kappa)
 
-base_theme <- theme_bw(base_size = 35, base_family = fontname) +
-  theme(
-    panel.border = element_blank(),
-    axis.line = element_line(colour = "black"),
-    axis.text = element_text(colour = "black"),
-    legend.position = "none",
-    axis.title.x = element_blank(),
-    plot.background = element_rect(fill = "white", colour = NA)
-  )
+  f <- function(T) {
+    E <- E_fun(T)
+    E * (rho*T/(T+eta) - mu*T - delta) + source
+  }
 
-p1 <- ggplot(res, aes(theta1, T1, colour = stability)) +
-  geom_point(size = 3) +
-  scale_colour_manual(values = cols) +
-  scale_x_continuous(breaks = seq(0, 1, 0.25)) +
-  scale_y_continuous(breaks = seq(0, 500, 100)) +
-  coord_cartesian(xlim = c(-0.05, 1.05), ylim = c(-5, 505), expand = FALSE) +
-  labs(y = "Tumor Cell Population") +
-  base_theme
+  roots <- find_roots(f, 1e-6, kappa - 1e-6)
+  out <- data.frame()
 
-p2 <- ggplot(res, aes(theta1, E1, colour = stability)) +
-  geom_point(size = 3) +
-  scale_colour_manual(values = cols) +
-  scale_x_continuous(breaks = seq(0, 1, 0.25)) +
-  scale_y_continuous(position = "right") +
-  coord_cartesian(xlim = c(-0.05, 1.05), ylim = c(-0.05, 4.05), expand = FALSE) +   # clip, don't drop, like Makie limits
-  labs(y = "Effector Cell Population") +
-  base_theme +
-  theme(plot.margin = margin(5.5, 5.5, 5.5, 50))   # ~ colgap!(..., 50)
+  for (T in c(0, roots)) {
+    E <- if (T == 0) source/delta else E_fun(T)
 
-xlab <- wrap_elements(grid::textGrob(
-  expression("Effector kill rate reduction, " * theta[1]),
-  gp = grid::gpar(fontsize = 35, fontfamily = fontname)
-))
+    J <- matrix(c(
+      alpha*(1-2*T/kappa)-E,
+      E*(rho*eta/(T+eta)^2-mu),
+      -T,
+      rho*T/(T+eta)-mu*T-delta
+    ), nrow=2)
 
-fig <- (p1 | p2) / xlab + plot_layout(heights = c(1, 0.12))
-fig
+    out <- rbind(out, data.frame(
+      parameter=source,
+      tumour=T,
+      effector=E,
+      stability=get_stability(J)
+    ))
+  }
+
+  out
+}
+
+draw_bifurcation <- function(data, title, xlab) {
+
+  oldpar <- par(no.readonly=TRUE)
+  on.exit(par(oldpar))
+
+  par(mfrow=c(1,2), mar=c(5,5,4,1.5),
+      oma=c(2,1,3,1), mgp=c(2.7,0.8,0))
+
+  colors <- c(Stable="#187B65", Unstable="#D46A96")
+
+  for (variable in c("tumour","effector")) {
+
+    ylabel <- if (variable=="tumour") {
+      "Tumour Cell Population"
+    } else {
+      "Effector Cell Population"
+    }
+
+    values <- data[[variable]]
+
+    plot(NA,
+         xlim=range(data$parameter),
+         ylim=range(c(0,values), finite=TRUE),
+         xlab=xlab, ylab=ylabel,
+         main=ylabel, las=1)
+
+    grid(col="gray92")
+
+    for (status in c("Unstable","Stable")) {
+      selected <- data$stability==status
+      points(data$parameter[selected],
+             values[selected],
+             pch=16, cex=0.42,
+             col=colors[status])
+    }
+
+    legend("topright",
+           legend=c("Stable","Unstable"),
+           col=colors,
+           pch=16, bty="n", cex=0.8)
+  }
+
+  mtext(title, outer=TRUE, side=3,
+        line=0.6, cex=1.25, font=2)
+}
+
+sigma_values <- seq(0.01, 0.8, length.out=300)
+
+simple_data <- do.call(
+  rbind,
+  lapply(sigma_values, kuznetsov_eq)
+)
+
+draw_bifurcation(
+  simple_data,
+  "Original Kuznetsov Model",
+  expression("Effector source rate, " *s)
+)
 ```
 
+```{r kz-bif-antigen, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Bifurcation diagram of the extended Kuznetsov model under reduced antigen presentation.", fig.width=11, fig.height=5.5, fig.align='center'}
 
+alpha1 <- 1.636 - 0.4908
+sigma <- 0.1181
+
+extended_eq <- function(theta, mechanism) {
+
+  if (mechanism == "RA") {
+    p_T <- theta * rho
+    m_T <- theta * mu
+  } else {
+    p_T <- rho
+    m_T <- mu * (2-theta)
+  }
+
+  E_fun <- function(T) {
+    alpha1/theta * (1-T/kappa)
+  }
+
+  f <- function(T) {
+    E <- E_fun(T)
+    E*(p_T*T/(T+eta)-m_T*T-delta)+sigma
+  }
+
+  roots <- find_roots(f, 1e-6, kappa-1e-6)
+
+  out <- data.frame()
+
+  for (T in c(0, roots)) {
+
+    E <- if (T == 0) sigma/delta else E_fun(T)
+
+    J <- matrix(c(
+      alpha1*(1-2*T/kappa)-theta*E,
+      E*(p_T*eta/(T+eta)^2-m_T),
+      -theta*T,
+      p_T*T/(T+eta)-m_T*T-delta
+    ), nrow=2)
+
+    out <- rbind(out, data.frame(
+      parameter=theta,
+      tumour=T,
+      effector=E,
+      stability=get_stability(J)
+    ))
+  }
+
+  out
+}
+
+theta_values <- seq(0.001, 1, length.out=500)
+
+ra_data <- do.call(
+  rbind,
+  lapply(theta_values, function(x) extended_eq(x, "RA"))
+)
+
+draw_bifurcation(
+  ra_data,
+  "Extended Kuznetsov - Reduced Antigen Presentation",
+  expression("Killing effectiveness, " * theta)
+)
+```
+
+```{r kz-bif-checkpoint, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Bifurcation diagram of the extended Kuznetsov model under immune checkpoint evasion.", fig.width=11, fig.height=5.5, fig.align='center'}
+
+ici_data <- do.call(
+  rbind,
+  lapply(theta_values, function(x) extended_eq(x, "ICI"))
+)
+
+draw_bifurcation(
+  ici_data,
+  "Extended Kuznetsov - Immune Checkpoint Evasion",
+  expression("Killing effectiveness, " * theta)
+)
+```
+
+The bifurcation diagrams illustrate how changes in model parameters affect the number and stability of equilibrium points. Figure \@ref(fig:kz-bif-original) shows the effect of varying the baseline effector cell influx rate $s$ in the original Kuznetsov model. For smaller values of $s$, multiple positive equilibria exist, including two stable equilibria separated by an unstable saddle point. As $s$ increases, some equilibria disappear through a saddle-node bifurcation. This demonstrates how increasing immune effector cells can change the long term behaviour of the tumour–immune system.
+
+Figures \@ref(fig:kz-bif-antigen) and \@ref(fig:kz-bif-checkpoint) illustrate the effects of immune resistance under reduced antigen presentation and immune checkpoint evasion, respectively. In both cases, $\theta$ represents the effectiveness of immune-mediated tumour killing, with smaller values corresponding to greater resistance. Under reduced antigen presentation, increasing $\theta$ can lead to the appearance of additional positive equilibria, while the checkpoint evasion model maintains multiple positive equilibria across the parameter range considered. These results demonstrate that different resistance mechanisms can affect the equilibrium structure differently, even when both reduce the effectiveness of immune-mediated tumour killing.
 
 ## Summary
 
