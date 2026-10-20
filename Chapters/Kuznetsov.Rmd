@@ -299,7 +299,7 @@ eq1 <- rbind(
   cbind(r1, sapply(r1, E1))
 )
 
-par(mar = c(5, 5, 4, 2))
+par(mar = c(5, 5, 3.5, 1.5))
 
 plot(
   NA,
@@ -308,13 +308,67 @@ plot(
   xlab = expression("Tumour Population (" * 10^8 * " cells)"),
   ylab = expression("Effector Population (" * 10^5 * " cells)"),
   main = "Simple Kuznetsov Phase Portrait",
-  cex.main = 1.2,
-  cex.lab = 1.1,
+  bty = "l",
+  cex.main = 1.1,
+  cex.lab = 1,
   las = 1
 )
 
-grid(col = "gray92")
+abline(
+  h = seq(0, 20, 2),
+  v = seq(0, 5, 0.5),
+  col = "gray94",
+  lwd = 0.7
+)
 
+
+# Direction field
+field <- expand.grid(
+  T = seq(0.15, 4.85, length.out = 19),
+  E = seq(0.5, 19.5, length.out = 17)
+)
+
+# Calculate rates directly in displayed units
+T_actual <- field$T * 1e8
+E_actual <- field$E * 1e5
+
+dT <- (
+  p1["a"] * T_actual * (1 - p1["b"] * T_actual) -
+  p1["n"] * E_actual * T_actual
+) * 1e-8
+
+dE <- (
+  p1["s"] +
+  p1["p_rate"] * E_actual * T_actual /
+    (p1["g"] + T_actual) -
+  p1["m"] * E_actual * T_actual -
+  p1["d"] * E_actual
+) * 1e-5
+
+# Normalize in plotted coordinates
+dx <- dT / 5
+dy <- dE / 20
+
+magnitude <- sqrt(dx^2 + dy^2)
+valid <- is.finite(magnitude) & magnitude > 0
+
+field <- field[valid, ]
+dx <- dx[valid] / magnitude[valid]
+dy <- dy[valid] / magnitude[valid]
+
+# Draw direction arrows
+arrows(
+  field$T - 0.15 * dx,
+  field$E - 0.6 * dy,
+  field$T + 0.15 * dx,
+  field$E + 0.6 * dy,
+  length = 0.06,
+  col = "gray55",
+  lwd = 1
+)
+
+
+# Initial conditions
 initials <- list(
   c(2e7, 2e5),
   c(8e7, 4e5),
@@ -331,29 +385,43 @@ for (u0 in initials) {
     method = "lsoda"
   )
 
-  lines(
-    sol[, "T"]*1e-8,
-    sol[, "E"]*1e-5,
-    col = "blue",
-    lwd = 2
+  x <- sol[, "T"] * 1e-8
+  y <- sol[, "E"] * 1e-5
+
+  lines(x, y, col = "#2795C3", lwd = 1.8)
+
+  visible <- which(
+    is.finite(x) & is.finite(y) &
+    x > 0.2 & x < 4.8 &
+    y > 0.5 & y < 19.5
   )
+
+  if (length(visible) > 30) {
+    k <- visible[round(length(visible) * 0.3)]
+    j <- min(k + 15, length(x))
+
+    distance <- sqrt((x[j]-x[k])^2 + (y[j]-y[k])^2)
+
+    if (is.finite(distance) && distance > 0.03) {
+      arrows(
+        x[k], y[k], x[j], y[j],
+        col = "#2795C3",
+        length = 0.1,
+        lwd = 1.5
+      )
+    }
+  }
 }
 
+# Equilibrium points
 points(
-  eq1[,1]*1e-8,
-  eq1[,2]*1e-5,
-  col = "red",
-  pch = 19,
-  cex = 1.4
-)
-
-legend(
-  "topright",
-  legend = c("Trajectories", "Equilibrium"),
-  col = c("blue", "red"),
-  lty = c(1, NA),
-  pch = c(NA, 19),
-  bty = "n"
+  eq1[, 1] * 1e-8,
+  eq1[, 2] * 1e-5,
+  pch = 21,
+  bg = "#D94841",
+  col = "white",
+  cex = 1.5,
+  lwd = 1.2
 )
 ```
 
@@ -598,7 +666,7 @@ eq2 <- rbind(
   cbind(r2, sapply(r2, E2))
 )
 
-par(mar = c(5, 5, 4, 2))
+par(mar = c(5, 5, 3.5, 1.5))
 
 plot(
   NA,
@@ -607,13 +675,64 @@ plot(
   xlab = "Tumour Population",
   ylab = "Effector Population",
   main = "Extended Kuznetsov Phase Portrait",
-  cex.main = 1.2,
-  cex.lab = 1.1,
+  bty = "l",
+  cex.main = 1.1,
+  cex.lab = 1,
   las = 1
 )
 
-grid(col = "gray92")
+abline(
+  h = seq(0, 2, 0.25),
+  v = seq(0, 500, 50),
+  col = "gray94",
+  lwd = 0.7
+)
 
+
+# Direction field
+field <- expand.grid(
+  T = seq(10, 490, length.out = 20),
+  E = seq(0.08, 1.92, length.out = 16)
+)
+
+T_actual <- field$T
+E_actual <- field$E
+
+dT <- (
+  p2["alpha_T"] * (1 - T_actual / p2["kappa"]) -
+  p2["theta"] * E_actual
+) * T_actual
+
+dE <- (
+  p2["theta"] * p2["rho"] * T_actual /
+    (T_actual + p2["eta"]) -
+  p2["theta"] * p2["mu"] * T_actual -
+  p2["delta"]
+) * E_actual + p2["sigma"]
+
+# Normalize relative to plotted axis scales
+dx <- dT / 500
+dy <- dE / 2
+
+magnitude <- sqrt(dx^2 + dy^2)
+valid <- is.finite(magnitude) & magnitude > 0
+
+field <- field[valid, ]
+dx <- dx[valid] / magnitude[valid]
+dy <- dy[valid] / magnitude[valid]
+
+arrows(
+  field$T - 7.5 * dx,
+  field$E - 0.03 * dy,
+  field$T + 7.5 * dx,
+  field$E + 0.03 * dy,
+  length = 0.06,
+  col = "gray55",
+  lwd = 1
+)
+
+
+# Initial conditions
 initials <- list(
   c(20, 0.4),
   c(80, 0.8),
@@ -630,29 +749,46 @@ for (u0 in initials) {
     method = "lsoda"
   )
 
-  lines(
-    sol[, "T"],
-    sol[, "E"],
-    col = "blue",
-    lwd = 2
+  x <- sol[, "T"]
+  y <- sol[, "E"]
+
+  lines(x, y, col = "#2795C3", lwd = 1.8)
+
+  visible <- which(
+    is.finite(x) & is.finite(y) &
+    x > 10 & x < 490 &
+    y > 0.08 & y < 1.92
   )
+
+  if (length(visible) > 30) {
+    k <- visible[round(length(visible)*0.3)]
+    j <- min(k + 15, length(x))
+
+    distance <- sqrt(
+      ((x[j]-x[k])/500)^2 +
+      ((y[j]-y[k])/2)^2
+    )
+
+    if (is.finite(distance) && distance > 0.005) {
+      arrows(
+        x[k], y[k], x[j], y[j],
+        col = "#2795C3",
+        length = 0.1,
+        lwd = 1.5
+      )
+    }
+  }
 }
 
+# Equilibrium points
 points(
-  eq2[,1],
-  eq2[,2],
-  col = "red",
-  pch = 19,
-  cex = 1.4
-)
-
-legend(
-  "topright",
-  legend = c("Trajectories", "Equilibrium"),
-  col = c("blue", "red"),
-  lty = c(1, NA),
-  pch = c(NA, 19),
-  bty = "n"
+  eq2[, 1],
+  eq2[, 2],
+  pch = 21,
+  bg = "#D94841",
+  col = "white",
+  cex = 1.5,
+  lwd = 1.2
 )
 ```
 
@@ -667,6 +803,7 @@ For the Kuznetsov model, parameters such as the maximum tumour growth rate $a$, 
 Bifurcation diagrams provide information that cannot be obtained from a single phase plane plot. A phase diagram describes the behaviour of the system for one fixed set of parameters, whereas a bifurcation diagram describes how the long term behaviour of the system changes across a range of parameter values.
 
 ```{r kz-bif-original, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Bifurcation diagram of the original Kuznetsov model as the effector source rate varies.", fig.width=11, fig.height=5.5, fig.align='center'}
+
 
 alpha <- 1.636
 eta <- 20.19
@@ -696,7 +833,6 @@ get_stability <- function(J) {
 }
 
 kuznetsov_eq <- function(source) {
-
   E_fun <- function(T) alpha * (1 - T/kappa)
 
   f <- function(T) {
@@ -729,14 +865,20 @@ kuznetsov_eq <- function(source) {
 }
 
 draw_bifurcation <- function(data, title, xlab) {
-
   oldpar <- par(no.readonly=TRUE)
   on.exit(par(oldpar))
 
-  par(mfrow=c(1,2), mar=c(5,5,4,1.5),
-      oma=c(2,1,3,1), mgp=c(2.7,0.8,0))
+  par(
+    mfrow=c(1,2),
+    mar=c(5,4.5,3,1),
+    oma=c(2,0,2,0),
+    mgp=c(2.5,0.7,0)
+  )
 
-  colors <- c(Stable="#187B65", Unstable="#D46A96")
+  colors <- c(
+    Stable="#2878B5",
+    Unstable="#D97732"
+  )
 
   for (variable in c("tumour","effector")) {
 
@@ -748,30 +890,35 @@ draw_bifurcation <- function(data, title, xlab) {
 
     values <- data[[variable]]
 
-    plot(NA,
-         xlim=range(data$parameter),
-         ylim=range(c(0,values), finite=TRUE),
-         xlab=xlab, ylab=ylabel,
-         main=ylabel, las=1)
+    plot(
+      NA,
+      xlim=range(data$parameter),
+      ylim=range(c(0,values), finite=TRUE),
+      xlab=xlab,
+      ylab=ylabel,
+      main=if (variable=="tumour") "Tumour" else "Effector",
+      las=1,
+      cex.main=1,
+      cex.lab=0.85,
+      cex.axis=0.8
+    )
 
     grid(col="gray92")
 
     for (status in c("Unstable","Stable")) {
       selected <- data$stability==status
-      points(data$parameter[selected],
-             values[selected],
-             pch=16, cex=0.42,
-             col=colors[status])
+      points(
+        data$parameter[selected],
+        values[selected],
+        pch=16,
+        cex=0.4,
+        col=colors[status]
+      )
     }
-
-    legend("topright",
-           legend=c("Stable","Unstable"),
-           col=colors,
-           pch=16, bty="n", cex=0.8)
   }
 
   mtext(title, outer=TRUE, side=3,
-        line=0.6, cex=1.25, font=2)
+        line=0.3, cex=1.1, font=2)
 }
 
 sigma_values <- seq(0.01, 0.8, length.out=300)
@@ -784,8 +931,9 @@ simple_data <- do.call(
 draw_bifurcation(
   simple_data,
   "Original Kuznetsov Model",
-  expression("Effector source rate, " *s)
+  "Effector Source Rate"
 )
+
 ```
 
 ```{r kz-bif-antigen, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Bifurcation diagram of the extended Kuznetsov model under reduced antigen presentation.", fig.width=11, fig.height=5.5, fig.align='center'}
