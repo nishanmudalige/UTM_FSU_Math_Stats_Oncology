@@ -1,0 +1,237 @@
+---
+title: "Kuznetsov-draft"
+output:
+  pdf_document: default
+  html_document: default
+---
+## The Kuznetsov Tumour–Immune Model
+
+A tumour is an abnormal mass of tissue that forms when cells grow and divide more than they should or do not die when they should. Tumours may be benign (not cancer) or malignant (cancer). Malignant tumours can spread into, or invade, nearby tissues. They can also spread to other parts of the body through the blood and lymph systems. 
+
+Tumour cells reproduce and therefore could increase the tumour population. Moreover, tumour cells can also be removed through interactions with immune effector cells. These cells recognize and respond to abnormal cells, including tumour cells. Some examples of these cells are cytotoxic T lymphocytes and natural killer cells. 
+
+Define the following:  
+
+$E$: Number of effector cells located at the tumor site,  
+
+$T$: Number of tumor cells located at the tumor site,  
+
+$s$: Baseline rate at which mature effector cells enter the tumour region,  
+
+$p$: Rate of tumour stimulated effector cell accumulation 
+
+$g$: Saturation parameter for tumour stimulated effector cell accumulation,  
+
+$m$: Rate of effector cell inactivation due to interactions with tumour cells,  
+
+$n$: Rate of tumour cell killing through interactions with effector cells,    
+
+$d$: Rate of ordinary effector cell elimination 
+
+$a$: Maximum growth rate of the tumor cell population,    
+
+$b$: Inverse of maximum carrying capacity,  
+
+where all of the above parameters are constant. 
+
+  To determine the rate of change of the effector cell population, we consider processes that increase and decrease the number of effector cells. Effector cells enter the tumour region at baseline rate $s$. Tumour cells also stimulate the accumulation of effector cells. We assume that this stimulation increases with tumour cell number but eventually saturates, giving the term $\frac{pET}{g+T}$. The saturation reflects the assumption that the accumulation of effector cells cannot increase indefinitely as tumour size increases, due to biological limitations. Effector cells are also inactivated through interactions with tumour cells at a rate proportional to both $E$ and $T$, giving the term $mET$. Finally, effector cells are eliminated naturally at a rate proportional to the size of the population, giving the term $dE$.
+  
+Combining these processes together, we obtain: 
+
+\begin{equation}
+\frac{dE}{dt} = s + \frac{pET}{g+T} - mET -dE
+\label{eq:kuznetsov4a}
+\end{equation}
+
+
+Similarly, to determine the rate of change of the tumour cell population, we consider processes that increase and decrease the number of tumour cells. We assume that tumour cells undergo logistic growth. At low tumour cell numbers, growth is approximately exponential, while at high tumour cell numbers, growth slows due to limitations such as available resources. This gives the logistic growth term $aT(1-bT)$. Tumour cells are also removed through interactions with immune effector cells. We assume that the rate of tumour cell killing is proportional to both the number of tumour cells and the number of effector cells, giving the term $nET$. Combining tumour growth and immune mediated killing, we obtain:
+
+\begin{equation}
+\frac{dT}{dt} = aT(1-bT) -nET
+\label{eq:kuznetsov4b}
+\end{equation}
+
+Equations @ref(eq:kuznetsov4a) and @ref(eq:kuznetsov4b) form the reduced Kuznetsov tumour immune model. These equations form a system of ODEs describing the interactions between tumour cells and immune effector cells. 
+
+## Analysing the Kuznetsov Model
+
+Recall that an equilibrium is a state where both $\frac{dE}{dt}=0$ and $\frac{dT}{dt}=0$.
+
+We first consider the case where there are no tumour cells, so $T=0$. Equation @ref(eq:kuznetsov4a) becomes
+
+$$
+\frac{dE}{dt}=s-dE.
+$$
+
+Setting this equal to zero and solving for $E$, we get
+
+$$
+E=\frac{s}{d}.
+$$
+
+Thus, the tumour free equilibrium is
+
+$$
+(E_1,T_1)=(\frac{s}{d},0).
+$$
+
+This equilibrium represents a state in which there are no tumour cells, while effector cells remain present due to the continuous baseline influx $s$.
+
+We next consider equilibria where both $T\neq0$ and $E\neq0$. From equation @ref(eq:kuznetsov4b), setting $\frac{dT}{dt}=0$ gives
+
+$$
+aT(1-bT)-nET=0.
+$$
+
+Factoring out $T$ gives
+
+$$
+T(a-abT-nE)=0.
+$$
+
+Since $T\neq0$, we obtain
+
+$$
+E=\frac{a}{n}(1-bT).
+$$
+
+This is the tumour nullcline for positive tumour cell populations.
+
+Similarly, setting equation @ref(eq:kuznetsov4a) equal to zero gives
+
+$$
+s+\frac{pET}{g+T}-mET-dE=0.
+$$
+
+Solving for $E$, we get
+
+$$
+E=
+\frac{s(g+T)}
+{d(g+T)+mT(g+T)-pT}.
+$$
+
+This is the effector cell nullcline.
+
+Therefore, positive equilibrium points occur at the intersections of the two nullclines.
+
+Depending on the parameter values, the model can have zero, one, two, or three positive equilibrium points.
+
+To analyse the stability around these equilibria, we first find the Jacobian matrix. Define $f(E,T)= s+\frac{pET}{g+T}-mET-dE$ and $g(E,T)= aT(1-bT)-nET$.
+
+The Jacobian matrix is
+
+$$\begin{pmatrix}
+\frac{pT}{g+T}-mT-d &
+\frac{pgE}{(g+T)^2}-mE \\
+-nT &
+a-2abT-nE
+\end{pmatrix}$$
+
+
+
+We first analyse the stability around the tumour free equilibrium.
+
+$$J(E_1,T_1)= 
+\begin{pmatrix}
+-d &
+\frac{ps}{dg}-m\frac{s}{d} \\
+0 &
+a-\frac{ns}{d}
+\end{pmatrix}$$
+
+The eigenvalues of $J(E_1,T_1)$ are $\lambda_1=-d$ and $\lambda_2=a-\frac{ns}{d}.$
+
+Since $d>0$, we always have $\lambda_1<0$. The stability of the tumour free equilibrium therefore depends on the second eigenvalue.
+
+If $a-\frac{ns}{d}<0$, then both eigenvalues are negative and the tumour free equilibrium is locally asymptotically stable.
+
+If $a-\frac{ns}{d}>0$, the eigenvalues have opposite signs. Therefore, the tumour free equilibrium is a saddle point and is unstable.
+
+Notice that $a$ represents the maximum tumour growth rate, while $\frac{ns}{d}$ represents the strength of tumour cell removal associated with the baseline effector population. Thus, the local stability of the tumour free state depends on the balance between tumour growth and immune mediated tumour removal.
+
+Kuznetsov et al. used experimental data from mice to obtain the following parameter values for the model. The parameters $a$, $b$, and $s$ were specified based on experimental considerations, while the remaining parameters were estimated by nonlinear least-squares fitting.:
+
+$$
+s=1.3\times10^4,\quad
+p=0.1245,\quad
+g=2.019\times10^7,\quad
+m=3.422\times10^{-10},
+$$
+
+$$
+n=1.101\times10^{-7},\quad
+d=0.0412,\quad
+a=0.18,\quad
+b=2.0\times10^{-9}.
+$$
+using these, we get that the tumour free equilibrium is $(E_1,T_1)=(\frac{s}{d},0)\approx(315534,0)$. 
+
+Also, $\lambda_1= -d =  -0.0412$ and $\lambda_2= a-\frac{ns}{d} \approx 0.1453$. Since the eigenvalues have opposite signs, $(E_1,T_1)$ is a saddle point and is unstable.
+
+Now consider the case where $E \neq 0$ and $T \neq 0$. We will use the estimated parameter values to study stability in this case, since the equilibria depend on parameter values.
+
+Note that equilibria occur at the intersection of the tumour and effector cell nullclines. That is, they occur when
+$$
+\frac{a}{n}(1-bT)
+=
+\frac{s(g+T)}
+{d(g+T)+mT(g+T)-pT}.
+$$
+
+Using the estimated values, we get the following equilibria: 
+
+$$
+(E_2,T_2)
+=
+(1.608\times10^6,\;8.186\times10^6),
+$$
+
+$$
+(E_3,T_3)
+=
+(7.585\times10^5,\;2.680\times10^8),
+$$
+
+and
+
+$$
+(E_4,T_4)
+=
+(1.732\times10^5,\;4.470\times10^8).
+$$
+Now, we analyse the stability around each equilibrium.
+
+$$
+J(E_2,T_2)
+\approx
+\begin{pmatrix}
+-0.00808 & 0.00447 \\
+-0.90132 & -0.00295
+\end{pmatrix}
+$$ 
+has eigenvalues $\lambda_1 \approx -0.00552+0.06342i$
+and $\lambda_2 \approx -0.00552-0.06342i.$ Both eigenvalues are complex with negative real parts, thus the equilibrium $(E_2,T_2)$ is a stable focus.
+
+$$
+J(E_3,T_3)
+\approx
+\begin{pmatrix}
+-0.01714 & -0.000237 \\
+-29.5093 & -0.09649
+\end{pmatrix}
+$$ 
+has eigenvalues $\lambda_1\approx0.03576$ and $\lambda_2\approx-0.14936.$ Since the eigenvalues have opposite signs, $(E_3,T_3)$ is a saddle point and is unstable. 
+
+$$
+J(E_4,T_4)
+\approx
+\begin{pmatrix}
+-0.07505 & -0.0000573 \\
+-49.2175 & -0.16093
+\end{pmatrix}
+$$ 
+
+has eigenvalues $\lambda_1\approx-0.04970$ and $\lambda_2\approx-0.18628.$
+
+Since they are both negative, the $(E_4,T_4)$ is asymptotically stable.
