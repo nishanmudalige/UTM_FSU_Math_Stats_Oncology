@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 2 Introduction | sample2</title>
   <meta name="description" content="Chapter 2 Introduction | sample2" />
-  <meta name="generator" content="bookdown 0.48 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.45 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 2 Introduction | sample2" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Nazanin Mokari &amp; Bryce Morsky" />
 
 
-<meta name="date" content="2026-10-08" />
+<meta name="date" content="2026-10-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -52,8 +52,81 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.11.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
 
 
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <style type="text/css">
   
@@ -114,6 +187,15 @@ div.csl-indent {
 <li class="chapter" data-level="2.6" data-path="introduction.html"><a href="introduction.html#illustrative-example"><i class="fa fa-check"></i><b>2.6</b> Illustrative Example</a></li>
 <li class="chapter" data-level="2.7" data-path="introduction.html"><a href="introduction.html#analysing-this-system"><i class="fa fa-check"></i><b>2.7</b> Analysing this system</a></li>
 <li class="chapter" data-level="2.8" data-path="introduction.html"><a href="introduction.html#limitations"><i class="fa fa-check"></i><b>2.8</b> Limitations</a></li>
+<li class="chapter" data-level="2.9" data-path="introduction.html"><a href="introduction.html#introductory-model"><i class="fa fa-check"></i><b>2.9</b> Introductory Model</a>
+<ul>
+<li class="chapter" data-level="2.9.1" data-path="introduction.html"><a href="introduction.html#modeling-assumptions"><i class="fa fa-check"></i><b>2.9.1</b> Modeling Assumptions</a></li>
+<li class="chapter" data-level="2.9.2" data-path="introduction.html"><a href="introduction.html#parameters"><i class="fa fa-check"></i><b>2.9.2</b> Parameters</a></li>
+<li class="chapter" data-level="2.9.3" data-path="introduction.html"><a href="introduction.html#model-development"><i class="fa fa-check"></i><b>2.9.3</b> Model Development</a></li>
+<li class="chapter" data-level="2.9.4" data-path="introduction.html"><a href="introduction.html#case-1-fast-growth"><i class="fa fa-check"></i><b>2.9.4</b> Case 1: Fast Growth</a></li>
+<li class="chapter" data-level="2.9.5" data-path="introduction.html"><a href="introduction.html#nondimensionalization"><i class="fa fa-check"></i><b>2.9.5</b> Nondimensionalization</a></li>
+<li class="chapter" data-level="2.9.6" data-path="introduction.html"><a href="introduction.html#further-practice"><i class="fa fa-check"></i><b>2.9.6</b> Further Practice</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html"><i class="fa fa-check"></i><b>3</b> The Kuznetsov Tumour–Immune Model</a>
 <ul>
@@ -128,7 +210,40 @@ div.csl-indent {
 <li class="chapter" data-level="4.4" data-path="sec:resistant.html"><a href="sec:resistant.html#root-structure-and-sign-test"><i class="fa fa-check"></i><b>4.4</b> Root structure and sign test</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="summary.html"><a href="summary.html"><i class="fa fa-check"></i><b>5</b> Summary</a></li>
-<li class="chapter" data-level="6" data-path="hello.html"><a href="hello.html"><i class="fa fa-check"></i><b>6</b> Hello</a></li>
+<li class="chapter" data-level="6" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html"><i class="fa fa-check"></i><b>6</b> Agent-Based Modeling</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#chapter-overview-and-learning-objectives"><i class="fa fa-check"></i><b>6.1</b> Chapter Overview and Learning Objectives</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#learning-objectives"><i class="fa fa-check"></i><b>6.1.1</b> Learning Objectives</a></li>
+<li class="chapter" data-level="6.1.2" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#prerequisites-and-recommended-background"><i class="fa fa-check"></i><b>6.1.2</b> Prerequisites and Recommended Background</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#introduction-why-agent-based-modeling-in-oncology"><i class="fa fa-check"></i><b>6.2</b> Introduction: Why Agent-Based Modeling in Oncology?</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#comparing-modeling-approaches-odes-vs.-abms"><i class="fa fa-check"></i><b>6.2.1</b> Comparing Modeling Approaches: ODEs vs. ABMs</a></li>
+<li class="chapter" data-level="6.2.2" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#when-to-use-abms-in-cancer-biology"><i class="fa fa-check"></i><b>6.2.2</b> When to Use ABMs in Cancer Biology</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#the-four-pillar-ingredients-of-an-oncology-abm"><i class="fa fa-check"></i><b>6.3</b> The Four Pillar Ingredients of an Oncology ABM</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#agents-and-state-variables"><i class="fa fa-check"></i><b>6.3.1</b> Agents and State Variables</a></li>
+<li class="chapter" data-level="6.3.2" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#environment-the-world"><i class="fa fa-check"></i><b>6.3.2</b> Environment (The World)</a></li>
+<li class="chapter" data-level="6.3.3" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#interaction-and-behavior-rules"><i class="fa fa-check"></i><b>6.3.3</b> Interaction and Behavior Rules</a></li>
+<li class="chapter" data-level="6.3.4" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#iterative-scheduling-loop"><i class="fa fa-check"></i><b>6.3.4</b> Iterative Scheduling Loop</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#hands-on-implementation-walkthrough-predator-prey-in-r-plotly"><i class="fa fa-check"></i><b>6.4</b> Hands-On Implementation Walkthrough: Predator-Prey in R &amp; Plotly</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#model-formulation-and-parameters"><i class="fa fa-check"></i><b>6.4.1</b> Model Formulation and Parameters</a></li>
+<li class="chapter" data-level="6.4.2" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#data-structures"><i class="fa fa-check"></i><b>6.4.2</b> Data Structures</a></li>
+<li class="chapter" data-level="6.4.3" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#core-simulation-functions"><i class="fa fa-check"></i><b>6.4.3</b> Core Simulation Functions</a></li>
+<li class="chapter" data-level="6.4.4" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#main-simulation-loop-spatial-visualization"><i class="fa fa-check"></i><b>6.4.4</b> Main Simulation Loop &amp; Spatial Visualization</a></li>
+<li class="chapter" data-level="6.4.5" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#interactive-exploration-via-shiny"><i class="fa fa-check"></i><b>6.4.5</b> Interactive Exploration via Shiny</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#standardized-model-documentation-the-odd-protocol"><i class="fa fa-check"></i><b>6.5</b> Standardized Model Documentation: The ODD Protocol</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#motivation-reproducibility-in-computational-modeling"><i class="fa fa-check"></i><b>6.5.1</b> Motivation: Reproducibility in Computational Modeling</a></li>
+<li class="chapter" data-level="6.5.2" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#the-seven-elements-of-odd-applied-to-cancer-models"><i class="fa fa-check"></i><b>6.5.2</b> The Seven Elements of ODD Applied to Cancer Models</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="hello.html"><a href="hello.html"><i class="fa fa-check"></i><b>7</b> Hello</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -357,7 +472,174 @@ is described by <span class="math inline">\(\eta T E\)</span>. Combining tumour 
 <p>Secondly, consider the case where there are no tumour cells (<span class="math inline">\(T=0\)</span>). By <a href="introduction.html#eq:PPEffector">(2.2)</a>, <span class="math inline">\(\frac{dE}{dt}=-\delta E\)</span>. We get that <span class="math inline">\(E(t)= E(0)e^{-\delta t}\)</span>, implying that density of effector cells tends to zero over time. This is unrealistic, as effector cells are constantly present throughout the body.</p>
 <p>Thirdly, we are not modelling many factors that are involved in these tumour-effector cell interactions. This includes different tumour cell types, different effector cell types, and damage to healthy cells.</p>
 <p>Overall, this model simply demonstrates how a system of ordinary differential equations could be used to study tumour cell and effector cell interactions despite its limitations. We will gradually introduce more sophisticated models throughout the text, leading to more realistic models and useful interpretations.</p>
+</div>
+<div id="introductory-model" class="section level2 hasAnchor" number="2.9">
+<h2><span class="header-section-number">2.9</span> Introductory Model<a href="introduction.html#introductory-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><em>need to cite the McElwain paper somewhere: Apoptosis as a Volume Loss Mechanism in Mathematical Models of Solid Tumor Growth</em></p>
+<p>The simplest mathematical model to discuss the growing of a tumor would be one that only describes the growth and death of cells. Cancer cells grow and divide at a rapid pace, leading to the development of tumors.</p>
+<p>Early experimental studies on tumors study the rate of change of the volume, noticing that over time the growth rate decreased and necrotic cores could develop. Necrotic cores occur when cells at the middle of a tumor do not have enough nutrients and die en masse.</p>
+<p>Using a differential equation, we can model the tumor growth with regards to the nutrient density.</p>
+<div id="modeling-assumptions" class="section level3 hasAnchor" number="2.9.1">
+<h3><span class="header-section-number">2.9.1</span> Modeling Assumptions<a href="introduction.html#modeling-assumptions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>The tumor stays a sphere and is axisymmetric
+<ul>
+<li>The tumor not being axisymmetric would complicate the model by including terms dependent on angle, while not providing enough insight to justify the complication</li>
+</ul></li>
+<li>Nutrient is only consumed by living cells</li>
+<li>The system is at diffusive equilibrium, since nutrient diffusion happens in seconds but tumor growth happens over days
+<ul>
+<li>If the system is not at diffusive equilibrium, we would have to model two timescales, this assumption simplifies the derivation</li>
+</ul></li>
+<li>Cancer cells die when the concentration of nutrient falls below a certain level</li>
+<li>Cells move towards the center as tumor grows</li>
+</ul>
+</div>
+<div id="parameters" class="section level3 hasAnchor" number="2.9.2">
+<h3><span class="header-section-number">2.9.2</span> Parameters<a href="introduction.html#parameters" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><span class="math inline">\(\sigma(r)\)</span>: nutrient concentration at radius point, <span class="math inline">\(r\)</span></li>
+<li><span class="math inline">\(\hat{\sigma}\)</span>: nutrient concentration when slowed growth occurs</li>
+<li><span class="math inline">\(\sigma_i\)</span>: critical nutrient concentration, ie <span class="math inline">\(\sigma&lt;\sigma_i\)</span> means that the cells dies</li>
+<li><span class="math inline">\(\sigma_\infty\)</span>: constant nutrient concentration at surface, <span class="math inline">\(R_0\)</span></li>
+<li><span class="math inline">\(A\)</span>: nutrient consumption, per unit time</li>
+<li><span class="math inline">\(s\)</span>: proliferation, per unit time</li>
+<li><span class="math inline">\(\lambda\)</span>: volume loss due to apoptosis, per unit time</li>
+<li><span class="math inline">\(k\)</span>: diffusion constant</li>
+<li><span class="math inline">\(R_0\)</span>: outer radius of tumor</li>
+</ul>
+</div>
+<div id="model-development" class="section level3 hasAnchor" number="2.9.3">
+<h3><span class="header-section-number">2.9.3</span> Model Development<a href="introduction.html#model-development" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The model has three separate growth regimes: fast growth, slow growth, and development of the necrotic core. This state of the model depends on the nutrient concentration at <span class="math inline">\(\sigma(0)\)</span>, the center of the tumor.</p>
+<p>The proliferation and nutrient consumption of cells is dictated by:</p>
+<p><span class="math display">\[
+f(\sigma) = \begin{cases} 1, &amp; \hat{\sigma}\leq \sigma, \\ \frac{\sigma}{\hat{\sigma}}, &amp; \sigma_i &lt; \sigma \leq \hat{\sigma}, \\ 0, &amp; \sigma &lt; \sigma_i\end{cases}.
+\]</span></p>
+<p>The top case is fast growth, where proliferation and nutrient consumption are unhindered. As <span class="math inline">\(\sigma\)</span> falls below a nutrient concentration, slowed growth begins, and the constants are scaled by the proportion of nutrient available. Lastly, <span class="math inline">\(\sigma\)</span> falls below the critical
+nutrient concentration, <span class="math inline">\(\sigma_i\)</span>, and the cell dies from lack of nutrients.</p>
+</div>
+<div id="case-1-fast-growth" class="section level3 hasAnchor" number="2.9.4">
+<h3><span class="header-section-number">2.9.4</span> Case 1: Fast Growth<a href="introduction.html#case-1-fast-growth" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The nutrient concentration can be defined using the diffusion equation in spherical coordinates. Since we assume the problem is axisymmetric and at equilibrium, we are only concerned with the radial coordinate:</p>
+<p><span class="math display">\[
+\frac{k}{r^2}\frac{d}{dr}\left[ r^2\frac{d\sigma}{dr}\right] = A, \quad 0 \leq r \leq R_0.
+\]</span></p>
+<p>We can solve this equation by dividing by <span class="math inline">\(\frac{k}{r^2}\)</span> and integrating twice,</p>
+<p><span class="math display">\[
+\begin{align}
+\frac{d}{dr}[r^2\frac{d\sigma}{dr}] &amp;= \frac{Ar^2}{k}\\
+r^2\frac{d\sigma}{dr} &amp;= \frac{Ar^3}{3k}+ c_1\\
+\frac{d\sigma}{dr} &amp;= \frac{Ar}{3k}+\frac{c_1}{r^2}\\
+\sigma(r) &amp;= \frac{Ar^2}{6k}-\frac{c_1}{r} + c_2\\
+\end{align}
+\]</span></p>
+<p>For this equation to be valid at <span class="math inline">\(r=0\)</span>, <span class="math inline">\(c_1\)</span> must be zero. Further, we have the constraint on the outer boundary, <span class="math inline">\(\sigma(R_0)=\sigma_\infty\)</span>. This constraint gives us the solution for the nutrient concentration as</p>
+<p><span class="math display">\[
+\begin{align}
+\sigma(R_0) &amp;= \frac{AR_0^2}{6k} + c_2 = \sigma_\infty \implies c_2 = \sigma_\infty - \frac{AR_0^2}{6k}\\
+\sigma(r) &amp;= \frac{AR_0^2}{6k} + \sigma_\infty - \frac{AR_0^2}{6k}\\
+\sigma(r) &amp;= \sigma_\infty - \frac{A}{6k}(R_0^2- r^2).
+\end{align}
+\]</span></p>
+<p>Now, that we have modeled the nutrient concentration we can move to modeling the growth of the tumor as a sphere by modeling how the outer radius, <span class="math inline">\(R_0\)</span>, changes over time with respect to volume gained, <span class="math inline">\(s\)</span>, and volume lost, <span class="math inline">\(\lambda\)</span>,</p>
+<p><span class="math display">\[
+\frac{4\pi}{3}\frac{dR_0^3}{dt} = s\frac{4\pi}{3}R_0^3 - \lambda\frac{4\pi}{3}R_0^3 \implies \frac{dR_0^3}{dt} = (s-\lambda)R_0^3.
+\]</span></p>
+<p>The <span class="math inline">\(\frac{4\pi}{3}\)</span> comes from the equation for the volume of a sphere, but since all terms incorporate it, they cancel out.</p>
+</div>
+<div id="nondimensionalization" class="section level3 hasAnchor" number="2.9.5">
+<h3><span class="header-section-number">2.9.5</span> Nondimensionalization<a href="introduction.html#nondimensionalization" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>One way to study differential equations is through nondimensionalization. This method removes the units from the parameters in the system, so that you can simplify the differential equation. In this case, it offers the ability to merge the nutrient concentration and growth equations. We can start this process by rewriting the radial growth equation we just set up. The derivative is taken with respect to <span class="math inline">\(R_0^3\)</span>, but using chain rule you can write <span class="math inline">\(\frac{dR_0^3}{dt} = 3R_0^2\frac{dR_0}{dt}\)</span>. Then, we can further rewrite</p>
+<p><span class="math display">\[
+\frac{dR_0}{dt} = \frac{s-\lambda}{3}R_0.
+\]</span></p>
+<p>Now, we can begin nondimensionalizing. We use scaled time as <span class="math inline">\(\tau = st\)</span> and <span class="math inline">\(\xi = BR_0\)</span> where <span class="math inline">\(B = \sqrt{\frac{A}{k\hat{\sigma}}}\)</span>.</p>
+<p>The units of the variables are</p>
+<p><span class="math display">\[
+[\tau] = [s][t] = \text{time}^{-1}\text{time} = \text{no dimension}\\
+[\xi] = \sqrt{\frac{[A]}{[k][\hat{\sigma}]}}[R_0] = \sqrt{\frac{\frac{\text{mol}}{\text{length}^3\text{time}}}{\frac{\text{length}^2}{\text{time}}\frac{\text{mol}}{\text{length}^3}}}\text{length} = \sqrt{\frac{1}{\text{length}^2}}\text{length} = \text{no dimension}
+\]</span></p>
+<p>Now, we see that we have two nondimensional variables, <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\xi\)</span>. Next, we need to do change of variables. To change from <span class="math inline">\(dt\)</span> to <span class="math inline">\(d\tau\)</span>, we see that since <span class="math inline">\(\tau = st\)</span>, <span class="math inline">\(\frac{d\tau}{dt} = s\)</span>. Thus <span class="math inline">\(\frac{dt}{d\tau}=\frac{1}{s}\)</span> by simply inverting the fraction. Next, we change from <span class="math inline">\(\frac{dR_0}{dt}\)</span> to <span class="math inline">\(\frac{dR_0}{d\tau}\)</span></p>
+<p><span class="math display">\[
+\frac{dR_0}{d\tau} = \frac{dR_0}{dt}\frac{dt}{d\tau} = \frac{1}{s}\frac{dR_0}{dt}\implies \frac{dR_0}{dt} = s\frac{dR_0}{d\tau}.
+\]</span>
+We can now do this for <span class="math inline">\(\xi\)</span>, since <span class="math inline">\(\frac{d\xi}{dR_0} = B\)</span>
+<span class="math display">\[
+\frac{d\xi}{d\tau} = \frac{d\xi}{dR_0}\frac{dR_0}{d\tau} = B\frac{dR_0}{d\tau}\implies \frac{dR_0}{d\tau} = \frac{1}{B} \frac{d\xi}{d\tau}.
+\]</span></p>
+<p>Now, we can sequentially plug these into the growth equation and derive</p>
+<p><span class="math display">\[
+\begin{align}
+\frac{dR_0}{dt} &amp;= \frac{s-\lambda}{3}R_0\\
+s\frac{dR_0}{d\tau} &amp;= \frac{s-\lambda}{3}R_0\\
+\frac{s}{B}\frac{d\xi}{d\tau} &amp;= \frac{s-\lambda}{3}R_0\\
+\frac{d\xi}{d\tau} &amp;= \frac{1-\frac{\lambda}{s}}{3}BR_0 = \frac{1-\gamma}{3}\xi
+\end{align}
+\]</span></p>
+<p>where <span class="math inline">\(\gamma = \frac{\lambda}{s}\)</span>, another nondimensional parameter. Using separation of variables, we get the solution</p>
+<p><span class="math display">\[
+\xi(\tau) = \xi(0)e^{(1-\gamma)\tau/3}
+\]</span></p>
+<p>where <span class="math inline">\(\xi(0)\)</span> is the initial value of the scaled outer radius. Now, we see how the nondimensionalization is useful. This system exhibits exponential growth, in the fast growth regime, if <span class="math inline">\(\gamma&lt; 1\)</span>, equivalently <span class="math inline">\(s&gt;\lambda\)</span>, otherwise seen as proliferation being greater than volume loss from apoptosis.</p>
+<p>Now, looking back at the nutrient concentration, we reach <span class="math inline">\(\hat{\sigma}\)</span> when <span class="math inline">\(\sigma(0) = \hat{\sigma}\)</span>. This gives us the expression</p>
+<p><span class="math display">\[
+\hat{\sigma} = \sigma_\infty - \frac{A}{6k}R_0^2.
+\]</span></p>
+<p>This <span class="math inline">\(R_0\)</span> is critical for understanding when the system changes regimes. So, solving for <span class="math inline">\(R_0^2\)</span>, we can get an expression involving <span class="math inline">\(\xi\)</span>. Since <span class="math inline">\(R_0^2 = \frac{\xi^2}{B^2}\)</span>, we get the equation</p>
+<p><span class="math display">\[
+\frac{k\hat{\sigma}\xi^2}{A} = \frac{6k}{A}(\sigma_\infty-\hat{\sigma})
+\]</span></p>
+<p>which solves to</p>
+<p><span class="math display">\[
+\xi_s = \sqrt{6(\frac{\sigma_\infty}{\hat{\sigma}}-1)}
+\]</span></p>
+<p><span class="math inline">\(\xi_s\)</span> is the critical scaled radius when the system moves from a fast growth only regime to a fast and slow growth regime.</p>
+</div>
+<div id="further-practice" class="section level3 hasAnchor" number="2.9.6">
+<h3><span class="header-section-number">2.9.6</span> Further Practice<a href="introduction.html#further-practice" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>These same steps can be applied to the other two phases of growth. As practice, we leave the slowed growth case to the reader.</p>
+<div id="slowed-growth" class="section level4 hasAnchor" number="2.9.6.1">
+<h4><span class="header-section-number">2.9.6.1</span> Slowed Growth<a href="introduction.html#slowed-growth" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Diffusion is defined by</p>
+<p><span class="math display">\[\frac{k}{r^2}\frac{d}{dr}[r^2\frac{d\sigma}{dr}] = \begin{cases}\frac{A\sigma}{\hat{\sigma}}, &amp; 0\leq r\leq \hat{R}\\ A, &amp; \hat{R}\leq r\leq R_0\end{cases}\]</span>
+where <span class="math inline">\(\hat{R}\)</span> is the radius of the tumor when <span class="math inline">\(\sigma = \hat{\sigma}\)</span>. If you would like a challenge, please try to derive the solutions to the two different equations. The solutions are comprised in steps if you would like to check you progress. <em>Hint: you can write <span class="math inline">\(\frac{e^x-e^{-x}}{2} = \sinh(x)\)</span></em></p>
+<details>
+<summary>
+Solution to the nutrient diffusion equation
+</summary>
+<p>The solution to the equation becomes</p>
+<span class="math display">\[\sigma(r) = \hat{\sigma}\frac{\hat{R}}{r}\frac{\sinh Br}{\sinh B\hat{R}}, \quad 0\leq r\leq \hat{R},\\
+\sigma(r) = \sigma_\infty + \frac{A}{6k}(r^2-R_0^2)+[\hat{\sigma}-\sigma_\infty-\frac{A}{6k}(\hat{R}^2-R_0^2)]\frac{\hat{R}}{r}\frac{r-R_0}{\hat{R}-R_0}, \quad \hat{R}\leq r\leq R_0. \]</span>
+</details>
+<p>After deriving the two nutrient equations, you can create an expression for <span class="math inline">\(\hat{R}\)</span> by matching <span class="math inline">\(\frac{d\sigma}{dr}\)</span> at <span class="math inline">\(r=\hat{R}\)</span>. <em>Hint: after introducing a scaled variable, <span class="math inline">\(\rho = B\hat{R}\)</span>, you can write <span class="math inline">\(coth = \frac{e^x+e^{-x}}{e^x-e^{-x}} = \frac{e^{2x}+1}{e^{2x}-1}\)</span>.</em></p>
+<details>
+<summary>
+The solution can be found here
+</summary>
+<span class="math display">\[
+\frac{\sigma_\infty}{\hat{\sigma}} -1 = \frac{1}{6}(\xi^2-\rho^2)+[\rho(\rho\coth \rho-1)-\frac{\rho^3}{3}][\frac{1}\rho-\frac{1}\xi].
+\]</span>
+</details>
+Next, you can derive the growth equation for the system. <em>Hint: <span class="math inline">\(\lambda\)</span> is constant the entire radius, but <span class="math inline">\(s\)</span> has two separate values.</em>
+<details>
+<summary>
+Growth equation!!
+</summary>
+<p>The growth equation is</p>
+<p><span class="math display">\[ \frac{4\pi}{4}\frac{dR_0^3}{dt} = s\frac{4\pi}{3}(R_0^3-\hat{R}^3)-\lambda\frac{4\pi}{3}R_0^3+4\pi s\int_0^{\hat{R}}\frac{\sigma(r)}{\hat{\sigma}r^2}dr\]</span></p>
+</details>
+After deriving the growth equation, you can integrate over <span class="math inline">\(\hat{\sigma}\)</span> and perform nondimensionalization to get
+<details>
+<summary>
+Final Solution
+</summary>
+<span class="math display">\[\xi^2\frac{d\xi}{d\tau}=\frac{1}{3}[(1-\gamma)\xi^3-\rho^3] +\rho[\rho\coth \rho - 1].\]</span>
+</details>
+<p>This equation has an equilibrium point <span class="math inline">\((\xi^*,\rho^*)\)</span>, you may show that for a given parameter regime, this is stable and for other parameters, a necrotic core will form.</p>
 
+</div>
+</div>
 </div>
 </div>
             </section>

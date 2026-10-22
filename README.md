@@ -1,6 +1,24 @@
 # UTM_FSU_Math_Stats_Oncology
 Repository for UTM and FSU to work on building resources to teach mathematical and statistical oncology
 
+
+## Aims for Week 6 (Oct 22)
+- [ ] Heba: Cover Four pillar ingredients of an Oncology ABM, Hands on implementation walthrough
+- [ ] Heba: Try to implement ABM for predator-prey in plotly (grid, param values, graph: population)
+- [ ] Maria: Cover Chapter over view and learning objectives, Introduction to ABM, Standardized model documentation
+- [ ] John: Finish Apoptosis Chapter and append to end of Introduction
+
+## Aims for Week 5 (Oct 15)
+
+- [X] Everyone: Help John complete the chapter on the model in spherical coordinates
+- [X] Everyone: Start the agent based model (ABM) chapter
+- [X] Heba: Read the papers on ABM
+- [X] Maria: Read the papers on ABM
+- [X] Heba: summarize ABM model paper (John's paper + Bryce's papers in slack) in a separate folder on GitHub
+- [X] Maria: summarize ABM model paper (John's paper + Bryce's papers in slack) in a separate folder on GitHub
+- [ ] Everyone: Coordinate to keep branch reasonably clean. Help each other with merges where necessary (Contact Heba for merge conflicts).
+
+=======
 ## Aims for Week 6
 
 - introduce probability distributions/ background (binomial, normal, t, chi squared)

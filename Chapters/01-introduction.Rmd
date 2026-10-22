@@ -241,3 +241,193 @@ Secondly, consider the case where there are no tumour cells ($T=0$). By \@ref(eq
 Thirdly, we are not modelling many factors that are involved in these tumour-effector cell interactions. This includes different tumour cell types, different effector cell types, and damage to healthy cells. 
 
 Overall, this model simply demonstrates how a system of ordinary differential equations could be used to study tumour cell and effector cell interactions despite its limitations. We will gradually introduce more sophisticated models throughout the text, leading to more realistic models and useful interpretations.
+
+## Introductory Model
+
+_need to cite the McElwain paper somewhere: Apoptosis as a Volume Loss Mechanism in Mathematical Models of Solid Tumor Growth_
+
+The simplest mathematical model to discuss the growing of a tumor would be one that only describes the growth and death of cells. Cancer cells grow and divide at a rapid pace, leading to the development of tumors.
+
+Early experimental studies on tumors study the rate of change of the volume, noticing that over time the growth rate decreased and necrotic cores could develop. Necrotic cores occur when cells at the middle of a tumor do not have enough nutrients and die en masse.
+
+Using a differential equation, we can model the tumor growth with regards to the nutrient density.
+
+### Modeling Assumptions
+
+* The tumor stays a sphere and is axisymmetric
+    * The tumor not being axisymmetric would complicate the model by including terms dependent on angle, while not providing enough insight to justify the complication
+* Nutrient is only consumed by living cells
+* The system is at diffusive equilibrium, since nutrient diffusion happens in seconds but tumor growth happens over days
+    * If the system is not at diffusive equilibrium, we would have to model two timescales, this assumption simplifies the derivation
+* Cancer cells die when the concentration of nutrient falls below a certain level
+* Cells move towards the center as tumor grows
+
+### Parameters 
+
+* $\sigma(r)$: nutrient concentration at radius point, $r$
+* $\hat{\sigma}$: nutrient concentration when slowed growth occurs
+* $\sigma_i$: critical nutrient concentration, ie $\sigma<\sigma_i$ means that the cells dies
+* $\sigma_\infty$: constant nutrient concentration at surface, $R_0$
+* $A$: nutrient consumption, per unit time
+* $s$: proliferation, per unit time
+* $\lambda$: volume loss due to apoptosis, per unit time
+* $k$: diffusion constant
+* $R_0$: outer radius of tumor
+
+### Model Development
+The model has three separate growth regimes: fast growth, slow growth, and development of the necrotic core. This state of the model depends on the nutrient concentration at $\sigma(0)$, the center of the tumor. 
+
+The proliferation and nutrient consumption of cells is dictated by:
+
+$$
+f(\sigma) = \begin{cases} 1, & \hat{\sigma}\leq \sigma, \\ \frac{\sigma}{\hat{\sigma}}, & \sigma_i < \sigma \leq \hat{\sigma}, \\ 0, & \sigma < \sigma_i\end{cases}. 
+$$
+
+The top case is fast growth, where proliferation and nutrient consumption are unhindered. As $\sigma$ falls below a nutrient concentration, slowed growth begins, and the constants are scaled by the proportion of nutrient available. Lastly, $\sigma$ falls below the critical 
+nutrient concentration, $\sigma_i$, and the cell dies from lack of nutrients.
+
+### Case 1: Fast Growth
+The nutrient concentration can be defined using the diffusion equation in spherical coordinates. Since we assume the problem is axisymmetric and at equilibrium, we are only concerned with the radial coordinate:
+
+$$
+\frac{k}{r^2}\frac{d}{dr}\left[ r^2\frac{d\sigma}{dr}\right] = A, \quad 0 \leq r \leq R_0.
+$$
+
+We can solve this equation by dividing by $\frac{k}{r^2}$ and integrating twice,
+
+$$
+\begin{align}
+\frac{d}{dr}[r^2\frac{d\sigma}{dr}] &= \frac{Ar^2}{k}\\
+r^2\frac{d\sigma}{dr} &= \frac{Ar^3}{3k}+ c_1\\
+\frac{d\sigma}{dr} &= \frac{Ar}{3k}+\frac{c_1}{r^2}\\
+\sigma(r) &= \frac{Ar^2}{6k}-\frac{c_1}{r} + c_2\\
+\end{align}
+$$
+
+For this equation to be valid at $r=0$, $c_1$ must be zero. Further, we have the constraint on the outer boundary, $\sigma(R_0)=\sigma_\infty$. This constraint gives us the solution for the nutrient concentration as
+
+$$
+\begin{align}
+\sigma(R_0) &= \frac{AR_0^2}{6k} + c_2 = \sigma_\infty \implies c_2 = \sigma_\infty - \frac{AR_0^2}{6k}\\
+\sigma(r) &= \frac{AR_0^2}{6k} + \sigma_\infty - \frac{AR_0^2}{6k}\\
+\sigma(r) &= \sigma_\infty - \frac{A}{6k}(R_0^2- r^2). 
+\end{align}
+$$
+
+Now, that we have modeled the nutrient concentration we can move to modeling the growth of the tumor as a sphere by modeling how the outer radius, $R_0$, changes over time with respect to volume gained, $s$, and volume lost, $\lambda$,
+
+$$
+\frac{4\pi}{3}\frac{dR_0^3}{dt} = s\frac{4\pi}{3}R_0^3 - \lambda\frac{4\pi}{3}R_0^3 \implies \frac{dR_0^3}{dt} = (s-\lambda)R_0^3.
+$$
+
+The $\frac{4\pi}{3}$ comes from the equation for the volume of a sphere, but since all terms incorporate it, they cancel out.
+
+### Nondimensionalization
+
+One way to study differential equations is through nondimensionalization. This method removes the units from the parameters in the system, so that you can simplify the differential equation. In this case, it offers the ability to merge the nutrient concentration and growth equations. We can start this process by rewriting the radial growth equation we just set up. The derivative is taken with respect to $R_0^3$, but using chain rule you can write $\frac{dR_0^3}{dt} = 3R_0^2\frac{dR_0}{dt}$. Then, we can further rewrite
+
+$$
+\frac{dR_0}{dt} = \frac{s-\lambda}{3}R_0.
+$$
+
+Now, we can begin nondimensionalizing. We use scaled time as $\tau = st$ and $\xi = BR_0$ where $B = \sqrt{\frac{A}{k\hat{\sigma}}}$. 
+
+The units of the variables are 
+
+$$
+[\tau] = [s][t] = \text{time}^{-1}\text{time} = \text{no dimension}\\
+[\xi] = \sqrt{\frac{[A]}{[k][\hat{\sigma}]}}[R_0] = \sqrt{\frac{\frac{\text{mol}}{\text{length}^3\text{time}}}{\frac{\text{length}^2}{\text{time}}\frac{\text{mol}}{\text{length}^3}}}\text{length} = \sqrt{\frac{1}{\text{length}^2}}\text{length} = \text{no dimension}
+$$
+
+Now, we see that we have two nondimensional variables, $\tau$ and $\xi$. Next, we need to do change of variables. To change from $dt$ to $d\tau$, we see that since $\tau = st$, $\frac{d\tau}{dt} = s$. Thus $\frac{dt}{d\tau}=\frac{1}{s}$ by simply inverting the fraction. Next, we change from $\frac{dR_0}{dt}$ to $\frac{dR_0}{d\tau}$
+
+$$
+\frac{dR_0}{d\tau} = \frac{dR_0}{dt}\frac{dt}{d\tau} = \frac{1}{s}\frac{dR_0}{dt}\implies \frac{dR_0}{dt} = s\frac{dR_0}{d\tau}.
+$$
+We can now do this for $\xi$, since $\frac{d\xi}{dR_0} = B$
+$$
+\frac{d\xi}{d\tau} = \frac{d\xi}{dR_0}\frac{dR_0}{d\tau} = B\frac{dR_0}{d\tau}\implies \frac{dR_0}{d\tau} = \frac{1}{B} \frac{d\xi}{d\tau}.
+$$
+
+Now, we can sequentially plug these into the growth equation and derive
+
+$$
+\begin{align}
+\frac{dR_0}{dt} &= \frac{s-\lambda}{3}R_0\\
+s\frac{dR_0}{d\tau} &= \frac{s-\lambda}{3}R_0\\
+\frac{s}{B}\frac{d\xi}{d\tau} &= \frac{s-\lambda}{3}R_0\\
+\frac{d\xi}{d\tau} &= \frac{1-\frac{\lambda}{s}}{3}BR_0 = \frac{1-\gamma}{3}\xi
+\end{align}
+$$
+
+where $\gamma = \frac{\lambda}{s}$, another nondimensional parameter. Using separation of variables, we get the solution
+
+$$
+\xi(\tau) = \xi(0)e^{(1-\gamma)\tau/3}
+$$
+
+where $\xi(0)$ is the initial value of the scaled outer radius. Now, we see how the nondimensionalization is useful. This system exhibits exponential growth, in the fast growth regime, if $\gamma< 1$, equivalently $s>\lambda$, otherwise seen as proliferation being greater than volume loss from apoptosis. 
+
+Now, looking back at the nutrient concentration, we reach $\hat{\sigma}$ when $\sigma(0) = \hat{\sigma}$. This gives us the expression 
+
+$$
+\hat{\sigma} = \sigma_\infty - \frac{A}{6k}R_0^2.
+$$
+
+This $R_0$ is critical for understanding when the system changes regimes. So, solving for $R_0^2$, we can get an expression involving $\xi$. Since $R_0^2 = \frac{\xi^2}{B^2}$, we get the equation
+
+$$
+\frac{k\hat{\sigma}\xi^2}{A} = \frac{6k}{A}(\sigma_\infty-\hat{\sigma})
+$$
+
+which solves to 
+
+$$
+\xi_s = \sqrt{6(\frac{\sigma_\infty}{\hat{\sigma}}-1)}
+$$
+
+$\xi_s$ is the critical scaled radius when the system moves from a fast growth only regime to a fast and slow growth regime.
+
+### Further Practice
+These same steps can be applied to the other two phases of growth. As practice, we leave the slowed growth case to the reader.
+
+#### Slowed Growth
+Diffusion is defined by
+
+$$\frac{k}{r^2}\frac{d}{dr}[r^2\frac{d\sigma}{dr}] = \begin{cases}\frac{A\sigma}{\hat{\sigma}}, & 0\leq r\leq \hat{R}\\ A, & \hat{R}\leq r\leq R_0\end{cases}$$
+where $\hat{R}$ is the radius of the tumor when $\sigma = \hat{\sigma}$. If you would like a challenge, please try to derive the solutions to the two different equations. The solutions are comprised in steps if you would like to check you progress. _Hint: you can write $\frac{e^x-e^{-x}}{2} = \sinh(x)$_
+
+
+<details>
+<summary>Solution to the nutrient diffusion equation</summary>
+The solution to the equation becomes
+
+$$\sigma(r) = \hat{\sigma}\frac{\hat{R}}{r}\frac{\sinh Br}{\sinh B\hat{R}}, \quad 0\leq r\leq \hat{R},\\
+\sigma(r) = \sigma_\infty + \frac{A}{6k}(r^2-R_0^2)+[\hat{\sigma}-\sigma_\infty-\frac{A}{6k}(\hat{R}^2-R_0^2)]\frac{\hat{R}}{r}\frac{r-R_0}{\hat{R}-R_0}, \quad \hat{R}\leq r\leq R_0. $$
+</details>
+
+After deriving the two nutrient equations, you can create an expression for $\hat{R}$ by matching $\frac{d\sigma}{dr}$ at $r=\hat{R}$. _Hint: after introducing a scaled variable, $\rho = B\hat{R}$, you can write $coth = \frac{e^x+e^{-x}}{e^x-e^{-x}} = \frac{e^{2x}+1}{e^{2x}-1}$._
+
+<details>
+<summary>The solution can be found here</summary>
+$$
+\frac{\sigma_\infty}{\hat{\sigma}} -1 = \frac{1}{6}(\xi^2-\rho^2)+[\rho(\rho\coth \rho-1)-\frac{\rho^3}{3}][\frac{1}\rho-\frac{1}\xi].
+$$
+</details>
+
+Next, you can derive the growth equation for the system. _Hint: $\lambda$ is constant the entire radius, but $s$ has two separate values._
+<details>
+<summary>Growth equation!!</summary>
+The growth equation is
+
+$$ \frac{4\pi}{4}\frac{dR_0^3}{dt} = s\frac{4\pi}{3}(R_0^3-\hat{R}^3)-\lambda\frac{4\pi}{3}R_0^3+4\pi s\int_0^{\hat{R}}\frac{\sigma(r)}{\hat{\sigma}r^2}dr$$
+
+</details>
+After deriving the growth equation, you can integrate over $\hat{\sigma}$ and perform nondimensionalization to get
+<details>
+<summary>Final Solution</summary>
+
+$$\xi^2\frac{d\xi}{d\tau}=\frac{1}{3}[(1-\gamma)\xi^3-\rho^3] +\rho[\rho\coth \rho - 1].$$
+</details>
+
+This equation has an equilibrium point $(\xi^*,\rho^*)$, you may show that for a given parameter regime, this is stable and for other parameters, a necrotic core will form. 
