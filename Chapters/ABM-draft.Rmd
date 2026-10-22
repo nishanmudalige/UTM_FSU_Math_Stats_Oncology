@@ -1,7 +1,382 @@
----
-title: "Agent-Based Modeling Draft"
-output:
-  pdf_document: default
-  html_document: default
----
-## Introduction to Agent Based Models
+# Agent-Based Modeling
+
+## Chapter Overview and Learning Objectives
+
+### Learning Objectives
+*(To be developed by Maria)*
+
+### Prerequisites and Recommended Background
+*(To be developed by Maria)*
+
+## Introduction: Why Agent-Based Modeling in Oncology?
+
+### Comparing Modeling Approaches: ODEs vs. ABMs
+*(To be developed by Maria)*
+
+### When to Use ABMs in Cancer Biology
+*(To be developed by Maria)*
+
+## The Four Pillar Ingredients of an Oncology ABM
+
+Ordinary differential equation (ODE) models treat populations as continuous averages. In reality, however, cancer is driven by three factors: individual differences between cells, competition for space, and direct interactions with their surroundings. To capture these biological dynamics in a computer simulation, Agent-Based Models (ABMs) rely on four core building blocks:
+
+### Agents and State Variables
+Agents are independent computational entities representing individual biological actors (for example, tumor cells, cytotoxic T lymphocytes, macrophages, or stromal fibroblasts). Each agent maintains its own internal state variables, which may include:
+
+- **Spatial Coordinates:** Position $(x, y)$ on a discrete lattice or continuous coordinate space.
+- **Agent Type / Phenotype:** Cell lineage (e.g., prey/tumor cell vs. predator/immune cell, stem-like vs. differentiated, sensitive vs. drug-resistant).
+- **Internal Resources / Health:** Energy level, cell volume, or damage accumulation (e.g., DNA double-strand breaks).
+- **Lifecycle Status:** Active/proliferating, quiescent, senescent, or flagged for death (apoptotic/necrotic).
+
+### Environment (The World)
+The environment represents the physical tissue domain and biochemical landscape in which agents live:
+
+- **Spatial Topology:** Typically presented as a 2D or 3D grid. The boundaries can be reflective (rigid walls) or periodic (wrapping around edges so cells exiting the right re-enter on the left).
+- **Physical Exclusion:** Rules dictating whether a single lattice site can host multiple agents or enforces volume control (carrying capacity per cell).
+- **Background resources:** Gradients of extracellular nutrients (glucose, oxygen), chemokines, or therapeutic drugs that diffuse, decay, and are consumed by agents.
+
+### Interaction and Behavior Rules
+Rules define how each cell behaves and makes decisions at every step of the simulation. Some examples include:
+
+- **Movement:** Random walks, contact-inhibited crawling, or chemotaxis toward nutrient sources.
+- **Feeding & Metabolism:** Extracting energy from the local environment or prey to fuel baseline basal metabolic costs.
+- **Immune Attacks (Predation):** Immune cells spotting cancer cells upon physical proximity, causing them to lock onto them and destroy them (cell lysis).
+- **Reproduction (Proliferation):** Dividing into daughter cells when internal energy exceeds a threshold and space is available.
+- **Cell Death (Apoptosis):** Cell death triggered by starvation (energy dropping below zero), immune destruction, or senescence.
+
+### Iterative Scheduling Loop
+Time advances in discrete increments ($\Delta t$). At each time step:
+
+1. **Activation Order:** Living agents are activated. In asynchronous scheduling, the order is randomized at every step to prevent execution order artifacts.
+2. **Action Execution:** Each agent evaluates its local neighborhood, updates its energy, moves, interacts, and potentially reproduces or dies.
+3. **Environmental Update:** Diffusive fields diffuse/decay and renewable resources regenerate.
+4. **State Census:** Macroscopic summary statistics (e.g., total population counts, spatial clustering) are logged for analysis.
+
+## Hands-On Implementation Walkthrough: Predator-Prey in R & Plotly
+
+Recall that in Chapter 1, we introduced the continuous Lotka-Volterra system to model the high level interaction between immune effector cells ($E$, predators) and tumour cells ($T$, prey):
+$$\frac{dT}{dt} = a T - b T E, \quad \frac{dE}{dt} = c T E - d E$$
+
+While ODEs predict deterministic oscillations, real biological microenvironments display uneven spatial distribution, random local die-offs, and localized cell clustering. Here, we build an agent-based counterpart in R, using **Plotly** to visualize both the spatial grid and macroscopic population curves.
+
+> ### Two Ways to Run and Interact with this Model
+>
+> **Option 1: In-Browser Exploration**
+>
+> - **How to interact:**
+>   - **Hover:** Hover your mouse over any cell or agent to view its exact $(x, y)$ coordinates and internal energy level.
+>   - **Zoom & Pan:** Click and drag a box across the grid to zoom into localized cell clusters; double-click to reset the view.
+>   - **Filter Traces:** Click individual labels in the legend (e.g., *Prey*, *Predators*, *Grass*) to hide or isolate specific populations.
+>
+> **Option 2: Shiny Application**
+>
+> A shiny application is a standalone interactive application featuring real-time animation, step-by-step playback, and dynamic parameter sweeps.
+>
+> - **How to run:**
+>   - Ensure `shiny` and `plotly` are installed (`install.packages(c("shiny", "plotly"))`).
+>   - Open [`scripts/predator_prey_app.R`](scripts/predator_prey_app.R) in RStudio and click the green **"Run App"** button at the top right of the editor, or run `shiny::runApp("scripts/predator_prey_app.R")` in the R console.
+> - **How to interact:**
+>   - Adjust parameter sliders for initial cell counts, grid dimensions, and reproduction probabilities.
+>   - Click **Play / Pause** or **Step once** to watch predator-prey hunting, reproduction, and nutrient regrowth unfold in real time.
+>   - Switch presets between *Stable Coexistence* and *Default (Predator Extinction)* to observe system bifurcation.
+
+### Model Formulation and Parameters
+
+Our spatial ecosystem consists of:
+
+1. **Prey (Tumor / Sheep):** Move into unoccupied neighboring patches, consume background resources (grass/nutrients), expend energy to survive, and divide upon acquiring sufficient energy.
+2. **Predators (Immune / Wolves):** Actively search for prey, consume prey on the same lattice site, gain energy from predation, and divide probabilistically.
+3. **Renewable Resource Field (Nutrients / Grass):** Spatial patches that regenerate after a fixed countdown period once consumed.
+
+| Parameter | Variable Name | Coexistence Value | Extinction Value | Biological Meaning |
+| :--- | :--- | :--- | :--- | :--- |
+| **Grid Size** | `dims` | $30 \times 30$ | $20 \times 20$ | Tissue domain size |
+| **Initial Prey** | `n_sheep` | $140$ | $100$ | Initial tumor / prey density |
+| **Initial Predators** | `n_wolves` | $20$ | $50$ | Initial immune / predator density |
+| **Resource Regrowth** | `regrowth_time` | $30$ | $30$ | Steps required for nutrients to replenish |
+| **Prey Energy Gain** | `de_sheep` | $5$ | $4$ | Energy acquired per nutrient patch |
+| **Predator Energy Gain** | `de_wolf` | $30$ | $20$ | Energy acquired per prey killed |
+| **Prey Division Prob.** | `sheep_rep` | $0.31$ | $0.04$ | Probability of division per time step |
+| **Predator Division Prob.**| `wolf_rep` | $0.06$ | $0.05$ | Probability of division per predation |
+
+### Data Structures
+
+In R, storing hundreds of agents as individual R objects or iterating over nested data frames can be computationally slow. To achieve high simulation speeds, we store agents as **parallel vectors** enclosed inside a mutable `environment`.
+
+```{r setup-abm, message=FALSE, warning=FALSE}
+library(plotly)
+
+# Agent type constants
+SHEEP <- 1L  # Prey (Tumor cells / Sheep)
+WOLF  <- 2L  # Predator (Immune cells / Wolves)
+
+# Moore 8-neighbourhood coordinate offsets (Chebyshev metric)
+DX <- c(-1L,  0L,  1L, -1L, 1L, -1L, 0L, 1L)
+DY <- c(-1L, -1L, -1L,  0L, 0L,  1L, 1L, 1L)
+```
+
+### Core Simulation Functions
+
+#### Initializing the Model
+The `initialize_model()` function constructs the spatial lattice, assigns initial random positions and energy levels, and configures the resource countdown grid:
+
+```{r initialize-model}
+initialize_model <- function(n_sheep = 100, n_wolves = 50, dims = 20,
+                             regrowth_time = 30, de_sheep = 4, de_wolf = 20,
+                             sheep_rep = 0.04, wolf_rep = 0.05, seed = 23182) {
+  set.seed(seed)
+  m <- new.env()
+  W <- H <- as.integer(dims)
+  n <- n_sheep + n_wolves
+  m$W <- W
+  m$H <- H
+
+  # Agents: random positions; initial energy uniform on 0, ..., 2*delta - 1
+  m$type   <- c(rep(SHEEP, n_sheep), rep(WOLF, n_wolves))
+  m$x      <- sample.int(W, n, replace = TRUE)
+  m$y      <- sample.int(H, n, replace = TRUE)
+  m$energy <- as.numeric(c(sample.int(2 * de_sheep, n_sheep, replace = TRUE) - 1,
+                           sample.int(2 * de_wolf,  n_wolves, replace = TRUE) - 1))
+  m$alive  <- rep(TRUE, n)
+  m$rp     <- c(sheep_rep, wolf_rep)   # reproduction probability by type
+  m$de     <- c(de_sheep, de_wolf)     # energy gained from eating, by type
+
+  # Occupancy counts per cell (enforces prey volume exclusion)
+  m$occ <- matrix(tabulate((m$y - 1L) * W + m$x, W * H), W, H)
+
+  # Grass/Resource field: half fully grown, rest random countdown
+  m$regrowth  <- regrowth_time
+  m$fully     <- matrix(sample(c(TRUE, FALSE), W * H, replace = TRUE), W, H)
+  m$countdown <- matrix(ifelse(m$fully, regrowth_time,
+                               sample.int(regrowth_time, W * H, replace = TRUE) - 1L),
+                        W, H)
+
+  # Tracking history
+  m$step    <- 0L
+  m$h_step  <- 0L
+  m$h_sheep <- n_sheep
+  m$h_wolf  <- n_wolves
+  m$h_grass <- sum(m$fully)
+  m
+}
+```
+
+#### Individual Agent Rules (Movement, Feeding, Reproduction, Death)
+At each step, an agent walks to a neighboring cell with periodic boundary wrap-around (`%% W`), spends 1 unit of energy for basal metabolism, feeds if targets are present, and probabilistically reproduces:
+
+```{r agent-rules}
+kill_agent <- function(m, i) {
+  m$alive[i] <- FALSE
+  m$occ[m$x[i], m$y[i]] <- m$occ[m$x[i], m$y[i]] - 1L
+}
+
+reproduce <- function(m, i) {
+  # Offspring costs half the parent's energy; placed on parent's cell
+  m$energy[i] <- m$energy[i] / 2
+  m$type   <- c(m$type, m$type[i])
+  m$x      <- c(m$x, m$x[i])
+  m$y      <- c(m$y, m$y[i])
+  m$energy <- c(m$energy, m$energy[i])
+  m$alive  <- c(m$alive, TRUE)
+  m$occ[m$x[i], m$y[i]] <- m$occ[m$x[i], m$y[i]] + 1L
+}
+
+agent_step <- function(m, i) {
+  t <- m$type[i]
+
+  # Periodic boundary movement (toroidal wrap-around)
+  nx <- ((m$x[i] - 1L + DX) %% m$W) + 1L
+  ny <- ((m$y[i] - 1L + DY) %% m$H) + 1L
+
+  # Sheep move only to empty cells; wolves move anywhere
+  if (t == SHEEP) {
+    ok <- m$occ[cbind(nx, ny)] == 0L
+    nx <- nx[ok]
+    ny <- ny[ok]
+  }
+  if (length(nx) > 0) {
+    k <- sample.int(length(nx), 1)
+    m$occ[m$x[i], m$y[i]] <- m$occ[m$x[i], m$y[i]] - 1L
+    m$x[i] <- nx[k]
+    m$y[i] <- ny[k]
+    m$occ[nx[k], ny[k]] <- m$occ[nx[k], ny[k]] + 1L
+  }
+
+  # Moving costs 1 energy; die if energy < 0
+  m$energy[i] <- m$energy[i] - 1
+  if (m$energy[i] < 0) {
+    kill_agent(m, i)
+    return(invisible())
+  }
+
+  # Feeding
+  if (t == SHEEP) {
+    if (m$fully[m$x[i], m$y[i]]) {
+      m$energy[i] <- m$energy[i] + m$de[SHEEP]
+      m$fully[m$x[i], m$y[i]] <- FALSE
+    }
+  } else {
+    dinner <- which(m$alive & m$type == SHEEP & m$x == m$x[i] & m$y == m$y[i])
+    if (length(dinner) > 0) {
+      kill_agent(m, dinner[1])
+      m$energy[i] <- m$energy[i] + m$de[WOLF]
+    }
+  }
+
+  # Reproduction
+  if (runif(1) <= m$rp[t]) reproduce(m, i)
+}
+```
+
+#### Environmental Regeneration and Model Step Loop
+```{r environmental-rules}
+grass_step <- function(m) {
+  growing <- !m$fully
+  ready   <- growing & m$countdown <= 0
+  m$fully[ready]     <- TRUE
+  m$countdown[ready] <- m$regrowth
+  dec <- growing & !ready
+  m$countdown[dec] <- m$countdown[dec] - 1L
+}
+
+model_step <- function(m) {
+  # Asynchronous random scheduling: shuffle living agent indices
+  ids <- which(m$alive)
+  ids <- ids[sample.int(length(ids))]
+  for (i in ids) if (m$alive[i]) agent_step(m, i)
+  grass_step(m)
+
+  m$step    <- m$step + 1L
+  m$h_step  <- c(m$h_step, m$step)
+  m$h_sheep <- c(m$h_sheep, sum(m$alive & m$type == SHEEP))
+  m$h_wolf  <- c(m$h_wolf,  sum(m$alive & m$type == WOLF))
+  m$h_grass <- c(m$h_grass, sum(m$fully))
+
+  # Occasionally drop dead agents so vectors do not grow without bound
+  if (length(m$alive) > 4 * sum(m$alive) + 500) {
+    keep <- m$alive
+    m$type   <- m$type[keep]
+    m$x      <- m$x[keep]
+    m$y      <- m$y[keep]
+    m$energy <- m$energy[keep]
+    m$alive  <- m$alive[keep]
+  }
+}
+```
+
+### Main Simulation Loop & Spatial Visualization
+
+#### Visualizing the 2D Spatial Lattice with Plotly
+The spatial lattice is visualized using an interactive Plotly heatmap for the background grass/resource layer combined with scatter markers for prey and predators:
+
+```{r plot-grid-fn}
+plot_grid <- function(m) {
+  W <- m$W
+  H <- m$H
+  growth <- ifelse(m$fully, 1, 1 - m$countdown / m$regrowth)
+
+  s <- which(m$alive & m$type == SHEEP)
+  w <- which(m$alive & m$type == WOLF)
+
+  p <- plot_ly() |>
+    add_heatmap(
+      x = seq_len(W), y = seq_len(H), z = t(growth),
+      zmin = 0, zmax = 1, showscale = FALSE,
+      colorscale = list(c(0, "#A0522D"), c(1, "#3C9A3C")),
+      hovertemplate = "cell (%{x}, %{y})<br>grass regrown: %{z:.0%}<extra></extra>"
+    )
+
+  if (length(s) > 0) {
+    p <- p |> add_markers(
+      x = m$x[s] - 0.15, y = m$y[s] - 0.15 * runif(length(s)),
+      name = "Prey (Sheep / Tumor)",
+      marker = list(symbol = "circle", size = 9, color = "rgba(255,255,255,0.85)",
+                    line = list(color = "black", width = 1)),
+      text = sprintf("Prey<br>energy: %.1f", m$energy[s]),
+      hoverinfo = "text"
+    )
+  }
+  if (length(w) > 0) {
+    p <- p |> add_markers(
+      x = m$x[w] + 0.15, y = m$y[w] + 0.15 * runif(length(w)),
+      name = "Predators (Wolves / Immune)",
+      marker = list(symbol = "triangle-up", size = 11, color = "rgba(51,51,77,0.9)",
+                    line = list(color = "black", width = 1)),
+      text = sprintf("Predator<br>energy: %.1f", m$energy[w]),
+      hoverinfo = "text"
+    )
+  }
+
+  p |>
+    layout(
+      title = list(text = sprintf("Step %d  |  Prey: %d  Predators: %d  Grass: %d",
+                                  m$step, length(s), length(w), sum(m$fully)),
+                   font = list(size = 14)),
+      xaxis = list(range = c(0.5, W + 0.5), showgrid = FALSE, zeroline = FALSE,
+                   title = "", constrain = "domain"),
+      yaxis = list(range = c(0.5, H + 0.5), showgrid = FALSE, zeroline = FALSE,
+                   title = "", scaleanchor = "x", constrain = "domain"),
+      legend = list(orientation = "h", y = -0.05),
+      margin = list(t = 40, l = 10, r = 10, b = 10)
+    )
+}
+```
+
+#### Visualizing Population Dynamics Over Time with Plotly
+```{r plot-timeseries-fn}
+plot_timeseries <- function(m) {
+  plot_ly(x = m$h_step) |>
+    add_lines(y = m$h_sheep, name = "Prey (Sheep / Tumor)",
+              line = list(color = "#8B8878", width = 2)) |>
+    add_lines(y = m$h_wolf,  name = "Predators (Wolves / Immune)",
+              line = list(color = "#33334D", width = 2)) |>
+    add_lines(y = m$h_grass, name = "Grass (Nutrient Patches)",
+              line = list(color = "#2E8B2E", width = 2)) |>
+    layout(
+      xaxis = list(title = "Simulation Step"),
+      yaxis = list(title = "Population Count", rangemode = "tozero"),
+      hovermode = "x unified",
+      legend = list(orientation = "h", y = -0.2),
+      margin = list(t = 20)
+    )
+}
+```
+
+#### Simulating the Coexistence Regime
+```{r run-coexistence-simulation}
+# Initialize model with stable coexistence preset
+sim_model <- initialize_model(
+  n_sheep = 140, n_wolves = 20, dims = 30, regrowth_time = 30,
+  de_sheep = 5, de_wolf = 30, sheep_rep = 0.31, wolf_rep = 0.06, seed = 24
+)
+
+# Run 60 simulation steps
+for (step in 1:60) {
+  model_step(sim_model)
+}
+
+# Render interactive Plotly spatial lattice
+plot_grid(sim_model)
+```
+
+```{r plot-coexistence-timeseries}
+# Render interactive Plotly population time series
+plot_timeseries(sim_model)
+```
+
+### Interactive Exploration via Shiny
+
+To experiment with parameter sweeps interactively, an accompanying Shiny web application is available. It features real-time sliders for initial population counts, grid size, energy returns, and reproduction probabilities:
+
+```{r run-shiny-app, eval=FALSE}
+# To run the complete interactive app in RStudio:
+shiny::runApp("scripts/predator_prey_app.R")
+```
+
+## Standardized Model Documentation: The ODD Protocol
+
+### Motivation: Reproducibility in Computational Modeling
+*(To be developed by Maria)*
+
+### The Seven Elements of ODD Applied to Cancer Models
+*(To be developed by Maria)*
