@@ -15,6 +15,14 @@ equilibrium-points-and-local-stability
 illustrative-example
 analysing-this-system
 limitations
+introductory-model
+modeling-assumptions
+parameters
+model-development
+case-1-fast-growth
+nondimensionalization
+further-practice
+slowed-growth
 the-kuznetsov-tumourimmune-model
 analysing-the-kuznetsov-model
 coexistence-equilibria-root-structure-and-sign-test
