@@ -1,12 +1,15 @@
 # UTM_FSU_Math_Stats_Oncology
 Repository for UTM and FSU to work on building resources to teach mathematical and statistical oncology
 
+## Aims for Week 6 (Oct 29)
+- [ ] All: Update code and explain implementation in a more approachable way for someone without a introductory background in coding
+
 
 ## Aims for Week 6 (Oct 22)
-- [ ] Heba: Cover Four pillar ingredients of an Oncology ABM, Hands on implementation walthrough
-- [ ] Heba: Try to implement ABM for predator-prey in plotly (grid, param values, graph: population)
+- [X] Heba: Cover Four pillar ingredients of an Oncology ABM, Hands on implementation walthrough
+- [X] Heba: Try to implement ABM for predator-prey in plotly (grid, param values, graph: population)
 - [ ] Maria: Cover Chapter over view and learning objectives, Introduction to ABM, Standardized model documentation
-- [ ] John: Finish Apoptosis Chapter and append to end of Introduction
+- [X] John: Finish Apoptosis Chapter and append to end of Introduction
 
 ## Aims for Week 5 (Oct 15)
 
