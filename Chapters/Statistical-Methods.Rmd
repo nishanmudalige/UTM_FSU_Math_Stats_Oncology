@@ -36,7 +36,11 @@ $$
 F_X(x)=P(X\leq x).
 $$
 
-The expected value and variance are used to describe the centre and variability of a probability distribution. The expected value of $X$ is denoted by $E[X]$, while its variance is defined as $\operatorname{Var}(X)=E[(X-E[X])^2]$, the expected squared deviation from the mean.
+The expected value and variance are used to describe the centre and variability of a probability distribution. The expected value of $X$ is denoted by $E(X)$, while its variance is defined as $\operatorname{Var}(X)=E[(X-E(X)^2]$, the expected squared deviation from the mean.
+
+Let $X_1, X_2,...,X_n$ be indepedent random variables. Then,
+$$E(\sum_{i=1}^n c_i X_i)=\sum_{i=1}^n c_i E(X_i), $$
+and $$\operatorname{Var} (\sum_{i=1}^n c_i X_i)= \sum_{i=1}^n c_i^2 \operatorname{Var} (X_i) $$
 
 We now introduce common discrete and continuous probability distributions and discuss their applications in oncology.
 
@@ -55,7 +59,7 @@ P(X=x)=p^x(1-p)^{1-x},
 \qquad x=0,1.
 $$
 
-The expected value and variance are $E[X]=p$ and $\operatorname{Var}(X)=p(1-p)$.
+The expected value and variance are $E(X)=p$ and $\operatorname{Var}(X)=p(1-p)$.
 
 Suppose researchers are interested in whether a patient responds to a particular cancer treatment. Let $X=1$ indicate that a patient responds to treatment and $X=0$ indicate that the patient does not respond. If the probability of responding is $p$, then $X$ follows a Bernoulli distribution.
 
@@ -76,11 +80,11 @@ P(X=x)=\binom{n}{x}p^x(1-p)^{n-x},
 $$
 
 The expected value and variance are
-$E[X]=np$ and $\operatorname{Var}(X)=np(1-p)$.
+$E(X)=np$ and $\operatorname{Var}(X)=np(1-p)$.
 
 Suppose a clinical trial involves $100$ patients receiving a particular cancer treatment. If each patient independently responds with probability $p=0.7$, then the number of patients who respond can be modelled as $X\sim\operatorname{Binomial}(100,0.7)$.
 
-The expected number of patients who respond is $E[X]=100(0.7)=70$. 
+The expected number of patients who respond is $E(X)=100(0.7)=70$. 
 
 Also, the probability that at least $80$ patients respond to the treatment is
 
@@ -107,12 +111,11 @@ f_X(x)=\frac{1}{\sqrt{2\pi \sigma^2}}
 \qquad -\infty<x<\infty.
 $$
 
-The expected value and variance are $E[X]=\mu$ and $\operatorname{Var}(X)=\sigma^2.$
+The expected value and variance are $E(X)=\mu$ and $\operatorname{Var}(X)=\sigma^2.$
 
 If $Z \sim N(0,1)$, we say $Z$ follows a standard normal distribution.
 
-The normal distribution is particularly important in classical linear regression, which we introduce later in this chapter. Under the normal-error linear regression model, the error terms are assumed to follow a normal distribution with mean zero and constant variance.
-
+Also, if $X_1,X_2,...,X_n$ are normal random variables, then $\sum_{i=1}^n {c_i X_i}$ is also a normal random variable, where $c_1,c_2,...,c_n \in \mathbb{R}$. That is, a linear combination of normal random variables is also normal.
 
 
 ```{r normal-distributions, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5, fig.align='center', fig.cap="Normal distributions with different means and variances."}
@@ -179,7 +182,7 @@ $$
 
 where $\Gamma(\cdot)$ denotes the gamma function.
 
-The expected value and variance are $E[X]=n$ and $\operatorname{Var}(X)=2n.$
+The expected value and variance are $E(X)=n$ and $\operatorname{Var}(X)=2n.$
 
 The chi-squared distribution is nonnegative and generally right-skewed. Its shape depends on the degrees of freedom, becoming less skewed as the degrees of freedom increase.
 
@@ -256,18 +259,7 @@ $$
 
 where $\Gamma(\cdot)$ denotes the gamma function and $n$ represents the degrees of freedom.
 
-The expected value is
-
-$$
-E[X]=0,\qquad n>1,
-$$
-
-and the variance is
-
-$$
-\operatorname{Var}(X)=\frac{n}{n-2},
-\qquad n>2.
-$$
+The expected value is $E(X)=0,\qquad n>1,$ and the variance is $\operatorname{Var}(X)=\frac{n}{n-2},\qquad n>2.$
 
 The shape of the Student's t-distribution depends on its degrees of freedom, denoted by \(n\). For smaller values of \(n\), the distribution has heavier tails and a lower peak compared to the standard normal distribution. As \(n\) increases, the tails become lighter and the distribution approaches the standard normal distribution. In particular, as \(n\to\infty\), the Student's t-distribution converges in distribution to \(N(0,1)\).
 
@@ -357,9 +349,9 @@ f_X(x)=\lambda e^{-\lambda x},
 \qquad x\geq 0.
 $$
 
-The expected value and variance are $E[X]=\frac{1}{\lambda}$ and $\operatorname{Var}(X)=\frac{1}{\lambda^2}.$
+The expected value and variance are $E(X)=\frac{1}{\lambda}$ and $\operatorname{Var}(X)=\frac{1}{\lambda^2}.$
 
-The shape of the exponential distribution depends on its rate parameter, denoted by \(\lambda\). As \(\lambda\) increases, the probability density decreases more rapidly, indicating that shorter waiting times become more likely. Conversely, smaller values of \(\lambda\) correspond to longer expected waiting times. Since \(E[X]=1/\lambda\) and \(\operatorname{Var}(X)=1/\lambda^2\), both the expected value and variance decrease as the rate parameter increases. 
+The shape of the exponential distribution depends on its rate parameter, denoted by \(\lambda\). As \(\lambda\) increases, the probability density decreases more rapidly, indicating that shorter waiting times become more likely. Conversely, smaller values of \(\lambda\) correspond to longer expected waiting times. Since \(E(X)=1/\lambda\) and \(\operatorname{Var}(X)=1/\lambda^2\), both the expected value and variance decrease as the rate parameter increases. 
 
 ```{r exponential-distributions, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5, fig.align='center', fig.cap="Exponential distributions with different rate parameters."}
 library(ggplot2)
@@ -433,7 +425,7 @@ f_X(x)=
 \qquad x\geq 0.
 $$
 
-The expected value and variance are $E[X]=\lambda\Gamma\left(1+\frac{1}{k}\right)$ and $\operatorname{Var}(X)=\lambda^2\left[\Gamma\left(1+\frac{2}{k}\right)-\Gamma^2\left(1+\frac{1}{k}\right)\right]$
+The expected value and variance are $E(X)=\lambda\Gamma\left(1+\frac{1}{k}\right)$ and $\operatorname{Var}(X)=\lambda^2\left[\Gamma\left(1+\frac{2}{k}\right)-\Gamma^2\left(1+\frac{1}{k}\right)\right]$
 
 where $\Gamma(\cdot)$ denotes the gamma function.
 
@@ -534,6 +526,101 @@ Note that a linear association between the response and explanatory varaiables d
 Suppose researchers are interested in investigating the relationship between cancer drug dosage and the change in tumour volume over a fixed treatment period. Let $Y_i$ represent the change in tumour volume for patient $i$, and let $x_i$ represent the administered drug dosage. A simple linear regression model may be used to study whether changes in drug dosage are associated with changes in tumour volume. The model describes a statistical association, not whether changing the dosage causes a change in tumour volume.
 
 
+```{r slr-comparison, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=4.8, fig.align='center', fig.cap="Simple linear regression: (a) fitted least squares regression line and (b) residuals representing the vertical distances between observed and predicted responses."}
+library(ggplot2)
+library(grid)
+
+# Simulate data
+set.seed(123)
+n <- 30
+
+dosage <- seq(5, 50, length.out = n)
+tumour_change <- -0.5 - 0.08 * dosage +
+  rnorm(n, mean = 0, sd = 1.2)
+
+slr_data <- data.frame(
+  dosage = dosage,
+  tumour_change = tumour_change
+)
+
+# Fit regression model
+slr_model <- lm(tumour_change ~ dosage, data = slr_data)
+
+slr_data$fitted <- fitted(slr_model)
+
+# Consistent formatting
+plot_theme <- theme_minimal(base_size = 11) +
+  theme(
+    plot.title = element_text(
+      size = 12, face = "bold", hjust = 0.5
+    ),
+    axis.title = element_text(size = 10),
+    panel.grid.minor = element_blank(),
+    plot.margin = margin(8, 8, 8, 8)
+  )
+
+# Plot 1: Line of best fit
+p1 <- ggplot(slr_data, aes(x = dosage, y = tumour_change)) +
+  geom_point(color = "steelblue", size = 2.2) +
+  geom_abline(
+    intercept = coef(slr_model)[1],
+    slope = coef(slr_model)[2],
+    color = "red",
+    linewidth = 1
+  ) +
+  labs(
+    title = "(a) Fitted Regression Line",
+    x = "Drug Dosage (mg)",
+    y = "Tumour Volume Change (cm³)"
+  ) +
+  plot_theme
+
+# Plot 2: Line of best fit with residuals
+p2 <- ggplot(slr_data, aes(x = dosage, y = tumour_change)) +
+  geom_segment(
+    aes(
+      xend = dosage,
+      yend = fitted
+    ),
+    color = "darkgreen",
+    linetype = "dashed",
+    linewidth = 0.8
+  ) +
+  geom_point(color = "steelblue", size = 2.2) +
+  geom_abline(
+    intercept = coef(slr_model)[1],
+    slope = coef(slr_model)[2],
+    color = "red",
+    linewidth = 1
+  ) +
+  labs(
+    title = "(b) Fitted Regression Line with Residuals",
+    x = "Drug Dosage (mg)",
+    y = "Tumour Volume Change (cm³)"
+  ) +
+  plot_theme
+
+# Combine plots side by side
+grid.newpage()
+
+pushViewport(
+  viewport(layout = grid.layout(1, 2))
+)
+
+print(
+  p1,
+  vp = viewport(layout.pos.row = 1, layout.pos.col = 1),
+  newpage = FALSE
+)
+
+print(
+  p2,
+  vp = viewport(layout.pos.row = 1, layout.pos.col = 2),
+  newpage = FALSE
+)
+```
+Figure (a) illustrates the fitted least squares regression line, which describes the estimated linear relationship between drug dosage and tumour volume change. Each point represents an observed response, while the red line represents the predicted response for a given drug dosage. Figure (b) additionally displays the residuals, represented by the dashed green vertical segments. Each residual measures the difference between an observed response and its predicted value.
+
 ### Least Squares Estimation
 
 To fit a simple linear regression model, we must estimate the unknown parameters $\beta_0$ and $\beta_1$.
@@ -560,8 +647,6 @@ Q=
 $$
 
 The objective of ordinary least squares is to find values of $\beta_0$ and $\beta_1$ that minimize $Q$.
-
-#### Derivation of the Least Squares Estimators
 
 To derive the least squares estimators, we minimize the residual sum of squares with respect to $\beta_0$ and $\beta_1$.
 
@@ -750,3 +835,274 @@ Y_i\sim N(\beta_0+\beta_1x_i,\sigma^2).
 $$
 
 Note that the normality assumption is not required to calculate the least squares estimates. However, it is used to justify exact t-tests and confidence intervals under the normal-error model.
+
+
+### Statistical Inference in Simple Linear Regression
+
+Least squares estimation provides estimates of the unknown regression coefficients $\beta_0$ and $\beta_1$. However, these estimates are calculated from a sample and are therefore subject to sampling variability. Statistical inference allows us to quantify this uncertainty and draw conclusions about the population regression parameters.
+
+Recall the simple linear regression model
+
+$$
+Y_i=\beta_0+\beta_1x_i+\varepsilon_i,
+\qquad i=1,\ldots,n,
+$$
+
+where the explanatory variable values $x_1,\ldots,x_n$ are treated as fixed, and the error terms are assumed to be independent and identically distributed according to $\varepsilon_i\sim N(0,\sigma^2)$. Consequently,$Y_i\sim N(\beta_0+\beta_1x_i,\sigma^2).$
+
+
+
+#### Sampling Distribution of the Slope Estimator
+
+Recall that the least squares estimator of the slope is
+
+$$
+\hat{\beta}_1=
+\frac{S_{xy}}{S_{xx}}
+=
+\frac{\sum_{i=1}^{n}(x_i-\bar{x})(Y_i-\bar{Y})}
+{\sum_{i=1}^{n}(x_i-\bar{x})^2},
+$$
+
+We can express $\hat{\beta}_1$ as a linear combination of the response variables $Y_1,\ldots,Y_n$.
+
+Define
+
+$$
+c_i=\frac{x_i-\bar{x}}{S_{xx}}.
+$$
+
+Then,
+
+$$
+\begin{aligned}
+\hat{\beta}_1
+&=\frac{1}{S_{xx}}
+\sum_{i=1}^{n}(x_i-\bar{x})(Y_i-\bar{Y})\\
+&=\frac{1}{S_{xx}}
+\left[
+\sum_{i=1}^{n}(x_i-\bar{x})Y_i
+-\bar{Y}\sum_{i=1}^{n}(x_i-\bar{x})
+\right].
+\end{aligned}
+$$
+
+Since $\sum_{i=1}^{n}(x_i-\bar{x})=0,$ we obtain
+
+$$
+\hat{\beta}_1 =\sum_{i=1}^{n}\frac{x_i-\bar{x}}{S_{xx}}Y_i = \sum_{i=1}^{n}c_iY_i.
+$$
+
+
+Since $\hat{\beta}_1$ is a linear combination of independent normally distributed random variables, it also follows a normal distribution.
+
+The expectation of $\hat{\beta}_1$ can be found as follows:
+
+$$
+\begin{aligned}
+E[\hat{\beta}_1]
+&=E\left[\sum_{i=1}^{n}c_iY_i\right]\\
+&=\sum_{i=1}^{n}c_iE[Y_i]\\
+&=\sum_{i=1}^{n}c_i(\beta_0+\beta_1x_i)\\
+&=\beta_0\sum_{i=1}^{n}c_i
++\beta_1\sum_{i=1}^{n}c_ix_i\\
+&= \beta_1
+\end{aligned}
+$$
+
+
+Since
+$$
+\begin{aligned}
+\sum_{i=1}^{n}c_i
+&=\sum_{i=1}^{n}\frac{x_i-\bar{x}}{S_{xx}}\\
+&=\frac{1}{S_{xx}}
+\left(\sum_{i=1}^{n}x_i-n\bar{x}\right)\\
+&=0,
+\end{aligned}
+$$
+
+and
+
+$$
+\begin{aligned}
+\sum_{i=1}^{n}c_ix_i
+&=\sum_{i=1}^{n}
+\frac{x_i(x_i-\bar{x})}{S_{xx}}\\
+&=\frac{1}{S_{xx}}
+\sum_{i=1}^{n}
+\left[(x_i-\bar{x})+\bar{x}\right]
+(x_i-\bar{x})\\
+&=\frac{1}{S_{xx}}
+\left[
+\sum_{i=1}^{n}(x_i-\bar{x})^2
++\bar{x}\sum_{i=1}^{n}(x_i-\bar{x})
+\right]\\
+&=\frac{S_{xx}}{S_{xx}}\\
+&=1.
+\end{aligned}
+$$
+
+Hence,
+
+$$
+\boxed{E[\hat{\beta}_1]=\beta_1.}
+$$
+
+
+
+Next, we derive the variance of $\hat{\beta}_1$.
+
+Since the observations are independent and $\operatorname{Var}(Y_i)=\sigma^2$,
+
+$$
+\begin{aligned}
+\operatorname{Var}(\hat{\beta}_1)
+&=\operatorname{Var}\left(
+\sum_{i=1}^{n}c_iY_i
+\right)\\
+&=\sum_{i=1}^{n}c_i^2\operatorname{Var}(Y_i)\\
+&=\sigma^2\sum_{i=1}^{n}c_i^2.
+\end{aligned}
+$$
+Also,
+
+$$
+\begin{aligned}
+\sum_{i=1}^{n}c_i^2
+&=\sum_{i=1}^{n}
+\frac{(x_i-\bar{x})^2}{S_{xx}^2}\\
+&=\frac{1}{S_{xx}^2}
+\sum_{i=1}^{n}(x_i-\bar{x})^2\\
+&=\frac{S_{xx}}{S_{xx}^2}\\
+&=\frac{1}{S_{xx}}.
+\end{aligned}
+$$
+
+Hence,
+
+$$
+\boxed{
+\operatorname{Var}(\hat{\beta}_1)
+=\frac{\sigma^2}{S_{xx}}.
+}
+$$
+
+Since $\hat{\beta}_1$ is normally distributed, with expected value $\beta_1$ and variance $\sigma^2/S_{xx}$, we conclude that
+
+$$
+\boxed{
+\hat{\beta}_1\sim
+N\left(\beta_1,\frac{\sigma^2}{S_{xx}}\right).
+}
+$$
+
+#### Hypothesis Testing and Confidence Intervals for the Slope
+
+A common objective in regression analysis is to determine whether the explanatory variable has a statistically significant linear association with the response variable.
+
+To do this, we may test the hypotheses $H_0:\beta_1=0$ against $H_1:\beta_1\neq 0.$
+
+From the sampling distribution derived previously,
+
+$$
+\frac{\hat{\beta}_1-\beta_1}
+{SE(\hat{\beta}_1)}
+\sim t_{n-2}.
+$$
+
+Under $H_0$, we substitute $\beta_1=0$ to obtain the test statistic
+
+$$
+\boxed{
+T=
+\frac{\hat{\beta}_1}
+{SE(\hat{\beta}_1)}.
+}
+$$
+
+Under the null hypothesis, $T\sim t_{n-2}.$
+
+Rejecting $H_0:\beta_1=0$ provides statistical evidence of a linear association between the explanatory and response variables under the assumptions of the regression model. However, statistical significance does not necessarily imply practical significance or a causal relationship.
+
+For a confidence level of $100(1-\alpha)\%$, we have
+
+$$
+P\left(
+-t_{n-2,1-\alpha/2}
+\leq
+\frac{\hat{\beta}_1-\beta_1}{SE(\hat{\beta}_1)}
+\leq
+t_{n-2,1-\alpha/2}
+\right)=1-\alpha.
+$$
+
+Multiplying through by the positive standard error,
+
+$$
+P\left(
+-t_{n-2,1-\alpha/2}SE(\hat{\beta}_1)
+\leq
+\hat{\beta}_1-\beta_1
+\leq
+t_{n-2,1-\alpha/2}SE(\hat{\beta}_1)
+\right)=1-\alpha.
+$$
+
+Rearranging to isolate $\beta_1$,
+
+$$
+P\left(
+\hat{\beta}_1-t_{n-2,1-\alpha/2}SE(\hat{\beta}_1)
+\leq\beta_1\leq
+\hat{\beta}_1+t_{n-2,1-\alpha/2}SE(\hat{\beta}_1)
+\right)=1-\alpha.
+$$
+
+Therefore, a $100(1-\alpha)\%$ confidence interval for $\beta_1$ is
+
+$$
+\boxed{
+\hat{\beta}_1
+\pm
+t_{n-2,1-\alpha/2}
+\frac{\hat{\sigma}}{\sqrt{S_{xx}}}.
+}
+$$
+
+
+
+### Coefficient of Determination ($R^2$)
+
+After fitting a simple linear regression model, it is important to evaluate how well the fitted regression line describes the observed data. One commonly used measure of model fit is the coefficient of determination, denoted by $R^2$. To define $R^2$, we first decompose the total variability in the response variable into variability explained by the regression model and unexplained residual variability.
+
+The total sum of squares (SST) measures the total observed variability in the response variable about its sample mean:
+
+$$
+SST=\sum_{i=1}^{n}(Y_i-\bar{Y})^2.
+$$
+
+The regression sum of squares (SSR) measures the variability accounted for by the fitted regression model:
+
+$$
+SSR=\sum_{i=1}^{n}(\hat{Y}_i-\bar{Y})^2.
+$$
+
+The error sum of squares (SSE), also referred to as the residual sum of squares, measures the variability not explained by the fitted regression model:
+
+$$
+SSE=\sum_{i=1}^{n}(Y_i-\hat{Y}_i)^2.
+$$
+
+The identity \(SST=SSR+SSE\) can be established algebraically using the properties of the least squares estimators. We omit the derivation here for conciseness.
+
+The coefficient of determination is defined as the proportion of total observed variability in the response variable accounted for by the fitted regression model:
+
+$$
+\boxed {R^2=\frac{SSR}{SST} = 1-\frac{SSE}{SST}}.
+$$
+
+Notice that $0\leq R^2\leq 1$
+
+An $R^2$ value closer to one indicates that the fitted regression model accounts for a greater proportion of the observed variability in the response variable. Conversely, an $R^2$ value closer to zero indicates that the model accounts for relatively little of the observed variability.
+
