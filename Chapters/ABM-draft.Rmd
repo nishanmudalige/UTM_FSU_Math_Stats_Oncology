@@ -52,266 +52,518 @@ Time advances in discrete increments ($\Delta t$). At each time step:
 3. **Environmental Update:** Diffusive fields diffuse/decay and renewable resources regenerate.
 4. **State Census:** Macroscopic summary statistics (e.g., total population counts, spatial clustering) are logged for analysis.
 
-## Hands-On Implementation Walkthrough: Predator-Prey in R & Plotly
+## Hands-On Implementation Walkthrough: Tumour-Immune Dynamics in R & Plotly
 
-Recall that in Chapter 1, we introduced the continuous Lotka-Volterra system to model the high level interaction between immune effector cells ($E$, predators) and tumour cells ($T$, prey):
-$$\frac{dT}{dt} = a T - b T E, \quad \frac{dE}{dt} = c T E - d E$$
+In Chapter 1, we introduced the classic **Lotka-Volterra** system to describe predator-prey interactions between cytotoxic immune effector cells ($E$, predators) and tumour cells ($T$, prey):
+$$\frac{dT}{dt} = a\, T - b\, T E, \qquad \frac{dE}{dt} = c\, T E - d\, E$$
 
-While ODEs predict deterministic oscillations, real biological microenvironments display uneven spatial distribution, random local die-offs, and localized cell clustering. Here, we build an agent-based counterpart in R, using **Plotly** to visualize both the spatial grid and macroscopic population curves.
+In continuous ordinary differential equations (ODEs), populations are assumed to be "well-mixed" and uniformly distributed across continuous space. However, real clinical tumors grow in complex, structured physical microenvironments where space and local biology govern survival:
 
-> ### Two Ways to Run and Interact with this Model
+1. **Spatial Clustering & Nodule Formation:** Tumours do not disperse evenly; they originate as dense, localized nodules surrounded by healthy tissue and vascular beds.
+2. **Contact Inhibition (Volume Exclusion):** Cells require physical room to divide. Even if nutrients are abundant, cells tightly packed in the tumor core cannot proliferate until space opens up at the tumor margin.
+3. **Chemotaxis (Directed Search):** Immune cells do not wander blindly. Instead, they sense chemical gradients (chemokines) secreted by tumour cells, migrating preferentially toward cancer nests.
+4. **T-Cell Exhaustion:** Chronic antigenic stimulation causes cytotoxic T cells to become functionally exhausted, losing their ability to kill or proliferate.
+5. **Therapeutic Rescue (Immunotherapy):** Immune checkpoint inhibitors (such as anti-PD-1 / anti-PD-L1 antibodies) block inhibitory pathways, reinvigorating exhausted T cells and restoring immune control.
+
+Here, we translate these Lotka-Volterra tumour-immune dynamics into an **Agent-Based Model (ABM)**.
+
+> ### How to Run the Models
 >
-> **Option 1: In-Browser Exploration**
->
-> - **How to interact:**
->   - **Hover:** Hover your mouse over any cell or agent to view its exact $(x, y)$ coordinates and internal energy level.
->   - **Zoom & Pan:** Click and drag a box across the grid to zoom into localized cell clusters; double-click to reset the view.
->   - **Filter Traces:** Click individual labels in the legend (e.g., *Prey*, *Predators*, *Grass*) to hide or isolate specific populations.
->
-> **Option 2: Shiny Application**
->
-> A shiny application is a standalone interactive application featuring real-time animation, step-by-step playback, and dynamic parameter sweeps.
->
-> - **How to run:**
->   - Ensure `shiny` and `plotly` are installed (`install.packages(c("shiny", "plotly"))`).
->   - Open [`scripts/predator_prey_app.R`](scripts/predator_prey_app.R) in RStudio and click the green **"Run App"** button at the top right of the editor, or run `shiny::runApp("scripts/predator_prey_app.R")` in the R console.
-> - **How to interact:**
->   - Adjust parameter sliders for initial cell counts, grid dimensions, and reproduction probabilities.
->   - Click **Play / Pause** or **Step once** to watch predator-prey hunting, reproduction, and nutrient regrowth unfold in real time.
->   - Switch presets between *Stable Coexistence* and *Default (Predator Extinction)* to observe system bifurcation.
+> - **Running in R / RStudio:** Run each R code chunk in sequence (or click the green **Run** button at the top-right of each chunk in RStudio) to simulate the tumor microenvironment and generate the figures.
+> - **Interactive Plotly Controls:**
+>   - **Hover:** Move your cursor over any cell or line to inspect coordinates, remaining energy, and kill counts.
+>   - **Zoom & Pan:** Click and drag across the lattice to zoom into localized cell interactions; double-click anywhere to reset.
+>   - **Time-Lapse Animation:** Under Scenario 1, click **Play** or scrub the **Time Step slider** to watch tumor growth, immune infiltration, and cell predation step-by-step.
 
-### Model Formulation and Parameters
+### Model Formulation and Biological Parameters
 
-Our spatial ecosystem consists of:
+Our simulated tumor environment contains three interacting components:
 
-1. **Prey (Tumor / Sheep):** Move into unoccupied neighboring patches, consume background resources (grass/nutrients), expend energy to survive, and divide upon acquiring sufficient energy.
-2. **Predators (Immune / Wolves):** Actively search for prey, consume prey on the same lattice site, gain energy from predation, and divide probabilistically.
-3. **Renewable Resource Field (Nutrients / Grass):** Spatial patches that regenerate after a fixed countdown period once consumed.
+1. **Tumour Cells ($T$, Prey):** The cells start as a tight cluster in the middle of the tissue. They take up nutrients supplied by nearby blood vessels to fuel their basic survival, move into open surrounding areas, and multiply until they run out of room (*contact-inhibited growth*). If they run out of nutrients and energy (energy drops below zero), they starve and die from *necrosis*.
+2. **Cytotoxic T Lymphocytes ($E$, Predators):** These cells patrol the tissue domain. They detect tumor cells via *chemotaxis* and attack on contact with probability $p_{\text{kill}}$. Killing a target provides them with energy (target lysis) and triggers them to divide. After sustained killing, T cells reach an *exhaustion limit*, losing both their ability to kill (cytotoxicity) and their ability to divide (proliferative potential).
+3. **Vascular Nutrient Field (Resource):** A 2D grid representing oxygen and glucose delivery from the capillary microvasculature. Once a tumor cell feeds at a site, the nutrients are depleted and a countdown starts until nearby blood vessels replenish it.
 
-| Parameter | Variable Name | Coexistence Value | Extinction Value | Biological Meaning |
-| :--- | :--- | :--- | :--- | :--- |
-| **Grid Size** | `dims` | $30 \times 30$ | $20 \times 20$ | Tissue domain size |
-| **Initial Prey** | `n_sheep` | $140$ | $100$ | Initial tumor / prey density |
-| **Initial Predators** | `n_wolves` | $20$ | $50$ | Initial immune / predator density |
-| **Resource Regrowth** | `regrowth_time` | $30$ | $30$ | Steps required for nutrients to replenish |
-| **Prey Energy Gain** | `de_sheep` | $5$ | $4$ | Energy acquired per nutrient patch |
-| **Predator Energy Gain** | `de_wolf` | $30$ | $20$ | Energy acquired per prey killed |
-| **Prey Division Prob.** | `sheep_rep` | $0.31$ | $0.04$ | Probability of division per time step |
-| **Predator Division Prob.**| `wolf_rep` | $0.06$ | $0.05$ | Probability of division per predation |
+| Parameter | Variable | Default Value | Biological Meaning |
+| :--- | :--- | :--- | :--- |
+| **Tissue Dimensions** | `dims` | $40 \times 40$ | Lattice size ($1,600$ discrete tissue patches) |
+| **Initial Tumour Burden** | `n_tumour` | $60$ | Starting size of the central tumor nodule |
+| **Initial Immune Infiltration** | `n_tcell` | $10$ | Starting density of patrolling cytotoxic T cells |
+| **Nutrient Resupply Time** | `resupply_time` | $12$ | Steps required for vascular nutrients to replenish |
+| **Tumour Nutrient Energy** | `de_tumour` | $14$ | Energy gained by a tumour cell from consuming a nutrient patch |
+| **Tumour Proliferation Prob.** | `tumour_div` | $0.06$ | Probability of cell division per time step (if space is free) |
+| **Tumour Motility** | `tumour_motility` | $0.05$ | Probability of random migration to an empty neighbor |
+| **T-Cell Lysis Energy Gain** | `de_tcell` | $12$ | Energy gained by a T cell upon destroying a tumour cell |
+| **Base Cytotoxicity** | `p_kill` | $0.50$ | Probability of successfully killing a contacted tumour cell |
+| **Clonal Proliferation Prob.** | `tcell_prolif` | $0.40$ | Probability of T-cell division following a successful kill |
+| **Exhaustion Limit** | `exhaustion_limit` | $6$ | Total kills before a T cell enters a dysfunctional/exhausted state |
+| **Systemic Recruitment** | `recruit` | $1.0$ | Rate of fresh T-cell influx from circulation (per 100 tumour cells) |
+| **Chemotactic Bias** | `chemotaxis` | $0.60$ | Probability of directed migration toward a neighboring tumour cell |
+| **Immunotherapy Flag** | `therapy` | `FALSE` | Toggle for checkpoint inhibitor (anti-PD-1) therapy |
+| **Therapy Start Step** | `therapy_start` | $200$ | Simulation step at which checkpoint inhibitor therapy begins |
+| **Kill Probability Boost** | `therapy_kill_boost` | $1.6\times$ | Factor multiplying kill probability when therapy is active |
+| **Exhaustion Multiplier** | `therapy_exh_mult` | $4\times$ | Factor expanding the exhaustion limit when therapy is active |
 
-### Data Structures
+---
 
-In R, storing hundreds of agents as individual R objects or iterating over nested data frames can be computationally slow. To achieve high simulation speeds, we store agents as **parallel vectors** enclosed inside a mutable `environment`.
+### Data Structures: Demystified for Beginners
+
+If you are new to programming or agent-based modeling in R, two design patterns in our code will make your life much easier:
+
+#### 1. Why We Use an R `environment` (`new.env()`)
+In standard R, when you pass a data frame or list into a function, R creates a duplicate copy in memory whenever you modify it (this is called "copy-on-modify"). In an agent-based model where thousands of cells move, eat, and divide across hundreds of time steps, copying the entire world at every tick would make the simulation extremely slow!
+
+An R **`environment`** (`m <- new.env()`) acts like a shared notebook or container box. When functions read and update values inside `m`, they modify the original data directly in place, ensuring our simulation runs at top speed.
+
+#### 2. Why We Use "Parallel Vectors"
+Instead of creating hundreds of separate complex objects for every individual cell, we store agent attributes in synchronized, simple 1D vectors:
+- `m$x[i]` and `m$y[i]`: the $(x, y)$ coordinate of cell `i`.
+- `m$type[i]`: whether cell `i` is a tumour cell (`1`) or a T cell (`2`).
+- `m$energy[i]`: the remaining metabolic energy of cell `i`.
+- `m$kills[i]`: how many tumour cells T cell `i` has eliminated.
+- `m$alive[i]`: `TRUE` if the cell is currently living, `FALSE` if dead.
+
+For example, cell number $7$ is described simply by looking at index $7$ across all vectors: its position is `(m$x[7], m$y[7])` and its energy is `m$energy[7]`. 
+
+#### 3. Spatial Matrix for Volume Exclusion
+To enforce **contact inhibition** (at most one tumour cell per site), we maintain a 2D integer matrix `m$tum`. If coordinate $(x, y)$ is empty, `m$tum[x, y] == 0`. If occupied, it holds the ID number of that tumour cell. 
+
+#### 4. The Moore 8-Neighborhood & Periodic Boundary Wrapping
+Cells can move or divide into any of their $8$ surrounding neighbors (North, South, East, West, and the 4 diagonals):
+
+```
+(-1, -1)   ( 0, -1)   ( 1, -1)
+(-1,  0)   [ Cell ]   ( 1,  0)
+(-1,  1)   ( 0,  1)   ( 1,  1)
+```
+
+To prevent cells from "falling off" the edge of the tissue grid, we use **periodic (toroidal) boundary conditions**: a cell that walks off the right edge wraps around to the left edge, and a cell walking off the top wraps to the bottom. In R's 1-based indexing, this wrap-around is computed cleanly with the modulo operator:
+```r
+wrapped_x <- ((current_x - 1 + dx) %% grid_width) + 1
+```
+
+---
+
+### Code Walkthrough
+
+Let us now build the complete agent-based model step-by-step.
+
+#### Step 1: Libraries and Biological Constants
+We load `plotly` and define our integer identifiers and neighborhood step offsets.
 
 ```{r setup-abm, message=FALSE, warning=FALSE}
 library(plotly)
 
-# Agent type constants
-SHEEP <- 1L  # Prey (Tumor cells / Sheep)
-WOLF  <- 2L  # Predator (Immune cells / Wolves)
+# Numerical labels for our cell types 
+TUMOUR <- 1L  # 1 represents a tumour cell (prey)
+TCELL  <- 2L  # 2 represents a cytotoxic T lymphocyte (predator)
 
-# Moore 8-neighbourhood coordinate offsets (Chebyshev metric)
+# Moore 8-neighbourhood coordinate offsets (dx and dy for all 8 surrounding patches)
 DX <- c(-1L,  0L,  1L, -1L, 1L, -1L, 0L, 1L)
 DY <- c(-1L, -1L, -1L,  0L, 0L,  1L, 1L, 1L)
+
+# Bundle default parameters into a clean, reusable list
+default_params <- list(
+  dims               = 40,    # 40x40 spatial lattice (1,600 patches)
+  n_tumour           = 60,    # Initial tumour cell count
+  n_tcell            = 10,    # Initial patrolling T-cell count
+  resupply_time      = 12,    # Steps for depleted nutrient to replenish
+  de_tumour          = 14,    # Energy gained by tumour from nutrient
+  tumour_div         = 0.06,  # Tumour division probability per step
+  tumour_motility    = 0.05,  # Tumour migration probability per step
+  de_tcell           = 12,    # Energy gained by T cell per tumour kill
+  p_kill             = 0.50,  # Base kill probability on contact
+  tcell_prolif       = 0.40,  # Clonal expansion probability after kill
+  exhaustion_limit   = 6,     # Kills before T cell becomes exhausted
+  recruit            = 1.0,   # T-cell recruitment rate per 100 tumour cells
+  chemotaxis         = 0.60,  # Chemotactic bias toward neighbouring tumour
+  therapy            = FALSE, # Checkpoint inhibitor therapy active?
+  therapy_start      = 200,   # Step at which therapy is initiated
+  therapy_kill_boost = 1.6,   # Multiplier for kill probability under therapy
+  therapy_exh_mult   = 4,     # Multiplier for exhaustion limit under therapy
+  seed               = 1      # Random seed for reproducible results
+)
 ```
 
-### Core Simulation Functions
-
-#### Initializing the Model
-The `initialize_model()` function constructs the spatial lattice, assigns initial random positions and energy levels, and configures the resource countdown grid:
+#### Step 2: Initializing the Model Environment
+The `initialize_model()` function builds the tissue lattice, seeds the central tumor nodule, places patrolling T cells, and sets up the vascular nutrient grid.
 
 ```{r initialize-model}
-initialize_model <- function(n_sheep = 100, n_wolves = 50, dims = 20,
-                             regrowth_time = 30, de_sheep = 4, de_wolf = 20,
-                             sheep_rep = 0.04, wolf_rep = 0.05, seed = 23182) {
-  set.seed(seed)
-  m <- new.env()
-  W <- H <- as.integer(dims)
-  n <- n_sheep + n_wolves
+initialize_model <- function(p = default_params) {
+  set.seed(p$seed)  # Fix seed for reproducible scientific simulations
+  m <- new.env()    # Create our mutable simulation environment
+  
+  W <- H <- as.integer(p$dims)
   m$W <- W
   m$H <- H
+  m$p <- p
 
-  # Agents: random positions; initial energy uniform on 0, ..., 2*delta - 1
-  m$type   <- c(rep(SHEEP, n_sheep), rep(WOLF, n_wolves))
-  m$x      <- sample.int(W, n, replace = TRUE)
-  m$y      <- sample.int(H, n, replace = TRUE)
-  m$energy <- as.numeric(c(sample.int(2 * de_sheep, n_sheep, replace = TRUE) - 1,
-                           sample.int(2 * de_wolf,  n_wolves, replace = TRUE) - 1))
-  m$alive  <- rep(TRUE, n)
-  m$rp     <- c(sheep_rep, wolf_rep)   # reproduction probability by type
-  m$de     <- c(de_sheep, de_wolf)     # energy gained from eating, by type
+  # --- Seed the Central Tumour Nodule ---
+  # In vivo tumors originate as compact masses. 
+  # To mimic this, we calculate each lattice site's distance from the center, add a small amount of random noise,
+  # and pick the nearest sites to form a naturally rounded cluster.
+  cx <- (W + 1) / 2
+  cy <- (H + 1) / 2
+  all_sites <- expand.grid(x = seq_len(W), y = seq_len(H))
+  distances <- sqrt((all_sites$x - cx)^2 + (all_sites$y - cy)^2)
+  ordered_sites <- all_sites[order(distances + runif(nrow(all_sites), 0, 0.5)), ]
+  
+  nt <- min(p$n_tumour, W * H)
+  tx <- ordered_sites$x[seq_len(nt)]
+  ty <- ordered_sites$y[seq_len(nt)]
 
-  # Occupancy counts per cell (enforces prey volume exclusion)
-  m$occ <- matrix(tabulate((m$y - 1L) * W + m$x, W * H), W, H)
+  # --- Seed Patrolling T Cells ---
+  # T cells begin scattered randomly across the tissue microenvironment
+  ncel <- p$n_tcell
+  n_total <- nt + ncel
 
-  # Grass/Resource field: half fully grown, rest random countdown
-  m$regrowth  <- regrowth_time
+  # --- Populate Parallel Attribute Vectors ---
+  m$type   <- c(rep(TUMOUR, nt), rep(TCELL, ncel))
+  m$x      <- c(tx, sample.int(W, ncel, replace = TRUE))
+  m$y      <- c(ty, sample.int(H, ncel, replace = TRUE))
+  m$energy <- as.numeric(c(
+    sample.int(2 * p$de_tumour, nt, replace = TRUE) - 1,
+    sample.int(2 * p$de_tcell,  ncel, replace = TRUE) - 1
+  ))
+  m$kills  <- integer(n_total)   # Cumulative kills per agent (tracks exhaustion)
+  m$alive  <- rep(TRUE, n_total) # Life status: TRUE = active, FALSE = removed
+
+  # --- Spatial Matrix (Volume Exclusion) ---
+  # Holds the agent ID of the occupying tumour cell, or 0 if vacant
+  m$tum <- matrix(0L, W, H)
+  m$tum[cbind(tx, ty)] <- seq_len(nt)
+
+  # --- Vascular Nutrient Field ---
+  # TRUE = nutrient patch available; countdown = remaining steps until replenishment
   m$fully     <- matrix(sample(c(TRUE, FALSE), W * H, replace = TRUE), W, H)
-  m$countdown <- matrix(ifelse(m$fully, regrowth_time,
-                               sample.int(regrowth_time, W * H, replace = TRUE) - 1L),
-                        W, H)
+  m$countdown <- matrix(
+    ifelse(m$fully, p$resupply_time, sample.int(p$resupply_time, W * H, replace = TRUE) - 1L),
+    W, H
+  )
 
-  # Tracking history
-  m$step    <- 0L
-  m$h_step  <- 0L
-  m$h_sheep <- n_sheep
-  m$h_wolf  <- n_wolves
-  m$h_grass <- sum(m$fully)
+  # History tracking vectors for population time series
+  m$step        <- 0L
+  m$kill_events <- 0L
+  m$h_step      <- integer(0)
+  m$h_tumour    <- integer(0)
+  m$h_active    <- integer(0)
+  m$h_exhausted <- integer(0)
+  m$h_nutrient  <- integer(0)
+  
+  record(m)  # Take initial census
   m
 }
 ```
 
-#### Individual Agent Rules (Movement, Feeding, Reproduction, Death)
-At each step, an agent walks to a neighboring cell with periodic boundary wrap-around (`%% W`), spends 1 unit of energy for basal metabolism, feeds if targets are present, and probabilistically reproduces:
+#### Step 3: Helper Functions (Adding, Removing, and Finding Neighbors)
+These concise helper functions manage agent lifecycle changes, boundary math, and therapy state.
 
-```{r agent-rules}
-kill_agent <- function(m, i) {
-  m$alive[i] <- FALSE
-  m$occ[m$x[i], m$y[i]] <- m$occ[m$x[i], m$y[i]] - 1L
+```{r agent-helpers}
+# Check whether checkpoint inhibitor therapy is active at the current step
+therapy_on <- function(m) {
+  m$p$therapy && m$step >= m$p$therapy_start
 }
 
-reproduce <- function(m, i) {
-  # Offspring costs half the parent's energy; placed on parent's cell
-  m$energy[i] <- m$energy[i] / 2
-  m$type   <- c(m$type, m$type[i])
-  m$x      <- c(m$x, m$x[i])
-  m$y      <- c(m$y, m$y[i])
-  m$energy <- c(m$energy, m$energy[i])
+# Dynamic exhaustion threshold (expanded when immunotherapy is active)
+exh_limit <- function(m) {
+  m$p$exhaustion_limit * (if (therapy_on(m)) m$p$therapy_exh_mult else 1)
+}
+
+# Dynamic kill probability (boosted when immunotherapy is active)
+kill_prob <- function(m) {
+  min(1.0, m$p$p_kill * (if (therapy_on(m)) m$p$therapy_kill_boost else 1))
+}
+
+# Add a newborn daughter cell or newly recruited T cell to our parallel vectors
+add_agent <- function(m, type, x, y, energy, kills = 0L) {
+  m$type   <- c(m$type, type)
+  m$x      <- c(m$x, x)
+  m$y      <- c(m$y, y)
+  m$energy <- c(m$energy, energy)
+  m$kills  <- c(m$kills, kills)
   m$alive  <- c(m$alive, TRUE)
-  m$occ[m$x[i], m$y[i]] <- m$occ[m$x[i], m$y[i]] + 1L
+  new_id   <- length(m$alive)
+  if (type == TUMOUR) m$tum[x, y] <- new_id
+  new_id
 }
 
-agent_step <- function(m, i) {
-  t <- m$type[i]
+# Mark a cell as dead and clear its coordinate in the spatial matrix
+remove_agent <- function(m, i) {
+  m$alive[i] <- FALSE
+  if (m$type[i] == TUMOUR) m$tum[m$x[i], m$y[i]] <- 0L
+}
 
-  # Periodic boundary movement (toroidal wrap-around)
-  nx <- ((m$x[i] - 1L + DX) %% m$W) + 1L
-  ny <- ((m$y[i] - 1L + DY) %% m$H) + 1L
-
-  # Sheep move only to empty cells; wolves move anywhere
-  if (t == SHEEP) {
-    ok <- m$occ[cbind(nx, ny)] == 0L
-    nx <- nx[ok]
-    ny <- ny[ok]
-  }
-  if (length(nx) > 0) {
-    k <- sample.int(length(nx), 1)
-    m$occ[m$x[i], m$y[i]] <- m$occ[m$x[i], m$y[i]] - 1L
-    m$x[i] <- nx[k]
-    m$y[i] <- ny[k]
-    m$occ[nx[k], ny[k]] <- m$occ[nx[k], ny[k]] + 1L
-  }
-
-  # Moving costs 1 energy; die if energy < 0
-  m$energy[i] <- m$energy[i] - 1
-  if (m$energy[i] < 0) {
-    kill_agent(m, i)
-    return(invisible())
-  }
-
-  # Feeding
-  if (t == SHEEP) {
-    if (m$fully[m$x[i], m$y[i]]) {
-      m$energy[i] <- m$energy[i] + m$de[SHEEP]
-      m$fully[m$x[i], m$y[i]] <- FALSE
-    }
-  } else {
-    dinner <- which(m$alive & m$type == SHEEP & m$x == m$x[i] & m$y == m$y[i])
-    if (length(dinner) > 0) {
-      kill_agent(m, dinner[1])
-      m$energy[i] <- m$energy[i] + m$de[WOLF]
-    }
-  }
-
-  # Reproduction
-  if (runif(1) <= m$rp[t]) reproduce(m, i)
+# Calculate the coordinates of all 8 neighbors with toroidal boundary wrap-around
+neighbours <- function(m, i) {
+  list(
+    x = ((m$x[i] - 1L + DX) %% m$W) + 1L,
+    y = ((m$y[i] - 1L + DY) %% m$H) + 1L
+  )
 }
 ```
 
-#### Environmental Regeneration and Model Step Loop
+#### Step 4: Tumour Cell Behavior Rules
+At each time step, every living tumour cell follows four biological rules:
+1. **Motility:** With probability `tumour_motility`, it migrates into an unoccupied adjacent patch.
+2. **Basal Metabolism:** It consumes $1$ unit of energy. If its energy drops below zero, it undergoes necrotic cell death from starvation.
+3. **Nutrient Uptake:** If glucose/oxygen is present at its patch, it takes up the nutrient and gains energy (`de_tumour`).
+4. **Contact-Inhibited Proliferation:** With probability `tumour_div`, it divides into an empty adjacent patch, splitting its energy with the daughter cell. If all $8$ neighboring sites are occupied by other cancer cells, division is physically blocked (*contact inhibition*).
+
+```{r tumour-rules}
+tumour_step <- function(m, i) {
+  p  <- m$p
+  nb <- neighbours(m, i)
+  
+  # Identify which of the 8 neighbouring lattice sites are unoccupied
+  free <- m$tum[cbind(nb$x, nb$y)] == 0L
+
+  # 1. Migration: crawl to an empty neighboring patch
+  if (any(free) && runif(1) < p$tumour_motility) {
+    k <- which(free)
+    k <- k[sample.int(length(k), 1)]       # Choose one empty neighbor at random
+    m$tum[m$x[i], m$y[i]] <- 0L            # Clear old position
+    m$x[i] <- nb$x[k]; m$y[i] <- nb$y[k]   # Update coordinates
+    m$tum[m$x[i], m$y[i]] <- i             # Register new position
+    
+    # Re-evaluate empty neighbors after moving
+    nb <- neighbours(m, i)
+    free <- m$tum[cbind(nb$x, nb$y)] == 0L
+  }
+
+  # 2. Basal Metabolism: expend 1 energy unit for survival
+  m$energy[i] <- m$energy[i] - 1
+  if (m$energy[i] < 0) {
+    remove_agent(m, i)  # Starvation: cell undergoes necrosis
+    return(invisible())
+  }
+
+  # 3. Nutrient Uptake: feed on vascular glucose/oxygen
+  if (m$fully[m$x[i], m$y[i]]) {
+    m$energy[i] <- m$energy[i] + p$de_tumour
+    m$fully[m$x[i], m$y[i]] <- FALSE  # Nutrient patch is now depleted
+  }
+
+  # 4. Proliferation: divide into a free neighboring site (contact-inhibited)
+  if (any(free) && runif(1) <= p$tumour_div) {
+    k <- which(free)
+    k <- k[sample.int(length(k), 1)]
+    m$energy[i] <- m$energy[i] / 2  # Parent divides energy equally with daughter cell
+    add_agent(m, TUMOUR, nb$x[k], nb$y[k], m$energy[i])
+  }
+}
+```
+
+#### Step 5: Cytotoxic T Cell Behavior Rules
+Each living T cell acts as a patrolling predator:
+1. **Chemotaxis & Movement:** The T cell evaluates its $8$ neighboring patches. If any neighbor holds a tumour cell, it steps toward it with probability `chemotaxis` (chemokine gradient guidance); otherwise, it performs a random walk step.
+2. **Metabolism & Finite Lifespan:** The T cell loses $1$ energy unit per step. If energy drops below zero, it dies of senescence.
+3. **Exhaustion Check:** If the T cell's cumulative kill count reaches `exhaustion_limit`, it becomes **exhausted**: it remains physically present in the tissue but can no longer attack or proliferate.
+4. **Contact Cytotoxicity:** If active (non-exhausted) and sharing a patch with a tumour cell, it attacks with probability `kill_prob`, destroying the tumour cell (cell lysis), gaining energy (`de_tcell`), and logging a kill.
+5. **Clonal Expansion:** Following a kill, with probability `tcell_prolif`, the T cell divides into two active daughter T cells.
+
+```{r tcell-rules}
+tcell_step <- function(m, i) {
+  p  <- m$p
+  nb <- neighbours(m, i)
+
+  # 1. Chemotaxis: sense nearby tumour cells and step toward them
+  nearby_tumours <- which(m$tum[cbind(nb$x, nb$y)] > 0L)
+  k <- if (length(nearby_tumours) > 0 && runif(1) < p$chemotaxis) {
+    nearby_tumours[sample.int(length(nearby_tumours), 1)]  # Directed step toward tumor
+  } else {
+    sample.int(8L, 1)                                      # Random exploration step
+  }
+  m$x[i] <- nb$x[k]
+  m$y[i] <- nb$y[k]
+
+  # 2. Metabolism & Natural Lifespan
+  m$energy[i] <- m$energy[i] - 1
+  if (m$energy[i] < 0) {
+    remove_agent(m, i)  # T cell dies of natural senescence
+    return(invisible())
+  }
+
+  # 3. Exhaustion Check: exhausted T cells cannot kill or proliferate
+  if (m$kills[i] >= exh_limit(m)) {
+    return(invisible())
+  }
+
+  # 4. Contact Cytotoxicity: attack tumour cell at current site
+  target <- m$tum[m$x[i], m$y[i]]
+  if (target > 0L && runif(1) <= kill_prob(m)) {
+    remove_agent(m, target)               # Lyse the tumour cell
+    m$kill_events <- m$kill_events + 1L
+    m$energy[i]   <- m$energy[i] + p$de_tcell
+    m$kills[i]    <- m$kills[i] + 1L
+
+    # 5. Clonal Proliferation: divide following antigenic stimulation
+    if (runif(1) <= p$tcell_prolif) {
+      m$energy[i] <- m$energy[i] / 2     # Parent splits energy with daughter T cell
+      add_agent(m, TCELL, m$x[i], m$y[i], m$energy[i], m$kills[i])
+    }
+  }
+}
+```
+
+#### Step 6: Environmental Regeneration and Systemic Recruitment
+Between cellular actions, vascular nutrients replenish and new immune cells enter the tissue from systemic circulation in proportion to tumour antigen load:
+
 ```{r environmental-rules}
-grass_step <- function(m) {
+# Nutrient Regrowth: Depleted vascular patches count down and replenish
+nutrient_step <- function(m) {
+  R <- m$p$resupply_time
   growing <- !m$fully
   ready   <- growing & m$countdown <= 0
   m$fully[ready]     <- TRUE
-  m$countdown[ready] <- m$regrowth
+  m$countdown[ready] <- R
   dec <- growing & !ready
-  m$countdown[dec] <- m$countdown[dec] - 1L
+  m$countdown[dec]   <- m$countdown[dec] - 1L
 }
 
+# Systemic T-Cell Recruitment:
+# Bloodborne T cells extravasate into tissue at a rate proportional to tumour antigen load.
+# The number of new cells arriving each step is sampled from a Poisson distribution.
+recruit_tcells <- function(m) {
+  n_tum <- sum(m$alive & m$type == TUMOUR)
+  n_new <- rpois(1, m$p$recruit * n_tum / 100)
+  for (j in seq_len(n_new)) {
+    add_agent(
+      m, TCELL,
+      sample.int(m$W, 1), sample.int(m$H, 1),
+      sample.int(2 * m$p$de_tcell, 1) - 1
+    )
+  }
+}
+
+# Census function: tallies active, exhausted, and tumour populations
+counts <- function(m) {
+  a   <- m$alive
+  tc  <- a & m$type == TCELL
+  exh <- tc & (m$kills >= exh_limit(m))
+  c(
+    tumour    = sum(a & m$type == TUMOUR),
+    active    = sum(tc & !exh),
+    exhausted = sum(exh),
+    nutrient  = sum(m$fully)
+  )
+}
+
+# History logger for time-series trajectories
+record <- function(m) {
+  cc <- counts(m)
+  m$h_step      <- c(m$h_step, m$step)
+  m$h_tumour    <- c(m$h_tumour, cc[["tumour"]])
+  m$h_active    <- c(m$h_active, cc[["active"]])
+  m$h_exhausted <- c(m$h_exhausted, cc[["exhausted"]])
+  m$h_nutrient  <- c(m$h_nutrient, cc[["nutrient"]])
+}
+```
+
+#### Step 7: The Master Scheduling Loop
+At each discrete simulation step ($\Delta t$), living agents are activated. Notice that we **randomly shuffle the execution order** (`sample.int(...)`) so that no individual cell receives an unfair "first-move" advantage at every turn:
+
+```{r model-step-loop}
 model_step <- function(m) {
   # Asynchronous random scheduling: shuffle living agent indices
   ids <- which(m$alive)
   ids <- ids[sample.int(length(ids))]
-  for (i in ids) if (m$alive[i]) agent_step(m, i)
-  grass_step(m)
+  
+  for (i in ids) {
+    if (!m$alive[i]) next
+    if (m$type[i] == TUMOUR) tumour_step(m, i) else tcell_step(m, i)
+  }
+  
+  nutrient_step(m)   # Regenerate depleted vascular nutrients
+  recruit_tcells(m)  # Recruit circulating T cells based on tumour antigen load
+  m$step <- m$step + 1L
+  record(m)          # Record population census
 
-  m$step    <- m$step + 1L
-  m$h_step  <- c(m$h_step, m$step)
-  m$h_sheep <- c(m$h_sheep, sum(m$alive & m$type == SHEEP))
-  m$h_wolf  <- c(m$h_wolf,  sum(m$alive & m$type == WOLF))
-  m$h_grass <- c(m$h_grass, sum(m$fully))
-
-  # Occasionally drop dead agents so vectors do not grow without bound
+  # Housekeeping: periodically prune dead agents from memory so vectors stay compact
   if (length(m$alive) > 4 * sum(m$alive) + 500) {
     keep <- m$alive
-    m$type   <- m$type[keep]
-    m$x      <- m$x[keep]
-    m$y      <- m$y[keep]
-    m$energy <- m$energy[keep]
-    m$alive  <- m$alive[keep]
+    old_ids <- which(keep)
+    for (v in c("type", "x", "y", "energy", "kills", "alive")) m[[v]] <- m[[v]][keep]
+    remap <- integer(length(keep))
+    remap[old_ids] <- seq_along(old_ids)
+    m$tum[m$tum > 0L] <- remap[m$tum[m$tum > 0L]]
   }
 }
 ```
 
-### Main Simulation Loop & Spatial Visualization
+---
 
-#### Visualizing the 2D Spatial Lattice with Plotly
-The spatial lattice is visualized using an interactive Plotly heatmap for the background grass/resource layer combined with scatter markers for prey and predators:
+### Interactive Visualizations with Plotly
+
+#### 1. Interactive 2D Spatial Lattice (`plot_grid`)
+The spatial microenvironment is visualized by layering an interactive heatmap of vascular nutrient availability beneath scatter markers for tumour cells (purple), active T cells (blue), and exhausted T cells (grey).
 
 ```{r plot-grid-fn}
+# Color palette for intuitive biological distinction
+col_tumour    <- "#8E2C83"  # Distinct purple for tumour cells
+col_active    <- "#1F77B4"  # Vibrant blue for active cytotoxic T cells
+col_exhausted <- "#8C8C8C"  # Neutral grey for exhausted T cells
+col_nutrient  <- "#C9A227"  # Warm golden amber for vascular nutrient patches
+
 plot_grid <- function(m) {
-  W <- m$W
-  H <- m$H
-  growth <- ifelse(m$fully, 1, 1 - m$countdown / m$regrowth)
+  W <- m$W; H <- m$H; R <- m$p$resupply_time
+  level <- ifelse(m$fully, 1, 1 - m$countdown / R)
+  lim <- exh_limit(m)
+  tu  <- which(m$alive & m$type == TUMOUR)
+  tc  <- which(m$alive & m$type == TCELL)
+  ex  <- tc[m$kills[tc] >= lim]
+  ac  <- tc[m$kills[tc] < lim]
 
-  s <- which(m$alive & m$type == SHEEP)
-  w <- which(m$alive & m$type == WOLF)
-
+  # Background heatmap: vascular nutrient replenishment level
   p <- plot_ly() |>
     add_heatmap(
-      x = seq_len(W), y = seq_len(H), z = t(growth),
+      x = seq_len(W), y = seq_len(H), z = t(level),
       zmin = 0, zmax = 1, showscale = FALSE,
-      colorscale = list(c(0, "#A0522D"), c(1, "#3C9A3C")),
-      hovertemplate = "cell (%{x}, %{y})<br>grass regrown: %{z:.0%}<extra></extra>"
+      colorscale = list(c(0, "#5A3A2E"), c(1, "#F3DCD4")),
+      hovertemplate = "site (%{x}, %{y})<br>nutrient resupplied: %{z:.0%}<extra></extra>"
     )
 
-  if (length(s) > 0) {
+  # Scatter overlay: Tumour cells
+  if (length(tu) > 0) {
     p <- p |> add_markers(
-      x = m$x[s] - 0.15, y = m$y[s] - 0.15 * runif(length(s)),
-      name = "Prey (Sheep / Tumor)",
-      marker = list(symbol = "circle", size = 9, color = "rgba(255,255,255,0.85)",
-                    line = list(color = "black", width = 1)),
-      text = sprintf("Prey<br>energy: %.1f", m$energy[s]),
+      x = m$x[tu], y = m$y[tu], name = "Tumour cells",
+      marker = list(symbol = "circle", size = 7, color = col_tumour,
+                    line = list(color = "white", width = 0.5)),
+      text = sprintf("Tumour cell<br>energy: %.1f", m$energy[tu]),
       hoverinfo = "text"
     )
   }
-  if (length(w) > 0) {
+  
+  # Scatter overlay: Active Cytotoxic T cells
+  if (length(ac) > 0) {
     p <- p |> add_markers(
-      x = m$x[w] + 0.15, y = m$y[w] + 0.15 * runif(length(w)),
-      name = "Predators (Wolves / Immune)",
-      marker = list(symbol = "triangle-up", size = 11, color = "rgba(51,51,77,0.9)",
-                    line = list(color = "black", width = 1)),
-      text = sprintf("Predator<br>energy: %.1f", m$energy[w]),
+      x = m$x[ac] + 0.2, y = m$y[ac] + 0.2 * runif(length(ac)), name = "Active T cells",
+      marker = list(symbol = "triangle-up", size = 9, color = col_active,
+                    line = list(color = "white", width = 0.8)),
+      text = sprintf("Active T cell<br>energy: %.1f<br>kills: %d", m$energy[ac], m$kills[ac]),
       hoverinfo = "text"
     )
   }
+  
+  # Scatter overlay: Exhausted T cells
+  if (length(ex) > 0) {
+    p <- p |> add_markers(
+      x = m$x[ex] + 0.2, y = m$y[ex] + 0.2 * runif(length(ex)), name = "Exhausted T cells",
+      marker = list(symbol = "triangle-up", size = 9, color = col_exhausted,
+                    line = list(color = "white", width = 0.8)),
+      text = sprintf("Exhausted T cell<br>energy: %.1f<br>kills: %d", m$energy[ex], m$kills[ex]),
+      hoverinfo = "text"
+    )
+  }
+
+  status <- if (!m$p$therapy) "" else if (therapy_on(m)) "  |  therapy ON" else
+    sprintf("  |  therapy at step %d", m$p$therapy_start)
 
   p |>
     layout(
-      title = list(text = sprintf("Step %d  |  Prey: %d  Predators: %d  Grass: %d",
-                                  m$step, length(s), length(w), sum(m$fully)),
-                   font = list(size = 14)),
+      title = list(
+        text = sprintf("Step %d  |  tumour: %d  T cells: %d (%d exhausted)%s",
+                       m$step, length(tu), length(tc), length(ex), status),
+        font = list(size = 13)
+      ),
       xaxis = list(range = c(0.5, W + 0.5), showgrid = FALSE, zeroline = FALSE,
                    title = "", constrain = "domain"),
       yaxis = list(range = c(0.5, H + 0.5), showgrid = FALSE, zeroline = FALSE,
@@ -322,56 +574,189 @@ plot_grid <- function(m) {
 }
 ```
 
-#### Visualizing Population Dynamics Over Time with Plotly
+#### 2. Macroscopic Population Dynamics (`plot_timeseries`)
+Tracks the temporal trajectories of tumour cells, active T cells, exhausted T cells, and nutrient availability over simulation steps. Hovering over any point displays a unified summary tooltip.
+
 ```{r plot-timeseries-fn}
 plot_timeseries <- function(m) {
+  shapes <- list()
+  annotations <- list()
+  
+  # Add vertical marker when checkpoint inhibitor therapy is administered
+  if (m$p$therapy && m$step >= m$p$therapy_start) {
+    shapes <- list(list(
+      type = "line", x0 = m$p$therapy_start, x1 = m$p$therapy_start,
+      y0 = 0, y1 = 1, yref = "paper",
+      line = list(color = "#2CA02C", dash = "dot", width = 2)
+    ))
+    annotations <- list(list(
+      x = m$p$therapy_start, y = 1, yref = "paper", text = "checkpoint inhibitor",
+      showarrow = FALSE, xanchor = "left", font = list(color = "#2CA02C", size = 11)
+    ))
+  }
+  
   plot_ly(x = m$h_step) |>
-    add_lines(y = m$h_sheep, name = "Prey (Sheep / Tumor)",
-              line = list(color = "#8B8878", width = 2)) |>
-    add_lines(y = m$h_wolf,  name = "Predators (Wolves / Immune)",
-              line = list(color = "#33334D", width = 2)) |>
-    add_lines(y = m$h_grass, name = "Grass (Nutrient Patches)",
-              line = list(color = "#2E8B2E", width = 2)) |>
+    add_lines(y = m$h_tumour, name = "Tumour cells",
+              line = list(color = col_tumour, width = 2.5)) |>
+    add_lines(y = m$h_active, name = "Active T cells",
+              line = list(color = col_active, width = 2)) |>
+    add_lines(y = m$h_exhausted, name = "Exhausted T cells",
+              line = list(color = col_exhausted, width = 2, dash = "dash")) |>
+    add_lines(y = m$h_nutrient, name = "Nutrient-available sites",
+              line = list(color = col_nutrient, width = 1.5), visible = "legendonly") |>
     layout(
       xaxis = list(title = "Simulation Step"),
-      yaxis = list(title = "Population Count", rangemode = "tozero"),
+      yaxis = list(title = "Cell Count", rangemode = "tozero"),
       hovermode = "x unified",
+      shapes = shapes,
+      annotations = annotations,
       legend = list(orientation = "h", y = -0.2),
       margin = list(t = 20)
     )
 }
 ```
 
-#### Simulating the Coexistence Regime
-```{r run-coexistence-simulation}
-# Initialize model with stable coexistence preset
-sim_model <- initialize_model(
-  n_sheep = 140, n_wolves = 20, dims = 30, regrowth_time = 30,
-  de_sheep = 5, de_wolf = 30, sheep_rep = 0.31, wolf_rep = 0.06, seed = 24
-)
+#### 3. Time-Lapse Animation Player (`plot_animated_simulation`)
+Click **Play** or scrub the **Time Slider** to watch tumor growth, immune infiltration, and cell destruction step-by-step.
 
-# Run 60 simulation steps
-for (step in 1:60) {
-  model_step(sim_model)
+```{r plot-animated-fn}
+plot_animated_simulation <- function(m, n_steps = 30) {
+  records <- list()
+  
+  for (s in 1:n_steps) {
+    if (s > 1) model_step(m)
+    
+    tu  <- which(m$alive & m$type == TUMOUR)
+    tc  <- which(m$alive & m$type == TCELL)
+    lim <- exh_limit(m)
+    ex  <- tc[m$kills[tc] >= lim]
+    ac  <- tc[m$kills[tc] < lim]
+    
+    # Off-screen dummy rows ensure all 3 factor levels are initialized in every frame
+    dummy_df <- data.frame(
+      x = c(-10, -10, -10),
+      y = c(-10, -10, -10),
+      cell_type = factor(c("Tumour cells", "Active T cells", "Exhausted T cells"),
+                         levels = c("Tumour cells", "Active T cells", "Exhausted T cells")),
+      info = c("", "", ""),
+      step = s
+    )
+    records[[length(records) + 1]] <- dummy_df
+    
+    if (length(tu) > 0) {
+      records[[length(records) + 1]] <- data.frame(
+        x = m$x[tu], y = m$y[tu],
+        cell_type = factor(rep("Tumour cells", length(tu)),
+                           levels = c("Tumour cells", "Active T cells", "Exhausted T cells")),
+        info = sprintf("Tumour cell<br>Energy: %.1f", m$energy[tu]),
+        step = s
+      )
+    }
+    if (length(ac) > 0) {
+      records[[length(records) + 1]] <- data.frame(
+        x = m$x[ac] + 0.15, y = m$y[ac] + 0.15,
+        cell_type = factor(rep("Active T cells", length(ac)),
+                           levels = c("Tumour cells", "Active T cells", "Exhausted T cells")),
+        info = sprintf("Active T cell<br>Energy: %.1f<br>Kills: %d", m$energy[ac], m$kills[ac]),
+        step = s
+      )
+    }
+    if (length(ex) > 0) {
+      records[[length(records) + 1]] <- data.frame(
+        x = m$x[ex] + 0.15, y = m$y[ex] + 0.15,
+        cell_type = factor(rep("Exhausted T cells", length(ex)),
+                           levels = c("Tumour cells", "Active T cells", "Exhausted T cells")),
+        info = sprintf("Exhausted T cell<br>Energy: %.1f<br>Kills: %d", m$energy[ex], m$kills[ex]),
+        step = s
+      )
+    }
+  }
+  
+  df_anim <- do.call(rbind, records)
+  
+  plot_ly(
+    df_anim,
+    x = ~x, y = ~y, color = ~cell_type,
+    colors = c("Tumour cells" = col_tumour, "Active T cells" = col_active, "Exhausted T cells" = col_exhausted),
+    frame = ~step,
+    type = "scatter", mode = "markers",
+    marker = list(size = 8, opacity = 0.85, line = list(color = "white", width = 0.5)),
+    text = ~info, hoverinfo = "text"
+  ) |>
+    layout(
+      title = list(text = "Interactive Spatial Simulation (Click Play or Drag Slider)", font = list(size = 14)),
+      xaxis = list(range = c(0.5, m$W + 0.5), title = "Lattice X", showgrid = FALSE, zeroline = FALSE, constrain = "domain"),
+      yaxis = list(range = c(0.5, m$H + 0.5), title = "Lattice Y", showgrid = FALSE, zeroline = FALSE, scaleanchor = "x", constrain = "domain"),
+      legend = list(orientation = "h", y = -0.15),
+      margin = list(t = 40, l = 10, r = 10, b = 40)
+    ) |>
+    animation_opts(frame = 250, transition = 0, redraw = FALSE) |>
+    animation_slider(currentvalue = list(prefix = "Time Step: ", font = list(color = "#333")))
+}
+```
+
+---
+
+### Exploring Biological Regimes: The Three "E"s of Cancer Immunoediting
+
+In modern oncology, the interaction between tumours and the immune system is categorized by the **Three "E"s of Cancer Immunoediting**:
+1. **Elimination:** The nascent tumor is successfully recognized and eradicated by cytotoxic immune responses.
+2. **Equilibrium:** Tumour cells and immune cells reach a dynamic standoff, keeping the tumor burden stable over extended time scales (the spatial analog of stable Lotka-Volterra coexistence).
+3. **Escape:** Persistent stimulation triggers immune exhaustion and suppresses cytotoxicity, enabling the tumor to break through immune control.
+
+#### Scenario 1: Stable Immune Equilibrium
+Under our default parameters, the tumor nodule expands until systemic recruitment and chemotaxis mobilize cytotoxic T cells to the tumor boundary, producing a stable standoff:
+
+```{r run-equilibrium-simulation, message=FALSE, warning=FALSE}
+# Initialize the model with default equilibrium parameters
+sim_equilibrium <- initialize_model(default_params)
+
+# Render the interactive in-browser animated player over 25 steps
+plot_animated_simulation(sim_equilibrium, n_steps = 25)
+```
+
+Now let us run the model forward for an additional $75$ steps (totaling $100$ steps) and examine the macroscopic population trajectories:
+
+```{r plot-equilibrium-timeseries, message=FALSE, warning=FALSE}
+# Advance simulation to step 100
+for (step in 26:100) {
+  model_step(sim_equilibrium)
 }
 
-# Render interactive Plotly spatial lattice
-plot_grid(sim_model)
+# Render final 2D spatial microenvironment snapshot
+plot_grid(sim_equilibrium)
+
+# Render interactive macroscopic population trajectories
+plot_timeseries(sim_equilibrium)
 ```
 
-```{r plot-coexistence-timeseries}
-# Render interactive Plotly population time series
-plot_timeseries(sim_model)
+#### Scenario 2: Immune Escape and Checkpoint Inhibitor Rescue
+What happens if T-cell exhaustion occurs very rapidly (`exhaustion_limit = 2`)?
+The tumor quickly exhausts its attackers and breaks free (*immune escape*). However, if we administer **checkpoint inhibitor therapy (anti-PD-1)** at step $120$, the exhaustion limit is quadrupled and killing efficiency is boosted—reinvigorating exhausted cells and crushing the escaping tumor!
+
+```{r run-escape-therapy-simulation, message=FALSE, warning=FALSE}
+# Configure scenario: low exhaustion limit, with therapy starting at step 120
+escape_params <- default_params
+escape_params$exhaustion_limit   <- 2       # Rapid exhaustion triggers immune escape
+escape_params$therapy            <- TRUE    # Administer checkpoint inhibitor
+escape_params$therapy_start      <- 120     # Therapy initiated at step 120
+escape_params$therapy_kill_boost <- 1.6     # 60% boost to cytotoxicity
+escape_params$therapy_exh_mult   <- 4       # Quadruple exhaustion limit
+
+sim_therapy <- initialize_model(escape_params)
+
+# Simulate 220 time steps across the pre-treatment and post-treatment phases
+for (step in 1:220) {
+  model_step(sim_therapy)
+}
+
+# Render interactive time series showing tumor escape and therapeutic rescue
+plot_timeseries(sim_therapy)
 ```
 
-### Interactive Exploration via Shiny
+Notice how the purple tumour curve initially skyrockets between steps $40$ and $120$ as active T cells plummet into exhaustion (the dashed grey curve). The moment checkpoint inhibitor therapy is administered at step $120$ (indicated by the vertical green marker), exhausted T cells are rapidly reinvigorated, driving tumour eradication!
 
-To experiment with parameter sweeps interactively, an accompanying Shiny web application is available. It features real-time sliders for initial population counts, grid size, energy returns, and reproduction probabilities:
-
-```{r run-shiny-app, eval=FALSE}
-# To run the complete interactive app in RStudio:
-shiny::runApp("scripts/predator_prey_app.R")
-```
+---
 
 ## Standardized Model Documentation: The ODD Protocol
 

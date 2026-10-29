@@ -2,7 +2,7 @@
 Repository for UTM and FSU to work on building resources to teach mathematical and statistical oncology
 
 ## Aims for Week 6 (Oct 29)
-- [ ] All: Update code and explain implementation in a more approachable way for someone without a introductory background in coding
+- [X] All: Update code and explain implementation in a more approachable way for someone without a introductory background in coding
 
 
 ## Aims for Week 6 (Oct 22)
