@@ -116,6 +116,7 @@ An R **`environment`** (`m <- new.env()`) acts like a shared notebook or contain
 
 #### 2. Why We Use "Parallel Vectors"
 Instead of creating hundreds of separate complex objects for every individual cell, we store agent attributes in synchronized, simple 1D vectors:
+
 - `m$x[i]` and `m$y[i]`: the $(x, y)$ coordinate of cell `i`.
 - `m$type[i]`: whether cell `i` is a tumour cell (`1`) or a T cell (`2`).
 - `m$energy[i]`: the remaining metabolic energy of cell `i`.
@@ -303,9 +304,13 @@ neighbours <- function(m, i) {
 
 #### Step 4: Tumour Cell Behavior Rules
 At each time step, every living tumour cell follows four biological rules:
+
 1. **Motility:** With probability `tumour_motility`, it migrates into an unoccupied adjacent patch.
+
 2. **Basal Metabolism:** It consumes $1$ unit of energy. If its energy drops below zero, it undergoes necrotic cell death from starvation.
+
 3. **Nutrient Uptake:** If glucose/oxygen is present at its patch, it takes up the nutrient and gains energy (`de_tumour`).
+
 4. **Contact-Inhibited Proliferation:** With probability `tumour_div`, it divides into an empty adjacent patch, splitting its energy with the daughter cell. If all $8$ neighboring sites are occupied by other cancer cells, division is physically blocked (*contact inhibition*).
 
 ```{r tumour-rules}
@@ -354,10 +359,15 @@ tumour_step <- function(m, i) {
 
 #### Step 5: Cytotoxic T Cell Behavior Rules
 Each living T cell acts as a patrolling predator:
+
 1. **Chemotaxis & Movement:** The T cell evaluates its $8$ neighboring patches. If any neighbor holds a tumour cell, it steps toward it with probability `chemotaxis` (chemokine gradient guidance); otherwise, it performs a random walk step.
+
 2. **Metabolism & Finite Lifespan:** The T cell loses $1$ energy unit per step. If energy drops below zero, it dies of senescence.
+
 3. **Exhaustion Check:** If the T cell's cumulative kill count reaches `exhaustion_limit`, it becomes **exhausted**: it remains physically present in the tissue but can no longer attack or proliferate.
+
 4. **Contact Cytotoxicity:** If active (non-exhausted) and sharing a patch with a tumour cell, it attacks with probability `kill_prob`, destroying the tumour cell (cell lysis), gaining energy (`de_tcell`), and logging a kill.
+
 5. **Clonal Expansion:** Following a kill, with probability `tcell_prolif`, the T cell divides into two active daughter T cells.
 
 ```{r tcell-rules}
@@ -700,6 +710,7 @@ plot_animated_simulation <- function(m, n_steps = 30) {
 ### Exploring Biological Regimes: The Three "E"s of Cancer Immunoediting
 
 In modern oncology, the interaction between tumours and the immune system is categorized by the **Three "E"s of Cancer Immunoediting**:
+
 1. **Elimination:** The nascent tumor is successfully recognized and eradicated by cytotoxic immune responses.
 2. **Equilibrium:** Tumour cells and immune cells reach a dynamic standoff, keeping the tumor burden stable over extended time scales (the spatial analog of stable Lotka-Volterra coexistence).
 3. **Escape:** Persistent stimulation triggers immune exhaustion and suppresses cytotoxicity, enabling the tumor to break through immune control.
@@ -732,7 +743,7 @@ plot_timeseries(sim_equilibrium)
 
 #### Scenario 2: Immune Escape and Checkpoint Inhibitor Rescue
 What happens if T-cell exhaustion occurs very rapidly (`exhaustion_limit = 2`)?
-The tumor quickly exhausts its attackers and breaks free (*immune escape*). However, if we administer **checkpoint inhibitor therapy (anti-PD-1)** at step $120$, the exhaustion limit is quadrupled and killing efficiency is boosted—reinvigorating exhausted cells and crushing the escaping tumor!
+The tumor quickly exhausts its attackers and breaks free (*immune escape*). However, administering **checkpoint inhibitor therapy (anti-PD-1)** at step $120$ quadruples the exhaustion limit and boosts killing efficiency, rejuvenating exhausted cells and controlling the escaping tumor.
 
 ```{r run-escape-therapy-simulation, message=FALSE, warning=FALSE}
 # Configure scenario: low exhaustion limit, with therapy starting at step 120
