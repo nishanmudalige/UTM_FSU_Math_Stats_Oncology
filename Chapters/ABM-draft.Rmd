@@ -3,18 +3,22 @@
 ## Chapter Overview and Learning Objectives
 
 ### Learning Objectives
-*(To be developed by Maria)*
-
-### Prerequisites and Recommended Background
-*(To be developed by Maria)*
+- Understand the components of agent-based models in oncology, including agents, environment, and rules of interaction.
+- Understand the differences between continuous approaches (Ordinary/Partial Differential Equations) and discrete modeling methods.
+- Write an introductory agent-based model in R to simulate tumor/immune cell interactions
 
 ## Introduction: Why Agent-Based Modeling in Oncology?
+Agent-based modeling (ABM) is a bottom-up computer simulation technique that models the individual behavior of autonomous units. Agent-based models are particularly powerful in oncology because they account for the variability and heterogeneity of the cells in the body of someone with the disease; they allow scientists to simulate the behaviors of individual cells and observe how they drive tumor growth, therapeutic resistance, and immune evasion.
 
 ### Comparing Modeling Approaches: ODEs vs. ABMs
-*(To be developed by Maria)*
+Compared to traditional models, the computational expense of ABMs is very high since they process autonomous entities (agents) concurrently, and they can range from thousands to millions. Models including agents, however, are rarely purely discrete. In recent years, efforts in integrative science have facilitated iterative collaboration (West et al, 2024) not only to overcome computational limitations, but to accurately model a multi-scale disease. ABMs handle intercellular interactions, mutations, and highly variable events, while differential equations handle continuous variables like nutrients and the spread of chemotherapeutic drugs. In oncology, ABMs are also often integrated with differential equations and machine learning.
 
 ### When to Use ABMs in Cancer Biology
-*(To be developed by Maria)*
+Understanding when to choose an ABM over traditional continuous or aggregate modeling methods is essential for effective computational design. ABMs are best suited for systems with:
+- **High Heterogeneity**: The agents of the system are diverse, unique, and possess distinct states, rules, or behaviors (e.g., different cell types in a tissue, cells at varying stages of the cell cycle, tumor subclones competing for space).
+- **High Environmental Influence**: Physical space, location, distance, movement, and local neighborhood interactions (e.g., crowding, physical collisions, diffusion gradients, spatial segregation).
+- **Decentralized Control**: There is no central controller or master equation dictating the entire system. Macro-level behavior arises from independent, local interactions.
+- **Non-Linear Dynamics and Feedback Loops**: The system features complex feedback loops where individual actions change the environment, which in turn alters how individuals behave.
 
 ## The Four Pillar Ingredients of an Oncology ABM
 
@@ -380,3 +384,9 @@ shiny::runApp("scripts/predator_prey_app.R")
 
 ### The Seven Elements of ODD Applied to Cancer Models
 *(To be developed by Maria)*
+
+## References
+[Agent-based approaches for biological modeling in oncology: A literature review](10.1016/j.artmed.2024.102884)
+[Agent-based methods facilitate integrative science in cancer](https://doi.org/10.1016/j.tcb.2022.10.006)
+[Machine learning meets agent-based modeling](https://ccl.northwestern.edu/papers/agent2006rand.pdf)
+[Synergistic Integration between Machine Learning and Agent-Based Modeling: A Multidisciplinary Review](https://doi.org/10.1109/tnnls.2021.3106777)
