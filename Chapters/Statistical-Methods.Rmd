@@ -38,7 +38,7 @@ $$
 
 The expected value and variance are used to describe the centre and variability of a probability distribution. The expected value of $X$ is denoted by $E(X)$, while its variance is defined as $\operatorname{Var}(X)=E[(X-E(X)^2]$, the expected squared deviation from the mean.
 
-Let $X_1, X_2,...,X_n$ be indepedent random variables. Then,
+If $X_1, X_2,...,X_n$ be independent random variables, 
 $$E(\sum_{i=1}^n c_i X_i)=\sum_{i=1}^n c_i E(X_i), $$
 and $$\operatorname{Var} (\sum_{i=1}^n c_i X_i)= \sum_{i=1}^n c_i^2 \operatorname{Var} (X_i) $$
 
@@ -113,7 +113,7 @@ $$
 
 The expected value and variance are $E(X)=\mu$ and $\operatorname{Var}(X)=\sigma^2.$
 
-If $Z \sim N(0,1)$, we say $Z$ follows a standard normal distribution.
+If $X \sim N(\mu, sigma^2)$, then $Z = \frac{X-\mu}{\sigma} \sim N(0,1)$. We say $Z$ follows a standard normal distribution.
 
 Also, if $X_1,X_2,...,X_n$ are normal random variables, then $\sum_{i=1}^n {c_i X_i}$ is also a normal random variable, where $c_1,c_2,...,c_n \in \mathbb{R}$. That is, a linear combination of normal random variables is also normal.
 
@@ -161,8 +161,6 @@ print(p)
 
 #### Chi-Squared Distribution
 
-The chi-squared distribution is a continuous probability distribution commonly used in statistical inference, particularly for hypothesis testing and estimating population variances.
-
 Let $Z_1,Z_2,\ldots,Z_{n}$ be independent standard normal random variables, where $n$ is a positive integer. Then the random variable
 
 $$
@@ -183,6 +181,8 @@ $$
 where $\Gamma(\cdot)$ denotes the gamma function.
 
 The expected value and variance are $E(X)=n$ and $\operatorname{Var}(X)=2n.$
+
+A very useful result is that $$ \frac{(n-1)s^2}{\sigma^2} \sim \chi^2_{n-1},$$ where $s^2$ is the sample variance, and $\sigma^2$ is the population variance.
 
 The chi-squared distribution is nonnegative and generally right-skewed. Its shape depends on the degrees of freedom, becoming less skewed as the degrees of freedom increase.
 
@@ -243,8 +243,6 @@ print(p)
 
 #### Student's t-Distribution
 
-The Student's t-distribution is a continuous probability distribution that is symmetric about zero and resembles the standard normal distribution. However, the t-distribution has heavier tails, allowing for greater variability and more extreme observations. It is particularly useful for statistical inference when the population variance is unknown.
-
 Let $Z \sim N(0,1)$ and $W \sim \chi^2_{n}$. Then $X = \frac{Z}{\sqrt{\frac{W}{n}}}$ follows a Student's t-distribution with $n>0$ degrees of freedom. We write $X\sim t_{n}.$
 
 Its probability density function is
@@ -261,7 +259,7 @@ where $\Gamma(\cdot)$ denotes the gamma function and $n$ represents the degrees 
 
 The expected value is $E(X)=0,\qquad n>1,$ and the variance is $\operatorname{Var}(X)=\frac{n}{n-2},\qquad n>2.$
 
-The shape of the Student's t-distribution depends on its degrees of freedom, denoted by \(n\). For smaller values of \(n\), the distribution has heavier tails and a lower peak compared to the standard normal distribution. As \(n\) increases, the tails become lighter and the distribution approaches the standard normal distribution. In particular, as \(n\to\infty\), the Student's t-distribution converges in distribution to \(N(0,1)\).
+The Student's t-distribution is a continuous probability distribution that is symmetric about zero and resembles the standard normal distribution. However, the t-distribution has heavier tails, allowing for greater variability and more extreme observations. The shape of the Student's t-distribution depends on its degrees of freedom, denoted by \(n\). For smaller values of \(n\), the distribution has heavier tails and a lower peak compared to the standard normal distribution. As \(n\) increases, the tails become lighter and the distribution approaches the standard normal distribution. In particular, as \(n\to\infty\), the Student's t-distribution converges in distribution to \(N(0,1)\).
 
 
 ```{r t-distributions, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5, fig.align='center', fig.cap="Student's t-distributions with different degrees of freedom, compared with the standard normal distribution."}
@@ -329,9 +327,7 @@ print(p)
 ```
 
 
-Suppose researchers are interested in determining whether the mean tumour size differs between two independent groups of patients receiving different cancer treatments. Under suitable assumptions, a two-sample t-test may be used to investigate whether there is a statistically significant difference in mean tumour size between the groups.
-
-The t-distribution is also important in linear regression, where t-tests are commonly used to determine whether individual regression coefficients differ significantly from zero. For example, researchers may use a t-test to investigate whether a patient's age is significantly associated with tumour size after accounting for other explanatory variables. We discuss this in further detail later in the chapter.
+It is particularly useful for statistical inference when the population variance is unknown. In linear regression, t-tests are commonly used to determine whether regression coefficients differ significantly from zero. For example, researchers may use a t-test to investigate whether a patient's age is significantly associated with tumour size after accounting for other explanatory variables. We discuss this in further detail later in the chapter.
 
 
 
@@ -351,7 +347,7 @@ $$
 
 The expected value and variance are $E(X)=\frac{1}{\lambda}$ and $\operatorname{Var}(X)=\frac{1}{\lambda^2}.$
 
-The shape of the exponential distribution depends on its rate parameter, denoted by \(\lambda\). As \(\lambda\) increases, the probability density decreases more rapidly, indicating that shorter waiting times become more likely. Conversely, smaller values of \(\lambda\) correspond to longer expected waiting times. Since \(E(X)=1/\lambda\) and \(\operatorname{Var}(X)=1/\lambda^2\), both the expected value and variance decrease as the rate parameter increases. 
+The shape of the exponential distribution depends on its rate parameter, denoted by \(\lambda\). As \(\lambda\) increases, the probability density decreases more rapidly, indicating that shorter waiting times become more likely. Conversely, smaller values of \(\lambda\) correspond to longer expected waiting times. 
 
 ```{r exponential-distributions, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5, fig.align='center', fig.cap="Exponential distributions with different rate parameters."}
 library(ggplot2)
@@ -406,7 +402,7 @@ print(p)
 ```
 
 
-Moreover, the exponential distribution is important in survival analysis because it assumes a constant hazard function, $h(t)=\lambda.$ Suppose researchers are interested in the time between cancer diagnosis and disease recurrence. Under the assumption that the instantaneous recurrence rate remains constant over time, the time until recurrence may be modelled using an exponential distribution.
+Moreover, the exponential distribution is important in survival analysis because it assumes a constant hazard function, $h(t)=\lambda.$ Suppose researchers are interested in the time between cancer diagnosis and disease recurrence. Under the assumption that the instantaneous recurrence rate remains constant over time, the time until recurrence may be modelled using an exponential distribution. We discuss hazard functions in more detail later in the chapter. 
 
 
 #### Weibull Distribution
@@ -513,113 +509,120 @@ where:
 
 The population regression coefficients $\beta_0$ and $\beta_1$ are generally unknown and must be estimated using observed data. Their estimates are denoted by $\hat{\beta}_0$ and $\hat{\beta}_1$, respectively.
 
-The fitted regression equation is
+The fitted regression equation is $\hat{Y}_i=\hat{\beta}_0+\hat{\beta}_1x_i,$ where $\hat{Y}_i$ represents the predicted value of the response variable for observation $i$.
 
-$$
-\hat{Y}_i=\hat{\beta}_0+\hat{\beta}_1x_i,
-$$
+Note that a linear association between the response and explanatory variables does not imply a causal relationship between them.
 
-where $\hat{Y}_i$ represents the predicted value of the response variable for observation $i$.
+To illustrate the application of simple linear regression in oncology, we consider prostate cancer dataset available in the `faraway` package in R. The dataset contains clinical measurements from 97 men with prostate cancer, including tumour volume, prostate-specific antigen (PSA) levels, age, and other patient characteristics. PSA is a protein produced by cells in the prostate gland, and its concentration in the blood is commonly used in the assessment and monitoring of prostate cancer. 
 
-Note that a linear association between the response and explanatory varaiables does not imply a causal relationship between them.
+We are interested in investigating the relationship between tumour volume and PSA levels. Since both variables are right-skewed, we consider their logarithmic transformations, which provide a more suitable basis for linear regression. Let \(X_i\) denote the log tumour volume and \(Y_i\) denote the log PSA level of patient \(i\). Below are the values for PSA levels and tumour values for the 97 men, and plots of the relationship between them. 
 
-Suppose researchers are interested in investigating the relationship between cancer drug dosage and the change in tumour volume over a fixed treatment period. Let $Y_i$ represent the change in tumour volume for patient $i$, and let $x_i$ represent the administered drug dosage. A simple linear regression model may be used to study whether changes in drug dosage are associated with changes in tumour volume. The model describes a statistical association, not whether changing the dosage causes a change in tumour volume.
+```{r prostate-table, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
 
+library(faraway)
+library(knitr)
 
-```{r slr-comparison, echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=4.8, fig.align='center', fig.cap="Simple linear regression: (a) fitted least squares regression line and (b) residuals representing the vertical distances between observed and predicted responses."}
-library(ggplot2)
-library(grid)
+data(prostate, package = "faraway")
 
-# Simulate data
-set.seed(123)
-n <- 30
+# Select variables
+df <- prostate[, c("lcavol", "lpsa")]
 
-dosage <- seq(5, 50, length.out = n)
-tumour_change <- -0.5 - 0.08 * dosage +
-  rnorm(n, mean = 0, sd = 1.2)
+# Split observations into three sections
+n <- nrow(df)
+rows <- ceiling(n / 3)
 
-slr_data <- data.frame(
-  dosage = dosage,
-  tumour_change = tumour_change
-)
+# Function to create each section
+make_section <- function(start, end) {
 
-# Fit regression model
-slr_model <- lm(tumour_change ~ dosage, data = slr_data)
+  indices <- seq.int(start, min(end, n))
 
-slr_data$fitted <- fitted(slr_model)
-
-# Consistent formatting
-plot_theme <- theme_minimal(base_size = 11) +
-  theme(
-    plot.title = element_text(
-      size = 12, face = "bold", hjust = 0.5
-    ),
-    axis.title = element_text(size = 10),
-    panel.grid.minor = element_blank(),
-    plot.margin = margin(8, 8, 8, 8)
+  section <- data.frame(
+    Patient = indices,
+    Volume = df$lcavol[indices],
+    PSA = df$lpsa[indices]
   )
 
-# Plot 1: Line of best fit
-p1 <- ggplot(slr_data, aes(x = dosage, y = tumour_change)) +
-  geom_point(color = "steelblue", size = 2.2) +
-  geom_abline(
-    intercept = coef(slr_model)[1],
-    slope = coef(slr_model)[2],
-    color = "red",
-    linewidth = 1
-  ) +
-  labs(
-    title = "(a) Fitted Regression Line",
-    x = "Drug Dosage (mg)",
-    y = "Tumour Volume Change (cm³)"
-  ) +
-  plot_theme
+  # Pad with empty rows
+  while (nrow(section) < rows) {
+    section[nrow(section) + 1, ] <- NA
+  }
 
-# Plot 2: Line of best fit with residuals
-p2 <- ggplot(slr_data, aes(x = dosage, y = tumour_change)) +
-  geom_segment(
-    aes(
-      xend = dosage,
-      yend = fitted
-    ),
-    color = "darkgreen",
-    linetype = "dashed",
-    linewidth = 0.8
-  ) +
-  geom_point(color = "steelblue", size = 2.2) +
-  geom_abline(
-    intercept = coef(slr_model)[1],
-    slope = coef(slr_model)[2],
-    color = "red",
-    linewidth = 1
-  ) +
-  labs(
-    title = "(b) Fitted Regression Line with Residuals",
-    x = "Drug Dosage (mg)",
-    y = "Tumour Volume Change (cm³)"
-  ) +
-  plot_theme
+  return(section)
+}
 
-# Combine plots side by side
-grid.newpage()
+# Create three sections
+section1 <- make_section(1, rows)
+section2 <- make_section(rows + 1, 2 * rows)
+section3 <- make_section(2 * rows + 1, 3 * rows)
 
-pushViewport(
-  viewport(layout = grid.layout(1, 2))
-)
+# Combine side by side
+table_data <- cbind(section1, section2, section3)
 
-print(
-  p1,
-  vp = viewport(layout.pos.row = 1, layout.pos.col = 1),
-  newpage = FALSE
-)
-
-print(
-  p2,
-  vp = viewport(layout.pos.row = 1, layout.pos.col = 2),
-  newpage = FALSE
+# Create table
+knitr::kable(
+  table_data,
+  digits = 3,
+  col.names = rep(c("Patient", "Log Volume", "Log PSA"), 3),
+  caption = "Prostate Cancer Dataset: Log Tumour Volume and Log PSA",
+  align = "c",
+  booktabs = TRUE,
+  na = ""
 )
 ```
-Figure (a) illustrates the fitted least squares regression line, which describes the estimated linear relationship between drug dosage and tumour volume change. Each point represents an observed response, while the red line represents the predicted response for a given drug dosage. Figure (b) additionally displays the residuals, represented by the dashed green vertical segments. Each residual measures the difference between an observed response and its predicted value.
+
+
+```{r prostate-regression, echo=FALSE, message=FALSE, warning=FALSE, fig.width=11, fig.height=4.5, fig.align='center', fig.cap="Relationship between log tumour volume and log PSA levels, with the fitted regression line and associated residuals."}
+library(faraway)
+library(ggplot2)
+library(patchwork)
+
+data(prostate, package = "faraway")
+
+# Fit simple linear regression
+model <- lm(lpsa ~ lcavol, data = prostate)
+
+# Add fitted values
+prostate$fitted <- fitted(model)
+
+# Plot 1: Scatterplot with fitted regression line
+p1 <- ggplot(prostate, aes(x = lcavol, y = lpsa)) +
+  geom_point(color = "steelblue", size = 2) +
+  geom_smooth(method = "lm", se = FALSE,
+              color = "firebrick", linewidth = 0.9) +
+  labs(
+    title = "Fitted Regression Line (a)",
+    x = "Log Tumour Volume",
+    y = "Log PSA"
+  ) +
+  theme_minimal(base_size = 12)
+
+# Plot 2: Scatterplot showing residuals
+p2 <- ggplot(prostate, aes(x = lcavol, y = lpsa)) +
+  geom_segment(aes(xend = lcavol,
+                   yend = fitted),
+               color = "lightgreen",
+               linewidth = 0.6,
+               alpha = 0.8) +
+  geom_point(color = "steelblue", size = 2) +
+  geom_abline(intercept = coef(model)[1],
+              slope = coef(model)[2],
+              color = "firebrick",
+              linewidth = 0.9) +
+  labs(
+    title = "Regression Residuals (b)",
+    x = "Log Tumour Volume",
+    y = "Log PSA"
+  ) +
+  theme_minimal(base_size = 12)
+
+# Display side by side
+p1 + p2
+```
+
+
+Figure (a) illustrates the fitted least squares regression line, which describes the estimated linear relationship between log tumour volume and log PSA levels. Each point represents an observed log PSA level for a given log tumour volume, while the red line represents the predicted log PSA level. Figure (b) additionally displays the residuals, represented by the green vertical segments. Each residual measures the difference between an observed log PSA level and its predicted value under the fitted regression model.
+
+We demonstrate how to obtain the fitted regression line and to further analyse if a linear association between log tumour volume and log PSA levels is statistically significant.
 
 ### Least Squares Estimation
 
@@ -647,8 +650,6 @@ Q=
 $$
 
 The objective of ordinary least squares is to find values of $\beta_0$ and $\beta_1$ that minimize $Q$.
-
-To derive the least squares estimators, we minimize the residual sum of squares with respect to $\beta_0$ and $\beta_1$.
 
 We begin with
 
@@ -759,8 +760,9 @@ and
 $$
 \boxed{
 \hat{\beta}_0=\bar{Y}-\hat{\beta}_1\bar{x}.
-}
+},
 $$
+where $S_{xx}=\sum_{i=1}^{n}(x_i-\bar{x})^2$ and $S_{xy}=\sum_{i=1}^{n}(x_i-\bar{x})(Y_i-\bar{Y})$.
 
 Substituting these estimates into the regression equation gives the fitted model
 
@@ -768,6 +770,17 @@ $$
 \hat{Y}_i=\hat{\beta}_0+\hat{\beta}_1x_i.
 $$
 
+
+We wish to fit the prostate cancer data. Using  Table \@ref(tab:prostate-table), we obtain $\bar{x}= 1.35001,$ $\bar{y}= 2.478387,$ $S_{xx}= 133.359,$ and $S_{xy}= 95.92784$. 
+
+Plugging these values into the OLS estimators for $\beta_0$ and $\beta_1$, we get
+$$ 
+\hat{\beta_1} = \frac{S_{xy}}{S_{xx}}=\frac{95.92784}{133.359} \approx 0.7193
+$$
+$$
+\hat{\beta_0}= \bar{Y}- \hat{\beta_1}\bar{x}= 2.478387 - (0.7193)(1.35001) \approx 1.5073
+$$
+Hence, the estimated regression line is $\boxed{\hat{Y_i} = 1.5073 + 0.7193x_i}$
 
 ### Interpretation of Regression Coefficients
 
@@ -777,65 +790,157 @@ The intercept $\beta_0$ represents the expected value of the response variable w
 
 The slope $\beta_1$ represents the change in the expected response variable associated with a one-unit increase in the explanatory variable. A positive slope indicates that the expected response increases as the explanatory variable increases, while a negative slope indicates that the expected response decreases.
 
-Suppose researchers obtain the following fitted regression model:
+Using the prostate cancer dataset, we obtain the following fitted regression model:
 
 $$
-\widehat{\text{Tumour Volume Change}}
+\widehat{\log(\text{PSA})}
 =
--0.5-0.08(\text{Drug Dosage}),
+1.5073+0.7193\log(\text{Tumour Volume}),
 $$
 
-where tumour volume change is measured in $\text{cm}^3$ and dosage is measured in mg.
+where PSA denotes prostate-specific antigen levels and tumour volume is measured in $\text{cm}^3$.
 
-Note that this example is hypothetical and is intended to illustrate coefficient interpretation rather than to describe the effectiveness of a particular cancer treatment.
+The estimated intercept is $\hat{\beta}_0=1.5073$, indicating that when tumour volume is $1\text{ cm}^3$, the predicted log PSA level is $1.5073$. Exponentiating, we obtain $e^{1.5073}\approx 4.51$. Thus, when tumour volume is $1\text{ cm}^3$, the model predicts a PSA level of approximately $4.51$ on the original scale.
 
-The estimated intercept is $\hat{\beta}_0=-0.5$, indicating that the predicted change in tumour volume at a dosage of $0$ mg is a decrease of $0.5\text{ cm}^3$.
+The estimated slope is $\hat{\beta}_1=0.7193$. Since both variables are logarithmically transformed, a $1\%$ increase in tumour volume is associated with an approximately $0.7193\%$ increase in the predicted PSA level, according to the fitted model.
 
-The estimated slope is $\hat{\beta}_1=-0.08$, indicating that each additional milligram of drug dosage is associated with an average decrease of $0.08\text{ cm}^3$ in tumour volume change, according to the fitted model.
-
-For example, a patient receiving a dosage of $20$ mg would have a predicted tumour volume change of
+For example, a patient with a tumour volume of $5\text{ cm}^3$ would have a predicted log PSA level of
 
 $$
-\hat{Y}=-0.5-0.08(20)=-2.1.
+\widehat{\log(\text{PSA})}
+=1.5073+0.7193\log(5)
+\approx 2.665.
 $$
 
-Thus, the model predicts a decrease in tumour volume of $2.1\text{ cm}^3$ over the specified treatment period.
+Exponentiating gives
+
+$$
+\widehat{\text{PSA}}=e^{2.665}\approx 14.37.
+$$
+
+Thus, the model predicts a median PSA level of approximately $14.37$ on the original scale for a patient with a tumour volume of $5\text{ cm}^3$.
 
 
 ### Assumptions of Simple Linear Regression
 
-To interpret the regression model appropriately and perform statistical inference, several assumptions must be considered.
+To interpret the regression model appropriately and perform statistical inference, several assumptions regarding the relationship between the variables and the behaviour of the error terms must be considered. Since the true errors are unobservable, residuals are commonly used to assess whether these assumptions are reasonable.
 
 **1. Linearity**
 
 The expected response is assumed to be a linear function of the explanatory variable. If the true relationship is nonlinear, the linear model may provide an inadequate description of the data.
 
+Linearity can be assessed using a scatterplot of the response against the explanatory variable, or a plot of residuals against fitted values. If the linearity assumption is reasonable, the residuals should be randomly scattered around zero without a systematic pattern. A pattern may indicate that a nonlinear model is more appropriate.
+
+For the prostate cancer dataset, the scatterplot in Figure \@ref(fig:prostate-regression) suggests a positive relationship between log tumour volume and log PSA levels. The residual plot in Figure \@ref(fig:prostate-diagnostics) appears to be randomly scattered, thus the linearity assumption appears reasonable.
+
 **2. Independence**
 
 The error terms are assumed to be independent across observations.
 
-This assumption may be violated when repeated measurements are collected from the same patient, or when observations are correlated due to shared characteristics or clinical settings.
+Independence is primarily assessed by examining how the data were collected. This assumption may be violated when repeated measurements are collected from the same patient, or when observations are correlated due to shared characteristics or clinical settings. 
+
+For the prostate cancer dataset, each observation corresponds to a different patient, so the independence assumption appears reasonable.
 
 **3. Constant Variance (Homoscedasticity)**
 
 The variance of the errors is assumed to be constant across all values of the explanatory variable. If the variability of the errors changes with the explanatory variable, the model exhibits heteroscedasticity.
 
+This assumption can be assessed using a plot of residuals against fitted values. Under constant variance, the vertical spread of the residuals should remain approximately the same across the range of fitted values.
+
+For the prostate cancer dataset, the spread of residuals appears relatively consistent across fitted values in Figure \@ref(fig:prostate-diagnostics), suggesting that the constant variance assumption is reasonable.
+
 **4. Normality of Errors**
 
-The error terms should follow a normal distribution:
+The error terms are assumed to follow a normal distribution. That is, $\varepsilon_i\sim N(0,\sigma^2).$ Note that the normality assumption is not required to calculate the least squares estimates. However, it is used to justify hypothesis tests and confidence intervals.
+
+Normality can be assessed using a normal Q-Q plot of the residuals. If the errors are approximately normally distributed, the points should lie reasonably close to the reference line. Substantial departures from this line may indicate violations of normality.
+
+We may also use the  Shapiro-Wilk test, which is a statistical test used to assess whether a sample is consistent with a normal distribution. The null hypothesis states that the errors follow a normal distribution, while the alternative hypothesis states that the errors do not follow a normal distribution. A p-value less than 0.05 suggests evidence against normality, while a p-value greater than 0.05 indicates insufficient evidence to reject normality.
+
+For the prostate cancer dataset, the normal Q-Q plot in Figure \@ref(fig:prostate-diagnostics) shows that most residuals lie reasonably close to the reference line, with some deviations in the tails. The Shapiro-Wilk test results in a p-value of 0.1419, failing to reject the alternative. Thus, the normality assumption appears reasonable for this example, though not perfect. 
+
+Overall, the diagnostic results suggest that the assumptions of simple linear regression are reasonably plausible for the log-transformed prostate cancer dataset, although some minor deviations are present.
+
+
+```{r prostate-diagnostics, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=4.5, fig.align='center', fig.cap="Diagnostic plots for the regression model relating log tumour volume to log PSA levels."}
+
+library(faraway)
+library(ggplot2)
+library(patchwork)
+
+data(prostate, package = "faraway")
+
+model <- lm(lpsa ~ lcavol, data = prostate)
+
+diagnostics <- data.frame(
+  fitted = fitted(model),
+  residuals = residuals(model)
+)
+
+# Residuals vs fitted
+p1 <- ggplot(diagnostics,
+             aes(x = fitted, y = residuals)) +
+  geom_point(color = "steelblue", size = 2) +
+  geom_hline(yintercept = 0,
+             color = "firebrick",
+             linetype = "dashed") +
+  labs(
+    title = "(a) Residuals vs. Fitted",
+    x = "Fitted Log PSA",
+    y = "Residuals"
+  ) +
+  theme_minimal(base_size = 12)
+
+# Normal Q-Q plot
+p2 <- ggplot(diagnostics,
+             aes(sample = residuals)) +
+  stat_qq(color = "steelblue", size = 2) +
+  stat_qq_line(color = "firebrick") +
+  labs(
+    title = "(b) Normal Q-Q Plot",
+    x = "Theoretical Quantiles",
+    y = "Sample Quantiles"
+  ) +
+  theme_minimal(base_size = 12)
+
+p1 + p2
+```
+
+### Coefficient of Determination ($R^2$)
+
+After fitting a simple linear regression model, it is important to evaluate how well the fitted regression line describes the observed data. One commonly used measure of model fit is the coefficient of determination, denoted by $R^2$. To define $R^2$, we first decompose the total variability in the response variable into variability explained by the regression model and unexplained residual variability.
+
+The total sum of squares (SST) measures the total observed variability in the response variable about its sample mean:
 
 $$
-\varepsilon_i\sim N(0,\sigma^2).
+SST=\sum_{i=1}^{n}(Y_i-\bar{Y})^2.
 $$
 
-Together with the other assumptions, this implies
+The regression sum of squares (SSR) measures the variability accounted for by the fitted regression model:
 
 $$
-Y_i\sim N(\beta_0+\beta_1x_i,\sigma^2).
+SSR=\sum_{i=1}^{n}(\hat{Y}_i-\bar{Y})^2.
 $$
 
-Note that the normality assumption is not required to calculate the least squares estimates. However, it is used to justify exact t-tests and confidence intervals under the normal-error model.
+The error sum of squares (SSE), also referred to as the residual sum of squares, measures the variability not explained by the fitted regression model:
 
+$$
+SSE=\sum_{i=1}^{n}(Y_i-\hat{Y}_i)^2.
+$$
+
+The identity \(SST=SSR+SSE\) can be established algebraically using the properties of the least squares estimators. We omit the derivation here for conciseness.
+
+The coefficient of determination is defined as the proportion of total observed variability in the response variable accounted for by the fitted regression model:
+
+$$
+\boxed {R^2=\frac{SSR}{SST} = 1-\frac{SSE}{SST}}.
+$$
+
+Notice that $0\leq R^2\leq 1$
+
+An $R^2$ value closer to one indicates that the fitted regression model accounts for a greater proportion of the observed variability in the response variable. Conversely, an $R^2$ value closer to zero indicates that the model accounts for relatively little of the observed variability.
+
+Using the prostate cancer data in Table \@ref(tab:prostate-table), we can compute $SSE = 58.91476$ and $SST = 127.9176$. We get that $R^2 = 1 - \frac{58.91476}{127.9176}= 0.5394319$. This indicates that approximately $53.94\%$ of the total variation in log PSA levels is explained by the linear relationship with log tumour volume. The remaining $46.06\%$ of the variation is not explained by the model and may be associated with other factors or random variability.
 
 ### Statistical Inference in Simple Linear Regression
 
@@ -1003,27 +1108,33 @@ A common objective in regression analysis is to determine whether the explanator
 
 To do this, we may test the hypotheses $H_0:\beta_1=0$ against $H_1:\beta_1\neq 0.$
 
-From the sampling distribution derived previously,
+We wish to use the sampling distribution derived above, however $\sigma^2$ is usually unknown. It can be shown that $\hat{\sigma^2} = \frac{SSE}{n-2}$ is an unbiased estimator for $\sigma^2$. We omit the proof for conciseness. Thus, we estimate $\sigma^2$ with $\hat{\sigma}^2$. 
 
+Further, it can be shown that $\frac{SSE}{\sigma^2} \sim \chi^2_{n-2}$. The proof is beyond the scope of the text. 
+
+Consider $T=\frac{\hat{\beta_1}-\beta_1}{\sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}}$. 
+Dividing the numerator and denominator by $\frac{\sigma}{\sqrt {S_{xx}}}$, we get 
 $$
-\frac{\hat{\beta}_1-\beta_1}
-{SE(\hat{\beta}_1)}
-\sim t_{n-2}.
+T= \frac {\frac{\hat{\beta_1}- \beta_1}{\frac{\sigma}{\sqrt {S_{xx}}}}} {\sqrt{\frac{\hat{\sigma}^2}{\sigma^2}}}
 $$
+Since $\hat{\beta_1} \sim N(\beta_1, \frac{\sigma^2}{S_{xx}} )$, $\frac{\hat{\beta_1}- \beta_1}{\frac{\sigma}{\sqrt {S_{xx}}}} \sim N(0,1).$
+
+Also, $\sqrt{\frac{\hat{\sigma}^2}{\sigma^2}} = \sqrt{\frac{SSE}{(n-2)\sigma^2}}$. Since $\frac{SSE}{\sigma^2} \sim \chi^2_{n-2}$, it follows that $T \sim t_{n-2}$. 
+
+That is,  $$T=\frac{\hat{\beta_1}-\beta_1}{\sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}} \sim t_{n-2}$$
+ 
 
 Under $H_0$, we substitute $\beta_1=0$ to obtain the test statistic
 
 $$
-\boxed{
-T=
-\frac{\hat{\beta}_1}
-{SE(\hat{\beta}_1)}.
-}
+\boxed{T^*=\frac{\hat{\beta_1}}{\sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}} }
 $$
 
-Under the null hypothesis, $T\sim t_{n-2}.$
+Under the null hypothesis, $T^*\sim t_{n-2}.$
 
 Rejecting $H_0:\beta_1=0$ provides statistical evidence of a linear association between the explanatory and response variables under the assumptions of the regression model. However, statistical significance does not necessarily imply practical significance or a causal relationship.
+
+
 
 For a confidence level of $100(1-\alpha)\%$, we have
 
@@ -1031,7 +1142,7 @@ $$
 P\left(
 -t_{n-2,1-\alpha/2}
 \leq
-\frac{\hat{\beta}_1-\beta_1}{SE(\hat{\beta}_1)}
+\frac{\hat{\beta}_1-\beta_1}{\sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}}
 \leq
 t_{n-2,1-\alpha/2}
 \right)=1-\alpha.
@@ -1041,11 +1152,11 @@ Multiplying through by the positive standard error,
 
 $$
 P\left(
--t_{n-2,1-\alpha/2}SE(\hat{\beta}_1)
+-t_{n-2,1-\alpha/2}\sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}
 \leq
 \hat{\beta}_1-\beta_1
 \leq
-t_{n-2,1-\alpha/2}SE(\hat{\beta}_1)
+t_{n-2,1-\alpha/2}\sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}
 \right)=1-\alpha.
 $$
 
@@ -1053,9 +1164,9 @@ Rearranging to isolate $\beta_1$,
 
 $$
 P\left(
-\hat{\beta}_1-t_{n-2,1-\alpha/2}SE(\hat{\beta}_1)
+\hat{\beta}_1-t_{n-2,1-\alpha/2}\sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}
 \leq\beta_1\leq
-\hat{\beta}_1+t_{n-2,1-\alpha/2}SE(\hat{\beta}_1)
+\hat{\beta}_1+t_{n-2,1-\alpha/2}\sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}
 \right)=1-\alpha.
 $$
 
@@ -1069,40 +1180,19 @@ t_{n-2,1-\alpha/2}
 \frac{\hat{\sigma}}{\sqrt{S_{xx}}}.
 }
 $$
+Suppose we wanted to test $H_0:\beta_1=0$ against $H_1:\beta_1\neq 0$ for the prostate cancer data, at the $0.05$ significance level.  Recall, $\hat{\beta_1} = 0.7193$, $S_{xx}= 133.359$, and $SSE = 58.91476$. Also, $n=97$, so $\hat{\sigma}^2 = \frac{58.91476}{95} \approx 0.6202.$ Putting this together, 
+
+$$T^* = \frac{0.7193}{\sqrt{\frac{0.6202}{133.359}}} \approx 10.5476. $$
+ For a $t$ distribution with $95$ degrees of freedom, the rejection region is $R^* = \{T : |T| > 1.985\}$
+
+Since $T^* \in R^*$, we reject the null in favour of the alternative. That is, we have statistically significant evidence that there is a linear association between log PSA levels and log tumour volume. 
 
 
+A 95% confidence interval for $\beta_1$ is 
+$$ 
+0.7193 \pm 1.985 {\sqrt{\frac{0.6202}{133.359}}}
+= \boxed {(0.5839,  0.8547).}
+$$ 
+We are $95\%$ confident that the true population slope lies between $0.5839$ and $0.8547$. Since both variables are logarithmically transformed, this suggests that a 1\% increase in tumour volume is associated with an approximately $0.5839\%$ to $0.8547\%$ increase in PSA levels, on average.
 
-### Coefficient of Determination ($R^2$)
-
-After fitting a simple linear regression model, it is important to evaluate how well the fitted regression line describes the observed data. One commonly used measure of model fit is the coefficient of determination, denoted by $R^2$. To define $R^2$, we first decompose the total variability in the response variable into variability explained by the regression model and unexplained residual variability.
-
-The total sum of squares (SST) measures the total observed variability in the response variable about its sample mean:
-
-$$
-SST=\sum_{i=1}^{n}(Y_i-\bar{Y})^2.
-$$
-
-The regression sum of squares (SSR) measures the variability accounted for by the fitted regression model:
-
-$$
-SSR=\sum_{i=1}^{n}(\hat{Y}_i-\bar{Y})^2.
-$$
-
-The error sum of squares (SSE), also referred to as the residual sum of squares, measures the variability not explained by the fitted regression model:
-
-$$
-SSE=\sum_{i=1}^{n}(Y_i-\hat{Y}_i)^2.
-$$
-
-The identity \(SST=SSR+SSE\) can be established algebraically using the properties of the least squares estimators. We omit the derivation here for conciseness.
-
-The coefficient of determination is defined as the proportion of total observed variability in the response variable accounted for by the fitted regression model:
-
-$$
-\boxed {R^2=\frac{SSR}{SST} = 1-\frac{SSE}{SST}}.
-$$
-
-Notice that $0\leq R^2\leq 1$
-
-An $R^2$ value closer to one indicates that the fitted regression model accounts for a greater proportion of the observed variability in the response variable. Conversely, an $R^2$ value closer to zero indicates that the model accounts for relatively little of the observed variability.
-
+Furthermore, since the confidence interval contains strictly positive values, there is evidence of a statistically significant positive linear relationship between log tumour volume and log PSA levels at the $5\%$ significance level, further verifying the result found in our hypothesis test.
