@@ -1,9 +1,15 @@
 # UTM_FSU_Math_Stats_Oncology
 Repository for UTM and FSU to work on building resources to teach mathematical and statistical oncology
 
-## Aims for Week 7 (Nov 5)
-- [ ] Everyone: Tweak and Refine ABM Chapter 
-- [ ] Everyone: Everyone come up with ideas for what the next chapters could be 
+## Aims for Week 9 (Nov 19)
+- [ ] Everyone: Work together to clean up the repository and content
+- [ ] Everyone: Introduce pictures, graphics etc.
+- [ ] Everyone: Include interactive elements embedded directly into the e-book
+- [ ] Heba: Work on improving appearance using `CSS`
+
+## Aims for Week 7-8 (Nov 5-12)
+- [?] Everyone: Tweak and Refine ABM Chapter 
+- [X] Everyone: Everyone come up with ideas for what the next chapters could be 
 
 ## Aims for Week 6 (Oct 22)
 - [X] Heba: Cover Four pillar ingredients of an Oncology ABM, Hands on implementation walthrough
