@@ -6,6 +6,7 @@ Repository for UTM and FSU to work on building resources to teach mathematical a
 - [ ] Everyone: Introduce pictures, graphics etc.
 - [ ] Everyone: Include interactive elements embedded directly into the e-book
 - [ ] Heba: Work on improving appearance using `CSS`
+- [ ] Heba: Attempt merging the JHM and RAN branches with the main branch
 
 ## Aims for Week 7-8 (Nov 5-12)
 - [?] Everyone: Tweak and Refine ABM Chapter 
