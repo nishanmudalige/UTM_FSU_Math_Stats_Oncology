@@ -9,7 +9,7 @@ Repository for UTM and FSU to work on building resources to teach mathematical a
 - [ ] Heba: Attempt merging the JHM and RAN branches with the main branch
 
 ## Aims for Week 7-8 (Nov 5-12)
-- [?] Everyone: Tweak and Refine ABM Chapter 
+- [ ] Everyone: Tweak and Refine ABM Chapter 
 - [X] Everyone: Everyone come up with ideas for what the next chapters could be 
 
 ## Aims for Week 6 (Oct 22)
