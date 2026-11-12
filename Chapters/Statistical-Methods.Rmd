@@ -1196,3 +1196,296 @@ $$
 We are $95\%$ confident that the true population slope lies between $0.5839$ and $0.8547$. Since both variables are logarithmically transformed, this suggests that a 1\% increase in tumour volume is associated with an approximately $0.5839\%$ to $0.8547\%$ increase in PSA levels, on average.
 
 Furthermore, since the confidence interval contains strictly positive values, there is evidence of a statistically significant positive linear relationship between log tumour volume and log PSA levels at the $5\%$ significance level, further verifying the result found in our hypothesis test.
+
+## Logistic Regression 
+
+Simple linear regression is used to model the relationship between a continuous response variable and an explanatory variable. However, many applications in oncology involve a binary outcome, such as whether a tumour is malignant or benign, whether a patient responds to a treatment, or whether a cancer recurs during a specified follow-up period. 
+
+Logistic regression is a statistical method used to model the relationship between a binary response variable and one or more explanatory variables. A binary response variable takes only two possible values, typically denoted as \(0\) and \(1\). Unlike simple linear regression, which directly models the expected value of the response variable, logistic regression models the probability that the response variable equals \(1\). 
+
+
+### The Logistic Regression Model
+
+Let $Y_i$ denote the binary response variable for observation $i$ and let $x_i$ denote the corresponding explanatory variable. The response variable follows a Bernoulli distribution with parameter $p_i=P(Y_i=1\mid x_i)$, where $p_i$ is the probability of observing a success given $x_i$. The simple logistic regression model is defined as
+
+$$
+\log\left(\frac{p_i}{1-p_i}\right)=\beta_0+\beta_1x_i,
+\qquad i=1,\ldots,n,
+$$
+
+or equivalently,
+
+$$
+p_i=\frac{\exp(\beta_0+\beta_1x_i)}{1+\exp(\beta_0+\beta_1x_i)},
+$$
+
+where:
+
+- $Y_i$ is the binary response variable for observation $i$, taking values $0$ or $1$,
+- $x_i$ is the explanatory variable for observation $i$,
+- $p_i$ is the probability that $Y_i=1$, given $x_i$,
+- $\beta_0$ is the population intercept,
+- $\beta_1$ is the population slope,
+- $n$ is the number of observations.
+
+The population regression coefficients $\beta_0$ and $\beta_1$ are generally unknown and must be estimated using observed data. Their estimates are denoted by $\hat{\beta}_0$ and $\hat{\beta}_1$, respectively.
+
+The fitted logistic regression equation is
+
+$$
+\hat{p}_i=\frac{\exp(\hat{\beta}_0+\hat{\beta}_1x_i)}{1+\exp(\hat{\beta}_0+\hat{\beta}_1x_i)},
+$$
+
+where $\hat{p}_i$ represents the predicted probability that $Y_i=1$ for observation $i$.
+
+Note that an association between the response and explanatory variables does not imply a causal relationship between them.
+
+
+In logistic regression, the odds of success are defined as the ratio of the probability of success to the probability of failure. That is,
+
+$$
+\text{Odds}=\frac{p_i}{1-p_i}.
+$$
+
+Unlike probabilities, which range from $0$ to $1$, odds range from $0$ to infinity. Odds greater than $1$ indicate that success is more likely than failure, while odds less than $1$ indicate that failure is more likely than success. 
+
+Notice that logistic regression models the logarithm of the odds as a linear function of the explanatory variable.
+
+
+### Estimation of Regression Coefficients
+
+Unlike simple linear regression, where the regression coefficients are estimated using the method of least squares, logistic regression uses the method of maximum likelihood estimation (MLE). This method estimates the unknown parameters by finding the values that maximize the likelihood of observing the given data.
+
+The likelihood function describes how likely the observed data are for different values of the unknown parameters. Suppose $Y_1,Y_2,\ldots,Y_n$ are independent Bernoulli random variables, where $Y_i\sim\operatorname{Bernoulli}(p_i)$. The probability mass function of $Y_i$ is given by
+
+$$
+P(Y_i=y_i)=p_i^{y_i}(1-p_i)^{1-y_i},\qquad y_i = 0,1.
+$$
+
+Assuming independence, the likelihood function is
+
+$$
+L(\beta_0,\beta_1)=\prod_{i=1}^n p_i^{y_i}(1-p_i)^{1-y_i}.
+$$
+
+Since $p_i=\frac{\exp(\beta_0+\beta_1x_i)}{1+\exp(\beta_0+\beta_1x_i)}$, we get
+
+
+$$
+\begin{aligned}
+L(\beta_0,\beta_1)
+&=\prod_{i=1}^n
+\left(\frac{\exp(\beta_0+\beta_1x_i)}
+{1+\exp(\beta_0+\beta_1x_i)}\right)^{y_i}
+\left(\frac{1}{1+\exp(\beta_0+\beta_1x_i)}\right)^{1-y_i}\\
+&=\prod_{i=1}^n
+\frac{\exp\left(y_i(\beta_0+\beta_1x_i)\right)}
+{1+\exp(\beta_0+\beta_1x_i)}.
+\end{aligned}
+$$
+
+Rather than maximizing the likelihood function directly, it is more convenient to maximize its natural logarithm. Since the logarithm is a strictly increasing function, maximizing the log-likelihood is equivalent to maximizing the likelihood. The log-likelihood function is
+
+$$
+\ell(\beta_0,\beta_1)
+=\sum_{i=1}^n
+\left[
+y_i(\beta_0+\beta_1x_i)
+-\log\left(1+\exp(\beta_0+\beta_1x_i)\right)
+\right].
+$$
+
+To obtain the maximum likelihood estimators, we differentiate the log-likelihood function with respect to $\beta_0$ and $\beta_1$ and set the resulting expressions equal to zero.
+
+Differentiating with respect to $\beta_0$, we obtain
+
+$$
+\begin{aligned}
+\frac{\partial\ell}{\partial\beta_0}
+&=\sum_{i=1}^n
+\left[
+y_i-\frac{\exp(\beta_0+\beta_1x_i)}
+{1+\exp(\beta_0+\beta_1x_i)}
+\right]\\
+&=0.
+\end{aligned}
+$$
+
+Similarly, differentiating with respect to $\beta_1$ gives
+
+$$
+\begin{aligned}
+\frac{\partial\ell}{\partial\beta_1}
+&=\sum_{i=1}^n
+\left[
+x_iy_i-
+\frac{x_i\exp(\beta_0+\beta_1x_i)}
+{1+\exp(\beta_0+\beta_1x_i)}
+\right]\\
+&=0.
+\end{aligned}
+$$
+
+Therefore, the maximum likelihood estimators $\hat{\beta}_0$ and $\hat{\beta}_1$ satisfy the following system of equations:
+
+$$
+\boxed{
+\begin{aligned}
+\sum_{i=1}^n\left[
+y_i-\frac{\exp(\hat{\beta}_0+\hat{\beta}_1x_i)}
+{1+\exp(\hat{\beta}_0+\hat{\beta}_1x_i)}
+\right]&=0,\\[6pt]
+\sum_{i=1}^n x_i\left[
+y_i-\frac{\exp(\hat{\beta}_0+\hat{\beta}_1x_i)}
+{1+\exp(\hat{\beta}_0+\hat{\beta}_1x_i)}
+\right]&=0.
+\end{aligned}
+}
+$$
+
+Unlike the least squares estimators in simple linear regression, these equations do not generally have closed-form solutions. Instead, iterative methods such as the Newton--Raphson algorithm are used to obtain $\hat{\beta}_0$ and $\hat{\beta}_1$.
+
+
+### Interpretation of Regression Coefficients
+
+In logistic regression, the regression coefficients describe how the explanatory variable affects the log-odds of the outcome, rather than the expected value of the response variable as in simple linear regression. Recall that the logistic regression model is
+
+$$
+\log\left(\frac{p_i}{1-p_i}\right)=\beta_0+\beta_1x_i,
+$$
+
+where $p_i$ is the probability that $Y_i=1$, and $\frac{p_i}{1-p_i}$ represents the odds of success.
+
+The population intercept $\beta_0$ represents the log-odds of success when $x_i=0$. 
+
+The population slope $\beta_1$ represents the change in the log-odds of success for a one-unit increase in the explanatory variable. To see this, consider the log-odds at $x_i$ and $x_i+1$. Their difference is
+
+$$
+\begin{aligned}
+&\left[\beta_0+\beta_1(x_i+1)\right]
+-\left[\beta_0+\beta_1x_i\right]\\
+&=\beta_1.
+\end{aligned}
+$$
+
+- $\beta_1>0$ indicates an increase in the odds of success.
+- $\beta_1<0$ indicates a decrease in the odds of success.
+- $\beta_1=0$ indicates no change in the odds of success.
+
+### Statistical Inference in Logistic Regression
+
+Statistical inference in logistic regression allows us to draw conclusions about the unknown population regression coefficients using observed data. In particular, we may be interested in determining whether an explanatory variable is significantly associated with the probability of an outcome, or constructing confidence intervals for the regression coefficients.
+
+Unlike simple linear regression, where exact sampling distributions can be derived under the assumption of normally distributed errors, logistic regression generally relies on large-sample approximations. 
+
+
+#### Sampling Distribution of the Slope Estimator
+
+Unlike simple linear regression, the sampling distribution of $\hat{\beta}_1$ does not generally have a closed-form expression. However, under suitable regularity conditions, the maximum likelihood estimator is asymptotically normally distributed. In particular,
+
+$$
+\hat{\beta}_1
+\dot{{\sim}}
+N\left(\beta_1,\operatorname{Var}(\hat{\beta}_1)\right),
+$$
+
+where $\operatorname{Var}(\hat{\beta}_1)$ is approximated by the corresponding diagonal entry of the inverse Fisher information matrix.
+
+The Fisher information matrix measures the amount of information that the observed data provide about the unknown parameters of a statistical model. It is defined as the negative expected value of the Hessian matrix of the log-likelihood function. For $\boldsymbol{\beta}=(\beta_0,\beta_1)^T$, the Fisher information matrix is given by
+
+$$
+I(\boldsymbol{\beta})
+=-E\left[
+\frac{\partial^2\ell(\boldsymbol{\beta})}
+{\partial\boldsymbol{\beta}\,\partial\boldsymbol{\beta}^T}
+\right].
+$$
+
+Under suitable regularity conditions, the inverse Fisher information matrix approximates the covariance matrix of the maximum likelihood estimators. Consequently, its diagonal entries provide the approximate variances of the corresponding estimators.
+
+
+For our model, the Fisher information matrix is given by
+
+$$
+I(\beta_0,\beta_1)=
+\begin{pmatrix}
+\displaystyle\sum_{i=1}^n p_i(1-p_i)
+&
+\displaystyle\sum_{i=1}^n x_ip_i(1-p_i)
+\\[8pt]
+\displaystyle\sum_{i=1}^n x_ip_i(1-p_i)
+&
+\displaystyle\sum_{i=1}^n x_i^2p_i(1-p_i)
+\end{pmatrix},
+$$
+
+where
+
+$$
+p_i=\frac{\exp(\beta_0+\beta_1x_i)}
+{1+\exp(\beta_0+\beta_1x_i)}.
+$$
+
+The asymptotic variance of $\hat{\beta}_1$ is obtained from the bottom-right entry of $I(\beta_0,\beta_1)^{-1}$. Since the population parameters are unknown, we replace them with their maximum likelihood estimates to obtain
+
+$$
+\widehat{\operatorname{Var}}(\hat{\beta}_1)
+=
+\left[I(\hat{\beta}_0,\hat{\beta}_1)^{-1}\right]_{22}.
+$$
+
+The estimated standard error of $\hat{\beta}_1$ is therefore
+
+$$
+SE(\hat{\beta}_1)
+=
+\sqrt{\widehat{\operatorname{Var}}(\hat{\beta}_1)}.
+$$
+
+Consequently,
+$$
+\boxed{
+\frac{\hat{\beta}_1-\beta_1}
+{SE(\hat{\beta}_1)}
+\dot{\sim}N(0,1).
+}
+$$
+
+
+#### Hypothesis Testing and Confidence Intervals for the Slope
+
+As in simple linear regression, we may be interested in testing whether the explanatory variable is significantly associated with the response variable. In logistic regression, this corresponds to testing whether the population slope $\beta_1$ is equal to zero.
+
+We consider the hypotheses
+
+$$
+H_0:\beta_1=0
+\qquad\text{versus}\qquad
+H_1:\beta_1\neq 0.
+$$
+
+Under the null hypothesis, the log-odds of success do not depend on the explanatory variable. 
+
+One commonly used method for testing these hypotheses is the Wald test. The Wald test statistic is given by
+
+$$
+\boxed{
+Z=\frac{\hat{\beta}_1}{SE(\hat{\beta}_1)}.
+}
+$$
+
+Under $H_0$, the test statistic approximately follows a standard normal distribution:
+
+$$
+Z\dot{\sim}N(0,1).
+$$
+
+
+Using the approximate normal distribution of the maximum likelihood estimator, a two-sided $100(1-\alpha)\%$ confidence interval for $\beta_1$ is given by
+
+$$
+\boxed{
+\hat{\beta}_1\pm z_{1-\alpha/2}SE(\hat{\beta}_1).
+}
+$$
+
