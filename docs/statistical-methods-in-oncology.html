@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 Statistical Methods in Oncology | sample2</title>
+  <meta name="description" content="Chapter 4 Statistical Methods in Oncology | sample2" />
+  <meta name="generator" content="bookdown 0.48 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 Statistical Methods in Oncology | sample2" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="nishanmudalige/UTM_FSU_Mathematical_Statistical_Oncology" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 Statistical Methods in Oncology | sample2" />
+  
+  
+  
+
+<meta name="author" content="Rose Abed Musa, Heba Syed, Bryce Morsky, Nishan Mudalige" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="the-kuznetsov-tumourimmune-model.html"/>
+<link rel="next" href="hello.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Welcome</a></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#recommended-background"><i class="fa fa-check"></i><b>2.1</b> Recommended Background</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="introduction.html"><a href="introduction.html#mathematical-statistical-modelling"><i class="fa fa-check"></i><b>2.1.1</b> Mathematical &amp; Statistical Modelling</a></li>
+<li class="chapter" data-level="2.1.2" data-path="introduction.html"><a href="introduction.html#introductory-biology"><i class="fa fa-check"></i><b>2.1.2</b> Introductory Biology</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#history-of-mathematical-oncology"><i class="fa fa-check"></i><b>2.2</b> History of Mathematical Oncology</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#what-is-a-mathematical-model"><i class="fa fa-check"></i><b>2.3</b> What is a Mathematical Model?</a></li>
+<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#systems-of-odes-as-mathematical-models"><i class="fa fa-check"></i><b>2.4</b> Systems of ODEs as Mathematical Models</a></li>
+<li class="chapter" data-level="2.5" data-path="introduction.html"><a href="introduction.html#review-of-mathematical-concepts"><i class="fa fa-check"></i><b>2.5</b> Review of Mathematical Concepts</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="introduction.html"><a href="introduction.html#the-characteristic-equation"><i class="fa fa-check"></i><b>2.5.1</b> The Characteristic Equation</a></li>
+<li class="chapter" data-level="2.5.2" data-path="introduction.html"><a href="introduction.html#the-jacobian-matrix"><i class="fa fa-check"></i><b>2.5.2</b> The Jacobian Matrix</a></li>
+<li class="chapter" data-level="2.5.3" data-path="introduction.html"><a href="introduction.html#equilibrium-points-and-local-stability"><i class="fa fa-check"></i><b>2.5.3</b> Equilibrium Points and Local Stability</a></li>
+<li class="chapter" data-level="2.5.4" data-path="introduction.html"><a href="introduction.html#visualizing-equilibrium-stability"><i class="fa fa-check"></i><b>2.5.4</b> Visualizing equilibrium stability</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="introduction.html"><a href="introduction.html#illustrative-example"><i class="fa fa-check"></i><b>2.6</b> Illustrative Example</a></li>
+<li class="chapter" data-level="2.7" data-path="introduction.html"><a href="introduction.html#analysing-this-system"><i class="fa fa-check"></i><b>2.7</b> Analysing this system</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="introduction.html"><a href="introduction.html#phase-portrait-of-the-lotkavolterra-tumourimmune-model"><i class="fa fa-check"></i><b>2.7.1</b> Phase portrait of the Lotka–Volterra tumour–immune model</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="introduction.html"><a href="introduction.html#limitations"><i class="fa fa-check"></i><b>2.8</b> Limitations</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html"><i class="fa fa-check"></i><b>3</b> The Kuznetsov Tumour–Immune Model</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#sec:kuznetsov"><i class="fa fa-check"></i><b>3.1</b> The Simple Kuznetsov Model</a></li>
+<li class="chapter" data-level="3.2" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#analysing-the-kuznetsov-model"><i class="fa fa-check"></i><b>3.2</b> Analysing the Kuznetsov Model</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#phase-portrait-of-the-original-kuznetsov-model"><i class="fa fa-check"></i><b>3.2.1</b> Phase portrait of the original Kuznetsov model</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#coexistence-equilibria-root-structure-and-sign-test"><i class="fa fa-check"></i><b>3.3</b> Coexistence equilibria: root structure and sign test</a></li>
+<li class="chapter" data-level="3.4" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#sec:resistant"><i class="fa fa-check"></i><b>3.4</b> Extending the Model: An Immune-Resistant Tumor Subpopulation</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#mechanistic-derivation-of-theta-p_t-and-m_t"><i class="fa fa-check"></i><b>3.4.1</b> Mechanistic derivation of <span class="math inline">\(\theta\)</span>, <span class="math inline">\(p_T\)</span>, and <span class="math inline">\(m_T\)</span></a></li>
+<li class="chapter" data-level="3.4.2" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#equilibria-and-stability-of-the-extended-model"><i class="fa fa-check"></i><b>3.4.2</b> Equilibria and stability of the extended model</a></li>
+<li class="chapter" data-level="3.4.3" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#root-structure-and-sign-test"><i class="fa fa-check"></i><b>3.4.3</b> Root structure and sign test</a></li>
+<li class="chapter" data-level="3.4.4" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#phase-portrait-of-the-immune-resistant-model"><i class="fa fa-check"></i><b>3.4.4</b> Phase portrait of the immune-resistant model</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#bifurcation-analysis"><i class="fa fa-check"></i><b>3.5</b> Bifurcation Analysis</a></li>
+<li class="chapter" data-level="3.6" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#summary"><i class="fa fa-check"></i><b>3.6</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html"><i class="fa fa-check"></i><b>4</b> Statistical Methods in Oncology</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#review-of-probability-distributions"><i class="fa fa-check"></i><b>4.1</b> Review of Probability Distributions</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#random-variables-and-probability-distributions"><i class="fa fa-check"></i><b>4.1.1</b> Random Variables and Probability Distributions</a></li>
+<li class="chapter" data-level="4.1.2" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#discrete-probability-distributions"><i class="fa fa-check"></i><b>4.1.2</b> Discrete Probability Distributions</a></li>
+<li class="chapter" data-level="4.1.3" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#continuous-probability-distributions"><i class="fa fa-check"></i><b>4.1.3</b> Continuous Probability Distributions</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#simple-linear-regression"><i class="fa fa-check"></i><b>4.2</b> Simple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#the-simple-linear-regression-model"><i class="fa fa-check"></i><b>4.2.1</b> The Simple Linear Regression Model</a></li>
+<li class="chapter" data-level="4.2.2" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#least-squares-estimation"><i class="fa fa-check"></i><b>4.2.2</b> Least Squares Estimation</a></li>
+<li class="chapter" data-level="4.2.3" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#interpretation-of-regression-coefficients"><i class="fa fa-check"></i><b>4.2.3</b> Interpretation of Regression Coefficients</a></li>
+<li class="chapter" data-level="4.2.4" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#assumptions-of-simple-linear-regression"><i class="fa fa-check"></i><b>4.2.4</b> Assumptions of Simple Linear Regression</a></li>
+<li class="chapter" data-level="4.2.5" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#coefficient-of-determination-r2"><i class="fa fa-check"></i><b>4.2.5</b> Coefficient of Determination (<span class="math inline">\(R^2\)</span>)</a></li>
+<li class="chapter" data-level="4.2.6" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#statistical-inference-in-simple-linear-regression"><i class="fa fa-check"></i><b>4.2.6</b> Statistical Inference in Simple Linear Regression</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#logistic-regression"><i class="fa fa-check"></i><b>4.3</b> Logistic Regression</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#the-logistic-regression-model"><i class="fa fa-check"></i><b>4.3.1</b> The Logistic Regression Model</a></li>
+<li class="chapter" data-level="4.3.2" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#estimation-of-regression-coefficients"><i class="fa fa-check"></i><b>4.3.2</b> Estimation of Regression Coefficients</a></li>
+<li class="chapter" data-level="4.3.3" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#interpretation-of-regression-coefficients-1"><i class="fa fa-check"></i><b>4.3.3</b> Interpretation of Regression Coefficients</a></li>
+<li class="chapter" data-level="4.3.4" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#statistical-inference-in-logistic-regression"><i class="fa fa-check"></i><b>4.3.4</b> Statistical Inference in Logistic Regression</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="hello.html"><a href="hello.html"><i class="fa fa-check"></i><b>5</b> Hello</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">sample2</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="statistical-methods-in-oncology" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">Chapter 4</span> Statistical Methods in Oncology<a href="statistical-methods-in-oncology.html#statistical-methods-in-oncology" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="review-of-probability-distributions" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Review of Probability Distributions<a href="statistical-methods-in-oncology.html#review-of-probability-distributions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Probability distributions are fundamental to statistical modelling, as they describe the likelihood of different outcomes of random processes. In oncology, probability distributions are used to model various outcomes, including whether a patient develops cancer, the number of patients who respond to a treatment, and the time until disease recurrence or death. Different statistical methods rely on different probability distributions depending on the nature of the outcome being studied.</p>
+<div id="random-variables-and-probability-distributions" class="section level3 hasAnchor" number="4.1.1">
+<h3><span class="header-section-number">4.1.1</span> Random Variables and Probability Distributions<a href="statistical-methods-in-oncology.html#random-variables-and-probability-distributions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A random variable is a function that assigns a real number to each outcome of a random experiment. Random variables may be classified as either discrete or continuous.</p>
+<p>A <strong>discrete random variable</strong> takes values on a finite or countable infinite set. Its distribution can be described by a probability mass function (PMF),</p>
+<p><span class="math display">\[
+p_X(x)=P(X=x),
+\]</span></p>
+<p>which satisfies <span class="math inline">\(p_X(x)\geq 0\)</span> and
+<span class="math inline">\(\sum_x p_X(x)=1.\)</span></p>
+<p>A <strong>continuous random variable</strong> takes values from an uncountable infinite set. A continuous random variable has a distribution that can be described by a probability density function (PDF), denoted by <span class="math inline">\(f_X(x)\)</span>, satisfying <span class="math inline">\(f_X(x)\geq 0\)</span> and <span class="math inline">\(\int_{-\infty}^{\infty} f_X(x)\,dx=1.\)</span></p>
+<p>For a continuous random variable, probabilities over intervals are calculated by integration. In particular,</p>
+<p><span class="math display">\[
+P(a\leq X\leq b)=\int_a^b f_X(x)\,dx.
+\]</span></p>
+<p>Both discrete and continuous random variables can be described by their cumulative distribution function (CDF),</p>
+<p><span class="math display">\[
+F_X(x)=P(X\leq x).
+\]</span></p>
+<p>The expected value and variance are used to describe the centre and variability of a probability distribution. The expected value of <span class="math inline">\(X\)</span> is denoted by <span class="math inline">\(E(X)\)</span>, while its variance is defined as <span class="math inline">\(\operatorname{Var}(X)=E[(X-E(X)^2]\)</span>, the expected squared deviation from the mean.</p>
+<p>If <span class="math inline">\(X_1, X_2,...,X_n\)</span> be independent random variables,
+<span class="math display">\[E(\sum_{i=1}^n c_i X_i)=\sum_{i=1}^n c_i E(X_i), \]</span>
+and <span class="math display">\[\operatorname{Var} (\sum_{i=1}^n c_i X_i)= \sum_{i=1}^n c_i^2 \operatorname{Var} (X_i) \]</span></p>
+<p>We now introduce common discrete and continuous probability distributions and discuss their applications in oncology.</p>
+</div>
+<div id="discrete-probability-distributions" class="section level3 hasAnchor" number="4.1.2">
+<h3><span class="header-section-number">4.1.2</span> Discrete Probability Distributions<a href="statistical-methods-in-oncology.html#discrete-probability-distributions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="bernoulli-distribution" class="section level4 hasAnchor" number="4.1.2.1">
+<h4><span class="header-section-number">4.1.2.1</span> Bernoulli Distribution<a href="statistical-methods-in-oncology.html#bernoulli-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The Bernoulli distribution describes a random experiment with two possible outcomes, typically represented by <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span>. It is particularly useful for modelling binary outcomes.</p>
+<p>Let <span class="math inline">\(X\)</span> be a Bernoulli random variable with parameter <span class="math inline">\(p\)</span>, where <span class="math inline">\(0\leq p\leq 1\)</span>. We write <span class="math inline">\(X\sim\operatorname{Bernoulli}(p).\)</span></p>
+<p>The probability mass function is</p>
+<p><span class="math display">\[
+P(X=x)=p^x(1-p)^{1-x},
+\qquad x=0,1.
+\]</span></p>
+<p>The expected value and variance are <span class="math inline">\(E(X)=p\)</span> and <span class="math inline">\(\operatorname{Var}(X)=p(1-p)\)</span>.</p>
+<p>Suppose researchers are interested in whether a patient responds to a particular cancer treatment. Let <span class="math inline">\(X=1\)</span> indicate that a patient responds to treatment and <span class="math inline">\(X=0\)</span> indicate that the patient does not respond. If the probability of responding is <span class="math inline">\(p\)</span>, then <span class="math inline">\(X\)</span> follows a Bernoulli distribution.</p>
+<p>The Bernoulli distribution is particularly important in logistic regression, where the probability of a binary outcome is modelled as a function of explanatory variables.</p>
+</div>
+<div id="binomial-distribution" class="section level4 hasAnchor" number="4.1.2.2">
+<h4><span class="header-section-number">4.1.2.2</span> Binomial Distribution<a href="statistical-methods-in-oncology.html#binomial-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The binomial distribution describes the number of successes in a fixed number of independent Bernoulli trials, each with the same probability of success.</p>
+<p>Let <span class="math inline">\(X\)</span> denote the number of successes in <span class="math inline">\(n\)</span> independent trials, each with probability of success <span class="math inline">\(p\)</span>. Then, <span class="math inline">\(X\sim\operatorname{Binomial}(n,p)\)</span>.</p>
+<p>The probability mass function is</p>
+<p><span class="math display">\[
+P(X=x)=\binom{n}{x}p^x(1-p)^{n-x},
+\qquad x=0,1,\ldots,n.
+\]</span></p>
+<p>The expected value and variance are
+<span class="math inline">\(E(X)=np\)</span> and <span class="math inline">\(\operatorname{Var}(X)=np(1-p)\)</span>.</p>
+<p>Suppose a clinical trial involves <span class="math inline">\(100\)</span> patients receiving a particular cancer treatment. If each patient independently responds with probability <span class="math inline">\(p=0.7\)</span>, then the number of patients who respond can be modelled as <span class="math inline">\(X\sim\operatorname{Binomial}(100,0.7)\)</span>.</p>
+<p>The expected number of patients who respond is <span class="math inline">\(E(X)=100(0.7)=70\)</span>.</p>
+<p>Also, the probability that at least <span class="math inline">\(80\)</span> patients respond to the treatment is</p>
+<p><span class="math display">\[
+P(X \geq 80) = \sum_{x = 80}^{100} \binom{100}{x} (0.7)^x (0.3)^{100-x} \approx 0.01646285
+\]</span></p>
+</div>
+</div>
+<div id="continuous-probability-distributions" class="section level3 hasAnchor" number="4.1.3">
+<h3><span class="header-section-number">4.1.3</span> Continuous Probability Distributions<a href="statistical-methods-in-oncology.html#continuous-probability-distributions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="normal-distribution" class="section level4 hasAnchor" number="4.1.3.1">
+<h4><span class="header-section-number">4.1.3.1</span> Normal Distribution<a href="statistical-methods-in-oncology.html#normal-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The normal distribution is a continuous probability distribution characterized by its symmetric, bell-shaped density function.
+Let <span class="math inline">\(X\)</span> follow a normal distribution with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span>, where <span class="math inline">\(\sigma&gt;0\)</span>. We write <span class="math inline">\(X\sim N(\mu,\sigma^2).\)</span></p>
+<p>Its probability density function is</p>
+<p><span class="math display">\[
+f_X(x)=\frac{1}{\sqrt{2\pi \sigma^2}}
+\exp\left(
+-\frac{(x-\mu)^2}{2\sigma^2}
+\right),
+\qquad -\infty&lt;x&lt;\infty.
+\]</span></p>
+<p>The expected value and variance are <span class="math inline">\(E(X)=\mu\)</span> and <span class="math inline">\(\operatorname{Var}(X)=\sigma^2.\)</span></p>
+<p>If <span class="math inline">\(X \sim N(\mu, sigma^2)\)</span>, then <span class="math inline">\(Z = \frac{X-\mu}{\sigma} \sim N(0,1)\)</span>. We say <span class="math inline">\(Z\)</span> follows a standard normal distribution.</p>
+<p>Also, if <span class="math inline">\(X_1,X_2,...,X_n\)</span> are normal random variables, then <span class="math inline">\(\sum_{i=1}^n {c_i X_i}\)</span> is also a normal random variable, where <span class="math inline">\(c_1,c_2,...,c_n \in \mathbb{R}\)</span>. That is, a linear combination of normal random variables is also normal.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:normal-distributions"></span>
+<img src="_main_files/figure-html/normal-distributions-1.png" alt="Normal distributions with different means and variances." width="768" />
+<p class="caption">
+Figure 4.1: Normal distributions with different means and variances.
+</p>
+</div>
+</div>
+<div id="chi-squared-distribution" class="section level4 hasAnchor" number="4.1.3.2">
+<h4><span class="header-section-number">4.1.3.2</span> Chi-Squared Distribution<a href="statistical-methods-in-oncology.html#chi-squared-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Let <span class="math inline">\(Z_1,Z_2,\ldots,Z_{n}\)</span> be independent standard normal random variables, where <span class="math inline">\(n\)</span> is a positive integer. Then the random variable</p>
+<p><span class="math display">\[
+X=\sum_{i=1}^{n}Z_i^2
+\]</span></p>
+<p>follows a chi-squared distribution with <span class="math inline">\(n\)</span> degrees of freedom. We write <span class="math inline">\(X\sim\chi^2_{n}.\)</span></p>
+<p>Its probability density function is</p>
+<p><span class="math display">\[
+f_X(x)=
+\frac{1}{2^{n/2}\Gamma(n/2)}
+x^{n/2-1}e^{-x/2},
+\qquad x&gt;0,
+\]</span></p>
+<p>where <span class="math inline">\(\Gamma(\cdot)\)</span> denotes the gamma function.</p>
+<p>The expected value and variance are <span class="math inline">\(E(X)=n\)</span> and <span class="math inline">\(\operatorname{Var}(X)=2n.\)</span></p>
+<p>A very useful result is that <span class="math display">\[ \frac{(n-1)s^2}{\sigma^2} \sim \chi^2_{n-1},\]</span> where <span class="math inline">\(s^2\)</span> is the sample variance, and <span class="math inline">\(\sigma^2\)</span> is the population variance.</p>
+<p>The chi-squared distribution is nonnegative and generally right-skewed. Its shape depends on the degrees of freedom, becoming less skewed as the degrees of freedom increase.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:chi-squared-distributions"></span>
+<img src="_main_files/figure-html/chi-squared-distributions-1.png" alt="Chi-squared distributions with different degrees of freedom." width="768" />
+<p class="caption">
+Figure 4.2: Chi-squared distributions with different degrees of freedom.
+</p>
+</div>
+</div>
+<div id="students-t-distribution" class="section level4 hasAnchor" number="4.1.3.3">
+<h4><span class="header-section-number">4.1.3.3</span> Student’s t-Distribution<a href="statistical-methods-in-oncology.html#students-t-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Let <span class="math inline">\(Z \sim N(0,1)\)</span> and <span class="math inline">\(W \sim \chi^2_{n}\)</span>. Then <span class="math inline">\(X = \frac{Z}{\sqrt{\frac{W}{n}}}\)</span> follows a Student’s t-distribution with <span class="math inline">\(n&gt;0\)</span> degrees of freedom. We write <span class="math inline">\(X\sim t_{n}.\)</span></p>
+<p>Its probability density function is</p>
+<p><span class="math display">\[
+f_X(x)=
+\frac{\Gamma\left(\frac{n+1}{2}\right)}
+{\sqrt{n \pi}\Gamma\left(\frac{n}{2}\right)}
+\left(1+\frac{x^2}{n}\right)^{-\frac{n+1}{2}},
+\qquad -\infty&lt;x&lt;\infty,
+\]</span></p>
+<p>where <span class="math inline">\(\Gamma(\cdot)\)</span> denotes the gamma function and <span class="math inline">\(n\)</span> represents the degrees of freedom.</p>
+<p>The expected value is <span class="math inline">\(E(X)=0,\qquad n&gt;1,\)</span> and the variance is <span class="math inline">\(\operatorname{Var}(X)=\frac{n}{n-2},\qquad n&gt;2.\)</span></p>
+<p>The Student’s t-distribution is a continuous probability distribution that is symmetric about zero and resembles the standard normal distribution. However, the t-distribution has heavier tails, allowing for greater variability and more extreme observations. The shape of the Student’s t-distribution depends on its degrees of freedom, denoted by <span class="math inline">\(n\)</span>. For smaller values of <span class="math inline">\(n\)</span>, the distribution has heavier tails and a lower peak compared to the standard normal distribution. As <span class="math inline">\(n\)</span> increases, the tails become lighter and the distribution approaches the standard normal distribution. In particular, as <span class="math inline">\(n\to\infty\)</span>, the Student’s t-distribution converges in distribution to <span class="math inline">\(N(0,1)\)</span>.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:t-distributions"></span>
+<img src="_main_files/figure-html/t-distributions-1.png" alt="Student's t-distributions with different degrees of freedom, compared with the standard normal distribution." width="768" />
+<p class="caption">
+Figure 4.3: Student’s t-distributions with different degrees of freedom, compared with the standard normal distribution.
+</p>
+</div>
+<p>It is particularly useful for statistical inference when the population variance is unknown. In linear regression, t-tests are commonly used to determine whether regression coefficients differ significantly from zero. For example, researchers may use a t-test to investigate whether a patient’s age is significantly associated with tumour size after accounting for other explanatory variables. We discuss this in further detail later in the chapter.</p>
+</div>
+<div id="exponential-distribution" class="section level4 hasAnchor" number="4.1.3.4">
+<h4><span class="header-section-number">4.1.3.4</span> Exponential Distribution<a href="statistical-methods-in-oncology.html#exponential-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The exponential distribution is a continuous probability distribution frequently used to model waiting times until an event of interest occurs.</p>
+<p>Let <span class="math inline">\(X\)</span> follow an exponential distribution with rate parameter <span class="math inline">\(\lambda&gt;0\)</span>. We write
+<span class="math inline">\(X\sim\operatorname{Exponential}(\lambda).\)</span></p>
+<p>Its probability density function is</p>
+<p><span class="math display">\[
+f_X(x)=\lambda e^{-\lambda x},
+\qquad x\geq 0.
+\]</span></p>
+<p>The expected value and variance are <span class="math inline">\(E(X)=\frac{1}{\lambda}\)</span> and <span class="math inline">\(\operatorname{Var}(X)=\frac{1}{\lambda^2}.\)</span></p>
+<p>The shape of the exponential distribution depends on its rate parameter, denoted by <span class="math inline">\(\lambda\)</span>. As <span class="math inline">\(\lambda\)</span> increases, the probability density decreases more rapidly, indicating that shorter waiting times become more likely. Conversely, smaller values of <span class="math inline">\(\lambda\)</span> correspond to longer expected waiting times.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:exponential-distributions"></span>
+<img src="_main_files/figure-html/exponential-distributions-1.png" alt="Exponential distributions with different rate parameters." width="768" />
+<p class="caption">
+Figure 4.4: Exponential distributions with different rate parameters.
+</p>
+</div>
+<p>Moreover, the exponential distribution is important in survival analysis because it assumes a constant hazard function, <span class="math inline">\(h(t)=\lambda.\)</span> Suppose researchers are interested in the time between cancer diagnosis and disease recurrence. Under the assumption that the instantaneous recurrence rate remains constant over time, the time until recurrence may be modelled using an exponential distribution. We discuss hazard functions in more detail later in the chapter.</p>
+</div>
+<div id="weibull-distribution" class="section level4 hasAnchor" number="4.1.3.5">
+<h4><span class="header-section-number">4.1.3.5</span> Weibull Distribution<a href="statistical-methods-in-oncology.html#weibull-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The Weibull distribution is a continuous probability distribution commonly used to model time-to-event data. Unlike the exponential distribution, the Weibull distribution can accommodate hazard functions that increase or decrease over time.</p>
+<p>Let <span class="math inline">\(X\)</span> follow a Weibull distribution with shape parameter <span class="math inline">\(k&gt;0\)</span> and scale parameter <span class="math inline">\(\lambda&gt;0\)</span>. We write <span class="math inline">\(X\sim\operatorname{Weibull}(k,\lambda).\)</span></p>
+<p>Its probability density function is</p>
+<p><span class="math display">\[
+f_X(x)=
+\frac{k}{\lambda}
+\left(\frac{x}{\lambda}\right)^{k-1}
+\exp\left[-\left(\frac{x}{\lambda}\right)^k\right],
+\qquad x\geq 0.
+\]</span></p>
+<p>The expected value and variance are <span class="math inline">\(E(X)=\lambda\Gamma\left(1+\frac{1}{k}\right)\)</span> and <span class="math inline">\(\operatorname{Var}(X)=\lambda^2\left[\Gamma\left(1+\frac{2}{k}\right)-\Gamma^2\left(1+\frac{1}{k}\right)\right]\)</span></p>
+<p>where <span class="math inline">\(\Gamma(\cdot)\)</span> denotes the gamma function.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:weibull-distributions"></span>
+<img src="_main_files/figure-html/weibull-distributions-1.png" alt="Weibull distributions with different shape parameters and a fixed scale parameter." width="768" />
+<p class="caption">
+Figure 4.5: Weibull distributions with different shape parameters and a fixed scale parameter.
+</p>
+</div>
+<p>The Weibull distribution may be used to model the time from cancer diagnosis to death or disease recurrence when the risk of experiencing the event changes over time. For example, the Weibull distribution may be appropriate when the risk of recurrence decreases as time passes after treatment, provided that this pattern is supported by the observed data.</p>
+</div>
+</div>
+</div>
+<div id="simple-linear-regression" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Simple Linear Regression<a href="statistical-methods-in-oncology.html#simple-linear-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Regression analysis is a statistical method used to study relationships between a response variable and one or more explanatory variables. In oncology, regression models can be used to study relationships between patient characteristics, treatment-related factors, and clinical outcomes.</p>
+<p>Simple linear regression (SLR) examines the relationship between a continuous response variable and an explanatory variable by assuming that their relationship is linear. Understanding SLR provides a foundation for more complex statistical models, including multiple linear regression and logistic regression.</p>
+<div id="the-simple-linear-regression-model" class="section level3 hasAnchor" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> The Simple Linear Regression Model<a href="statistical-methods-in-oncology.html#the-simple-linear-regression-model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Let <span class="math inline">\(Y_i\)</span> denote the response variable for observation <span class="math inline">\(i\)</span> and let <span class="math inline">\(x_i\)</span> denote the corresponding explanatory variable. The simple linear regression model is defined as</p>
+<p><span class="math display">\[
+Y_i=\beta_0+\beta_1x_i+\varepsilon_i,
+\qquad i=1,\ldots,n,
+\]</span></p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">\(Y_i\)</span> is the response variable for observation <span class="math inline">\(i\)</span>.</li>
+<li><span class="math inline">\(x_i\)</span> is the explanatory variable for observation <span class="math inline">\(i\)</span>.</li>
+<li><span class="math inline">\(\beta_0\)</span> is the population intercept.</li>
+<li><span class="math inline">\(\beta_1\)</span> is the population slope.</li>
+<li><span class="math inline">\(\varepsilon_i\)</span> is the random error associated with observation <span class="math inline">\(i\)</span>.</li>
+<li><span class="math inline">\(n\)</span> is the number of observations.</li>
+</ul>
+<p>The population regression coefficients <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are generally unknown and must be estimated using observed data. Their estimates are denoted by <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span>, respectively.</p>
+<p>The fitted regression equation is <span class="math inline">\(\hat{Y}_i=\hat{\beta}_0+\hat{\beta}_1x_i,\)</span> where <span class="math inline">\(\hat{Y}_i\)</span> represents the predicted value of the response variable for observation <span class="math inline">\(i\)</span>.</p>
+<p>Note that a linear association between the response and explanatory variables does not imply a causal relationship between them.</p>
+<p>To illustrate the application of simple linear regression in oncology, we consider prostate cancer dataset available in the <code>faraway</code> package in R. The dataset contains clinical measurements from 97 men with prostate cancer, including tumour volume, prostate-specific antigen (PSA) levels, age, and other patient characteristics. PSA is a protein produced by cells in the prostate gland, and its concentration in the blood is commonly used in the assessment and monitoring of prostate cancer.</p>
+<p>We are interested in investigating the relationship between tumour volume and PSA levels. Since both variables are right-skewed, we consider their logarithmic transformations, which provide a more suitable basis for linear regression. Let <span class="math inline">\(X_i\)</span> denote the log tumour volume and <span class="math inline">\(Y_i\)</span> denote the log PSA level of patient <span class="math inline">\(i\)</span>. Below are the values for PSA levels and tumour values for the 97 men, and plots of the relationship between them.</p>
+<table style="width:100%;">
+<caption><span id="tab:prostate-table">Table 4.1: </span>Prostate Cancer Dataset: Log Tumour Volume and Log PSA</caption>
+<colgroup>
+<col width="10%" />
+<col width="13%" />
+<col width="10%" />
+<col width="10%" />
+<col width="13%" />
+<col width="10%" />
+<col width="10%" />
+<col width="13%" />
+<col width="10%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Patient</th>
+<th align="center">Log Volume</th>
+<th align="center">Log PSA</th>
+<th align="center">Patient</th>
+<th align="center">Log Volume</th>
+<th align="center">Log PSA</th>
+<th align="center">Patient</th>
+<th align="center">Log Volume</th>
+<th align="center">Log PSA</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center">-0.580</td>
+<td align="center">-0.431</td>
+<td align="center">34</td>
+<td align="center">0.010</td>
+<td align="center">2.022</td>
+<td align="center">67</td>
+<td align="center">2.023</td>
+<td align="center">2.920</td>
+</tr>
+<tr class="even">
+<td align="center">2</td>
+<td align="center">-0.994</td>
+<td align="center">-0.163</td>
+<td align="center">35</td>
+<td align="center">-0.010</td>
+<td align="center">2.048</td>
+<td align="center">68</td>
+<td align="center">2.198</td>
+<td align="center">2.963</td>
+</tr>
+<tr class="odd">
+<td align="center">3</td>
+<td align="center">-0.511</td>
+<td align="center">-0.163</td>
+<td align="center">36</td>
+<td align="center">1.308</td>
+<td align="center">2.086</td>
+<td align="center">69</td>
+<td align="center">-0.446</td>
+<td align="center">2.963</td>
+</tr>
+<tr class="even">
+<td align="center">4</td>
+<td align="center">-1.204</td>
+<td align="center">-0.163</td>
+<td align="center">37</td>
+<td align="center">1.423</td>
+<td align="center">2.158</td>
+<td align="center">70</td>
+<td align="center">1.194</td>
+<td align="center">2.973</td>
+</tr>
+<tr class="odd">
+<td align="center">5</td>
+<td align="center">0.751</td>
+<td align="center">0.372</td>
+<td align="center">38</td>
+<td align="center">0.457</td>
+<td align="center">2.192</td>
+<td align="center">71</td>
+<td align="center">1.864</td>
+<td align="center">3.013</td>
+</tr>
+<tr class="even">
+<td align="center">6</td>
+<td align="center">-1.050</td>
+<td align="center">0.765</td>
+<td align="center">39</td>
+<td align="center">2.661</td>
+<td align="center">2.214</td>
+<td align="center">72</td>
+<td align="center">1.160</td>
+<td align="center">3.037</td>
+</tr>
+<tr class="odd">
+<td align="center">7</td>
+<td align="center">0.737</td>
+<td align="center">0.765</td>
+<td align="center">40</td>
+<td align="center">0.798</td>
+<td align="center">2.277</td>
+<td align="center">73</td>
+<td align="center">1.215</td>
+<td align="center">3.056</td>
+</tr>
+<tr class="even">
+<td align="center">8</td>
+<td align="center">0.693</td>
+<td align="center">0.854</td>
+<td align="center">41</td>
+<td align="center">0.621</td>
+<td align="center">2.298</td>
+<td align="center">74</td>
+<td align="center">1.839</td>
+<td align="center">3.075</td>
+</tr>
+<tr class="odd">
+<td align="center">9</td>
+<td align="center">-0.777</td>
+<td align="center">1.047</td>
+<td align="center">42</td>
+<td align="center">1.442</td>
+<td align="center">2.308</td>
+<td align="center">75</td>
+<td align="center">2.999</td>
+<td align="center">3.275</td>
+</tr>
+<tr class="even">
+<td align="center">10</td>
+<td align="center">0.223</td>
+<td align="center">1.047</td>
+<td align="center">43</td>
+<td align="center">0.582</td>
+<td align="center">2.327</td>
+<td align="center">76</td>
+<td align="center">3.141</td>
+<td align="center">3.338</td>
+</tr>
+<tr class="odd">
+<td align="center">11</td>
+<td align="center">0.255</td>
+<td align="center">1.267</td>
+<td align="center">44</td>
+<td align="center">1.772</td>
+<td align="center">2.375</td>
+<td align="center">77</td>
+<td align="center">2.011</td>
+<td align="center">3.393</td>
+</tr>
+<tr class="even">
+<td align="center">12</td>
+<td align="center">-1.347</td>
+<td align="center">1.267</td>
+<td align="center">45</td>
+<td align="center">1.486</td>
+<td align="center">2.522</td>
+<td align="center">78</td>
+<td align="center">2.538</td>
+<td align="center">3.436</td>
+</tr>
+<tr class="odd">
+<td align="center">13</td>
+<td align="center">1.613</td>
+<td align="center">1.267</td>
+<td align="center">46</td>
+<td align="center">1.664</td>
+<td align="center">2.553</td>
+<td align="center">79</td>
+<td align="center">2.648</td>
+<td align="center">3.458</td>
+</tr>
+<tr class="even">
+<td align="center">14</td>
+<td align="center">1.477</td>
+<td align="center">1.348</td>
+<td align="center">47</td>
+<td align="center">2.728</td>
+<td align="center">2.569</td>
+<td align="center">80</td>
+<td align="center">2.779</td>
+<td align="center">3.513</td>
+</tr>
+<tr class="odd">
+<td align="center">15</td>
+<td align="center">1.206</td>
+<td align="center">1.399</td>
+<td align="center">48</td>
+<td align="center">1.163</td>
+<td align="center">2.569</td>
+<td align="center">81</td>
+<td align="center">1.468</td>
+<td align="center">3.516</td>
+</tr>
+<tr class="even">
+<td align="center">16</td>
+<td align="center">1.541</td>
+<td align="center">1.447</td>
+<td align="center">49</td>
+<td align="center">1.746</td>
+<td align="center">2.592</td>
+<td align="center">82</td>
+<td align="center">2.514</td>
+<td align="center">3.531</td>
+</tr>
+<tr class="odd">
+<td align="center">17</td>
+<td align="center">-0.416</td>
+<td align="center">1.470</td>
+<td align="center">50</td>
+<td align="center">1.221</td>
+<td align="center">2.592</td>
+<td align="center">83</td>
+<td align="center">2.613</td>
+<td align="center">3.565</td>
+</tr>
+<tr class="even">
+<td align="center">18</td>
+<td align="center">2.288</td>
+<td align="center">1.493</td>
+<td align="center">51</td>
+<td align="center">1.092</td>
+<td align="center">2.657</td>
+<td align="center">84</td>
+<td align="center">2.678</td>
+<td align="center">3.571</td>
+</tr>
+<tr class="odd">
+<td align="center">19</td>
+<td align="center">-0.562</td>
+<td align="center">1.558</td>
+<td align="center">52</td>
+<td align="center">1.660</td>
+<td align="center">2.678</td>
+<td align="center">85</td>
+<td align="center">1.562</td>
+<td align="center">3.588</td>
+</tr>
+<tr class="even">
+<td align="center">20</td>
+<td align="center">0.182</td>
+<td align="center">1.599</td>
+<td align="center">53</td>
+<td align="center">0.513</td>
+<td align="center">2.684</td>
+<td align="center">86</td>
+<td align="center">3.303</td>
+<td align="center">3.631</td>
+</tr>
+<tr class="odd">
+<td align="center">21</td>
+<td align="center">1.147</td>
+<td align="center">1.639</td>
+<td align="center">54</td>
+<td align="center">2.127</td>
+<td align="center">2.691</td>
+<td align="center">87</td>
+<td align="center">2.024</td>
+<td align="center">3.680</td>
+</tr>
+<tr class="even">
+<td align="center">22</td>
+<td align="center">2.059</td>
+<td align="center">1.658</td>
+<td align="center">55</td>
+<td align="center">3.154</td>
+<td align="center">2.705</td>
+<td align="center">88</td>
+<td align="center">1.732</td>
+<td align="center">3.712</td>
+</tr>
+<tr class="odd">
+<td align="center">23</td>
+<td align="center">-0.545</td>
+<td align="center">1.696</td>
+<td align="center">56</td>
+<td align="center">1.267</td>
+<td align="center">2.718</td>
+<td align="center">89</td>
+<td align="center">2.808</td>
+<td align="center">3.984</td>
+</tr>
+<tr class="even">
+<td align="center">24</td>
+<td align="center">1.782</td>
+<td align="center">1.714</td>
+<td align="center">57</td>
+<td align="center">0.975</td>
+<td align="center">2.788</td>
+<td align="center">90</td>
+<td align="center">1.562</td>
+<td align="center">3.994</td>
+</tr>
+<tr class="odd">
+<td align="center">25</td>
+<td align="center">0.385</td>
+<td align="center">1.732</td>
+<td align="center">58</td>
+<td align="center">0.464</td>
+<td align="center">2.794</td>
+<td align="center">91</td>
+<td align="center">3.246</td>
+<td align="center">4.030</td>
+</tr>
+<tr class="even">
+<td align="center">26</td>
+<td align="center">1.447</td>
+<td align="center">1.766</td>
+<td align="center">59</td>
+<td align="center">0.542</td>
+<td align="center">2.806</td>
+<td align="center">92</td>
+<td align="center">2.533</td>
+<td align="center">4.130</td>
+</tr>
+<tr class="odd">
+<td align="center">27</td>
+<td align="center">0.513</td>
+<td align="center">1.800</td>
+<td align="center">60</td>
+<td align="center">1.061</td>
+<td align="center">2.812</td>
+<td align="center">93</td>
+<td align="center">2.830</td>
+<td align="center">4.385</td>
+</tr>
+<tr class="even">
+<td align="center">28</td>
+<td align="center">-0.400</td>
+<td align="center">1.816</td>
+<td align="center">61</td>
+<td align="center">0.457</td>
+<td align="center">2.842</td>
+<td align="center">94</td>
+<td align="center">3.821</td>
+<td align="center">4.684</td>
+</tr>
+<tr class="odd">
+<td align="center">29</td>
+<td align="center">1.040</td>
+<td align="center">1.848</td>
+<td align="center">62</td>
+<td align="center">1.997</td>
+<td align="center">2.854</td>
+<td align="center">95</td>
+<td align="center">2.907</td>
+<td align="center">5.143</td>
+</tr>
+<tr class="even">
+<td align="center">30</td>
+<td align="center">2.410</td>
+<td align="center">1.895</td>
+<td align="center">63</td>
+<td align="center">2.776</td>
+<td align="center">2.854</td>
+<td align="center">96</td>
+<td align="center">2.883</td>
+<td align="center">5.478</td>
+</tr>
+<tr class="odd">
+<td align="center">31</td>
+<td align="center">0.285</td>
+<td align="center">1.924</td>
+<td align="center">64</td>
+<td align="center">2.035</td>
+<td align="center">2.882</td>
+<td align="center">97</td>
+<td align="center">3.472</td>
+<td align="center">5.583</td>
+</tr>
+<tr class="even">
+<td align="center">32</td>
+<td align="center">0.182</td>
+<td align="center">2.008</td>
+<td align="center">65</td>
+<td align="center">2.073</td>
+<td align="center">2.882</td>
+<td align="center">NA</td>
+<td align="center">NA</td>
+<td align="center">NA</td>
+</tr>
+<tr class="odd">
+<td align="center">33</td>
+<td align="center">1.275</td>
+<td align="center">2.008</td>
+<td align="center">66</td>
+<td align="center">1.459</td>
+<td align="center">2.888</td>
+<td align="center">NA</td>
+<td align="center">NA</td>
+<td align="center">NA</td>
+</tr>
+</tbody>
+</table>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:prostate-regression"></span>
+<img src="_main_files/figure-html/prostate-regression-1.png" alt="Relationship between log tumour volume and log PSA levels, with the fitted regression line and associated residuals." width="1056" />
+<p class="caption">
+Figure 4.6: Relationship between log tumour volume and log PSA levels, with the fitted regression line and associated residuals.
+</p>
+</div>
+<p>Figure (a) illustrates the fitted least squares regression line, which describes the estimated linear relationship between log tumour volume and log PSA levels. Each point represents an observed log PSA level for a given log tumour volume, while the red line represents the predicted log PSA level. Figure (b) additionally displays the residuals, represented by the green vertical segments. Each residual measures the difference between an observed log PSA level and its predicted value under the fitted regression model.</p>
+<p>We demonstrate how to obtain the fitted regression line and to further analyse if a linear association between log tumour volume and log PSA levels is statistically significant.</p>
+</div>
+<div id="least-squares-estimation" class="section level3 hasAnchor" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> Least Squares Estimation<a href="statistical-methods-in-oncology.html#least-squares-estimation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>To fit a simple linear regression model, we must estimate the unknown parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.</p>
+<p>One of the most commonly used estimation methods is ordinary least squares (OLS), which determines the regression coefficients by minimizing the sum of squared residuals.</p>
+<p>A residual is the difference between an observed response and its predicted value. For observation <span class="math inline">\(i\)</span>, the residual is defined as</p>
+<p><span class="math display">\[
+e_i=Y_i-\hat{Y}_i.
+\]</span></p>
+<p>Substituting the fitted regression equation gives</p>
+<p><span class="math display">\[
+e_i=Y_i-\hat{\beta}_0-\hat{\beta}_1x_i.
+\]</span></p>
+<p>The residual sum of squares is defined by</p>
+<p><span class="math display">\[
+Q=
+\sum_{i=1}^{n}(Y_i-\beta_0-\beta_1x_i)^2.
+\]</span></p>
+<p>The objective of ordinary least squares is to find values of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> that minimize <span class="math inline">\(Q\)</span>.</p>
+<p>We begin with</p>
+<p><span class="math display">\[
+Q=
+\sum_{i=1}^{n}(Y_i-\beta_0-\beta_1x_i)^2.
+\]</span></p>
+<p>Taking the partial derivative with respect to <span class="math inline">\(\beta_0\)</span> gives</p>
+<p><span class="math display">\[
+\frac{\partial Q}{\partial\beta_0}
+=
+-2\sum_{i=1}^{n}(Y_i-\beta_0-\beta_1x_i).
+\]</span></p>
+<p>Setting this derivative equal to zero and evaluating at the least squares estimates,</p>
+<p><span class="math display">\[
+\sum_{i=1}^{n}
+(Y_i-\hat{\beta}_0-\hat{\beta}_1x_i)=0.
+\]</span></p>
+<p>Expanding,</p>
+<p><span class="math display">\[
+\sum_{i=1}^{n}Y_i
+-n\hat{\beta}_0
+-\hat{\beta}_1\sum_{i=1}^{n}x_i=0.
+\]</span></p>
+<p>Rearranging and dividing by <span class="math inline">\(n\)</span>, we get,</p>
+<p><span class="math display">\[
+\boxed{
+\hat{\beta}_0=\bar{Y}-\hat{\beta}_1\bar{x}
+}
+\]</span></p>
+<p>where <span class="math inline">\(\bar{Y}=\frac{1}{n}\sum_{i=1}^{n}Y_i\)</span> and <span class="math inline">\(\bar{x}=\frac{1}{n}\sum_{i=1}^{n}x_i.\)</span></p>
+<p>Now, taking the partial derivative with respect to <span class="math inline">\(\beta_1\)</span> gives</p>
+<p><span class="math display">\[
+\frac{\partial Q}{\partial\beta_1}
+=
+-2\sum_{i=1}^{n}
+x_i(Y_i-\beta_0-\beta_1x_i).
+\]</span></p>
+<p>Setting this derivative equal to zero,</p>
+<p><span class="math display">\[
+\sum_{i=1}^{n}
+x_i(Y_i-\hat{\beta}_0-\hat{\beta}_1x_i)=0.
+\]</span></p>
+<p>Substituting the expression for <span class="math inline">\(\hat{\beta}_0\)</span>,</p>
+<p><span class="math display">\[
+\sum_{i=1}^{n}
+x_i
+\left[
+Y_i-\bar{Y}
++\hat{\beta}_1\bar{x}
+-\hat{\beta}_1x_i
+\right]=0.
+\]</span></p>
+<p>Rearranging,</p>
+<p><span class="math display">\[
+\sum_{i=1}^{n}x_i(Y_i-\bar{Y})
+=
+\hat{\beta}_1
+\sum_{i=1}^{n}x_i(x_i-\bar{x}).
+\]</span></p>
+<p>we obtain</p>
+<p><span class="math display">\[
+\boxed{
+\hat{\beta}_1=
+\frac{
+\sum_{i=1}^{n}(x_i-\bar{x})(Y_i-\bar{Y})
+}{
+\sum_{i=1}^{n}(x_i-\bar{x})^2
+}
+},
+\]</span>
+Since <span class="math inline">\(\sum_{i=1}^{n}x_i(Y_i-\bar{Y}) = \sum_{i=1}^{n}(x_i-\bar{x})(Y_i-\bar{Y})\)</span> and <span class="math inline">\(\sum_{i=1}^{n}x_i(x_i-\bar{x})=\sum_{i=1}^{n}(x_i-\bar{x})^2.\)</span></p>
+<p>Therefore, the least squares estimators are</p>
+<p><span class="math display">\[
+\boxed{
+\hat{\beta}_1=
+\frac{
+\sum_{i=1}^{n}(x_i-\bar{x})(Y_i-\bar{Y})
+}{
+\sum_{i=1}^{n}(x_i-\bar{x})^2
+} = \frac{S_{xy}}{S_{xx}}
+}
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\boxed{
+\hat{\beta}_0=\bar{Y}-\hat{\beta}_1\bar{x}.
+},
+\]</span>
+where <span class="math inline">\(S_{xx}=\sum_{i=1}^{n}(x_i-\bar{x})^2\)</span> and <span class="math inline">\(S_{xy}=\sum_{i=1}^{n}(x_i-\bar{x})(Y_i-\bar{Y})\)</span>.</p>
+<p>Substituting these estimates into the regression equation gives the fitted model</p>
+<p><span class="math display">\[
+\hat{Y}_i=\hat{\beta}_0+\hat{\beta}_1x_i.
+\]</span></p>
+<p>We wish to fit the prostate cancer data. Using Table <a href="statistical-methods-in-oncology.html#tab:prostate-table">4.1</a>, we obtain <span class="math inline">\(\bar{x}= 1.35001,\)</span> <span class="math inline">\(\bar{y}= 2.478387,\)</span> <span class="math inline">\(S_{xx}= 133.359,\)</span> and <span class="math inline">\(S_{xy}= 95.92784\)</span>.</p>
+<p>Plugging these values into the OLS estimators for <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>, we get
+<span class="math display">\[
+\hat{\beta_1} = \frac{S_{xy}}{S_{xx}}=\frac{95.92784}{133.359} \approx 0.7193
+\]</span>
+<span class="math display">\[
+\hat{\beta_0}= \bar{Y}- \hat{\beta_1}\bar{x}= 2.478387 - (0.7193)(1.35001) \approx 1.5073
+\]</span>
+Hence, the estimated regression line is <span class="math inline">\(\boxed{\hat{Y_i} = 1.5073 + 0.7193x_i}\)</span></p>
+</div>
+<div id="interpretation-of-regression-coefficients" class="section level3 hasAnchor" number="4.2.3">
+<h3><span class="header-section-number">4.2.3</span> Interpretation of Regression Coefficients<a href="statistical-methods-in-oncology.html#interpretation-of-regression-coefficients" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>After estimating the regression coefficients, it is important to interpret their values in the context of the research question.</p>
+<p>The intercept <span class="math inline">\(\beta_0\)</span> represents the expected value of the response variable when the explanatory variable is zero.</p>
+<p>The slope <span class="math inline">\(\beta_1\)</span> represents the change in the expected response variable associated with a one-unit increase in the explanatory variable. A positive slope indicates that the expected response increases as the explanatory variable increases, while a negative slope indicates that the expected response decreases.</p>
+<p>Using the prostate cancer dataset, we obtain the following fitted regression model:</p>
+<p><span class="math display">\[
+\widehat{\log(\text{PSA})}
+=
+1.5073+0.7193\log(\text{Tumour Volume}),
+\]</span></p>
+<p>where PSA denotes prostate-specific antigen levels and tumour volume is measured in <span class="math inline">\(\text{cm}^3\)</span>.</p>
+<p>The estimated intercept is <span class="math inline">\(\hat{\beta}_0=1.5073\)</span>, indicating that when tumour volume is <span class="math inline">\(1\text{ cm}^3\)</span>, the predicted log PSA level is <span class="math inline">\(1.5073\)</span>. Exponentiating, we obtain <span class="math inline">\(e^{1.5073}\approx 4.51\)</span>. Thus, when tumour volume is <span class="math inline">\(1\text{ cm}^3\)</span>, the model predicts a PSA level of approximately <span class="math inline">\(4.51\)</span> on the original scale.</p>
+<p>The estimated slope is <span class="math inline">\(\hat{\beta}_1=0.7193\)</span>. Since both variables are logarithmically transformed, a <span class="math inline">\(1\%\)</span> increase in tumour volume is associated with an approximately <span class="math inline">\(0.7193\%\)</span> increase in the predicted PSA level, according to the fitted model.</p>
+<p>For example, a patient with a tumour volume of <span class="math inline">\(5\text{ cm}^3\)</span> would have a predicted log PSA level of</p>
+<p><span class="math display">\[
+\widehat{\log(\text{PSA})}
+=1.5073+0.7193\log(5)
+\approx 2.665.
+\]</span></p>
+<p>Exponentiating gives</p>
+<p><span class="math display">\[
+\widehat{\text{PSA}}=e^{2.665}\approx 14.37.
+\]</span></p>
+<p>Thus, the model predicts a median PSA level of approximately <span class="math inline">\(14.37\)</span> on the original scale for a patient with a tumour volume of <span class="math inline">\(5\text{ cm}^3\)</span>.</p>
+</div>
+<div id="assumptions-of-simple-linear-regression" class="section level3 hasAnchor" number="4.2.4">
+<h3><span class="header-section-number">4.2.4</span> Assumptions of Simple Linear Regression<a href="statistical-methods-in-oncology.html#assumptions-of-simple-linear-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>To interpret the regression model appropriately and perform statistical inference, several assumptions regarding the relationship between the variables and the behaviour of the error terms must be considered. Since the true errors are unobservable, residuals are commonly used to assess whether these assumptions are reasonable.</p>
+<p><strong>1. Linearity</strong></p>
+<p>The expected response is assumed to be a linear function of the explanatory variable. If the true relationship is nonlinear, the linear model may provide an inadequate description of the data.</p>
+<p>Linearity can be assessed using a scatterplot of the response against the explanatory variable, or a plot of residuals against fitted values. If the linearity assumption is reasonable, the residuals should be randomly scattered around zero without a systematic pattern. A pattern may indicate that a nonlinear model is more appropriate.</p>
+<p>For the prostate cancer dataset, the scatterplot in Figure <a href="statistical-methods-in-oncology.html#fig:prostate-regression">4.6</a> suggests a positive relationship between log tumour volume and log PSA levels. The residual plot in Figure <a href="statistical-methods-in-oncology.html#fig:prostate-diagnostics">4.7</a> appears to be randomly scattered, thus the linearity assumption appears reasonable.</p>
+<p><strong>2. Independence</strong></p>
+<p>The error terms are assumed to be independent across observations.</p>
+<p>Independence is primarily assessed by examining how the data were collected. This assumption may be violated when repeated measurements are collected from the same patient, or when observations are correlated due to shared characteristics or clinical settings.</p>
+<p>For the prostate cancer dataset, each observation corresponds to a different patient, so the independence assumption appears reasonable.</p>
+<p><strong>3. Constant Variance (Homoscedasticity)</strong></p>
+<p>The variance of the errors is assumed to be constant across all values of the explanatory variable. If the variability of the errors changes with the explanatory variable, the model exhibits heteroscedasticity.</p>
+<p>This assumption can be assessed using a plot of residuals against fitted values. Under constant variance, the vertical spread of the residuals should remain approximately the same across the range of fitted values.</p>
+<p>For the prostate cancer dataset, the spread of residuals appears relatively consistent across fitted values in Figure <a href="statistical-methods-in-oncology.html#fig:prostate-diagnostics">4.7</a>, suggesting that the constant variance assumption is reasonable.</p>
+<p><strong>4. Normality of Errors</strong></p>
+<p>The error terms are assumed to follow a normal distribution. That is, <span class="math inline">\(\varepsilon_i\sim N(0,\sigma^2).\)</span> Note that the normality assumption is not required to calculate the least squares estimates. However, it is used to justify hypothesis tests and confidence intervals.</p>
+<p>Normality can be assessed using a normal Q-Q plot of the residuals. If the errors are approximately normally distributed, the points should lie reasonably close to the reference line. Substantial departures from this line may indicate violations of normality.</p>
+<p>We may also use the Shapiro-Wilk test, which is a statistical test used to assess whether a sample is consistent with a normal distribution. The null hypothesis states that the errors follow a normal distribution, while the alternative hypothesis states that the errors do not follow a normal distribution. A p-value less than 0.05 suggests evidence against normality, while a p-value greater than 0.05 indicates insufficient evidence to reject normality.</p>
+<p>For the prostate cancer dataset, the normal Q-Q plot in Figure <a href="statistical-methods-in-oncology.html#fig:prostate-diagnostics">4.7</a> shows that most residuals lie reasonably close to the reference line, with some deviations in the tails. The Shapiro-Wilk test results in a p-value of 0.1419, failing to reject the alternative. Thus, the normality assumption appears reasonable for this example, though not perfect.</p>
+<p>Overall, the diagnostic results suggest that the assumptions of simple linear regression are reasonably plausible for the log-transformed prostate cancer dataset, although some minor deviations are present.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:prostate-diagnostics"></span>
+<img src="_main_files/figure-html/prostate-diagnostics-1.png" alt="Diagnostic plots for the regression model relating log tumour volume to log PSA levels." width="960" />
+<p class="caption">
+Figure 4.7: Diagnostic plots for the regression model relating log tumour volume to log PSA levels.
+</p>
+</div>
+</div>
+<div id="coefficient-of-determination-r2" class="section level3 hasAnchor" number="4.2.5">
+<h3><span class="header-section-number">4.2.5</span> Coefficient of Determination (<span class="math inline">\(R^2\)</span>)<a href="statistical-methods-in-oncology.html#coefficient-of-determination-r2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>After fitting a simple linear regression model, it is important to evaluate how well the fitted regression line describes the observed data. One commonly used measure of model fit is the coefficient of determination, denoted by <span class="math inline">\(R^2\)</span>. To define <span class="math inline">\(R^2\)</span>, we first decompose the total variability in the response variable into variability explained by the regression model and unexplained residual variability.</p>
+<p>The total sum of squares (SST) measures the total observed variability in the response variable about its sample mean:</p>
+<p><span class="math display">\[
+SST=\sum_{i=1}^{n}(Y_i-\bar{Y})^2.
+\]</span></p>
+<p>The regression sum of squares (SSR) measures the variability accounted for by the fitted regression model:</p>
+<p><span class="math display">\[
+SSR=\sum_{i=1}^{n}(\hat{Y}_i-\bar{Y})^2.
+\]</span></p>
+<p>The error sum of squares (SSE), also referred to as the residual sum of squares, measures the variability not explained by the fitted regression model:</p>
+<p><span class="math display">\[
+SSE=\sum_{i=1}^{n}(Y_i-\hat{Y}_i)^2.
+\]</span></p>
+<p>The identity <span class="math inline">\(SST=SSR+SSE\)</span> can be established algebraically using the properties of the least squares estimators. We omit the derivation here for conciseness.</p>
+<p>The coefficient of determination is defined as the proportion of total observed variability in the response variable accounted for by the fitted regression model:</p>
+<p><span class="math display">\[
+\boxed {R^2=\frac{SSR}{SST} = 1-\frac{SSE}{SST}}.
+\]</span></p>
+<p>Notice that <span class="math inline">\(0\leq R^2\leq 1\)</span></p>
+<p>An <span class="math inline">\(R^2\)</span> value closer to one indicates that the fitted regression model accounts for a greater proportion of the observed variability in the response variable. Conversely, an <span class="math inline">\(R^2\)</span> value closer to zero indicates that the model accounts for relatively little of the observed variability.</p>
+<p>Using the prostate cancer data in Table <a href="statistical-methods-in-oncology.html#tab:prostate-table">4.1</a>, we can compute <span class="math inline">\(SSE = 58.91476\)</span> and <span class="math inline">\(SST = 127.9176\)</span>. We get that <span class="math inline">\(R^2 = 1 - \frac{58.91476}{127.9176}= 0.5394319\)</span>. This indicates that approximately <span class="math inline">\(53.94\%\)</span> of the total variation in log PSA levels is explained by the linear relationship with log tumour volume. The remaining <span class="math inline">\(46.06\%\)</span> of the variation is not explained by the model and may be associated with other factors or random variability.</p>
+</div>
+<div id="statistical-inference-in-simple-linear-regression" class="section level3 hasAnchor" number="4.2.6">
+<h3><span class="header-section-number">4.2.6</span> Statistical Inference in Simple Linear Regression<a href="statistical-methods-in-oncology.html#statistical-inference-in-simple-linear-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Least squares estimation provides estimates of the unknown regression coefficients <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>. However, these estimates are calculated from a sample and are therefore subject to sampling variability. Statistical inference allows us to quantify this uncertainty and draw conclusions about the population regression parameters.</p>
+<p>Recall the simple linear regression model</p>
+<p><span class="math display">\[
+Y_i=\beta_0+\beta_1x_i+\varepsilon_i,
+\qquad i=1,\ldots,n,
+\]</span></p>
+<p>where the explanatory variable values <span class="math inline">\(x_1,\ldots,x_n\)</span> are treated as fixed, and the error terms are assumed to be independent and identically distributed according to <span class="math inline">\(\varepsilon_i\sim N(0,\sigma^2)\)</span>. Consequently,<span class="math inline">\(Y_i\sim N(\beta_0+\beta_1x_i,\sigma^2).\)</span></p>
+<div id="sampling-distribution-of-the-slope-estimator" class="section level4 hasAnchor" number="4.2.6.1">
+<h4><span class="header-section-number">4.2.6.1</span> Sampling Distribution of the Slope Estimator<a href="statistical-methods-in-oncology.html#sampling-distribution-of-the-slope-estimator" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Recall that the least squares estimator of the slope is</p>
+<p><span class="math display">\[
+\hat{\beta}_1=
+\frac{S_{xy}}{S_{xx}}
+=
+\frac{\sum_{i=1}^{n}(x_i-\bar{x})(Y_i-\bar{Y})}
+{\sum_{i=1}^{n}(x_i-\bar{x})^2},
+\]</span></p>
+<p>We can express <span class="math inline">\(\hat{\beta}_1\)</span> as a linear combination of the response variables <span class="math inline">\(Y_1,\ldots,Y_n\)</span>.</p>
+<p>Define</p>
+<p><span class="math display">\[
+c_i=\frac{x_i-\bar{x}}{S_{xx}}.
+\]</span></p>
+<p>Then,</p>
+<p><span class="math display">\[
+\begin{aligned}
+\hat{\beta}_1
+&amp;=\frac{1}{S_{xx}}
+\sum_{i=1}^{n}(x_i-\bar{x})(Y_i-\bar{Y})\\
+&amp;=\frac{1}{S_{xx}}
+\left[
+\sum_{i=1}^{n}(x_i-\bar{x})Y_i
+-\bar{Y}\sum_{i=1}^{n}(x_i-\bar{x})
+\right].
+\end{aligned}
+\]</span></p>
+<p>Since <span class="math inline">\(\sum_{i=1}^{n}(x_i-\bar{x})=0,\)</span> we obtain</p>
+<p><span class="math display">\[
+\hat{\beta}_1 =\sum_{i=1}^{n}\frac{x_i-\bar{x}}{S_{xx}}Y_i = \sum_{i=1}^{n}c_iY_i.
+\]</span></p>
+<p>Since <span class="math inline">\(\hat{\beta}_1\)</span> is a linear combination of independent normally distributed random variables, it also follows a normal distribution.</p>
+<p>The expectation of <span class="math inline">\(\hat{\beta}_1\)</span> can be found as follows:</p>
+<p><span class="math display">\[
+\begin{aligned}
+E[\hat{\beta}_1]
+&amp;=E\left[\sum_{i=1}^{n}c_iY_i\right]\\
+&amp;=\sum_{i=1}^{n}c_iE[Y_i]\\
+&amp;=\sum_{i=1}^{n}c_i(\beta_0+\beta_1x_i)\\
+&amp;=\beta_0\sum_{i=1}^{n}c_i
++\beta_1\sum_{i=1}^{n}c_ix_i\\
+&amp;= \beta_1
+\end{aligned}
+\]</span></p>
+<p>Since
+<span class="math display">\[
+\begin{aligned}
+\sum_{i=1}^{n}c_i
+&amp;=\sum_{i=1}^{n}\frac{x_i-\bar{x}}{S_{xx}}\\
+&amp;=\frac{1}{S_{xx}}
+\left(\sum_{i=1}^{n}x_i-n\bar{x}\right)\\
+&amp;=0,
+\end{aligned}
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\begin{aligned}
+\sum_{i=1}^{n}c_ix_i
+&amp;=\sum_{i=1}^{n}
+\frac{x_i(x_i-\bar{x})}{S_{xx}}\\
+&amp;=\frac{1}{S_{xx}}
+\sum_{i=1}^{n}
+\left[(x_i-\bar{x})+\bar{x}\right]
+(x_i-\bar{x})\\
+&amp;=\frac{1}{S_{xx}}
+\left[
+\sum_{i=1}^{n}(x_i-\bar{x})^2
++\bar{x}\sum_{i=1}^{n}(x_i-\bar{x})
+\right]\\
+&amp;=\frac{S_{xx}}{S_{xx}}\\
+&amp;=1.
+\end{aligned}
+\]</span></p>
+<p>Hence,</p>
+<p><span class="math display">\[
+\boxed{E[\hat{\beta}_1]=\beta_1.}
+\]</span></p>
+<p>Next, we derive the variance of <span class="math inline">\(\hat{\beta}_1\)</span>.</p>
+<p>Since the observations are independent and <span class="math inline">\(\operatorname{Var}(Y_i)=\sigma^2\)</span>,</p>
+<p><span class="math display">\[
+\begin{aligned}
+\operatorname{Var}(\hat{\beta}_1)
+&amp;=\operatorname{Var}\left(
+\sum_{i=1}^{n}c_iY_i
+\right)\\
+&amp;=\sum_{i=1}^{n}c_i^2\operatorname{Var}(Y_i)\\
+&amp;=\sigma^2\sum_{i=1}^{n}c_i^2.
+\end{aligned}
+\]</span>
+Also,</p>
+<p><span class="math display">\[
+\begin{aligned}
+\sum_{i=1}^{n}c_i^2
+&amp;=\sum_{i=1}^{n}
+\frac{(x_i-\bar{x})^2}{S_{xx}^2}\\
+&amp;=\frac{1}{S_{xx}^2}
+\sum_{i=1}^{n}(x_i-\bar{x})^2\\
+&amp;=\frac{S_{xx}}{S_{xx}^2}\\
+&amp;=\frac{1}{S_{xx}}.
+\end{aligned}
+\]</span></p>
+<p>Hence,</p>
+<p><span class="math display">\[
+\boxed{
+\operatorname{Var}(\hat{\beta}_1)
+=\frac{\sigma^2}{S_{xx}}.
+}
+\]</span></p>
+<p>Since <span class="math inline">\(\hat{\beta}_1\)</span> is normally distributed, with expected value <span class="math inline">\(\beta_1\)</span> and variance <span class="math inline">\(\sigma^2/S_{xx}\)</span>, we conclude that</p>
+<p><span class="math display">\[
+\boxed{
+\hat{\beta}_1\sim
+N\left(\beta_1,\frac{\sigma^2}{S_{xx}}\right).
+}
+\]</span></p>
+</div>
+<div id="hypothesis-testing-and-confidence-intervals-for-the-slope" class="section level4 hasAnchor" number="4.2.6.2">
+<h4><span class="header-section-number">4.2.6.2</span> Hypothesis Testing and Confidence Intervals for the Slope<a href="statistical-methods-in-oncology.html#hypothesis-testing-and-confidence-intervals-for-the-slope" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>A common objective in regression analysis is to determine whether the explanatory variable has a statistically significant linear association with the response variable.</p>
+<p>To do this, we may test the hypotheses <span class="math inline">\(H_0:\beta_1=0\)</span> against <span class="math inline">\(H_1:\beta_1\neq 0.\)</span></p>
+<p>We wish to use the sampling distribution derived above, however <span class="math inline">\(\sigma^2\)</span> is usually unknown. It can be shown that <span class="math inline">\(\hat{\sigma^2} = \frac{SSE}{n-2}\)</span> is an unbiased estimator for <span class="math inline">\(\sigma^2\)</span>. We omit the proof for conciseness. Thus, we estimate <span class="math inline">\(\sigma^2\)</span> with <span class="math inline">\(\hat{\sigma}^2\)</span>.</p>
+<p>Further, it can be shown that <span class="math inline">\(\frac{SSE}{\sigma^2} \sim \chi^2_{n-2}\)</span>. The proof is beyond the scope of the text.</p>
+<p>Consider <span class="math inline">\(T=\frac{\hat{\beta_1}-\beta_1}{\sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}}\)</span>.
+Dividing the numerator and denominator by <span class="math inline">\(\frac{\sigma}{\sqrt {S_{xx}}}\)</span>, we get
+<span class="math display">\[
+T= \frac {\frac{\hat{\beta_1}- \beta_1}{\frac{\sigma}{\sqrt {S_{xx}}}}} {\sqrt{\frac{\hat{\sigma}^2}{\sigma^2}}}
+\]</span>
+Since <span class="math inline">\(\hat{\beta_1} \sim N(\beta_1, \frac{\sigma^2}{S_{xx}} )\)</span>, <span class="math inline">\(\frac{\hat{\beta_1}- \beta_1}{\frac{\sigma}{\sqrt {S_{xx}}}} \sim N(0,1).\)</span></p>
+<p>Also, <span class="math inline">\(\sqrt{\frac{\hat{\sigma}^2}{\sigma^2}} = \sqrt{\frac{SSE}{(n-2)\sigma^2}}\)</span>. Since <span class="math inline">\(\frac{SSE}{\sigma^2} \sim \chi^2_{n-2}\)</span>, it follows that <span class="math inline">\(T \sim t_{n-2}\)</span>.</p>
+<p>That is, <span class="math display">\[T=\frac{\hat{\beta_1}-\beta_1}{\sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}} \sim t_{n-2}\]</span></p>
+<p>Under <span class="math inline">\(H_0\)</span>, we substitute <span class="math inline">\(\beta_1=0\)</span> to obtain the test statistic</p>
+<p><span class="math display">\[
+\boxed{T^*=\frac{\hat{\beta_1}}{\sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}} }
+\]</span></p>
+<p>Under the null hypothesis, <span class="math inline">\(T^*\sim t_{n-2}.\)</span></p>
+<p>Rejecting <span class="math inline">\(H_0:\beta_1=0\)</span> provides statistical evidence of a linear association between the explanatory and response variables under the assumptions of the regression model. However, statistical significance does not necessarily imply practical significance or a causal relationship.</p>
+<p>For a confidence level of <span class="math inline">\(100(1-\alpha)\%\)</span>, we have</p>
+<p><span class="math display">\[
+P\left(
+-t_{n-2,1-\alpha/2}
+\leq
+\frac{\hat{\beta}_1-\beta_1}{\sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}}
+\leq
+t_{n-2,1-\alpha/2}
+\right)=1-\alpha.
+\]</span></p>
+<p>Multiplying through by the positive standard error,</p>
+<p><span class="math display">\[
+P\left(
+-t_{n-2,1-\alpha/2}\sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}
+\leq
+\hat{\beta}_1-\beta_1
+\leq
+t_{n-2,1-\alpha/2}\sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}
+\right)=1-\alpha.
+\]</span></p>
+<p>Rearranging to isolate <span class="math inline">\(\beta_1\)</span>,</p>
+<p><span class="math display">\[
+P\left(
+\hat{\beta}_1-t_{n-2,1-\alpha/2}\sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}
+\leq\beta_1\leq
+\hat{\beta}_1+t_{n-2,1-\alpha/2}\sqrt{\frac{\hat{\sigma}^2}{S_{xx}}}
+\right)=1-\alpha.
+\]</span></p>
+<p>Therefore, a <span class="math inline">\(100(1-\alpha)\%\)</span> confidence interval for <span class="math inline">\(\beta_1\)</span> is</p>
+<p><span class="math display">\[
+\boxed{
+\hat{\beta}_1
+\pm
+t_{n-2,1-\alpha/2}
+\frac{\hat{\sigma}}{\sqrt{S_{xx}}}.
+}
+\]</span>
+Suppose we wanted to test <span class="math inline">\(H_0:\beta_1=0\)</span> against <span class="math inline">\(H_1:\beta_1\neq 0\)</span> for the prostate cancer data, at the <span class="math inline">\(0.05\)</span> significance level. Recall, <span class="math inline">\(\hat{\beta_1} = 0.7193\)</span>, <span class="math inline">\(S_{xx}= 133.359\)</span>, and <span class="math inline">\(SSE = 58.91476\)</span>. Also, <span class="math inline">\(n=97\)</span>, so <span class="math inline">\(\hat{\sigma}^2 = \frac{58.91476}{95} \approx 0.6202.\)</span> Putting this together,</p>
+<p><span class="math display">\[T^* = \frac{0.7193}{\sqrt{\frac{0.6202}{133.359}}} \approx 10.5476. \]</span>
+For a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(95\)</span> degrees of freedom, the rejection region is <span class="math inline">\(R^* = \{T : |T| &gt; 1.985\}\)</span></p>
+<p>Since <span class="math inline">\(T^* \in R^*\)</span>, we reject the null in favour of the alternative. That is, we have statistically significant evidence that there is a linear association between log PSA levels and log tumour volume.</p>
+<p>A 95% confidence interval for <span class="math inline">\(\beta_1\)</span> is
+<span class="math display">\[
+0.7193 \pm 1.985 {\sqrt{\frac{0.6202}{133.359}}}
+= \boxed {(0.5839,  0.8547).}
+\]</span>
+We are <span class="math inline">\(95\%\)</span> confident that the true population slope lies between <span class="math inline">\(0.5839\)</span> and <span class="math inline">\(0.8547\)</span>. Since both variables are logarithmically transformed, this suggests that a 1% increase in tumour volume is associated with an approximately <span class="math inline">\(0.5839\%\)</span> to <span class="math inline">\(0.8547\%\)</span> increase in PSA levels, on average.</p>
+<p>Furthermore, since the confidence interval contains strictly positive values, there is evidence of a statistically significant positive linear relationship between log tumour volume and log PSA levels at the <span class="math inline">\(5\%\)</span> significance level, further verifying the result found in our hypothesis test.</p>
+</div>
+</div>
+</div>
+<div id="logistic-regression" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Logistic Regression<a href="statistical-methods-in-oncology.html#logistic-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Simple linear regression is used to model the relationship between a continuous response variable and an explanatory variable. However, many applications in oncology involve a binary outcome, such as whether a tumour is malignant or benign, whether a patient responds to a treatment, or whether a cancer recurs during a specified follow-up period.</p>
+<p>Logistic regression is a statistical method used to model the relationship between a binary response variable and one or more explanatory variables. A binary response variable takes only two possible values, typically denoted as <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span>. Unlike simple linear regression, which directly models the expected value of the response variable, logistic regression models the probability that the response variable equals <span class="math inline">\(1\)</span>.</p>
+<div id="the-logistic-regression-model" class="section level3 hasAnchor" number="4.3.1">
+<h3><span class="header-section-number">4.3.1</span> The Logistic Regression Model<a href="statistical-methods-in-oncology.html#the-logistic-regression-model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Let <span class="math inline">\(Y_i\)</span> denote the binary response variable for observation <span class="math inline">\(i\)</span> and let <span class="math inline">\(x_i\)</span> denote the corresponding explanatory variable. The response variable follows a Bernoulli distribution with parameter <span class="math inline">\(p_i=P(Y_i=1\mid x_i)\)</span>, where <span class="math inline">\(p_i\)</span> is the probability of observing a success given <span class="math inline">\(x_i\)</span>. The simple logistic regression model is defined as</p>
+<p><span class="math display">\[
+\log\left(\frac{p_i}{1-p_i}\right)=\beta_0+\beta_1x_i,
+\qquad i=1,\ldots,n,
+\]</span></p>
+<p>or equivalently,</p>
+<p><span class="math display">\[
+p_i=\frac{\exp(\beta_0+\beta_1x_i)}{1+\exp(\beta_0+\beta_1x_i)},
+\]</span></p>
+<p>where:</p>
+<ul>
+<li><span class="math inline">\(Y_i\)</span> is the binary response variable for observation <span class="math inline">\(i\)</span>, taking values <span class="math inline">\(0\)</span> or <span class="math inline">\(1\)</span>,</li>
+<li><span class="math inline">\(x_i\)</span> is the explanatory variable for observation <span class="math inline">\(i\)</span>,</li>
+<li><span class="math inline">\(p_i\)</span> is the probability that <span class="math inline">\(Y_i=1\)</span>, given <span class="math inline">\(x_i\)</span>,</li>
+<li><span class="math inline">\(\beta_0\)</span> is the population intercept,</li>
+<li><span class="math inline">\(\beta_1\)</span> is the population slope,</li>
+<li><span class="math inline">\(n\)</span> is the number of observations.</li>
+</ul>
+<p>The population regression coefficients <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are generally unknown and must be estimated using observed data. Their estimates are denoted by <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span>, respectively.</p>
+<p>The fitted logistic regression equation is</p>
+<p><span class="math display">\[
+\hat{p}_i=\frac{\exp(\hat{\beta}_0+\hat{\beta}_1x_i)}{1+\exp(\hat{\beta}_0+\hat{\beta}_1x_i)},
+\]</span></p>
+<p>where <span class="math inline">\(\hat{p}_i\)</span> represents the predicted probability that <span class="math inline">\(Y_i=1\)</span> for observation <span class="math inline">\(i\)</span>.</p>
+<p>Note that an association between the response and explanatory variables does not imply a causal relationship between them.</p>
+<p>In logistic regression, the odds of success are defined as the ratio of the probability of success to the probability of failure. That is,</p>
+<p><span class="math display">\[
+\text{Odds}=\frac{p_i}{1-p_i}.
+\]</span></p>
+<p>Unlike probabilities, which range from <span class="math inline">\(0\)</span> to <span class="math inline">\(1\)</span>, odds range from <span class="math inline">\(0\)</span> to infinity. Odds greater than <span class="math inline">\(1\)</span> indicate that success is more likely than failure, while odds less than <span class="math inline">\(1\)</span> indicate that failure is more likely than success.</p>
+<p>Notice that logistic regression models the logarithm of the odds as a linear function of the explanatory variable.</p>
+</div>
+<div id="estimation-of-regression-coefficients" class="section level3 hasAnchor" number="4.3.2">
+<h3><span class="header-section-number">4.3.2</span> Estimation of Regression Coefficients<a href="statistical-methods-in-oncology.html#estimation-of-regression-coefficients" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Unlike simple linear regression, where the regression coefficients are estimated using the method of least squares, logistic regression uses the method of maximum likelihood estimation (MLE). This method estimates the unknown parameters by finding the values that maximize the likelihood of observing the given data.</p>
+<p>The likelihood function describes how likely the observed data are for different values of the unknown parameters. Suppose <span class="math inline">\(Y_1,Y_2,\ldots,Y_n\)</span> are independent Bernoulli random variables, where <span class="math inline">\(Y_i\sim\operatorname{Bernoulli}(p_i)\)</span>. The probability mass function of <span class="math inline">\(Y_i\)</span> is given by</p>
+<p><span class="math display">\[
+P(Y_i=y_i)=p_i^{y_i}(1-p_i)^{1-y_i},\qquad y_i = 0,1.
+\]</span></p>
+<p>Assuming independence, the likelihood function is</p>
+<p><span class="math display">\[
+L(\beta_0,\beta_1)=\prod_{i=1}^n p_i^{y_i}(1-p_i)^{1-y_i}.
+\]</span></p>
+<p>Since <span class="math inline">\(p_i=\frac{\exp(\beta_0+\beta_1x_i)}{1+\exp(\beta_0+\beta_1x_i)}\)</span>, we get</p>
+<p><span class="math display">\[
+\begin{aligned}
+L(\beta_0,\beta_1)
+&amp;=\prod_{i=1}^n
+\left(\frac{\exp(\beta_0+\beta_1x_i)}
+{1+\exp(\beta_0+\beta_1x_i)}\right)^{y_i}
+\left(\frac{1}{1+\exp(\beta_0+\beta_1x_i)}\right)^{1-y_i}\\
+&amp;=\prod_{i=1}^n
+\frac{\exp\left(y_i(\beta_0+\beta_1x_i)\right)}
+{1+\exp(\beta_0+\beta_1x_i)}.
+\end{aligned}
+\]</span></p>
+<p>Rather than maximizing the likelihood function directly, it is more convenient to maximize its natural logarithm. Since the logarithm is a strictly increasing function, maximizing the log-likelihood is equivalent to maximizing the likelihood. The log-likelihood function is</p>
+<p><span class="math display">\[
+\ell(\beta_0,\beta_1)
+=\sum_{i=1}^n
+\left[
+y_i(\beta_0+\beta_1x_i)
+-\log\left(1+\exp(\beta_0+\beta_1x_i)\right)
+\right].
+\]</span></p>
+<p>To obtain the maximum likelihood estimators, we differentiate the log-likelihood function with respect to <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> and set the resulting expressions equal to zero.</p>
+<p>Differentiating with respect to <span class="math inline">\(\beta_0\)</span>, we obtain</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{\partial\ell}{\partial\beta_0}
+&amp;=\sum_{i=1}^n
+\left[
+y_i-\frac{\exp(\beta_0+\beta_1x_i)}
+{1+\exp(\beta_0+\beta_1x_i)}
+\right]\\
+&amp;=0.
+\end{aligned}
+\]</span></p>
+<p>Similarly, differentiating with respect to <span class="math inline">\(\beta_1\)</span> gives</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{\partial\ell}{\partial\beta_1}
+&amp;=\sum_{i=1}^n
+\left[
+x_iy_i-
+\frac{x_i\exp(\beta_0+\beta_1x_i)}
+{1+\exp(\beta_0+\beta_1x_i)}
+\right]\\
+&amp;=0.
+\end{aligned}
+\]</span></p>
+<p>Therefore, the maximum likelihood estimators <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span> satisfy the following system of equations:</p>
+<p><span class="math display">\[
+\boxed{
+\begin{aligned}
+\sum_{i=1}^n\left[
+y_i-\frac{\exp(\hat{\beta}_0+\hat{\beta}_1x_i)}
+{1+\exp(\hat{\beta}_0+\hat{\beta}_1x_i)}
+\right]&amp;=0,\\[6pt]
+\sum_{i=1}^n x_i\left[
+y_i-\frac{\exp(\hat{\beta}_0+\hat{\beta}_1x_i)}
+{1+\exp(\hat{\beta}_0+\hat{\beta}_1x_i)}
+\right]&amp;=0.
+\end{aligned}
+}
+\]</span></p>
+<p>Unlike the least squares estimators in simple linear regression, these equations do not generally have closed-form solutions. Instead, iterative methods such as the Newton–Raphson algorithm are used to obtain <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span>.</p>
+</div>
+<div id="interpretation-of-regression-coefficients-1" class="section level3 hasAnchor" number="4.3.3">
+<h3><span class="header-section-number">4.3.3</span> Interpretation of Regression Coefficients<a href="statistical-methods-in-oncology.html#interpretation-of-regression-coefficients-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In logistic regression, the regression coefficients describe how the explanatory variable affects the log-odds of the outcome, rather than the expected value of the response variable as in simple linear regression. Recall that the logistic regression model is</p>
+<p><span class="math display">\[
+\log\left(\frac{p_i}{1-p_i}\right)=\beta_0+\beta_1x_i,
+\]</span></p>
+<p>where <span class="math inline">\(p_i\)</span> is the probability that <span class="math inline">\(Y_i=1\)</span>, and <span class="math inline">\(\frac{p_i}{1-p_i}\)</span> represents the odds of success.</p>
+<p>The population intercept <span class="math inline">\(\beta_0\)</span> represents the log-odds of success when <span class="math inline">\(x_i=0\)</span>.</p>
+<p>The population slope <span class="math inline">\(\beta_1\)</span> represents the change in the log-odds of success for a one-unit increase in the explanatory variable. To see this, consider the log-odds at <span class="math inline">\(x_i\)</span> and <span class="math inline">\(x_i+1\)</span>. Their difference is</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;\left[\beta_0+\beta_1(x_i+1)\right]
+-\left[\beta_0+\beta_1x_i\right]\\
+&amp;=\beta_1.
+\end{aligned}
+\]</span></p>
+<ul>
+<li><span class="math inline">\(\beta_1&gt;0\)</span> indicates an increase in the odds of success.</li>
+<li><span class="math inline">\(\beta_1&lt;0\)</span> indicates a decrease in the odds of success.</li>
+<li><span class="math inline">\(\beta_1=0\)</span> indicates no change in the odds of success.</li>
+</ul>
+</div>
+<div id="statistical-inference-in-logistic-regression" class="section level3 hasAnchor" number="4.3.4">
+<h3><span class="header-section-number">4.3.4</span> Statistical Inference in Logistic Regression<a href="statistical-methods-in-oncology.html#statistical-inference-in-logistic-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Statistical inference in logistic regression allows us to draw conclusions about the unknown population regression coefficients using observed data. In particular, we may be interested in determining whether an explanatory variable is significantly associated with the probability of an outcome, or constructing confidence intervals for the regression coefficients.</p>
+<p>Unlike simple linear regression, where exact sampling distributions can be derived under the assumption of normally distributed errors, logistic regression generally relies on large-sample approximations.</p>
+<div id="sampling-distribution-of-the-slope-estimator-1" class="section level4 hasAnchor" number="4.3.4.1">
+<h4><span class="header-section-number">4.3.4.1</span> Sampling Distribution of the Slope Estimator<a href="statistical-methods-in-oncology.html#sampling-distribution-of-the-slope-estimator-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Unlike simple linear regression, the sampling distribution of <span class="math inline">\(\hat{\beta}_1\)</span> does not generally have a closed-form expression. However, under suitable regularity conditions, the maximum likelihood estimator is asymptotically normally distributed. In particular,</p>
+<p><span class="math display">\[
+\hat{\beta}_1
+\dot{{\sim}}
+N\left(\beta_1,\operatorname{Var}(\hat{\beta}_1)\right),
+\]</span></p>
+<p>where <span class="math inline">\(\operatorname{Var}(\hat{\beta}_1)\)</span> is approximated by the corresponding diagonal entry of the inverse Fisher information matrix.</p>
+<p>The Fisher information matrix measures the amount of information that the observed data provide about the unknown parameters of a statistical model. It is defined as the negative expected value of the Hessian matrix of the log-likelihood function. For <span class="math inline">\(\boldsymbol{\beta}=(\beta_0,\beta_1)^T\)</span>, the Fisher information matrix is given by</p>
+<p><span class="math display">\[
+I(\boldsymbol{\beta})
+=-E\left[
+\frac{\partial^2\ell(\boldsymbol{\beta})}
+{\partial\boldsymbol{\beta}\,\partial\boldsymbol{\beta}^T}
+\right].
+\]</span></p>
+<p>Under suitable regularity conditions, the inverse Fisher information matrix approximates the covariance matrix of the maximum likelihood estimators. Consequently, its diagonal entries provide the approximate variances of the corresponding estimators.</p>
+<p>For our model, the Fisher information matrix is given by</p>
+<p><span class="math display">\[
+I(\beta_0,\beta_1)=
+\begin{pmatrix}
+\displaystyle\sum_{i=1}^n p_i(1-p_i)
+&amp;
+\displaystyle\sum_{i=1}^n x_ip_i(1-p_i)
+\\[8pt]
+\displaystyle\sum_{i=1}^n x_ip_i(1-p_i)
+&amp;
+\displaystyle\sum_{i=1}^n x_i^2p_i(1-p_i)
+\end{pmatrix},
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+p_i=\frac{\exp(\beta_0+\beta_1x_i)}
+{1+\exp(\beta_0+\beta_1x_i)}.
+\]</span></p>
+<p>The asymptotic variance of <span class="math inline">\(\hat{\beta}_1\)</span> is obtained from the bottom-right entry of <span class="math inline">\(I(\beta_0,\beta_1)^{-1}\)</span>. Since the population parameters are unknown, we replace them with their maximum likelihood estimates to obtain</p>
+<p><span class="math display">\[
+\widehat{\operatorname{Var}}(\hat{\beta}_1)
+=
+\left[I(\hat{\beta}_0,\hat{\beta}_1)^{-1}\right]_{22}.
+\]</span></p>
+<p>The estimated standard error of <span class="math inline">\(\hat{\beta}_1\)</span> is therefore</p>
+<p><span class="math display">\[
+SE(\hat{\beta}_1)
+=
+\sqrt{\widehat{\operatorname{Var}}(\hat{\beta}_1)}.
+\]</span></p>
+<p>Consequently,
+<span class="math display">\[
+\boxed{
+\frac{\hat{\beta}_1-\beta_1}
+{SE(\hat{\beta}_1)}
+\dot{\sim}N(0,1).
+}
+\]</span></p>
+</div>
+<div id="hypothesis-testing-and-confidence-intervals-for-the-slope-1" class="section level4 hasAnchor" number="4.3.4.2">
+<h4><span class="header-section-number">4.3.4.2</span> Hypothesis Testing and Confidence Intervals for the Slope<a href="statistical-methods-in-oncology.html#hypothesis-testing-and-confidence-intervals-for-the-slope-1" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>As in simple linear regression, we may be interested in testing whether the explanatory variable is significantly associated with the response variable. In logistic regression, this corresponds to testing whether the population slope <span class="math inline">\(\beta_1\)</span> is equal to zero.</p>
+<p>We consider the hypotheses</p>
+<p><span class="math display">\[
+H_0:\beta_1=0
+\qquad\text{versus}\qquad
+H_1:\beta_1\neq 0.
+\]</span></p>
+<p>Under the null hypothesis, the log-odds of success do not depend on the explanatory variable.</p>
+<p>One commonly used method for testing these hypotheses is the Wald test. The Wald test statistic is given by</p>
+<p><span class="math display">\[
+\boxed{
+Z=\frac{\hat{\beta}_1}{SE(\hat{\beta}_1)}.
+}
+\]</span></p>
+<p>Under <span class="math inline">\(H_0\)</span>, the test statistic approximately follows a standard normal distribution:</p>
+<p><span class="math display">\[
+Z\dot{\sim}N(0,1).
+\]</span></p>
+<p>Using the approximate normal distribution of the maximum likelihood estimator, a two-sided <span class="math inline">\(100(1-\alpha)\%\)</span> confidence interval for <span class="math inline">\(\beta_1\)</span> is given by</p>
+<p><span class="math display">\[
+\boxed{
+\hat{\beta}_1\pm z_{1-\alpha/2}SE(\hat{\beta}_1).
+}
+\]</span></p>
+
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="the-kuznetsov-tumourimmune-model.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="hello.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
