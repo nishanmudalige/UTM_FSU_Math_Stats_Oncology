@@ -1,0 +1,60 @@
+# Optimal Control
+Mathematical models of cancer describe how tumor populations evolve over time and how they interact with the immune system, treatment, and their surrounding environment. While these models can provide insight into tumor dynamics and treatment response, they often assume that treatment is prescribed according to a fixed schedule.
+
+Optimal control theory extends this framework by treating therapy as a time-dependent decision variable. Rather than simply predicting tumor evolution under a prescribed treatment, we seek a treatment strategy that optimizes a specified therapeutic objective.
+
+In cancer modeling, this objective typically involves balancing tumor reduction against treatment-related toxicity, drug consumption, or damage to healthy tissue. The resulting mathematical problem combines a system of differential equations describing tumor dynamics with an objective functional measuring the
+performance of a treatment strategy.
+
+Optimal control has been applied to several cancer treatment problems, including chemotherapy, immunotherapy, and combination therapy. Examples include studies of competing chemotherapy strategies, immune mediated tumor dynamics, and treatment optimization in the presence of drug resistance.
+
+This chapter introduces the mathematical foundations of optimal control for ordinary differential equation (ODE) models of cancer. We begin with the general formulation of an optimal control problem, followed by Pontryagin’s Maximum Principle and the derivation of the associated optimality system. A Gompertzian
+tumor-growth model is then used to illustrate the derivation and numerical solution of an optimal treatment strategy using the forward–backward sweep method.
+
+
+## Formulation of an Optimal Control Problem
+
+
+### State equations, controls, and objective
+
+
+### Components of the objective functional
+
+
+### Why use a quadratic treatment cost?
+
+
+### Existence of an optimal control
+
+
+## Pontryagin’s Maximum Principle
+
+
+### The Hamiltonian and adjoint equations
+
+
+### Interpretation of adjoint variables
+
+
+### Interior optimal controls
+
+
+### Bounded optimal controls
+
+
+### Multiple states and multiple controls
+
+
+### Sufficient conditions
+
+
+### Uniqueness
+
+
+## A Gompertzian Tumor-Growth Model
+
+
+## Derivation of the Optimality System for the Gompertzian Model and numerical solution
+
+
+## An Optimal Control Approach for the Kuznetsov Model

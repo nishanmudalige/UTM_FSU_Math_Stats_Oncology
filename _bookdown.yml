@@ -6,6 +6,8 @@ rmd_files:
   - "index.Rmd"
   - "Chapters/01-introduction.Rmd"
   - "Chapters/Kuznetsov.Rmd"
+  - "Chapters/Optimal-Control.Rmd"
   - "Chapters/Statistical-Methods.Rmd"
   - "Chapters/sample2.Rmd"
   - "Chapters/references.Rmd"
+delete_merged_file: true
