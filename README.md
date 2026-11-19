@@ -5,12 +5,15 @@ Repository for UTM and FSU to work on building resources to teach mathematical a
 - [ ] Everyone: Work together to clean up the repository and content
 - [ ] Everyone: Introduce pictures, graphics etc.
 - [ ] Everyone: Include interactive elements embedded directly into the e-book
-- [ ] Heba: Work on improving appearance using `CSS`
-- [ ] Heba: Attempt merging the JHM and RAN branches with the main branch
+- [X] Heba: Work on improving appearance using `CSS`
+- [X] Heba: Attempt merging the JHM and RAN branches with the main branch
 
 ## Aims for Week 7-8 (Nov 5-12)
 - [ ] Everyone: Tweak and Refine ABM Chapter 
 - [X] Everyone: Everyone come up with ideas for what the next chapters could be 
+
+## Aims for Week 6 (Oct 29)
+- [X] All: Update code and explain implementation in a more approachable way for someone without a introductory background in coding
 
 ## Aims for Week 6 (Oct 22)
 - [X] Heba: Cover Four pillar ingredients of an Oncology ABM, Hands on implementation walthrough

@@ -1,0 +1,16 @@
+bookdown::gitbook:
+  css: style.css
+  split_bib: no
+  config:
+    toc:
+      collapse: subsection
+      before: |
+        <li class="toc-brand"><a href="./">An Introduction to Mathematical Oncology</a></li>
+      after: |
+        <li class="toc-footer"><a href="https://github.com/nishanmudalige/UTM_FSU_Mathematical_Statistical_Oncology" target="blank">UTM &amp; FSU Oncology Repository</a></li>
+    sharing: no
+    info: no
+    fontsettings:
+      theme: white
+      family: sans
+      size: 2
