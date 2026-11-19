@@ -1,0 +1,861 @@
+/* ==========================================================================
+   Mathematical & Statistical Oncology (UTM · FSU) — Custom Bookdown Theme
+   Modern academic textbook styling for bookdown::gitbook
+   Supports White (default) and Night (.color-theme-2)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* --------------------------------------------------------------------------
+   1. Design Tokens & Theme Palettes
+   -------------------------------------------------------------------------- */
+.book,
+.book.color-theme-1 {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  /* Default White Theme: Crisp Warm Slate & Academic Navy/Garnet */
+  --bg-page: #fcfcfd;
+  --bg-surface: #ffffff;
+  --bg-subtle: #f4f6f9;
+  --bg-sidebar: #f8fafc;
+  --bg-sidebar-hover: #eef2f7;
+  --bg-sidebar-active: rgba(15, 76, 129, 0.09);
+
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --heading-color: #0f172a;
+
+  --accent: #0f4c81;
+  --accent-hover: #0a355c;
+  --accent-secondary: #8b1e3f;
+  --accent-soft: rgba(15, 76, 129, 0.08);
+  --accent-secondary-soft: rgba(139, 30, 63, 0.08);
+
+  --border-subtle: #e2e8f0;
+  --border-strong: #cbd5e1;
+
+  --code-bg: #f8fafc;
+  --code-border: #e2e8f0;
+  --inline-code-bg: #f1f5f9;
+  --inline-code-text: #0f2942;
+
+  --callout-bg: #f8fafc;
+  --callout-border: #0f4c81;
+
+  --table-header-bg: #f1f5f9;
+  --table-stripe-bg: #f8fafc;
+  --table-hover-bg: #eef4fb;
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+/* Night Theme (.color-theme-2) */
+.book.color-theme-2 {
+  --bg-page: #0f172a;
+  --bg-surface: #162033;
+  --bg-subtle: #1e293b;
+  --bg-sidebar: #11192c;
+  --bg-sidebar-hover: #1a253d;
+  --bg-sidebar-active: rgba(96, 165, 250, 0.14);
+
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --heading-color: #f8fafc;
+
+  --accent: #60a5fa;
+  --accent-hover: #93c5fd;
+  --accent-secondary: #f472b6;
+  --accent-soft: rgba(96, 165, 250, 0.14);
+  --accent-secondary-soft: rgba(244, 114, 182, 0.14);
+
+  --border-subtle: #26334d;
+  --border-strong: #334155;
+
+  --code-bg: #162033;
+  --code-border: #26334d;
+  --inline-code-bg: #1e293b;
+  --inline-code-text: #93c5fd;
+
+  --callout-bg: #162033;
+  --callout-border: #60a5fa;
+
+  --table-header-bg: #1e293b;
+  --table-stripe-bg: #141e30;
+  --table-hover-bg: #1f2d47;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.35);
+}
+
+/* --------------------------------------------------------------------------
+   2. Base Page, Typography & Reading Rhythm
+   -------------------------------------------------------------------------- */
+div.book,
+.book .book-body,
+.book.color-theme-1 .book-body,
+.book.color-theme-2 .book-body {
+  background: var(--bg-page);
+  color: var(--text-primary);
+}
+
+.book.font-family-0,
+.book.font-family-1,
+.book .book-header,
+.book .book-summary,
+.book.font-family-0 .book-body .page-wrapper .page-inner section.normal {
+  font-family: var(--font-sans);
+}
+
+.book .book-body .page-wrapper .page-inner {
+  max-width: 840px;
+  padding: 32px 28px 72px;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal {
+  background: transparent;
+  color: var(--text-primary);
+  line-height: 1.75;
+  letter-spacing: -0.006em;
+  overflow: visible;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal p {
+  margin-bottom: 1.15em;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal ul,
+.book .book-body .page-wrapper .page-inner section.normal ol {
+  margin-bottom: 1.15em;
+  padding-left: 1.65em;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal li {
+  margin-bottom: 0.38em;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal li > ul,
+.book .book-body .page-wrapper .page-inner section.normal li > ol {
+  margin-top: 0.35em;
+  margin-bottom: 0.35em;
+}
+
+/* Links */
+.book .book-body .page-wrapper .page-inner section.normal a {
+  color: var(--accent);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: rgba(15, 76, 129, 0.3);
+  text-underline-offset: 3px;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+
+.book.color-theme-2 .book-body .page-wrapper .page-inner section.normal a {
+  text-decoration-color: rgba(96, 165, 250, 0.35);
+}
+
+.book .book-body .page-wrapper .page-inner section.normal a:hover {
+  color: var(--accent-hover);
+  text-decoration-color: currentColor;
+}
+
+/* Section Dividers */
+.book .book-body .page-wrapper .page-inner section.normal hr {
+  height: 1px;
+  margin: 2.5em 0;
+  background-color: var(--border-subtle);
+}
+
+/* --------------------------------------------------------------------------
+   3. Headings & Section Number Badges
+   -------------------------------------------------------------------------- */
+.book .book-body .page-wrapper .page-inner section.normal h1,
+.book .book-body .page-wrapper .page-inner section.normal h2,
+.book .book-body .page-wrapper .page-inner section.normal h3,
+.book .book-body .page-wrapper .page-inner section.normal h4,
+.book .book-body .page-wrapper .page-inner section.normal h5,
+.book .book-body .page-wrapper .page-inner section.normal h6 {
+  font-family: var(--font-sans);
+  color: var(--heading-color);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.022em;
+}
+
+/* Chapter Title (H1) */
+.book .book-body .page-wrapper .page-inner section.normal h1 {
+  font-size: 2.15em;
+  margin-top: 0.2em;
+  margin-bottom: 1.1em;
+  padding-bottom: 0.55em;
+  border-bottom: 2px solid var(--border-subtle);
+}
+
+/* Stack "Chapter X" cleanly above the chapter title */
+.book .book-body .page-wrapper .page-inner section.normal h1 .header-section-number {
+  display: block;
+  font-size: 0.38em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent-secondary);
+  margin-bottom: 0.45rem;
+}
+
+/* Major Section (H2) */
+.book .book-body .page-wrapper .page-inner section.normal h2 {
+  font-size: 1.52em;
+  margin-top: 2.1em;
+  margin-bottom: 0.75em;
+  padding-bottom: 0.32em;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* Subsection (H3 & H4) */
+.book .book-body .page-wrapper .page-inner section.normal h3 {
+  font-size: 1.22em;
+  font-weight: 600;
+  margin-top: 1.65em;
+  margin-bottom: 0.55em;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal h4 {
+  font-size: 1.05em;
+  font-weight: 600;
+  margin-top: 1.35em;
+  margin-bottom: 0.45em;
+  color: var(--text-secondary);
+}
+
+/* Section Numbers on H2–H4 */
+.book .book-body .page-wrapper .page-inner section.normal h2 .header-section-number,
+.book .book-body .page-wrapper .page-inner section.normal h3 .header-section-number,
+.book .book-body .page-wrapper .page-inner section.normal h4 .header-section-number {
+  color: var(--accent);
+  font-weight: 600;
+  margin-right: 0.35em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Subtle Anchor Icon */
+a.anchor-section::before {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* --------------------------------------------------------------------------
+   4. Top Navigation Header, Toolbar Dropdown & Next/Prev Arrows
+   -------------------------------------------------------------------------- */
+.book .book-header,
+.book.color-theme-1 .book-header,
+.book.color-theme-2 .book-header {
+  background-color: var(--bg-page) !important;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  height: 50px;
+}
+
+.book .book-header .btn,
+.book.color-theme-1 .book-header .btn,
+.book.color-theme-2 .book-header .btn {
+  color: var(--text-muted);
+  outline: none !important;
+  transition: color 0.15s ease;
+}
+
+.book .book-header .btn:focus {
+  outline: none !important;
+}
+
+.book .book-header .btn:hover,
+.book.color-theme-1 .book-header .btn:hover,
+.book.color-theme-2 .book-header .btn:hover {
+  color: var(--heading-color);
+}
+
+/* Hide the "i" keyboard-shortcut info button */
+.book .book-header .btn[aria-label*="Information"] {
+  display: none !important;
+}
+
+/* Font & Theme Settings Dropdown Menu ("A" menu) */
+.book .book-header .font-settings .dropdown-menu {
+  min-width: 210px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  box-shadow: var(--shadow-md);
+}
+
+.book .book-header .font-settings .dropdown-menu .dropdown-caret .caret-outer {
+  border-bottom-color: var(--border-subtle);
+}
+
+.book .book-header .font-settings .dropdown-menu .dropdown-caret .caret-inner {
+  border-bottom-color: var(--bg-surface);
+}
+
+.book .book-header .font-settings .dropdown-menu .buttons {
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+}
+
+.book .book-header .font-settings .dropdown-menu .buttons:last-child {
+  border-bottom: none;
+}
+
+/* Note: GitBook sets html { font-size: 62.5% } (1rem = 10px), so use explicit px here */
+.book .book-header .font-settings .dropdown-menu .buttons .button {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  padding: 10px 8px;
+  float: none;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.book .book-header .font-settings .dropdown-menu .buttons .button:hover {
+  background-color: var(--bg-subtle);
+  color: var(--heading-color);
+}
+
+/* Add clear "-" and "+" next to the "A" font-size buttons */
+.book .book-header .font-settings .font-reduce {
+  font-size: 13.5px !important;
+  line-height: 1.4 !important;
+}
+
+.book .book-header .font-settings .font-reduce::after {
+  content: " \2212";
+  font-weight: 600;
+}
+
+.book .book-header .font-settings .font-enlarge {
+  font-size: 16.5px !important;
+  line-height: 1.4 !important;
+}
+
+.book .book-header .font-settings .font-enlarge::after {
+  content: " +";
+  font-weight: 600;
+}
+
+/* Remove Font Family switcher row (Serif / Sans) */
+.book .book-header .font-settings .dropdown-menu .buttons:nth-child(3) {
+  display: none !important;
+}
+
+/* Remove Sepia option so theme toggle cleanly switches between White and Night */
+.book .book-header .font-settings .dropdown-menu .buttons:nth-child(4) .button:nth-child(2) {
+  display: none !important;
+}
+
+.book .book-header .font-settings .dropdown-menu .buttons:nth-child(4) .button {
+  width: 50% !important;
+}
+
+/* Highlight currently active theme (White vs. Night) */
+.book:not(.color-theme-2) .book-header .font-settings .dropdown-menu .buttons:nth-child(4) .button:nth-child(1),
+.book.color-theme-2 .book-header .font-settings .dropdown-menu .buttons:nth-child(4) .button:nth-child(3) {
+  color: var(--accent);
+  font-weight: 700;
+  background-color: var(--accent-soft);
+}
+
+.book .book-header h1,
+.book.color-theme-1 .book-header h1,
+.book.color-theme-2 .book-header h1 {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.book .book-body .navigation {
+  color: var(--border-strong);
+  font-size: 32px;
+}
+
+.book .book-body .navigation:hover {
+  color: var(--accent);
+}
+
+/* --------------------------------------------------------------------------
+   5. Sidebar / Table of Contents (.book-summary)
+   -------------------------------------------------------------------------- */
+.book .book-header.fixed {
+  transition: left 250ms ease;
+}
+
+@media (min-width: 601px) {
+  .book .book-summary {
+    width: 340px;
+    left: -340px;
+  }
+  .book.with-summary .book-summary {
+    left: 0;
+  }
+  .book.with-summary .book-body,
+  .book.with-summary .book-header.fixed {
+    left: 340px;
+  }
+}
+
+.book .book-summary,
+.book.color-theme-1 .book-summary,
+.book.color-theme-2 .book-summary {
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+
+/* Full-bleed Book Title Header at Top of Sidebar */
+.book .book-summary ul.summary li.toc-brand {
+  margin: 0;
+  padding: 0;
+}
+
+.book .book-summary ul.summary li.toc-brand > a,
+.book.color-theme-1 .book-summary ul.summary li.toc-brand > a,
+.book.color-theme-2 .book-summary ul.summary li.toc-brand > a {
+  display: block;
+  margin: 0;
+  padding: 20px 20px;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.4;
+  letter-spacing: -0.015em;
+  color: #ffffff !important;
+  background-color: #0f4c81 !important;
+  border: none;
+  border-bottom: 1px solid var(--border-subtle);
+  border-radius: 0;
+  box-shadow: none;
+  white-space: normal;
+}
+
+.book .book-summary ul.summary li.toc-brand > a:hover,
+.book.color-theme-1 .book-summary ul.summary li.toc-brand > a:hover,
+.book.color-theme-2 .book-summary ul.summary li.toc-brand > a:hover {
+  color: #ffffff !important;
+  background-color: #0f4c81 !important;
+  transform: none;
+  filter: none;
+}
+
+/* Hide auto-generated divider right under the full-bleed title header */
+.book .book-summary ul.summary li.toc-brand + li.divider {
+  display: none !important;
+}
+
+/* Search Input in Sidebar (keep height <= 50px so top: -50px hides completely when closed) */
+.book .book-summary .book-search {
+  height: 50px;
+  padding: 7px 14px;
+  top: -52px;
+  background: var(--bg-sidebar);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.book.with-search .book-summary .book-search {
+  top: 0;
+}
+
+.book .book-summary .book-search input,
+.book .book-summary .book-search input:focus {
+  width: 100%;
+  height: 35px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 14px;
+}
+
+.book .book-summary .book-search input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+/* Hide cluttered default green checkmarks next to TOC items */
+.book .book-summary ul.summary li i.fa-check {
+  display: none !important;
+}
+
+/* TOC Links (use li > span so inline MathJax spans inside <a> are never padded!) */
+.book .book-summary ul.summary li > a,
+.book .book-summary ul.summary li > span,
+.book.color-theme-1 .book-summary ul.summary li > a,
+.book.color-theme-2 .book-summary ul.summary li > a {
+  padding: 9px 18px;
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  font-weight: 450;
+  white-space: normal;
+  border-left: 3px solid transparent;
+  transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+
+/* Top-level chapters slightly bolder */
+.book .book-summary ul.summary > li.chapter > a {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-primary);
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* Chapter numbers in TOC */
+.book .book-summary ul.summary li a b {
+  color: var(--accent);
+  font-weight: 600;
+  margin-right: 5px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Nested TOC Indentation */
+.book .book-summary ul.summary li ul {
+  padding-left: 14px;
+}
+
+.book .book-summary ul.summary li ul li > a {
+  font-size: 13.5px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+
+/* Hover & Active States */
+.book .book-summary ul.summary li > a:hover,
+.book.color-theme-1 .book-summary ul.summary li > a:hover,
+.book.color-theme-2 .book-summary ul.summary li > a:hover {
+  background: var(--bg-sidebar-hover);
+  color: var(--heading-color);
+}
+
+.book .book-summary ul.summary li.active > a,
+.book.color-theme-1 .book-summary ul.summary li.active > a,
+.book.color-theme-2 .book-summary ul.summary li.active > a {
+  background: var(--bg-sidebar-active);
+  color: var(--accent);
+  border-left-color: var(--accent);
+  font-weight: 600;
+}
+
+.book .book-summary ul.summary li.divider {
+  background: var(--border-subtle);
+  margin: 10px 16px;
+}
+
+.book .book-summary ul.summary li.toc-footer a {
+  font-size: 12.5px;
+  color: var(--text-muted) !important;
+  padding: 12px 18px 22px;
+}
+
+/* Subtle Sidebar Scrollbar */
+.book .book-summary ul.summary::-webkit-scrollbar {
+  width: 6px;
+}
+.book .book-summary ul.summary::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   6. Code Blocks & Inline Code
+   -------------------------------------------------------------------------- */
+.book .book-body .page-wrapper .page-inner section.normal code,
+.book .book-body .page-wrapper .page-inner section.normal pre {
+  font-family: var(--font-mono);
+}
+
+/* Remove GitBook's awkward non-breaking space pseudo-elements around inline code */
+.book .book-body .page-wrapper .page-inner section.normal code::before,
+.book .book-body .page-wrapper .page-inner section.normal code::after {
+  content: none;
+}
+
+/* Crisp Inline Code Pill */
+.book .book-body .page-wrapper .page-inner section.normal :not(pre) > code {
+  padding: 0.16em 0.42em;
+  font-size: 0.84em;
+  background-color: var(--inline-code-bg);
+  color: var(--inline-code-text);
+  border: 1px solid var(--border-subtle);
+  border-radius: 5px;
+  font-weight: 500;
+}
+
+/* Fenced Code Blocks & R Chunks */
+.book .book-body .page-wrapper .page-inner section.normal div.sourceCode {
+  margin: 1.25em 0 1.5em;
+  border-radius: 8px;
+  border: 1px solid var(--code-border);
+  background: var(--code-bg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal pre {
+  margin: 1.25em 0 1.5em;
+  padding: 1em 1.2em;
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: 8px;
+  font-size: 0.85em;
+  line-height: 1.6;
+}
+
+/* Avoid double border when pre is inside div.sourceCode */
+.book .book-body .page-wrapper .page-inner section.normal div.sourceCode pre {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal pre > code {
+  font-size: inherit;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+/* Refined Syntax Highlighting for Light/Sepia */
+code span.co { color: #64748b; font-style: italic; } /* Comment */
+code span.kw,
+code span.cf { color: #7c3aed; font-weight: 600; }   /* Keyword / ControlFlow */
+code span.fu { color: #0f4c81; font-weight: 500; }   /* Function */
+code span.st,
+code span.ch,
+code span.vs { color: #0f766e; }                     /* String */
+code span.dv,
+code span.fl,
+code span.bn,
+code span.cn { color: #b45309; }                     /* Numbers & Constants */
+code span.op { color: #475569; }                     /* Operator */
+code span.va,
+code span.at { color: #1e293b; }                     /* Variable / Attribute */
+
+/* Night Mode Syntax Highlighting */
+.book.color-theme-2 code span.co { color: #64748b; }
+.book.color-theme-2 code span.kw,
+.book.color-theme-2 code span.cf { color: #c084fc; }
+.book.color-theme-2 code span.fu { color: #60a5fa; }
+.book.color-theme-2 code span.st,
+.book.color-theme-2 code span.ch,
+.book.color-theme-2 code span.vs { color: #34d399; }
+.book.color-theme-2 code span.dv,
+.book.color-theme-2 code span.fl,
+.book.color-theme-2 code span.bn,
+.book.color-theme-2 code span.cn { color: #fbbf24; }
+.book.color-theme-2 code span.op { color: #94a3b8; }
+.book.color-theme-2 code span.va,
+.book.color-theme-2 code span.at { color: #e2e8f0; }
+
+/* --------------------------------------------------------------------------
+   7. Callout Boxes (Blockquotes) & Interactive Solution Accordions (<details>)
+   -------------------------------------------------------------------------- */
+.book .book-body .page-wrapper .page-inner section.normal blockquote {
+  margin: 1.5em 0;
+  padding: 1.1em 1.35em;
+  opacity: 1;
+  color: var(--text-primary);
+  background: var(--callout-bg);
+  border-left: 4px solid var(--callout-border);
+  border-top: 1px solid var(--border-subtle);
+  border-right: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  border-radius: 0 8px 8px 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.book .book-body .page-wrapper .page-inner section.normal blockquote h3,
+.book .book-body .page-wrapper .page-inner section.normal blockquote h4 {
+  margin-top: 0;
+  color: var(--accent);
+}
+
+.book .book-body .page-wrapper .page-inner section.normal blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+/* Expandable Practice Solutions (<details> / <summary>) */
+.book .book-body .page-wrapper .page-inner section.normal details {
+  margin: 1.15em 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: border-color 0.15s ease;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal details:hover {
+  border-color: var(--border-strong);
+}
+
+.book .book-body .page-wrapper .page-inner section.normal details > summary {
+  padding: 0.75em 1.15em;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.94em;
+  color: var(--accent);
+  background: var(--bg-subtle);
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background-color 0.15s ease;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal details > summary::after {
+  content: "\25B8";
+  font-size: 1.05em;
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal details[open] > summary {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.book .book-body .page-wrapper .page-inner section.normal details[open] > summary::after {
+  transform: rotate(90deg);
+  color: var(--accent);
+}
+
+.book .book-body .page-wrapper .page-inner section.normal details > :not(summary) {
+  padding-left: 1.2em;
+  padding-right: 1.2em;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal details > summary + * {
+  margin-top: 0.95em;
+}
+
+/* --------------------------------------------------------------------------
+   8. Academic Booktabs-Style Tables
+   -------------------------------------------------------------------------- */
+.book .book-body .page-wrapper .page-inner section.normal table {
+  width: 100%;
+  margin: 1.6em 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-sans);
+  font-size: 0.92em;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal table thead th,
+.book.color-theme-1 .book-body .page-wrapper .page-inner section.normal table th,
+.book.color-theme-2 .book-body .page-wrapper .page-inner section.normal table th {
+  background-color: var(--table-header-bg);
+  color: var(--heading-color);
+  font-weight: 600;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 11px 14px;
+  border: none;
+  border-bottom: 2px solid var(--border-strong);
+}
+
+.book .book-body .page-wrapper .page-inner section.normal table td,
+.book.color-theme-1 .book-body .page-wrapper .page-inner section.normal table td,
+.book.color-theme-2 .book-body .page-wrapper .page-inner section.normal table td {
+  padding: 10px 14px;
+  border: none;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  vertical-align: top;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal table tr,
+.book.color-theme-1 .book-body .page-wrapper .page-inner section.normal table tr,
+.book.color-theme-2 .book-body .page-wrapper .page-inner section.normal table tr {
+  background-color: var(--bg-surface);
+  transition: background-color 0.12s ease;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal table tbody tr:nth-child(2n),
+.book.color-theme-1 .book-body .page-wrapper .page-inner section.normal table tbody tr:nth-child(2n),
+.book.color-theme-2 .book-body .page-wrapper .page-inner section.normal table tbody tr:nth-child(2n) {
+  background-color: var(--table-stripe-bg);
+}
+
+.book .book-body .page-wrapper .page-inner section.normal table tbody tr:hover {
+  background-color: var(--table-hover-bg);
+}
+
+/* --------------------------------------------------------------------------
+   9. Math Equations, Figures & Interactive Plotly Widgets
+   -------------------------------------------------------------------------- */
+.book .book-body .page-wrapper .page-inner section.normal .math.display,
+.book .book-body .page-wrapper .page-inner section.normal .MathJax_Display,
+.book .book-body .page-wrapper .page-inner section.normal mjx-container[display="true"] {
+  display: block;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.45em 0.25em;
+  margin: 0.9em 0;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal .plotly.html-widget {
+  margin: 1.5em auto;
+  padding: 10px;
+  background: #ffffff;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  box-shadow: var(--shadow-md);
+}
+
+.book .book-body .page-wrapper .page-inner section.normal .figure,
+.book .book-body .page-wrapper .page-inner section.normal figure {
+  margin: 1.75em 0;
+  text-align: center;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal img {
+  border-radius: 6px;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal p.caption,
+.book .book-body .page-wrapper .page-inner section.normal figcaption {
+  margin-top: 0.65em;
+  font-family: var(--font-sans);
+  font-size: 0.86em;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* Responsive mobile padding */
+@media (max-width: 600px) {
+  .book .book-body .page-wrapper .page-inner {
+    padding: 20px 16px 56px;
+  }
+  .book .book-body .page-wrapper .page-inner section.normal h1 {
+    font-size: 1.75em;
+  }
+}

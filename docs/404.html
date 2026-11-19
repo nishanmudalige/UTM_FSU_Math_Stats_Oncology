@@ -23,7 +23,7 @@
 <meta name="author" content="Nazanin Mokari &amp; Bryce Morsky" />
 
 
-<meta name="date" content="2026-10-29" />
+<meta name="date" content="2026-11-18" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -155,6 +155,7 @@ div.csl-indent {
 }
 </style>
 
+<link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
 <body>
@@ -167,6 +168,9 @@ div.csl-indent {
       <nav role="navigation">
 
 <ul class="summary">
+<li class="toc-brand"><a href="./">An Introduction to Mathematical Oncology</a></li>
+
+<li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Welcome</a></li>
 <li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
 <ul>
@@ -245,6 +249,9 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="7" data-path="hello.html"><a href="hello.html"><i class="fa fa-check"></i><b>7</b> Hello</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li class="toc-footer"><a href="https://github.com/nishanmudalige/UTM_FSU_Mathematical_Statistical_Oncology" target="blank">UTM &amp; FSU Oncology Repository</a></li>
+
 </ul>
 
       </nav>
@@ -288,17 +295,7 @@ the table of contents to find the page you are looking for.</p>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
-  "sharing": {
-    "github": false,
-    "facebook": true,
-    "twitter": true,
-    "linkedin": false,
-    "weibo": false,
-    "instapaper": false,
-    "vk": false,
-    "whatsapp": false,
-    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-  },
+  "sharing": false,
   "fontsettings": {
     "theme": "white",
     "family": "sans",
@@ -323,7 +320,8 @@ gitbook.start({
   },
   "toc": {
     "collapse": "subsection"
-  }
+  },
+  "info": false
 });
 });
 </script>
