@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 5 Optimal Control | sample2</title>
+  <meta name="description" content="Chapter 5 Optimal Control | sample2" />
+  <meta name="generator" content="bookdown 0.48 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 5 Optimal Control | sample2" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="nishanmudalige/UTM_FSU_Mathematical_Statistical_Oncology" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 5 Optimal Control | sample2" />
+  
+  
+  
+
+<meta name="author" content="Rose Abed Musa, Heba Syed, Bryce Morsky, Nishan Mudalige" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="agent-based-modeling.html"/>
+<link rel="next" href="statistical-methods-in-oncology.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.12.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.25.2/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="toc-brand"><a href="./">An Introduction to Mathematical Oncology</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Welcome</a></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#recommended-background"><i class="fa fa-check"></i><b>2.1</b> Recommended Background</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="introduction.html"><a href="introduction.html#mathematical-statistical-modelling"><i class="fa fa-check"></i><b>2.1.1</b> Mathematical &amp; Statistical Modelling</a></li>
+<li class="chapter" data-level="2.1.2" data-path="introduction.html"><a href="introduction.html#introductory-biology"><i class="fa fa-check"></i><b>2.1.2</b> Introductory Biology</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#history-of-mathematical-oncology"><i class="fa fa-check"></i><b>2.2</b> History of Mathematical Oncology</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#what-is-a-mathematical-model"><i class="fa fa-check"></i><b>2.3</b> What is a Mathematical Model?</a></li>
+<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#systems-of-odes-as-mathematical-models"><i class="fa fa-check"></i><b>2.4</b> Systems of ODEs as Mathematical Models</a></li>
+<li class="chapter" data-level="2.5" data-path="introduction.html"><a href="introduction.html#review-of-mathematical-concepts"><i class="fa fa-check"></i><b>2.5</b> Review of Mathematical Concepts</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="introduction.html"><a href="introduction.html#the-characteristic-equation"><i class="fa fa-check"></i><b>2.5.1</b> The Characteristic Equation</a></li>
+<li class="chapter" data-level="2.5.2" data-path="introduction.html"><a href="introduction.html#the-jacobian-matrix"><i class="fa fa-check"></i><b>2.5.2</b> The Jacobian Matrix</a></li>
+<li class="chapter" data-level="2.5.3" data-path="introduction.html"><a href="introduction.html#equilibrium-points-and-local-stability"><i class="fa fa-check"></i><b>2.5.3</b> Equilibrium Points and Local Stability</a></li>
+<li class="chapter" data-level="2.5.4" data-path="introduction.html"><a href="introduction.html#visualizing-equilibrium-stability"><i class="fa fa-check"></i><b>2.5.4</b> Visualizing equilibrium stability</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="introduction.html"><a href="introduction.html#illustrative-example"><i class="fa fa-check"></i><b>2.6</b> Illustrative Example</a></li>
+<li class="chapter" data-level="2.7" data-path="introduction.html"><a href="introduction.html#analysing-this-system"><i class="fa fa-check"></i><b>2.7</b> Analysing this system</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="introduction.html"><a href="introduction.html#phase-portrait-of-the-lotkavolterra-tumourimmune-model"><i class="fa fa-check"></i><b>2.7.1</b> Phase portrait of the Lotka–Volterra tumour–immune model</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="introduction.html"><a href="introduction.html#limitations"><i class="fa fa-check"></i><b>2.8</b> Limitations</a></li>
+<li class="chapter" data-level="2.9" data-path="introduction.html"><a href="introduction.html#introductory-model"><i class="fa fa-check"></i><b>2.9</b> Introductory Model</a>
+<ul>
+<li class="chapter" data-level="2.9.1" data-path="introduction.html"><a href="introduction.html#modeling-assumptions"><i class="fa fa-check"></i><b>2.9.1</b> Modeling Assumptions</a></li>
+<li class="chapter" data-level="2.9.2" data-path="introduction.html"><a href="introduction.html#parameters"><i class="fa fa-check"></i><b>2.9.2</b> Parameters</a></li>
+<li class="chapter" data-level="2.9.3" data-path="introduction.html"><a href="introduction.html#model-development"><i class="fa fa-check"></i><b>2.9.3</b> Model Development</a></li>
+<li class="chapter" data-level="2.9.4" data-path="introduction.html"><a href="introduction.html#case-1-fast-growth"><i class="fa fa-check"></i><b>2.9.4</b> Case 1: Fast Growth</a></li>
+<li class="chapter" data-level="2.9.5" data-path="introduction.html"><a href="introduction.html#nondimensionalization"><i class="fa fa-check"></i><b>2.9.5</b> Nondimensionalization</a></li>
+<li class="chapter" data-level="2.9.6" data-path="introduction.html"><a href="introduction.html#further-practice"><i class="fa fa-check"></i><b>2.9.6</b> Further Practice</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html"><i class="fa fa-check"></i><b>3</b> The Kuznetsov Tumour–Immune Model</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#sec:kuznetsov"><i class="fa fa-check"></i><b>3.1</b> The Simple Kuznetsov Model</a></li>
+<li class="chapter" data-level="3.2" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#analysing-the-kuznetsov-model"><i class="fa fa-check"></i><b>3.2</b> Analysing the Kuznetsov Model</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#phase-portrait-of-the-original-kuznetsov-model"><i class="fa fa-check"></i><b>3.2.1</b> Phase portrait of the original Kuznetsov model</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#coexistence-equilibria-root-structure-and-sign-test"><i class="fa fa-check"></i><b>3.3</b> Coexistence equilibria: root structure and sign test</a></li>
+<li class="chapter" data-level="3.4" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#sec:resistant"><i class="fa fa-check"></i><b>3.4</b> Extending the Model: An Immune-Resistant Tumor Subpopulation</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#mechanistic-derivation-of-theta-p_t-and-m_t"><i class="fa fa-check"></i><b>3.4.1</b> Mechanistic derivation of <span class="math inline">\(\theta\)</span>, <span class="math inline">\(p_T\)</span>, and <span class="math inline">\(m_T\)</span></a></li>
+<li class="chapter" data-level="3.4.2" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#equilibria-and-stability-of-the-extended-model"><i class="fa fa-check"></i><b>3.4.2</b> Equilibria and stability of the extended model</a></li>
+<li class="chapter" data-level="3.4.3" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#root-structure-and-sign-test"><i class="fa fa-check"></i><b>3.4.3</b> Root structure and sign test</a></li>
+<li class="chapter" data-level="3.4.4" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#phase-portrait-of-the-immune-resistant-model"><i class="fa fa-check"></i><b>3.4.4</b> Phase portrait of the immune-resistant model</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#bifurcation-analysis"><i class="fa fa-check"></i><b>3.5</b> Bifurcation Analysis</a></li>
+<li class="chapter" data-level="3.6" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#summary"><i class="fa fa-check"></i><b>3.6</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html"><i class="fa fa-check"></i><b>4</b> Agent-Based Modeling</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#chapter-overview-and-learning-objectives"><i class="fa fa-check"></i><b>4.1</b> Chapter Overview and Learning Objectives</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#learning-objectives"><i class="fa fa-check"></i><b>4.1.1</b> Learning Objectives</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#introduction-why-agent-based-modeling-in-oncology"><i class="fa fa-check"></i><b>4.2</b> Introduction: Why Agent-Based Modeling in Oncology?</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#comparing-modeling-approaches-odes-vs.-abms"><i class="fa fa-check"></i><b>4.2.1</b> Comparing Modeling Approaches: ODEs vs. ABMs</a></li>
+<li class="chapter" data-level="4.2.2" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#when-to-use-abms-in-cancer-biology"><i class="fa fa-check"></i><b>4.2.2</b> When to Use ABMs in Cancer Biology</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#the-four-pillar-ingredients-of-an-oncology-abm"><i class="fa fa-check"></i><b>4.3</b> The Four Pillar Ingredients of an Oncology ABM</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#agents-and-state-variables"><i class="fa fa-check"></i><b>4.3.1</b> Agents and State Variables</a></li>
+<li class="chapter" data-level="4.3.2" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#environment-the-world"><i class="fa fa-check"></i><b>4.3.2</b> Environment (The World)</a></li>
+<li class="chapter" data-level="4.3.3" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#interaction-and-behavior-rules"><i class="fa fa-check"></i><b>4.3.3</b> Interaction and Behavior Rules</a></li>
+<li class="chapter" data-level="4.3.4" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#iterative-scheduling-loop"><i class="fa fa-check"></i><b>4.3.4</b> Iterative Scheduling Loop</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#hands-on-implementation-walkthrough-tumour-immune-dynamics-in-r-plotly"><i class="fa fa-check"></i><b>4.4</b> Hands-On Implementation Walkthrough: Tumour-Immune Dynamics in R &amp; Plotly</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#model-formulation-and-biological-parameters"><i class="fa fa-check"></i><b>4.4.1</b> Model Formulation and Biological Parameters</a></li>
+<li class="chapter" data-level="4.4.2" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#data-structures-demystified-for-beginners"><i class="fa fa-check"></i><b>4.4.2</b> Data Structures: Demystified for Beginners</a></li>
+<li class="chapter" data-level="4.4.3" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#code-walkthrough"><i class="fa fa-check"></i><b>4.4.3</b> Code Walkthrough</a></li>
+<li class="chapter" data-level="4.4.4" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#interactive-visualizations-with-plotly"><i class="fa fa-check"></i><b>4.4.4</b> Interactive Visualizations with Plotly</a></li>
+<li class="chapter" data-level="4.4.5" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#exploring-biological-regimes-the-three-es-of-cancer-immunoediting"><i class="fa fa-check"></i><b>4.4.5</b> Exploring Biological Regimes: The Three “E”s of Cancer Immunoediting</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#standardized-model-documentation-the-odd-protocol"><i class="fa fa-check"></i><b>4.5</b> Standardized Model Documentation: The ODD Protocol</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#motivation-reproducibility-in-computational-modeling"><i class="fa fa-check"></i><b>4.5.1</b> Motivation: Reproducibility in Computational Modeling</a></li>
+<li class="chapter" data-level="4.5.2" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#the-seven-elements-of-odd-applied-to-cancer-models"><i class="fa fa-check"></i><b>4.5.2</b> The Seven Elements of ODD Applied to Cancer Models</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="agent-based-modeling.html"><a href="agent-based-modeling.html#references"><i class="fa fa-check"></i><b>4.6</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="optimal-control.html"><a href="optimal-control.html"><i class="fa fa-check"></i><b>5</b> Optimal Control</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="optimal-control.html"><a href="optimal-control.html#formulation-of-an-optimal-control-problem"><i class="fa fa-check"></i><b>5.1</b> Formulation of an Optimal Control Problem</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="optimal-control.html"><a href="optimal-control.html#state-equations-controls-and-objective"><i class="fa fa-check"></i><b>5.1.1</b> State equations, controls, and objective</a></li>
+<li class="chapter" data-level="5.1.2" data-path="optimal-control.html"><a href="optimal-control.html#components-of-the-objective-functional"><i class="fa fa-check"></i><b>5.1.2</b> Components of the objective functional</a></li>
+<li class="chapter" data-level="5.1.3" data-path="optimal-control.html"><a href="optimal-control.html#why-use-a-quadratic-treatment-cost"><i class="fa fa-check"></i><b>5.1.3</b> Why use a quadratic treatment cost?</a></li>
+<li class="chapter" data-level="5.1.4" data-path="optimal-control.html"><a href="optimal-control.html#existence-of-an-optimal-control"><i class="fa fa-check"></i><b>5.1.4</b> Existence of an optimal control</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="optimal-control.html"><a href="optimal-control.html#pontryagins-maximum-principle"><i class="fa fa-check"></i><b>5.2</b> Pontryagin’s Maximum Principle</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="optimal-control.html"><a href="optimal-control.html#the-hamiltonian-and-adjoint-equations"><i class="fa fa-check"></i><b>5.2.1</b> The Hamiltonian and adjoint equations</a></li>
+<li class="chapter" data-level="5.2.2" data-path="optimal-control.html"><a href="optimal-control.html#interpretation-of-adjoint-variables"><i class="fa fa-check"></i><b>5.2.2</b> Interpretation of adjoint variables</a></li>
+<li class="chapter" data-level="5.2.3" data-path="optimal-control.html"><a href="optimal-control.html#interior-optimal-controls"><i class="fa fa-check"></i><b>5.2.3</b> Interior optimal controls</a></li>
+<li class="chapter" data-level="5.2.4" data-path="optimal-control.html"><a href="optimal-control.html#bounded-optimal-controls"><i class="fa fa-check"></i><b>5.2.4</b> Bounded optimal controls</a></li>
+<li class="chapter" data-level="5.2.5" data-path="optimal-control.html"><a href="optimal-control.html#multiple-states-and-multiple-controls"><i class="fa fa-check"></i><b>5.2.5</b> Multiple states and multiple controls</a></li>
+<li class="chapter" data-level="5.2.6" data-path="optimal-control.html"><a href="optimal-control.html#sufficient-conditions"><i class="fa fa-check"></i><b>5.2.6</b> Sufficient conditions</a></li>
+<li class="chapter" data-level="5.2.7" data-path="optimal-control.html"><a href="optimal-control.html#uniqueness"><i class="fa fa-check"></i><b>5.2.7</b> Uniqueness</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="optimal-control.html"><a href="optimal-control.html#a-gompertzian-tumor-growth-model"><i class="fa fa-check"></i><b>5.3</b> A Gompertzian Tumor-Growth Model</a></li>
+<li class="chapter" data-level="5.4" data-path="optimal-control.html"><a href="optimal-control.html#derivation-of-the-optimality-system-for-the-gompertzian-model-and-numerical-solution"><i class="fa fa-check"></i><b>5.4</b> Derivation of the Optimality System for the Gompertzian Model and numerical solution</a></li>
+<li class="chapter" data-level="5.5" data-path="optimal-control.html"><a href="optimal-control.html#an-optimal-control-approach-for-the-kuznetsov-model"><i class="fa fa-check"></i><b>5.5</b> An Optimal Control Approach for the Kuznetsov Model</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html"><i class="fa fa-check"></i><b>6</b> Statistical Methods in Oncology</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#review-of-probability-distributions"><i class="fa fa-check"></i><b>6.1</b> Review of Probability Distributions</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#random-variables-and-probability-distributions"><i class="fa fa-check"></i><b>6.1.1</b> Random Variables and Probability Distributions</a></li>
+<li class="chapter" data-level="6.1.2" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#discrete-probability-distributions"><i class="fa fa-check"></i><b>6.1.2</b> Discrete Probability Distributions</a></li>
+<li class="chapter" data-level="6.1.3" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#continuous-probability-distributions"><i class="fa fa-check"></i><b>6.1.3</b> Continuous Probability Distributions</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#simple-linear-regression"><i class="fa fa-check"></i><b>6.2</b> Simple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#the-simple-linear-regression-model"><i class="fa fa-check"></i><b>6.2.1</b> The Simple Linear Regression Model</a></li>
+<li class="chapter" data-level="6.2.2" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#least-squares-estimation"><i class="fa fa-check"></i><b>6.2.2</b> Least Squares Estimation</a></li>
+<li class="chapter" data-level="6.2.3" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#interpretation-of-regression-coefficients"><i class="fa fa-check"></i><b>6.2.3</b> Interpretation of Regression Coefficients</a></li>
+<li class="chapter" data-level="6.2.4" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#assumptions-of-simple-linear-regression"><i class="fa fa-check"></i><b>6.2.4</b> Assumptions of Simple Linear Regression</a></li>
+<li class="chapter" data-level="6.2.5" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#coefficient-of-determination-r2"><i class="fa fa-check"></i><b>6.2.5</b> Coefficient of Determination (<span class="math inline">\(R^2\)</span>)</a></li>
+<li class="chapter" data-level="6.2.6" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#statistical-inference-in-simple-linear-regression"><i class="fa fa-check"></i><b>6.2.6</b> Statistical Inference in Simple Linear Regression</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#logistic-regression"><i class="fa fa-check"></i><b>6.3</b> Logistic Regression</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#the-logistic-regression-model"><i class="fa fa-check"></i><b>6.3.1</b> The Logistic Regression Model</a></li>
+<li class="chapter" data-level="6.3.2" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#estimation-of-regression-coefficients"><i class="fa fa-check"></i><b>6.3.2</b> Estimation of Regression Coefficients</a></li>
+<li class="chapter" data-level="6.3.3" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#interpretation-of-regression-coefficients-1"><i class="fa fa-check"></i><b>6.3.3</b> Interpretation of Regression Coefficients</a></li>
+<li class="chapter" data-level="6.3.4" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#statistical-inference-in-logistic-regression"><i class="fa fa-check"></i><b>6.3.4</b> Statistical Inference in Logistic Regression</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="hello.html"><a href="hello.html"><i class="fa fa-check"></i><b>7</b> Hello</a></li>
+<li class="chapter" data-level="" data-path="references-1.html"><a href="references-1.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li class="toc-footer"><a href="https://github.com/nishanmudalige/UTM_FSU_Mathematical_Statistical_Oncology" target="blank">UTM &amp; FSU Oncology Repository</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">sample2</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="optimal-control" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Optimal Control<a href="optimal-control.html#optimal-control" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Mathematical models of cancer describe how tumor populations evolve over time and how they interact with the immune system, treatment, and their surrounding environment. While these models can provide insight into tumor dynamics and treatment response, they often assume that treatment is prescribed according to a fixed schedule.</p>
+<p>Optimal control theory extends this framework by treating therapy as a time-dependent decision variable. Rather than simply predicting tumor evolution under a prescribed treatment, we seek a treatment strategy that optimizes a specified therapeutic objective.</p>
+<p>In cancer modeling, this objective typically involves balancing tumor reduction against treatment-related toxicity, drug consumption, or damage to healthy tissue. The resulting mathematical problem combines a system of differential equations describing tumor dynamics with an objective functional measuring the
+performance of a treatment strategy.</p>
+<p>Optimal control has been applied to several cancer treatment problems, including chemotherapy, immunotherapy, and combination therapy. Examples include studies of competing chemotherapy strategies, immune mediated tumor dynamics, and treatment optimization in the presence of drug resistance.</p>
+<p>This chapter introduces the mathematical foundations of optimal control for ordinary differential equation (ODE) models of cancer. We begin with the general formulation of an optimal control problem, followed by Pontryagin’s Maximum Principle and the derivation of the associated optimality system. A Gompertzian
+tumor-growth model is then used to illustrate the derivation and numerical solution of an optimal treatment strategy using the forward–backward sweep method.</p>
+<div id="formulation-of-an-optimal-control-problem" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Formulation of an Optimal Control Problem<a href="optimal-control.html#formulation-of-an-optimal-control-problem" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="state-equations-controls-and-objective" class="section level3 hasAnchor" number="5.1.1">
+<h3><span class="header-section-number">5.1.1</span> State equations, controls, and objective<a href="optimal-control.html#state-equations-controls-and-objective" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="components-of-the-objective-functional" class="section level3 hasAnchor" number="5.1.2">
+<h3><span class="header-section-number">5.1.2</span> Components of the objective functional<a href="optimal-control.html#components-of-the-objective-functional" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="why-use-a-quadratic-treatment-cost" class="section level3 hasAnchor" number="5.1.3">
+<h3><span class="header-section-number">5.1.3</span> Why use a quadratic treatment cost?<a href="optimal-control.html#why-use-a-quadratic-treatment-cost" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="existence-of-an-optimal-control" class="section level3 hasAnchor" number="5.1.4">
+<h3><span class="header-section-number">5.1.4</span> Existence of an optimal control<a href="optimal-control.html#existence-of-an-optimal-control" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+</div>
+<div id="pontryagins-maximum-principle" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Pontryagin’s Maximum Principle<a href="optimal-control.html#pontryagins-maximum-principle" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="the-hamiltonian-and-adjoint-equations" class="section level3 hasAnchor" number="5.2.1">
+<h3><span class="header-section-number">5.2.1</span> The Hamiltonian and adjoint equations<a href="optimal-control.html#the-hamiltonian-and-adjoint-equations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="interpretation-of-adjoint-variables" class="section level3 hasAnchor" number="5.2.2">
+<h3><span class="header-section-number">5.2.2</span> Interpretation of adjoint variables<a href="optimal-control.html#interpretation-of-adjoint-variables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="interior-optimal-controls" class="section level3 hasAnchor" number="5.2.3">
+<h3><span class="header-section-number">5.2.3</span> Interior optimal controls<a href="optimal-control.html#interior-optimal-controls" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="bounded-optimal-controls" class="section level3 hasAnchor" number="5.2.4">
+<h3><span class="header-section-number">5.2.4</span> Bounded optimal controls<a href="optimal-control.html#bounded-optimal-controls" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="multiple-states-and-multiple-controls" class="section level3 hasAnchor" number="5.2.5">
+<h3><span class="header-section-number">5.2.5</span> Multiple states and multiple controls<a href="optimal-control.html#multiple-states-and-multiple-controls" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="sufficient-conditions" class="section level3 hasAnchor" number="5.2.6">
+<h3><span class="header-section-number">5.2.6</span> Sufficient conditions<a href="optimal-control.html#sufficient-conditions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="uniqueness" class="section level3 hasAnchor" number="5.2.7">
+<h3><span class="header-section-number">5.2.7</span> Uniqueness<a href="optimal-control.html#uniqueness" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+</div>
+<div id="a-gompertzian-tumor-growth-model" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> A Gompertzian Tumor-Growth Model<a href="optimal-control.html#a-gompertzian-tumor-growth-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="derivation-of-the-optimality-system-for-the-gompertzian-model-and-numerical-solution" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> Derivation of the Optimality System for the Gompertzian Model and numerical solution<a href="optimal-control.html#derivation-of-the-optimality-system-for-the-gompertzian-model-and-numerical-solution" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="an-optimal-control-approach-for-the-kuznetsov-model" class="section level2 hasAnchor" number="5.5">
+<h2><span class="header-section-number">5.5</span> An Optimal Control Approach for the Kuznetsov Model<a href="optimal-control.html#an-optimal-control-approach-for-the-kuznetsov-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="agent-based-modeling.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="statistical-methods-in-oncology.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": false,
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  },
+  "info": false
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
