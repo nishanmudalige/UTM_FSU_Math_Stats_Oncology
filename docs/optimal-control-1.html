@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 5 Optimal Control | sample2</title>
+  <meta name="description" content="Chapter 5 Optimal Control | sample2" />
+  <meta name="generator" content="bookdown 0.48 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 5 Optimal Control | sample2" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="nishanmudalige/UTM_FSU_Mathematical_Statistical_Oncology" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 5 Optimal Control | sample2" />
+  
+  
+  
+
+<meta name="author" content="Rose Abed Musa, Heba Syed, Bryce Morsky, Nishan Mudalige" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="optimal-control.html"/>
+<link rel="next" href="statistical-methods-in-oncology.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Welcome</a></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#recommended-background"><i class="fa fa-check"></i><b>2.1</b> Recommended Background</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="introduction.html"><a href="introduction.html#mathematical-statistical-modelling"><i class="fa fa-check"></i><b>2.1.1</b> Mathematical &amp; Statistical Modelling</a></li>
+<li class="chapter" data-level="2.1.2" data-path="introduction.html"><a href="introduction.html#introductory-biology"><i class="fa fa-check"></i><b>2.1.2</b> Introductory Biology</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#history-of-mathematical-oncology"><i class="fa fa-check"></i><b>2.2</b> History of Mathematical Oncology</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#what-is-a-mathematical-model"><i class="fa fa-check"></i><b>2.3</b> What is a Mathematical Model?</a></li>
+<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#systems-of-odes-as-mathematical-models"><i class="fa fa-check"></i><b>2.4</b> Systems of ODEs as Mathematical Models</a></li>
+<li class="chapter" data-level="2.5" data-path="introduction.html"><a href="introduction.html#review-of-mathematical-concepts"><i class="fa fa-check"></i><b>2.5</b> Review of Mathematical Concepts</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="introduction.html"><a href="introduction.html#the-characteristic-equation"><i class="fa fa-check"></i><b>2.5.1</b> The Characteristic Equation</a></li>
+<li class="chapter" data-level="2.5.2" data-path="introduction.html"><a href="introduction.html#the-jacobian-matrix"><i class="fa fa-check"></i><b>2.5.2</b> The Jacobian Matrix</a></li>
+<li class="chapter" data-level="2.5.3" data-path="introduction.html"><a href="introduction.html#equilibrium-points-and-local-stability"><i class="fa fa-check"></i><b>2.5.3</b> Equilibrium Points and Local Stability</a></li>
+<li class="chapter" data-level="2.5.4" data-path="introduction.html"><a href="introduction.html#visualizing-equilibrium-stability"><i class="fa fa-check"></i><b>2.5.4</b> Visualizing equilibrium stability</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="introduction.html"><a href="introduction.html#illustrative-example"><i class="fa fa-check"></i><b>2.6</b> Illustrative Example</a></li>
+<li class="chapter" data-level="2.7" data-path="introduction.html"><a href="introduction.html#analysing-this-system"><i class="fa fa-check"></i><b>2.7</b> Analysing this system</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="introduction.html"><a href="introduction.html#phase-portrait-of-the-lotkavolterra-tumourimmune-model"><i class="fa fa-check"></i><b>2.7.1</b> Phase portrait of the Lotka–Volterra tumour–immune model</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="introduction.html"><a href="introduction.html#limitations"><i class="fa fa-check"></i><b>2.8</b> Limitations</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html"><i class="fa fa-check"></i><b>3</b> The Kuznetsov Tumour–Immune Model</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#sec:kuznetsov"><i class="fa fa-check"></i><b>3.1</b> The Simple Kuznetsov Model</a></li>
+<li class="chapter" data-level="3.2" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#analysing-the-kuznetsov-model"><i class="fa fa-check"></i><b>3.2</b> Analysing the Kuznetsov Model</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#phase-portrait-of-the-original-kuznetsov-model"><i class="fa fa-check"></i><b>3.2.1</b> Phase portrait of the original Kuznetsov model</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#coexistence-equilibria-root-structure-and-sign-test"><i class="fa fa-check"></i><b>3.3</b> Coexistence equilibria: root structure and sign test</a></li>
+<li class="chapter" data-level="3.4" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#sec:resistant"><i class="fa fa-check"></i><b>3.4</b> Extending the Model: An Immune-Resistant Tumor Subpopulation</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#mechanistic-derivation-of-theta-p_t-and-m_t"><i class="fa fa-check"></i><b>3.4.1</b> Mechanistic derivation of <span class="math inline">\(\theta\)</span>, <span class="math inline">\(p_T\)</span>, and <span class="math inline">\(m_T\)</span></a></li>
+<li class="chapter" data-level="3.4.2" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#equilibria-and-stability-of-the-extended-model"><i class="fa fa-check"></i><b>3.4.2</b> Equilibria and stability of the extended model</a></li>
+<li class="chapter" data-level="3.4.3" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#root-structure-and-sign-test"><i class="fa fa-check"></i><b>3.4.3</b> Root structure and sign test</a></li>
+<li class="chapter" data-level="3.4.4" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#phase-portrait-of-the-immune-resistant-model"><i class="fa fa-check"></i><b>3.4.4</b> Phase portrait of the immune-resistant model</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#bifurcation-analysis"><i class="fa fa-check"></i><b>3.5</b> Bifurcation Analysis</a></li>
+<li class="chapter" data-level="3.6" data-path="the-kuznetsov-tumourimmune-model.html"><a href="the-kuznetsov-tumourimmune-model.html#summary"><i class="fa fa-check"></i><b>3.6</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="optimal-control.html"><a href="optimal-control.html"><i class="fa fa-check"></i><b>4</b> Optimal Control</a></li>
+<li class="chapter" data-level="5" data-path="optimal-control-1.html"><a href="optimal-control-1.html"><i class="fa fa-check"></i><b>5</b> Optimal Control</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="optimal-control-1.html"><a href="optimal-control-1.html#formulation-of-an-optimal-control-problem"><i class="fa fa-check"></i><b>5.1</b> Formulation of an Optimal Control Problem</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="optimal-control-1.html"><a href="optimal-control-1.html#state-equations-controls-and-objective"><i class="fa fa-check"></i><b>5.1.1</b> State equations, controls, and objective</a></li>
+<li class="chapter" data-level="5.1.2" data-path="optimal-control-1.html"><a href="optimal-control-1.html#components-of-the-objective-functional"><i class="fa fa-check"></i><b>5.1.2</b> Components of the objective functional</a></li>
+<li class="chapter" data-level="5.1.3" data-path="optimal-control-1.html"><a href="optimal-control-1.html#why-use-a-quadratic-treatment-cost"><i class="fa fa-check"></i><b>5.1.3</b> Why use a quadratic treatment cost?</a></li>
+<li class="chapter" data-level="5.1.4" data-path="optimal-control-1.html"><a href="optimal-control-1.html#existence-of-an-optimal-control"><i class="fa fa-check"></i><b>5.1.4</b> Existence of an optimal control</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="optimal-control-1.html"><a href="optimal-control-1.html#pontryagins-maximum-principle"><i class="fa fa-check"></i><b>5.2</b> Pontryagin’s Maximum Principle</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="optimal-control-1.html"><a href="optimal-control-1.html#the-hamiltonian-and-adjoint-equations"><i class="fa fa-check"></i><b>5.2.1</b> The Hamiltonian and adjoint equations</a></li>
+<li class="chapter" data-level="5.2.2" data-path="optimal-control-1.html"><a href="optimal-control-1.html#interpretation-of-adjoint-variables"><i class="fa fa-check"></i><b>5.2.2</b> Interpretation of adjoint variables</a></li>
+<li class="chapter" data-level="5.2.3" data-path="optimal-control-1.html"><a href="optimal-control-1.html#interior-optimal-controls"><i class="fa fa-check"></i><b>5.2.3</b> Interior optimal controls</a></li>
+<li class="chapter" data-level="5.2.4" data-path="optimal-control-1.html"><a href="optimal-control-1.html#bounded-optimal-controls"><i class="fa fa-check"></i><b>5.2.4</b> Bounded optimal controls</a></li>
+<li class="chapter" data-level="5.2.5" data-path="optimal-control-1.html"><a href="optimal-control-1.html#multiple-states-and-multiple-controls"><i class="fa fa-check"></i><b>5.2.5</b> Multiple states and multiple controls</a></li>
+<li class="chapter" data-level="5.2.6" data-path="optimal-control-1.html"><a href="optimal-control-1.html#sufficient-conditions"><i class="fa fa-check"></i><b>5.2.6</b> Sufficient conditions</a></li>
+<li class="chapter" data-level="5.2.7" data-path="optimal-control-1.html"><a href="optimal-control-1.html#uniqueness"><i class="fa fa-check"></i><b>5.2.7</b> Uniqueness</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="optimal-control-1.html"><a href="optimal-control-1.html#a-gompertzian-tumor-growth-model"><i class="fa fa-check"></i><b>5.3</b> A Gompertzian Tumor-Growth Model</a></li>
+<li class="chapter" data-level="5.4" data-path="optimal-control-1.html"><a href="optimal-control-1.html#derivation-of-the-optimality-system-for-the-gompertzian-model-and-numerical-solution"><i class="fa fa-check"></i><b>5.4</b> Derivation of the Optimality System for the Gompertzian Model and numerical solution</a></li>
+<li class="chapter" data-level="5.5" data-path="optimal-control-1.html"><a href="optimal-control-1.html#an-optimal-control-approach-for-the-kuznetsov-model"><i class="fa fa-check"></i><b>5.5</b> An Optimal Control Approach for the Kuznetsov Model</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html"><i class="fa fa-check"></i><b>6</b> Statistical Methods in Oncology</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#review-of-probability-distributions"><i class="fa fa-check"></i><b>6.1</b> Review of Probability Distributions</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#random-variables-and-probability-distributions"><i class="fa fa-check"></i><b>6.1.1</b> Random Variables and Probability Distributions</a></li>
+<li class="chapter" data-level="6.1.2" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#discrete-probability-distributions"><i class="fa fa-check"></i><b>6.1.2</b> Discrete Probability Distributions</a></li>
+<li class="chapter" data-level="6.1.3" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#continuous-probability-distributions"><i class="fa fa-check"></i><b>6.1.3</b> Continuous Probability Distributions</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#simple-linear-regression"><i class="fa fa-check"></i><b>6.2</b> Simple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#the-simple-linear-regression-model"><i class="fa fa-check"></i><b>6.2.1</b> The Simple Linear Regression Model</a></li>
+<li class="chapter" data-level="6.2.2" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#least-squares-estimation"><i class="fa fa-check"></i><b>6.2.2</b> Least Squares Estimation</a></li>
+<li class="chapter" data-level="6.2.3" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#interpretation-of-regression-coefficients"><i class="fa fa-check"></i><b>6.2.3</b> Interpretation of Regression Coefficients</a></li>
+<li class="chapter" data-level="6.2.4" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#assumptions-of-simple-linear-regression"><i class="fa fa-check"></i><b>6.2.4</b> Assumptions of Simple Linear Regression</a></li>
+<li class="chapter" data-level="6.2.5" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#coefficient-of-determination-r2"><i class="fa fa-check"></i><b>6.2.5</b> Coefficient of Determination (<span class="math inline">\(R^2\)</span>)</a></li>
+<li class="chapter" data-level="6.2.6" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#statistical-inference-in-simple-linear-regression"><i class="fa fa-check"></i><b>6.2.6</b> Statistical Inference in Simple Linear Regression</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#logistic-regression"><i class="fa fa-check"></i><b>6.3</b> Logistic Regression</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#the-logistic-regression-model"><i class="fa fa-check"></i><b>6.3.1</b> The Logistic Regression Model</a></li>
+<li class="chapter" data-level="6.3.2" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#estimation-of-regression-coefficients"><i class="fa fa-check"></i><b>6.3.2</b> Estimation of Regression Coefficients</a></li>
+<li class="chapter" data-level="6.3.3" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#interpretation-of-regression-coefficients-1"><i class="fa fa-check"></i><b>6.3.3</b> Interpretation of Regression Coefficients</a></li>
+<li class="chapter" data-level="6.3.4" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#statistical-inference-in-logistic-regression"><i class="fa fa-check"></i><b>6.3.4</b> Statistical Inference in Logistic Regression</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="hello.html"><a href="hello.html"><i class="fa fa-check"></i><b>7</b> Hello</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">sample2</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="optimal-control-1" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Optimal Control<a href="optimal-control-1.html#optimal-control-1" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="formulation-of-an-optimal-control-problem" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Formulation of an Optimal Control Problem<a href="optimal-control-1.html#formulation-of-an-optimal-control-problem" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>An optimal control problem consists of three main components:</p>
+<ol style="list-style-type: decimal">
+<li>A dynamical system describing the evolution of the state variables.</li>
+<li>A set of admissible controls representing the allowable interventions.</li>
+<li>An objective functional measuring the performance of different control strategies.</li>
+</ol>
+<div id="state-equations-controls-and-objective" class="section level3 hasAnchor" number="5.1.1">
+<h3><span class="header-section-number">5.1.1</span> State equations, controls, and objective<a href="optimal-control-1.html#state-equations-controls-and-objective" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Definition: Admissible Controls.</strong></p>
+<p>Let <span class="math inline">\(U\subseteq\mathbb{R}^m\)</span> represent the set of allowable control values. The set of admissible controls is</p>
+<p><span class="math display">\[
+\mathcal{U}
+=
+\left\{
+u:[0,t_f]\rightarrow U
+\mid
+u \text{ is Lebesgue measurable}
+\right\}.
+\]</span></p>
+<p>For a scalar control with <span class="math inline">\(U=[0,M]\)</span>, the admissible controls satisfy</p>
+<p><span class="math display">\[
+0\leq u(t)\leq M
+\]</span></p>
+<p>for almost every <span class="math inline">\(t\in[0,t_f]\)</span>.</p>
+<p><strong>Definition: Optimal Control Problem.</strong></p>
+<p>Given the functions</p>
+<p><span class="math display">\[
+g:[0,t_f]\times\mathbb{R}^n\times U
+\rightarrow\mathbb{R}^n,
+\]</span></p>
+<p><span class="math display">\[
+f:[0,t_f]\times\mathbb{R}^n\times U
+\rightarrow\mathbb{R},
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\phi:\mathbb{R}^n\rightarrow\mathbb{R},
+\]</span></p>
+<p>the optimal control problem is to minimize</p>
+<p><span class="math display">\[
+J(u)
+=
+\int_0^{t_f}
+f(t,x(t),u(t))\,dt
++
+\phi(x(t_f))
+\]</span></p>
+<p>over all <span class="math inline">\(u\in\mathcal{U}\)</span>, subject to the state equations</p>
+<p><span class="math display">\[
+x&#39;(t)=g(t,x(t),u(t)),
+\qquad
+x(0)=x_0,
+\qquad
+0\leq t\leq t_f.
+\]</span></p>
+<p>Here, <span class="math inline">\(f\)</span> is the running cost, <span class="math inline">\(\phi\)</span> is the terminal cost, and <span class="math inline">\(J\)</span> is the objective functional.</p>
+<p>For each admissible control <span class="math inline">\(u\)</span>, the corresponding solution <span class="math inline">\(x=x(u)\)</span> is called the associated state.</p>
+<p><strong>Definition: Optimal Control and Optimal State.</strong></p>
+<p>An admissible control <span class="math inline">\(u^*\in\mathcal{U}\)</span> is an optimal control if <span class="math inline">\(J(u^*)\)</span> is finite and</p>
+<p><span class="math display">\[
+J(u^*)\leq J(u)
+\qquad
+\text{for all }u\in\mathcal{U}.
+\]</span></p>
+<p>The corresponding state <span class="math inline">\(x^*=x(u^*)\)</span> is called the optimal state, and the pair <span class="math inline">\((x^*,u^*)\)</span> is called an optimal pair.</p>
+</div>
+<div id="components-of-the-objective-functional" class="section level3 hasAnchor" number="5.1.2">
+<h3><span class="header-section-number">5.1.2</span> Components of the objective functional<a href="optimal-control-1.html#components-of-the-objective-functional" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="why-use-a-quadratic-treatment-cost" class="section level3 hasAnchor" number="5.1.3">
+<h3><span class="header-section-number">5.1.3</span> Why use a quadratic treatment cost?<a href="optimal-control-1.html#why-use-a-quadratic-treatment-cost" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="existence-of-an-optimal-control" class="section level3 hasAnchor" number="5.1.4">
+<h3><span class="header-section-number">5.1.4</span> Existence of an optimal control<a href="optimal-control-1.html#existence-of-an-optimal-control" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Theorem (Existence of an Optimal Control; Fleming and Rishel).</strong></p>
+<p>Consider the optimal control problem in Definition 1.2 with <span class="math inline">\(\phi=0\)</span>. Suppose the following conditions hold:</p>
+<ol style="list-style-type: decimal">
+<li><p>The set of admissible controls with corresponding state solutions is nonempty.</p></li>
+<li><p>The control set <span class="math inline">\(U\)</span> is closed and convex.</p></li>
+<li><p>The function <span class="math inline">\(g(t,x,u)\)</span> is continuous and affine in the control, so that</p>
+<p><span class="math display">\[
+g(t,x,u)
+=
+\alpha(t,x)+\beta(t,x)u.
+\]</span></p>
+<p>Furthermore, there exists a constant <span class="math inline">\(C&gt;0\)</span> such that</p>
+<p><span class="math display">\[
+|g(t,x,u)|
+\leq C(1+|x|+|u|).
+\]</span></p></li>
+<li><p>The running cost <span class="math inline">\(f(t,x,u)\)</span> is convex with respect to <span class="math inline">\(u\)</span> on <span class="math inline">\(U\)</span>.</p></li>
+<li><p>There exist constants <span class="math inline">\(c_1&gt;0\)</span>, <span class="math inline">\(c_2\)</span>, and <span class="math inline">\(p&gt;1\)</span> such that</p>
+<p><span class="math display">\[
+f(t,x,u)
+\geq c_1|u|^p-c_2.
+\]</span></p></li>
+</ol>
+<p>Then there exists an optimal control <span class="math inline">\(u^*\in\mathcal{U}\)</span> for which <span class="math inline">\(J(u^*)\)</span> is finite.</p>
+</div>
+</div>
+<div id="pontryagins-maximum-principle" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Pontryagin’s Maximum Principle<a href="optimal-control-1.html#pontryagins-maximum-principle" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="the-hamiltonian-and-adjoint-equations" class="section level3 hasAnchor" number="5.2.1">
+<h3><span class="header-section-number">5.2.1</span> The Hamiltonian and adjoint equations<a href="optimal-control-1.html#the-hamiltonian-and-adjoint-equations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Definition (Hamiltonian).</strong></p>
+<p>The Hamiltonian associated with the optimal control problem in Definition 1.2 is</p>
+<p><span class="math display">\[
+H(t,x,u,\lambda)
+=
+f(t,x,u)+\lambda^\top g(t,x,u).
+\]</span></p>
+<p>Equivalently,</p>
+<p><span class="math display">\[
+H(t,x,u,\lambda)
+=
+f(t,x,u)
++
+\sum_{i=1}^{n}
+\lambda_i g_i(t,x,u),
+\]</span></p>
+<p>where <span class="math inline">\(\lambda\in\mathbb{R}^n\)</span> is the vector of adjoint variables, also called costate variables.</p>
+<p><strong>Theorem (Pontryagin’s Maximum Principle).</strong></p>
+<p>Suppose <span class="math inline">\(u^*\)</span> is an optimal admissible control and <span class="math inline">\(x^*\)</span> is its corresponding state trajectory.</p>
+<p>Under the standard differentiability and regularity assumptions for the normal case, there exists an absolutely continuous adjoint vector <span class="math inline">\(\lambda(t)\)</span> satisfying the following necessary conditions.</p>
+<p><strong>State equations:</strong></p>
+<p><span class="math display">\[
+x^{*\prime}(t)
+=
+\frac{\partial H}{\partial\lambda}
+(t,x^*,u^*,\lambda),
+\qquad
+x^*(0)=x_0.
+\]</span></p>
+<p><strong>Adjoint equations:</strong></p>
+<p><span class="math display">\[
+\lambda&#39;(t)
+=
+-\frac{\partial H}{\partial x}
+(t,x^*,u^*,\lambda).
+\]</span></p>
+<p><strong>Transversality condition:</strong></p>
+<p><span class="math display">\[
+\lambda(t_f)
+=
+\nabla_x\phi(x^*(t_f)).
+\]</span></p>
+<p><strong>Hamiltonian minimization condition:</strong></p>
+<p><span class="math display">\[
+H(t,x^*,u^*,\lambda)
+=
+\min_{v\in U}
+H(t,x^*,v,\lambda)
+\]</span></p>
+<p>for almost every <span class="math inline">\(t\in[0,t_f]\)</span>.</p>
+<p><strong>Definition (Optimality System).</strong></p>
+<p>The state equations, the adjoint equations with their transversality conditions, and the characterization of the optimal control obtained from the Hamiltonian minimization condition together form the optimality system.</p>
+</div>
+<div id="interpretation-of-adjoint-variables" class="section level3 hasAnchor" number="5.2.2">
+<h3><span class="header-section-number">5.2.2</span> Interpretation of adjoint variables<a href="optimal-control-1.html#interpretation-of-adjoint-variables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="interior-optimal-controls" class="section level3 hasAnchor" number="5.2.3">
+<h3><span class="header-section-number">5.2.3</span> Interior optimal controls<a href="optimal-control-1.html#interior-optimal-controls" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="bounded-optimal-controls" class="section level3 hasAnchor" number="5.2.4">
+<h3><span class="header-section-number">5.2.4</span> Bounded optimal controls<a href="optimal-control-1.html#bounded-optimal-controls" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="multiple-states-and-multiple-controls" class="section level3 hasAnchor" number="5.2.5">
+<h3><span class="header-section-number">5.2.5</span> Multiple states and multiple controls<a href="optimal-control-1.html#multiple-states-and-multiple-controls" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+</div>
+<div id="sufficient-conditions" class="section level3 hasAnchor" number="5.2.6">
+<h3><span class="header-section-number">5.2.6</span> Sufficient conditions<a href="optimal-control-1.html#sufficient-conditions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Theorem (Sufficiency; Mangasarian).</strong></p>
+<p>Suppose the control set <span class="math inline">\(U\)</span> is convex, the terminal cost <span class="math inline">\(\phi\)</span> is convex and differentiable, and an admissible control <span class="math inline">\(u^*\in\mathcal{U}\)</span> with corresponding state <span class="math inline">\(x^*\)</span> and an absolutely continuous adjoint vector <span class="math inline">\(\lambda\)</span> satisfies the state equations, adjoint equations, transversality condition, and Hamiltonian minimization condition.</p>
+<p>If, for almost every <span class="math inline">\(t\in[0,t_f]\)</span>, the mapping</p>
+<p><span class="math display">\[
+(x,u)
+\mapsto
+H(t,x,u,\lambda(t))
+\]</span></p>
+<p>is convex on <span class="math inline">\(\mathbb{R}^n\times U\)</span>, then <span class="math inline">\(u^*\)</span> is an optimal control.</p>
+<p>If the mapping is strictly convex, then <span class="math inline">\(u^*\)</span> is the unique optimal control.</p>
+</div>
+<div id="uniqueness" class="section level3 hasAnchor" number="5.2.7">
+<h3><span class="header-section-number">5.2.7</span> Uniqueness<a href="optimal-control-1.html#uniqueness" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p><strong>Definition (Uniqueness of the Optimal Control).</strong></p>
+<p>An optimal control <span class="math inline">\(u^*\)</span> is unique if every other optimal control <span class="math inline">\(u\)</span> satisfies</p>
+<p><span class="math display">\[
+u(t)=u^*(t)
+\qquad
+\text{for almost every }t\in[0,t_f].
+\]</span></p>
+<p>If the state equations have a unique solution for each admissible control, the corresponding optimal state is also unique.</p>
+</div>
+</div>
+<div id="a-gompertzian-tumor-growth-model" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> A Gompertzian Tumor-Growth Model<a href="optimal-control-1.html#a-gompertzian-tumor-growth-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="derivation-of-the-optimality-system-for-the-gompertzian-model-and-numerical-solution" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> Derivation of the Optimality System for the Gompertzian Model and numerical solution<a href="optimal-control-1.html#derivation-of-the-optimality-system-for-the-gompertzian-model-and-numerical-solution" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="an-optimal-control-approach-for-the-kuznetsov-model" class="section level2 hasAnchor" number="5.5">
+<h2><span class="header-section-number">5.5</span> An Optimal Control Approach for the Kuznetsov Model<a href="optimal-control-1.html#an-optimal-control-approach-for-the-kuznetsov-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="optimal-control.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="statistical-methods-in-oncology.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

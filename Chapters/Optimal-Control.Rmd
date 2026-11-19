@@ -12,11 +12,97 @@ This chapter introduces the mathematical foundations of optimal control for ordi
 tumor-growth model is then used to illustrate the derivation and numerical solution of an optimal treatment strategy using the forward–backward sweep method.
 
 
+
+# Optimal Control
+
 ## Formulation of an Optimal Control Problem
 
+An optimal control problem consists of three main components:
+
+1. A dynamical system describing the evolution of the state variables.
+2. A set of admissible controls representing the allowable interventions.
+3. An objective functional measuring the performance of different control strategies.
 
 ### State equations, controls, and objective
 
+**Definition: Admissible Controls.**
+
+Let $U\subseteq\mathbb{R}^m$ represent the set of allowable control values. The set of admissible controls is
+
+$$
+\mathcal{U}
+=
+\left\{
+u:[0,t_f]\rightarrow U
+\mid
+u \text{ is Lebesgue measurable}
+\right\}.
+$$
+
+For a scalar control with $U=[0,M]$, the admissible controls satisfy
+
+$$
+0\leq u(t)\leq M
+$$
+
+for almost every $t\in[0,t_f]$.
+
+**Definition: Optimal Control Problem.**
+
+Given the functions
+
+$$
+g:[0,t_f]\times\mathbb{R}^n\times U
+\rightarrow\mathbb{R}^n,
+$$
+
+$$
+f:[0,t_f]\times\mathbb{R}^n\times U
+\rightarrow\mathbb{R},
+$$
+
+and
+
+$$
+\phi:\mathbb{R}^n\rightarrow\mathbb{R},
+$$
+
+the optimal control problem is to minimize
+
+$$
+J(u)
+=
+\int_0^{t_f}
+f(t,x(t),u(t))\,dt
++
+\phi(x(t_f))
+$$
+
+over all $u\in\mathcal{U}$, subject to the state equations
+
+$$
+x'(t)=g(t,x(t),u(t)),
+\qquad
+x(0)=x_0,
+\qquad
+0\leq t\leq t_f.
+$$
+
+Here, $f$ is the running cost, $\phi$ is the terminal cost, and $J$ is the objective functional.
+
+For each admissible control $u$, the corresponding solution $x=x(u)$ is called the associated state.
+
+**Definition: Optimal Control and Optimal State.**
+
+An admissible control $u^*\in\mathcal{U}$ is an optimal control if $J(u^*)$ is finite and
+
+$$
+J(u^*)\leq J(u)
+\qquad
+\text{for all }u\in\mathcal{U}.
+$$
+
+The corresponding state $x^*=x(u^*)$ is called the optimal state, and the pair $(x^*,u^*)$ is called an optimal pair.
 
 ### Components of the objective functional
 
@@ -26,12 +112,115 @@ tumor-growth model is then used to illustrate the derivation and numerical solut
 
 ### Existence of an optimal control
 
+**Theorem (Existence of an Optimal Control; Fleming and Rishel).**
 
-## Pontryagin’s Maximum Principle
+Consider the optimal control problem in Definition 1.2 with $\phi=0$. Suppose the following conditions hold:
 
+1. The set of admissible controls with corresponding state solutions is nonempty.
+
+2. The control set $U$ is closed and convex.
+
+3. The function $g(t,x,u)$ is continuous and affine in the control, so that
+
+   $$
+   g(t,x,u)
+   =
+   \alpha(t,x)+\beta(t,x)u.
+   $$
+
+   Furthermore, there exists a constant $C>0$ such that
+
+   $$
+   |g(t,x,u)|
+   \leq C(1+|x|+|u|).
+   $$
+
+4. The running cost $f(t,x,u)$ is convex with respect to $u$ on $U$.
+
+5. There exist constants $c_1>0$, $c_2$, and $p>1$ such that
+
+   $$
+   f(t,x,u)
+   \geq c_1|u|^p-c_2.
+   $$
+
+Then there exists an optimal control $u^*\in\mathcal{U}$ for which $J(u^*)$ is finite.
+
+## Pontryagin's Maximum Principle
 
 ### The Hamiltonian and adjoint equations
 
+**Definition (Hamiltonian).**
+
+The Hamiltonian associated with the optimal control problem in Definition 1.2 is
+
+$$
+H(t,x,u,\lambda)
+=
+f(t,x,u)+\lambda^\top g(t,x,u).
+$$
+
+Equivalently,
+
+$$
+H(t,x,u,\lambda)
+=
+f(t,x,u)
++
+\sum_{i=1}^{n}
+\lambda_i g_i(t,x,u),
+$$
+
+where $\lambda\in\mathbb{R}^n$ is the vector of adjoint variables, also called costate variables.
+
+**Theorem (Pontryagin's Maximum Principle).**
+
+Suppose $u^*$ is an optimal admissible control and $x^*$ is its corresponding state trajectory.
+
+Under the standard differentiability and regularity assumptions for the normal case, there exists an absolutely continuous adjoint vector $\lambda(t)$ satisfying the following necessary conditions.
+
+**State equations:**
+
+$$
+x^{*\prime}(t)
+=
+\frac{\partial H}{\partial\lambda}
+(t,x^*,u^*,\lambda),
+\qquad
+x^*(0)=x_0.
+$$
+
+**Adjoint equations:**
+
+$$
+\lambda'(t)
+=
+-\frac{\partial H}{\partial x}
+(t,x^*,u^*,\lambda).
+$$
+
+**Transversality condition:**
+
+$$
+\lambda(t_f)
+=
+\nabla_x\phi(x^*(t_f)).
+$$
+
+**Hamiltonian minimization condition:**
+
+$$
+H(t,x^*,u^*,\lambda)
+=
+\min_{v\in U}
+H(t,x^*,v,\lambda)
+$$
+
+for almost every $t\in[0,t_f]$.
+
+**Definition (Optimality System).**
+
+The state equations, the adjoint equations with their transversality conditions, and the characterization of the optimal control obtained from the Hamiltonian minimization condition together form the optimality system.
 
 ### Interpretation of adjoint variables
 
@@ -47,9 +236,35 @@ tumor-growth model is then used to illustrate the derivation and numerical solut
 
 ### Sufficient conditions
 
+**Theorem (Sufficiency; Mangasarian).**
+
+Suppose the control set $U$ is convex, the terminal cost $\phi$ is convex and differentiable, and an admissible control $u^*\in\mathcal{U}$ with corresponding state $x^*$ and an absolutely continuous adjoint vector $\lambda$ satisfies the state equations, adjoint equations, transversality condition, and Hamiltonian minimization condition.
+
+If, for almost every $t\in[0,t_f]$, the mapping
+
+$$
+(x,u)
+\mapsto
+H(t,x,u,\lambda(t))
+$$
+
+is convex on $\mathbb{R}^n\times U$, then $u^*$ is an optimal control.
+
+If the mapping is strictly convex, then $u^*$ is the unique optimal control.
 
 ### Uniqueness
 
+**Definition (Uniqueness of the Optimal Control).**
+
+An optimal control $u^*$ is unique if every other optimal control $u$ satisfies
+
+$$
+u(t)=u^*(t)
+\qquad
+\text{for almost every }t\in[0,t_f].
+$$
+
+If the state equations have a unique solution for each admissible control, the corresponding optimal state is also unique.
 
 ## A Gompertzian Tumor-Growth Model
 
