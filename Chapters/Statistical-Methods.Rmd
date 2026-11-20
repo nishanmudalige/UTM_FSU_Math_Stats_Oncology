@@ -1197,6 +1197,348 @@ We are $95\%$ confident that the true population slope lies between $0.5839$ and
 
 Furthermore, since the confidence interval contains strictly positive values, there is evidence of a statistically significant positive linear relationship between log tumour volume and log PSA levels at the $5\%$ significance level, further verifying the result found in our hypothesis test.
 
+## Multiple Linear Regression
+
+Simple linear regression models the relationship between a continuous response variable and a single explanatory variable. However, in many applications, the response variable may depend on several explanatory variables simultaneously. For example, in oncology, tumour size, patient age, treatment type, and other clinical characteristics may all be associated with a patient's response to treatment.
+
+Multiple linear regression (MLR) extends simple linear regression by allowing two or more explanatory variables to be included in the same model. This allows us to examine the relationship between each explanatory variable and the response variable while accounting for the other explanatory variables in the model.
+
+### The Multiple Linear Regression Model
+
+Suppose we have $n$ independent observations and $p$ explanatory variables. The multiple linear regression model is given by
+
+$$
+\boxed{
+Y_i=\beta_0+\beta_1x_{i1}+\beta_2x_{i2}+\cdots+\beta_px_{ip}+\varepsilon_i,
+\qquad i=1,\ldots,n,
+}
+$$
+
+where:
+
+- $Y_i$ is the response variable for the $i$th observation,
+- $x_{ij}$ is the value of the $j$th explanatory variable for the $i$th observation,
+- $\beta_0$ is the population intercept,
+- $\beta_j$ is the population regression coefficient corresponding to the $j$th explanatory variable, for $j=1,\ldots,p$,
+- $\varepsilon_i$ is the random error term,
+- $n$ is the number of observations,
+- $p$ is the number of explanatory variables.
+
+The multiple linear regression model can be written as
+
+$$
+\boxed{
+\mathbf{Y}=\mathbf{X}\boldsymbol{\beta}+\boldsymbol{\varepsilon},
+}
+$$
+
+where
+
+$$
+\mathbf{Y}=
+\begin{pmatrix}
+Y_1\\
+Y_2\\
+\vdots\\
+Y_n
+\end{pmatrix},
+\qquad
+\boldsymbol{\beta}=
+\begin{pmatrix}
+\beta_0\\
+\beta_1\\
+\vdots\\
+\beta_p
+\end{pmatrix},
+\qquad
+\boldsymbol{\varepsilon}=
+\begin{pmatrix}
+\varepsilon_1\\
+\varepsilon_2\\
+\vdots\\
+\varepsilon_n
+\end{pmatrix},
+$$
+and
+
+$$
+\mathbf{X}=
+\begin{pmatrix}
+1 & x_{11} & \cdots & x_{1p}\\
+1 & x_{21} & \cdots & x_{2p}\\
+\vdots & \vdots & \ddots & \vdots\\
+1 & x_{n1} & \cdots & x_{np}
+\end{pmatrix}.
+$$
+Here, $\mathbf{X}$ is called the design matrix and has dimensions $n\times(p+1)$. The first column consists entirely of ones to account for the intercept $\beta_0$. We assume that $n>p+1$ and that the columns of $\mathbf{X}$ are linearly independent. 
+
+As in simple linear regression, we assume that the errors have mean zero and constant variance. We also assume that the errors are independent. For exact hypothesis tests and confidence intervals, we additionally assume that $\varepsilon_i\sim N(0,\sigma^2)$.
+
+The population regression coefficients are generally unknown and must be estimated using observed data. Their estimates are denoted by $\hat{\beta}_0,\hat{\beta}_1,\ldots,\hat{\beta}_p$.
+
+The fitted multiple linear regression equation is
+
+
+$$
+\boxed{
+\hat{\mathbf{Y}}=\mathbf{X}\hat{\boldsymbol{\beta}}
+}.
+$$
+
+Equivalently, the fitted multiple linear regression equation can be written as
+
+$$
+\boxed{
+\hat{Y}_i=\hat{\beta}_0+
+\hat{\beta}_1x_{i1}+\cdots+
+\hat{\beta}_px_{ip},
+}
+$$
+
+where $\hat{Y}_i$ represents the predicted response for the $i$th observation.
+
+### Least Squares Estimation of the Regression Coefficients
+
+As in simple linear regression, we estimate the regression coefficients using the method of least squares, which minimizes the sum of squared differences between the observed and predicted responses.
+
+For the $i$th observation, the residual is $e_i=Y_i-\hat{Y}_i$.
+
+The sum of squared errors (SSE), also called the residual sum of squares, is
+
+$$
+SSE=\sum_{i=1}^n(Y_i-\hat{Y}_i)^2= \sum_{i=1}^n
+\left(
+Y_i-\beta_0-\sum_{j=1}^p\beta_jx_{ij}
+\right)^2.
+$$
+
+Our objective is to find the values of $\beta_0,\beta_1,\ldots,\beta_p$ that minimize this expression.
+
+Using matrix notation, the sum of squared errors becomes
+
+$$
+SSE(\boldsymbol{\beta})
+=
+(\mathbf{Y}-\mathbf{X}\boldsymbol{\beta})^T
+(\mathbf{Y}-\mathbf{X}\boldsymbol{\beta}).
+$$
+
+Expanding gives
+
+$$
+\begin{aligned}
+SSE(\boldsymbol{\beta})
+&=
+\mathbf{Y}^T\mathbf{Y}
+-\mathbf{Y}^T\mathbf{X}\boldsymbol{\beta}
+-\boldsymbol{\beta}^T\mathbf{X}^T\mathbf{Y}
++\boldsymbol{\beta}^T\mathbf{X}^T\mathbf{X}\boldsymbol{\beta}.
+\end{aligned}
+$$
+
+Notice that $\mathbf{Y}^T\mathbf{X}\boldsymbol{\beta}$ is a scalar. Therefore,$\mathbf{Y}^T\mathbf{X}\boldsymbol{\beta}=\boldsymbol{\beta}^T\mathbf{X}^T\mathbf{Y}.$ Hence,
+
+$$
+SSE(\boldsymbol{\beta})
+=
+\mathbf{Y}^T\mathbf{Y}
+-2\boldsymbol{\beta}^T\mathbf{X}^T\mathbf{Y}
++\boldsymbol{\beta}^T\mathbf{X}^T\mathbf{X}\boldsymbol{\beta}.
+$$
+
+To find the least squares estimator, we differentiate with respect to $\boldsymbol{\beta}$ and set the result equal to zero:
+
+$$
+\frac{\partial SSE}{\partial\boldsymbol{\beta}}
+=
+-2\mathbf{X}^T\mathbf{Y}
++2\mathbf{X}^T\mathbf{X}\boldsymbol{\beta}
+=\mathbf{0}.
+$$
+
+Rearranging gives
+
+$$
+\mathbf{X}^T\mathbf{X}\boldsymbol{\beta}
+=
+\mathbf{X}^T\mathbf{Y}.
+$$
+
+
+Since $\mathbf{X}^T\mathbf{X}$ is invertible, multiplying both sides by its inverse gives
+
+$$
+\boxed{
+\hat{\boldsymbol{\beta}}
+=
+(\mathbf{X}^T\mathbf{X})^{-1}
+\mathbf{X}^T\mathbf{Y}.
+}
+$$
+
+
+The fitted response vector is therefore
+
+$$
+\hat{\mathbf{Y}}=\mathbf{X}\hat{\boldsymbol{\beta}},
+$$
+
+
+### Interpretation of the Regression Coefficients
+
+The interpretation of the regression coefficients in multiple linear regression is similar to that in simple linear regression. Each coefficient describes the relationship between its corresponding explanatory variable and the response while holding all other explanatory variables constant.
+
+The intercept $\beta_0$ represents the expected value of the response variable when all explanatory variables are equal to zero. However, the intercept may not always have a meaningful practical interpretation, particularly when zero is not a realistic value for one or more explanatory variables.
+
+For $j=1,\ldots,p$, the coefficient $\beta_j$ represents the expected change in the response variable associated with a one-unit increase in $x_j$, while holding all other explanatory variables constant. Thus, if $\beta_j>0$, increasing $x_j$ is associated with an increase in the expected response. If $\beta_j<0$, increasing $x_j$ is associated with a decrease in the expected response, after accounting for the remaining explanatory variables.
+
+
+### Sampling Distribution of the Least Squares Estimators
+
+To conduct hypothesis tests and construct confidence intervals for the regression coefficients, we first derive the sampling distribution of the least squares estimator.
+
+Recall that
+
+$$
+\hat{\boldsymbol{\beta}}
+=
+(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{Y}.
+$$
+
+Substituting the regression model $\mathbf{Y}=\mathbf{X}\boldsymbol{\beta}+\boldsymbol{\varepsilon}$ gives
+
+$$
+\begin{aligned}
+\hat{\boldsymbol{\beta}}
+&=
+(\mathbf{X}^T\mathbf{X})^{-1}
+\mathbf{X}^T
+(\mathbf{X}\boldsymbol{\beta}+\boldsymbol{\varepsilon})\\
+&=
+(\mathbf{X}^T\mathbf{X})^{-1}
+\mathbf{X}^T\mathbf{X}\boldsymbol{\beta}
++
+(\mathbf{X}^T\mathbf{X})^{-1}
+\mathbf{X}^T\boldsymbol{\varepsilon}\\
+&=
+\boldsymbol{\beta}
++
+(\mathbf{X}^T\mathbf{X})^{-1}
+\mathbf{X}^T\boldsymbol{\varepsilon}.
+\end{aligned}
+$$
+
+Therefore,
+
+$$
+\hat{\boldsymbol{\beta}}
+=
+\boldsymbol{\beta}
++
+(\mathbf{X}^T\mathbf{X})^{-1}
+\mathbf{X}^T\boldsymbol{\varepsilon}.
+$$
+
+We now determine the expected value and covariance matrix of this estimator, treating the design matrix $\mathbf{X}$ as fixed.
+
+Taking expectations gives
+
+$$
+\begin{aligned}
+E(\hat{\boldsymbol{\beta}})
+&=
+E\left[
+\boldsymbol{\beta}
++
+(\mathbf{X}^T\mathbf{X})^{-1}
+\mathbf{X}^T\boldsymbol{\varepsilon}
+\right]\\
+&=
+\boldsymbol{\beta}
++
+(\mathbf{X}^T\mathbf{X})^{-1}
+\mathbf{X}^TE(\boldsymbol{\varepsilon}).
+\end{aligned}
+$$
+
+Since $E(\boldsymbol{\varepsilon})=\mathbf{0}$, we obtain
+
+$$
+E(\hat{\boldsymbol{\beta}})=\boldsymbol{\beta}.
+$$
+
+In particular, $E(\hat{\beta}_j)=\beta_j,\qquad j=0,\ldots,p$.
+
+
+Next, we determine the covariance matrix of $\hat{\boldsymbol{\beta}}$.
+
+Since the errors are independent and have constant variance $\sigma^2$,
+
+$$
+\operatorname{Cov}(\boldsymbol{\varepsilon})
+=\sigma^2\mathbf{I}_n,
+$$
+
+where $\mathbf{I}_n$ is the $n\times n$ identity matrix.
+
+Using the fact that $\operatorname{Cov}(\mathbf{A}\mathbf{Z})=\mathbf{A}\operatorname{Cov}(\mathbf{Z})\mathbf{A}^T$ for a fixed matrix $\mathbf{A}$, we obtain
+
+$$
+\begin{aligned}
+\operatorname{Cov}(\hat{\boldsymbol{\beta}})
+&=
+(\mathbf{X}^T\mathbf{X})^{-1}
+\mathbf{X}^T
+\operatorname{Cov}(\boldsymbol{\varepsilon})
+\mathbf{X}
+(\mathbf{X}^T\mathbf{X})^{-1}\\
+&=
+\sigma^2
+(\mathbf{X}^T\mathbf{X})^{-1}
+\mathbf{X}^T\mathbf{X}
+(\mathbf{X}^T\mathbf{X})^{-1}\\
+&=
+\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}.
+\end{aligned}
+$$
+
+Therefore,
+
+$$
+\boxed{
+\operatorname{Cov}(\hat{\boldsymbol{\beta}})
+=
+\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}.
+}
+$$
+
+The diagonal entries of this matrix give the variances of the individual coefficient estimators, while the off-diagonal entries give their covariances.
+
+Let $c_j$ denote the diagonal entry of $(\mathbf{X}^T\mathbf{X})^{-1}$ corresponding to $\beta_j$. Then $\operatorname{Var}(\hat{\beta}_j)=\sigma^2c_j.$
+
+
+Recall that we assumed $\boldsymbol{\varepsilon}\sim N_n(\mathbf{0},\sigma^2\mathbf{I}_n)$.
+Since $\hat{\boldsymbol{\beta}}$ is a linear transformation of the normally distributed error vector, it follows that $\hat{\boldsymbol{\beta}}\sim N_{p+1}\left(\boldsymbol{\beta},\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}\right).$ Note that $N_{k}$ denotes the $k$-dimensional normal distribution.
+
+Thus, The least squares estimator follows a $(p+1)$-dimensional multivariate normal distribution with mean vector $\boldsymbol{\beta}$ and covariance matrix $\sigma^2(\mathbf{X}^T\mathbf{X})^{-1}$."
+
+Consequently, each individual regression coefficient estimator has the sampling distribution
+
+$$
+\hat{\beta}_j\sim N(\beta_j,\sigma^2c_j),
+\qquad j=0,\ldots,p.
+$$
+
+Standardizing gives
+
+$$
+Z=
+\frac{\hat{\beta}_j-\beta_j}
+{\sigma\sqrt{c_j}}
+\sim N(0,1).
+$$
+
+
 ## Logistic Regression 
 
 Simple linear regression is used to model the relationship between a continuous response variable and an explanatory variable. However, many applications in oncology involve a binary outcome, such as whether a tumour is malignant or benign, whether a patient responds to a treatment, or whether a cancer recurs during a specified follow-up period. 
@@ -1240,7 +1582,6 @@ where $\hat{p}_i$ represents the predicted probability that $Y_i=1$ for observat
 
 Note that an association between the response and explanatory variables does not imply a causal relationship between them.
 
-
 In logistic regression, the odds of success are defined as the ratio of the probability of success to the probability of failure. That is,
 
 $$
@@ -1251,6 +1592,99 @@ Unlike probabilities, which range from $0$ to $1$, odds range from $0$ to infini
 
 Notice that logistic regression models the logarithm of the odds as a linear function of the explanatory variable.
 
+To illustrate the application of logistic regression in oncology, we again consider the prostate cancer dataset available in the `faraway` package in R. Seminal vesicle invasion (SVI) occurs when prostate cancer spreads into the seminal vesicles, which are glands located near the prostate.
+
+We are interested in investigating the relationship between tumour volume and the probability of seminal vesicle invasion. Since seminal vesicle invasion is a binary outcome, logistic regression is appropriate for modelling its probability. We consider the logarithmic transformation of tumour volume as our explanatory variable. Let $x_i$ denote the log tumour volume and $Y_i$ denote the presence of seminal vesicle invasion for patient $i$, where $Y_i=1$ indicates invasion and $Y_i=0$ indicates no invasion. Below are the values of these variables for the 97 men, along with a plot illustrating the relationship between them.
+
+```{r prostate-logistic-table, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
+library(faraway)
+library(knitr)
+
+data(prostate, package = "faraway")
+
+# Select variables
+df <- data.frame(
+  lcavol = prostate$lcavol,
+  svi = prostate$svi
+)
+
+# Split into three groups
+n <- nrow(df)
+k <- ceiling(n / 3)
+
+group1 <- df[1:k, ]
+group2 <- df[(k + 1):min(2*k, n), ]
+group3 <- df[(2*k + 1):n, ]
+
+# Pad each group to the same number of rows
+pad <- function(x, k) {
+  if (nrow(x) < k) {
+    x <- rbind(x, data.frame(
+      lcavol = rep(NA, k - nrow(x)),
+      svi = rep(NA, k - nrow(x))
+    ))
+  }
+  x
+}
+
+group1 <- pad(group1, k)
+group2 <- pad(group2, k)
+group3 <- pad(group3, k)
+
+# Combine side by side
+table_data <- data.frame(
+  "Log Tumour Volume" = round(group1$lcavol, 3),
+  "SVI" = group1$svi,
+  "Log Tumour Volume " = round(group2$lcavol, 3),
+  "SVI " = group2$svi,
+  "Log Tumour Volume  " = round(group3$lcavol, 3),
+  "SVI  " = group3$svi,
+  check.names = FALSE
+)
+
+kable(
+  table_data,
+  caption = "Log tumour volume and seminal vesicle invasion for 97 prostate cancer patients.",
+  align = "c",
+  na = ""
+)
+```
+
+```{r prostate-logistic-plots, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=4.5, fig.align='center', fig.cap="Relationship between log tumour volume and seminal vesicle invasion."}
+library(ggplot2)
+library(patchwork)
+
+data(prostate, package = "faraway")
+
+df <- data.frame(
+  lcavol = prostate$lcavol,
+  svi = prostate$svi
+)
+
+# Plot 1: Binary response scatterplot
+p1 <- ggplot(df, aes(x = lcavol, y = svi)) +
+  geom_jitter(
+    width = 0,
+    height = 0.06,
+    color = "steelblue",
+    size = 2,
+    alpha = 0.7
+  ) +
+  scale_y_continuous(
+    breaks = c(0, 1),
+    labels = c("No", "Yes"),
+    limits = c(-0.15, 1.15)
+  ) +
+  labs(
+    x = "Log Tumour Volume",
+    y = "Seminal Vesicle Invasion"
+  ) +
+  theme_minimal()
+
+print(p1)
+```
+
+Table \@ref(tab:prostate-logistic-table) presents the log tumour volumes and seminal vesicle invasion statuses for the 97 patients. Figure \@ref(fig:prostate-logistic-plots) illustrates the relationship between log tumour volume and seminal vesicle invasion. 
 
 ### Estimation of Regression Coefficients
 
@@ -1283,7 +1717,6 @@ L(\beta_0,\beta_1)
 {1+\exp(\beta_0+\beta_1x_i)}.
 \end{aligned}
 $$
-
 Rather than maximizing the likelihood function directly, it is more convenient to maximize its natural logarithm. Since the logarithm is a strictly increasing function, maximizing the log-likelihood is equivalent to maximizing the likelihood. The log-likelihood function is
 
 $$
@@ -1345,6 +1778,20 @@ $$
 
 Unlike the least squares estimators in simple linear regression, these equations do not generally have closed-form solutions. Instead, iterative methods such as the Newton--Raphson algorithm are used to obtain $\hat{\beta}_0$ and $\hat{\beta}_1$.
 
+Using R, we obtain $\hat{\beta}_0=-5.0296$ and $\hat{\beta}_1=1.9798$ for the prostate cancer study. Thus, the fitted logistic regression model is
+
+$$
+\log\left(\frac{\hat{p}_i}{1-\hat{p}_i}\right)
+=-5.0296+1.9798x_i,
+$$
+
+or equivalently,
+
+$$
+\hat{p}_i=
+\frac{\exp(-5.0296+1.9798x_i)}
+{1+\exp(-5.0296+1.9798x_i)}.
+$$
 
 ### Interpretation of Regression Coefficients
 
@@ -1372,6 +1819,24 @@ $$
 - $\beta_1<0$ indicates a decrease in the odds of success.
 - $\beta_1=0$ indicates no change in the odds of success.
 
+Using the prostate cancer data, the estimated intercept $\hat{\beta}_0=-5.0296$ represents the log-odds of seminal vesicle invasion when the log tumour volume is zero. The corresponding predicted probability is
+
+$$
+\hat{p}_i=\frac{\exp(-5.0296)}
+{1+\exp(-5.0296)}\approx 0.0065.
+$$
+
+Thus, a patient with a log tumour volume of zero has an estimated probability of approximately $0.65\%$ of seminal vesicle invasion.
+
+The estimated slope $\hat{\beta}_1=1.9798$ indicates that a one-unit increase in log tumour volume is associated with an increase of $1.9798$ in the log-odds of seminal vesicle invasion. Equivalently, the estimated odds ratio is
+
+$$
+\exp(\hat{\beta}_1)=\exp(1.9798)\approx 7.24.
+$$
+
+Therefore, a one-unit increase in log tumour volume is associated with approximately $7.24$ times the odds of seminal vesicle invasion. Since the explanatory variable is log-transformed, a one-unit increase in log tumour volume corresponds to multiplying the original tumour volume by $e$. Thus, multiplying tumour volume by $e$ is associated with a $7.24$-fold increase in the odds of seminal vesicle invasion.
+
+
 ### Statistical Inference in Logistic Regression
 
 Statistical inference in logistic regression allows us to draw conclusions about the unknown population regression coefficients using observed data. In particular, we may be interested in determining whether an explanatory variable is significantly associated with the probability of an outcome, or constructing confidence intervals for the regression coefficients.
@@ -1380,6 +1845,17 @@ Unlike simple linear regression, where exact sampling distributions can be deriv
 
 
 #### Sampling Distribution of the Slope Estimator
+
+Recall that the maximum likelihood estimator $\hat{\beta}_1$ is obtained by maximizing the log-likelihood function
+
+$$
+\ell(\beta_0,\beta_1)
+=\sum_{i=1}^n
+\left[
+y_i(\beta_0+\beta_1x_i)
+-\log\left(1+\exp(\beta_0+\beta_1x_i)\right)
+\right].
+$$
 
 Unlike simple linear regression, the sampling distribution of $\hat{\beta}_1$ does not generally have a closed-form expression. However, under suitable regularity conditions, the maximum likelihood estimator is asymptotically normally distributed. In particular,
 
@@ -1416,41 +1892,8 @@ I(\beta_0,\beta_1)=
 \displaystyle\sum_{i=1}^n x_ip_i(1-p_i)
 &
 \displaystyle\sum_{i=1}^n x_i^2p_i(1-p_i)
-\end{pmatrix},
+\end{pmatrix}.
 $$
-
-where
-
-$$
-p_i=\frac{\exp(\beta_0+\beta_1x_i)}
-{1+\exp(\beta_0+\beta_1x_i)}.
-$$
-
-The asymptotic variance of $\hat{\beta}_1$ is obtained from the bottom-right entry of $I(\beta_0,\beta_1)^{-1}$. Since the population parameters are unknown, we replace them with their maximum likelihood estimates to obtain
-
-$$
-\widehat{\operatorname{Var}}(\hat{\beta}_1)
-=
-\left[I(\hat{\beta}_0,\hat{\beta}_1)^{-1}\right]_{22}.
-$$
-
-The estimated standard error of $\hat{\beta}_1$ is therefore
-
-$$
-SE(\hat{\beta}_1)
-=
-\sqrt{\widehat{\operatorname{Var}}(\hat{\beta}_1)}.
-$$
-
-Consequently,
-$$
-\boxed{
-\frac{\hat{\beta}_1-\beta_1}
-{SE(\hat{\beta}_1)}
-\dot{\sim}N(0,1).
-}
-$$
-
 
 #### Hypothesis Testing and Confidence Intervals for the Slope
 
@@ -1488,4 +1931,61 @@ $$
 \hat{\beta}_1\pm z_{1-\alpha/2}SE(\hat{\beta}_1).
 }
 $$
+
+
+We are interested in determining whether log tumour volume is significantly associated with the probability of seminal vesicle invasion. We test
+
+$$
+H_0:\beta_1=0
+\qquad \text{versus} \qquad
+H_1:\beta_1\neq 0.
+$$
+
+Under the null hypothesis, log tumour volume is not associated with the log-odds of seminal vesicle invasion. We conduct a two-sided Wald test at the $\alpha=0.05$ significance level.
+
+Recall that the test statistic is
+
+$$
+Z^*=\frac{\hat{\beta}_1}{SE(\hat{\beta}_1)},
+$$
+
+which approximately follows a standard normal distribution under $H_0$. The rejection region is $R^*=\{z : |z|>z_{1-\alpha/2}=z_{0.975}=1.96\}$
+
+```{r prostate-logistic-inference, include=FALSE}
+library(faraway)
+data(prostate, package = "faraway")
+
+model <- glm(svi ~ lcavol,
+             data = prostate,
+             family = binomial)
+
+beta1_hat <- coef(model)["lcavol"]
+SE_beta1 <- summary(model)$coefficients["lcavol", "Std. Error"]
+
+z_stat <- beta1_hat / SE_beta1
+z_crit <- qnorm(0.975)
+
+CI_lower <- beta1_hat - z_crit * SE_beta1
+CI_upper <- beta1_hat + z_crit * SE_beta1
+
+OR_lower <- exp(CI_lower)
+OR_upper <- exp(CI_upper)
+```
+
+Using R, we obtain $\hat{\beta}_1= 1.9798$ and $SE(\hat{\beta}_1)=1.0429$. Therefore, the observed test statistic is
+
+$$
+Z = \frac{1.9798}{1.0429} \approx 1.8984
+$$
+
+Since $1.8984 \notin R^*$, there is insufficient statistical evidence to conclude that log tumour volume is associated with the log-odds of seminal vesicle invasion.`
+
+A $95\%$ confidence interval for $\beta_1$ is 
+$$ 
+1.9798 \pm 1.96 (1.0429)=\boxed{(-0.0643,  4.0239)}
+$$
+
+We are $95\%$ confident that the true change in the log-odds of seminal vesicle invasion for a one-unit increase in log tumour volume lies within this interval.
+
+Since the confidence interval for the slope contains zero, this is consistent with failing to reject the null hypothesis at the $5\%$ significance level.
 
