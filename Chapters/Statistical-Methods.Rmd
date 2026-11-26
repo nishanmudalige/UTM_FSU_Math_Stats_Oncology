@@ -330,132 +330,70 @@ print(p)
 It is particularly useful for statistical inference when the population variance is unknown. In linear regression, t-tests are commonly used to determine whether regression coefficients differ significantly from zero. For example, researchers may use a t-test to investigate whether a patient's age is significantly associated with tumour size after accounting for other explanatory variables. We discuss this in further detail later in the chapter.
 
 
+#### F-Distribution
 
-#### Exponential Distribution
-
-The exponential distribution is a continuous probability distribution frequently used to model waiting times until an event of interest occurs.
-
-Let $X$ follow an exponential distribution with rate parameter $\lambda>0$. We write
-$X\sim\operatorname{Exponential}(\lambda).$
-
-Its probability density function is
+Let $U$ and $V$ be independent chi-squared random variables with $n_1$ and $n_2$ degrees of freedom, respectively. That is,
 
 $$
-f_X(x)=\lambda e^{-\lambda x},
-\qquad x\geq 0.
+U\sim\chi^2_{n_1}
+\qquad\text{and}\qquad
+V\sim\chi^2_{n_2}.
 $$
 
-The expected value and variance are $E(X)=\frac{1}{\lambda}$ and $\operatorname{Var}(X)=\frac{1}{\lambda^2}.$
+Then the random variable
 
-The shape of the exponential distribution depends on its rate parameter, denoted by \(\lambda\). As \(\lambda\) increases, the probability density decreases more rapidly, indicating that shorter waiting times become more likely. Conversely, smaller values of \(\lambda\) correspond to longer expected waiting times. 
+$$
+X=\frac{U/n_1}{V/n_2}
+$$
 
-```{r exponential-distributions, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5, fig.align='center', fig.cap="Exponential distributions with different rate parameters."}
-library(ggplot2)
-
-# Range of x-values
-x <- seq(0, 8, length.out = 1000)
-
-# Exponential distributions with different rates
-df <- data.frame(
-  x = rep(x, 5),
-  density = c(
-    dexp(x, rate = 0.5),
-    dexp(x, rate = 1),
-    dexp(x, rate = 1.5),
-    dexp(x, rate = 2),
-    dexp(x, rate = 3)
-  ),
-  Distribution = factor(
-    rep(c(
-      "lambda = 0.5",
-      "lambda = 1",
-      "lambda = 1.5",
-      "lambda = 2",
-      "lambda = 3"
-    ), each = length(x)),
-    levels = c(
-      "lambda = 0.5",
-      "lambda = 1",
-      "lambda = 1.5",
-      "lambda = 2",
-      "lambda = 3"
-    )
-  )
-)
-
-# Create plot
-p <- ggplot(
-  df,
-  aes(x = x, y = density, color = Distribution)
-) +
-  geom_line(linewidth = 1.1) +
-  labs(
-    title = "Exponential Distributions",
-    x = "x",
-    y = "Probability Density",
-    color = "Rate Parameter"
-  ) +
-  theme_minimal(base_size = 13)
-
-# Display plot
-print(p)
-```
-
-
-Moreover, the exponential distribution is important in survival analysis because it assumes a constant hazard function, $h(t)=\lambda.$ Suppose researchers are interested in the time between cancer diagnosis and disease recurrence. Under the assumption that the instantaneous recurrence rate remains constant over time, the time until recurrence may be modelled using an exponential distribution. We discuss hazard functions in more detail later in the chapter. 
-
-
-#### Weibull Distribution
-
-The Weibull distribution is a continuous probability distribution commonly used to model time-to-event data. Unlike the exponential distribution, the Weibull distribution can accommodate hazard functions that increase or decrease over time.
-
-Let $X$ follow a Weibull distribution with shape parameter $k>0$ and scale parameter $\lambda>0$. We write $X\sim\operatorname{Weibull}(k,\lambda).$
+follows an F-distribution with $n_1$ numerator degrees of freedom and $n_2$ denominator degrees of freedom. We write $X\sim F_{n_1,n_2}$.
 
 Its probability density function is
 
 $$
 f_X(x)=
-\frac{k}{\lambda}
-\left(\frac{x}{\lambda}\right)^{k-1}
-\exp\left[-\left(\frac{x}{\lambda}\right)^k\right],
-\qquad x\geq 0.
+\frac{\Gamma((n_1+n_2)/2)}
+{\Gamma(n_1/2)\Gamma(n_2/2)}
+\left(\frac{n_1}{n_2}\right)^{n_1/2}
+\frac{x^{n_1/2-1}}
+{\left(1+\frac{n_1}{n_2}x\right)^{(n_1+n_2)/2}},
+\qquad x>0,
 $$
-
-The expected value and variance are $E(X)=\lambda\Gamma\left(1+\frac{1}{k}\right)$ and $\operatorname{Var}(X)=\lambda^2\left[\Gamma\left(1+\frac{2}{k}\right)-\Gamma^2\left(1+\frac{1}{k}\right)\right]$
 
 where $\Gamma(\cdot)$ denotes the gamma function.
 
+The expected value and variance are $E(X)=\frac{n_2}{n_2-2}$ for $n_2>2$ and $\operatorname{Var}(X)=\frac{2n_2^2(n_1+n_2-2)}{n_1(n_2-2)^2(n_2-4)}$ for $n_2>4.$
 
-```{r weibull-distributions, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5, fig.align='center', fig.cap="Weibull distributions with different shape parameters and a fixed scale parameter."}
+```{r f-distributions, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5, fig.align='center', fig.cap="F-distributions with different numerator and denominator degrees of freedom."}
 library(ggplot2)
 
 # Range of x-values
-x <- seq(0.01, 8, length.out = 1000)
+x <- seq(0.01, 5, length.out = 1000)
 
-# Weibull distributions with different shapes
+# F-distributions with different degrees of freedom
 df <- data.frame(
   x = rep(x, 5),
   density = c(
-    dweibull(x, shape = 0.5, scale = 2),
-    dweibull(x, shape = 1, scale = 2),
-    dweibull(x, shape = 1.5, scale = 2),
-    dweibull(x, shape = 2, scale = 2),
-    dweibull(x, shape = 3, scale = 2)
+    df(x, df1 = 1, df2 = 5),
+    df(x, df1 = 2, df2 = 5),
+    df(x, df1 = 5, df2 = 5),
+    df(x, df1 = 5, df2 = 10),
+    df(x, df1 = 10, df2 = 20)
   ),
   Distribution = factor(
     rep(c(
-      "k = 0.5",
-      "k = 1",
-      "k = 1.5",
-      "k = 2",
-      "k = 3"
+      "n1 = 1, n2 = 5",
+      "n1 = 2, n2 = 5",
+      "n1 = 5, n2 = 5",
+      "n1 = 5, n2 = 10",
+      "n1 = 10, n2 = 20"
     ), each = length(x)),
     levels = c(
-      "k = 0.5",
-      "k = 1",
-      "k = 1.5",
-      "k = 2",
-      "k = 3"
+      "n1 = 1, n2 = 5",
+      "n1 = 2, n2 = 5",
+      "n1 = 5, n2 = 5",
+      "n1 = 5, n2 = 10",
+      "n1 = 10, n2 = 20"
     )
   )
 )
@@ -467,21 +405,21 @@ p <- ggplot(
 ) +
   geom_line(linewidth = 1.1) +
   labs(
-    title = "Weibull Distributions",
-    subtitle = "Scale parameter = 2",
+    title = "F-Distributions",
     x = "x",
     y = "Probability Density",
-    color = "Shape Parameter"
+    color = "Degrees of Freedom"
   ) +
+  coord_cartesian(ylim = c(0, 1.5)) +
   theme_minimal(base_size = 13)
 
 # Display plot
 print(p)
 ```
 
+The F-distribution is nonnegative and generally right-skewed. Its shape depends on both the numerator and denominator degrees of freedom, becoming increasingly concentrated around one as both degrees of freedom increase.
 
-The Weibull distribution may be used to model the time from cancer diagnosis to death or disease recurrence when the risk of experiencing the event changes over time. For example, the Weibull distribution may be appropriate when the risk of recurrence decreases as time passes after treatment, provided that this pattern is supported by the observed data.
-
+The F-distribution is commonly used in hypothesis testing, particularly when comparing population variances, and testing the significance of regression models which is explored later in the chapter.
 
 ## Simple Linear Regression
 
@@ -515,61 +453,7 @@ Note that a linear association between the response and explanatory variables do
 
 To illustrate the application of simple linear regression in oncology, we consider prostate cancer dataset available in the `faraway` package in R. The dataset contains clinical measurements from 97 men with prostate cancer, including tumour volume, prostate-specific antigen (PSA) levels, age, and other patient characteristics. PSA is a protein produced by cells in the prostate gland, and its concentration in the blood is commonly used in the assessment and monitoring of prostate cancer. 
 
-We are interested in investigating the relationship between tumour volume and PSA levels. Since both variables are right-skewed, we consider their logarithmic transformations, which provide a more suitable basis for linear regression. Let \(X_i\) denote the log tumour volume and \(Y_i\) denote the log PSA level of patient \(i\). Below are the values for PSA levels and tumour values for the 97 men, and plots of the relationship between them. 
-
-```{r prostate-table, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
-
-library(faraway)
-library(knitr)
-
-data(prostate, package = "faraway")
-
-# Select variables
-df <- prostate[, c("lcavol", "lpsa")]
-
-# Split observations into three sections
-n <- nrow(df)
-rows <- ceiling(n / 3)
-
-# Function to create each section
-make_section <- function(start, end) {
-
-  indices <- seq.int(start, min(end, n))
-
-  section <- data.frame(
-    Patient = indices,
-    Volume = df$lcavol[indices],
-    PSA = df$lpsa[indices]
-  )
-
-  # Pad with empty rows
-  while (nrow(section) < rows) {
-    section[nrow(section) + 1, ] <- NA
-  }
-
-  return(section)
-}
-
-# Create three sections
-section1 <- make_section(1, rows)
-section2 <- make_section(rows + 1, 2 * rows)
-section3 <- make_section(2 * rows + 1, 3 * rows)
-
-# Combine side by side
-table_data <- cbind(section1, section2, section3)
-
-# Create table
-knitr::kable(
-  table_data,
-  digits = 3,
-  col.names = rep(c("Patient", "Log Volume", "Log PSA"), 3),
-  caption = "Prostate Cancer Dataset: Log Tumour Volume and Log PSA",
-  align = "c",
-  booktabs = TRUE,
-  na = ""
-)
-```
-
+We are interested in investigating the relationship between tumour volume and PSA levels. Since both variables are right-skewed, we consider their logarithmic transformations, which provide a more suitable basis for linear regression. Let \(X_i\) denote the log PSA level and \(Y_i\) denote the log tumour volume of patient \(i\). Below are the plots for the relationship between PSA levels and tumour volumes for 97 men. The exact values can be found in R.  
 
 ```{r prostate-regression, echo=FALSE, message=FALSE, warning=FALSE, fig.width=11, fig.height=4.5, fig.align='center', fig.cap="Relationship between log tumour volume and log PSA levels, with the fitted regression line and associated residuals."}
 library(faraway)
@@ -579,26 +463,26 @@ library(patchwork)
 data(prostate, package = "faraway")
 
 # Fit simple linear regression
-model <- lm(lpsa ~ lcavol, data = prostate)
+model <- lm(lcavol ~ lpsa, data = prostate)
 
 # Add fitted values
 prostate$fitted <- fitted(model)
 
 # Plot 1: Scatterplot with fitted regression line
-p1 <- ggplot(prostate, aes(x = lcavol, y = lpsa)) +
+p1 <- ggplot(prostate, aes(x = lpsa, y = lcavol)) +
   geom_point(color = "steelblue", size = 2) +
   geom_smooth(method = "lm", se = FALSE,
               color = "firebrick", linewidth = 0.9) +
   labs(
     title = "Fitted Regression Line (a)",
-    x = "Log Tumour Volume",
-    y = "Log PSA"
+    x = "Log PSA",
+    y = "Log Tumour Volume"
   ) +
   theme_minimal(base_size = 12)
 
 # Plot 2: Scatterplot showing residuals
-p2 <- ggplot(prostate, aes(x = lcavol, y = lpsa)) +
-  geom_segment(aes(xend = lcavol,
+p2 <- ggplot(prostate, aes(x = lpsa, y = lcavol)) +
+  geom_segment(aes(xend = lpsa,
                    yend = fitted),
                color = "lightgreen",
                linewidth = 0.6,
@@ -610,8 +494,8 @@ p2 <- ggplot(prostate, aes(x = lcavol, y = lpsa)) +
               linewidth = 0.9) +
   labs(
     title = "Regression Residuals (b)",
-    x = "Log Tumour Volume",
-    y = "Log PSA"
+    x = "Log PSA",
+    y = "Log Tumour Volume"
   ) +
   theme_minimal(base_size = 12)
 
@@ -620,7 +504,7 @@ p1 + p2
 ```
 
 
-Figure (a) illustrates the fitted least squares regression line, which describes the estimated linear relationship between log tumour volume and log PSA levels. Each point represents an observed log PSA level for a given log tumour volume, while the red line represents the predicted log PSA level. Figure (b) additionally displays the residuals, represented by the green vertical segments. Each residual measures the difference between an observed log PSA level and its predicted value under the fitted regression model.
+Figure (a) illustrates the fitted least squares regression line, which describes the estimated linear relationship between log tumour volume and log PSA levels. Each point represents an observed log tumour volume for a given log PSA level, while the red line represents the predicted log tumour volume. Figure (b) additionally displays the residuals, represented by the green vertical segments. Each residual measures the difference between an observed log tumour volume and its predicted value under the fitted regression model.
 
 We demonstrate how to obtain the fitted regression line and to further analyse if a linear association between log tumour volume and log PSA levels is statistically significant.
 
@@ -771,16 +655,16 @@ $$
 $$
 
 
-We wish to fit the prostate cancer data. Using  Table \@ref(tab:prostate-table), we obtain $\bar{x}= 1.35001,$ $\bar{y}= 2.478387,$ $S_{xx}= 133.359,$ and $S_{xy}= 95.92784$. 
+We wish to fit the prostate cancer data. We obtain $\bar{x}= 2.478387,$ $\bar{y}= 1.35001,$ $S_{xx}= 127.9176,$ and $S_{xy}= 95.92784$. 
 
 Plugging these values into the OLS estimators for $\beta_0$ and $\beta_1$, we get
 $$ 
-\hat{\beta_1} = \frac{S_{xy}}{S_{xx}}=\frac{95.92784}{133.359} \approx 0.7193
+\hat{\beta_1} = \frac{S_{xy}}{S_{xx}}=\frac{95.92784}{127.9176} \approx 0.74992
 $$
 $$
-\hat{\beta_0}= \bar{Y}- \hat{\beta_1}\bar{x}= 2.478387 - (0.7193)(1.35001) \approx 1.5073
+\hat{\beta_0}= \bar{Y}- \hat{\beta_1}\bar{x}= 1.35001 - (0.74992)(2.478387) \approx -0.50858
 $$
-Hence, the estimated regression line is $\boxed{\hat{Y_i} = 1.5073 + 0.7193x_i}$
+Hence, the estimated regression line is $\boxed{\hat{Y_i} = -0.50858 + 0.74992x_i}$
 
 ### Interpretation of Regression Coefficients
 
@@ -793,32 +677,32 @@ The slope $\beta_1$ represents the change in the expected response variable asso
 Using the prostate cancer dataset, we obtain the following fitted regression model:
 
 $$
-\widehat{\log(\text{PSA})}
+\widehat{\log(\text{Tumour Volume})}
 =
-1.5073+0.7193\log(\text{Tumour Volume}),
+-0.50858+0.74992\log(\text{PSA}),
 $$
 
 where PSA denotes prostate-specific antigen levels and tumour volume is measured in $\text{cm}^3$.
 
-The estimated intercept is $\hat{\beta}_0=1.5073$, indicating that when tumour volume is $1\text{ cm}^3$, the predicted log PSA level is $1.5073$. Exponentiating, we obtain $e^{1.5073}\approx 4.51$. Thus, when tumour volume is $1\text{ cm}^3$, the model predicts a PSA level of approximately $4.51$ on the original scale.
+The estimated intercept is $\hat{\beta}_0=-0.50858$, indicating that when PSA level is $1$ on the original scale, the predicted log tumour volume is $-0.50858$. Exponentiating, we obtain $e^{-0.50858}\approx 0.60$. Thus, when PSA level is $1$, the model predicts a median tumour volume of approximately $0.60\text{ cm}^3$ on the original scale.
 
-The estimated slope is $\hat{\beta}_1=0.7193$. Since both variables are logarithmically transformed, a $1\%$ increase in tumour volume is associated with an approximately $0.7193\%$ increase in the predicted PSA level, according to the fitted model.
+The estimated slope is $\hat{\beta}_1=0.74992$. Since both variables are logarithmically transformed, a $1\%$ increase in PSA level is associated with an approximately $0.74992\%$ increase in the predicted tumour volume, according to the fitted model.
 
-For example, a patient with a tumour volume of $5\text{ cm}^3$ would have a predicted log PSA level of
+For example, a patient with a PSA level of $5$ would have a predicted log tumour volume of
 
 $$
-\widehat{\log(\text{PSA})}
-=1.5073+0.7193\log(5)
-\approx 2.665.
+\widehat{\log(\text{Tumour Volume})}
+=-0.50858+0.74992\log(5)
+\approx 0.6984.
 $$
 
 Exponentiating gives
 
 $$
-\widehat{\text{PSA}}=e^{2.665}\approx 14.37.
+\widehat{\text{Tumour Volume}}=e^{0.6984}\approx 2.01\text{ cm}^3.
 $$
 
-Thus, the model predicts a median PSA level of approximately $14.37$ on the original scale for a patient with a tumour volume of $5\text{ cm}^3$.
+Thus, the model predicts a median tumour volume of approximately $2.01\text{ cm}^3$ on the original scale for a patient with a PSA level of $5$.
 
 
 ### Assumptions of Simple Linear Regression
@@ -831,7 +715,7 @@ The expected response is assumed to be a linear function of the explanatory vari
 
 Linearity can be assessed using a scatterplot of the response against the explanatory variable, or a plot of residuals against fitted values. If the linearity assumption is reasonable, the residuals should be randomly scattered around zero without a systematic pattern. A pattern may indicate that a nonlinear model is more appropriate.
 
-For the prostate cancer dataset, the scatterplot in Figure \@ref(fig:prostate-regression) suggests a positive relationship between log tumour volume and log PSA levels. The residual plot in Figure \@ref(fig:prostate-diagnostics) appears to be randomly scattered, thus the linearity assumption appears reasonable.
+For the prostate cancer dataset, the scatterplot in Figure \@ref(fig:prostate-regression) suggests a positive relationship between log PSA levels and log tumour volume. The residual plot in Figure \@ref(fig:prostate-diagnostics) can be examined for systematic patterns to assess whether the linearity assumption is reasonable.
 
 **2. Independence**
 
@@ -847,7 +731,7 @@ The variance of the errors is assumed to be constant across all values of the ex
 
 This assumption can be assessed using a plot of residuals against fitted values. Under constant variance, the vertical spread of the residuals should remain approximately the same across the range of fitted values.
 
-For the prostate cancer dataset, the spread of residuals appears relatively consistent across fitted values in Figure \@ref(fig:prostate-diagnostics), suggesting that the constant variance assumption is reasonable.
+For the prostate cancer dataset, the spread of residuals across fitted values in Figure \@ref(fig:prostate-diagnostics) can be examined to assess whether the constant variance assumption is reasonable.
 
 **4. Normality of Errors**
 
@@ -855,11 +739,7 @@ The error terms are assumed to follow a normal distribution. That is, $\varepsil
 
 Normality can be assessed using a normal Q-Q plot of the residuals. If the errors are approximately normally distributed, the points should lie reasonably close to the reference line. Substantial departures from this line may indicate violations of normality.
 
-We may also use the  Shapiro-Wilk test, which is a statistical test used to assess whether a sample is consistent with a normal distribution. The null hypothesis states that the errors follow a normal distribution, while the alternative hypothesis states that the errors do not follow a normal distribution. A p-value less than 0.05 suggests evidence against normality, while a p-value greater than 0.05 indicates insufficient evidence to reject normality.
-
-For the prostate cancer dataset, the normal Q-Q plot in Figure \@ref(fig:prostate-diagnostics) shows that most residuals lie reasonably close to the reference line, with some deviations in the tails. The Shapiro-Wilk test results in a p-value of 0.1419, failing to reject the alternative. Thus, the normality assumption appears reasonable for this example, though not perfect. 
-
-Overall, the diagnostic results suggest that the assumptions of simple linear regression are reasonably plausible for the log-transformed prostate cancer dataset, although some minor deviations are present.
+For the prostate cancer dataset, the normal Q-Q plot in Figure \@ref(fig:prostate-diagnostics) can be used to examine how closely the residuals follow the reference line. Since it is approximately linear with minor deviations, the normality assumption is reasonable 
 
 
 ```{r prostate-diagnostics, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=4.5, fig.align='center', fig.cap="Diagnostic plots for the regression model relating log tumour volume to log PSA levels."}
@@ -870,7 +750,7 @@ library(patchwork)
 
 data(prostate, package = "faraway")
 
-model <- lm(lpsa ~ lcavol, data = prostate)
+model <- lm(lcavol ~ lpsa, data = prostate)
 
 diagnostics <- data.frame(
   fitted = fitted(model),
@@ -886,7 +766,7 @@ p1 <- ggplot(diagnostics,
              linetype = "dashed") +
   labs(
     title = "(a) Residuals vs. Fitted",
-    x = "Fitted Log PSA",
+    x = "Fitted Log Tumour Volume",
     y = "Residuals"
   ) +
   theme_minimal(base_size = 12)
@@ -940,7 +820,7 @@ Notice that $0\leq R^2\leq 1$
 
 An $R^2$ value closer to one indicates that the fitted regression model accounts for a greater proportion of the observed variability in the response variable. Conversely, an $R^2$ value closer to zero indicates that the model accounts for relatively little of the observed variability.
 
-Using the prostate cancer data in Table \@ref(tab:prostate-table), we can compute $SSE = 58.91476$ and $SST = 127.9176$. We get that $R^2 = 1 - \frac{58.91476}{127.9176}= 0.5394319$. This indicates that approximately $53.94\%$ of the total variation in log PSA levels is explained by the linear relationship with log tumour volume. The remaining $46.06\%$ of the variation is not explained by the model and may be associated with other factors or random variability.
+Using the prostate cancer data, we can compute $SSE \approx 61.4209$ and $SST \approx 133.359$. We get that $R^2 = 1 - \frac{61.4209}{133.359}\approx 0.5394$. This indicates that approximately $53.94\%$ of the total variation in log tumour volume is explained by the linear relationship with log PSA level. The remaining $46.06\%$ of the variation is not explained by the model and may be associated with other factors or random variability.
 
 ### Statistical Inference in Simple Linear Regression
 
@@ -1180,20 +1060,20 @@ t_{n-2,1-\alpha/2}
 \frac{\hat{\sigma}}{\sqrt{S_{xx}}}.
 }
 $$
-Suppose we wanted to test $H_0:\beta_1=0$ against $H_1:\beta_1\neq 0$ for the prostate cancer data, at the $0.05$ significance level.  Recall, $\hat{\beta_1} = 0.7193$, $S_{xx}= 133.359$, and $SSE = 58.91476$. Also, $n=97$, so $\hat{\sigma}^2 = \frac{58.91476}{95} \approx 0.6202.$ Putting this together, 
+Suppose we wanted to test $H_0:\beta_1=0$ against $H_1:\beta_1\neq 0$ for the prostate cancer data, at the $0.05$ significance level.  Recall, $\hat{\beta_1} = 0.74992$, $S_{xx}= 127.9176$, and $SSE \approx 61.4209$. Also, $n=97$, so $\hat{\sigma}^2 = \frac{61.4209}{95} \approx 0.64654.$ Putting this together, 
 
-$$T^* = \frac{0.7193}{\sqrt{\frac{0.6202}{133.359}}} \approx 10.5476. $$
+$$T^* = \frac{0.74992}{\sqrt{\frac{0.64654}{127.9176}}} \approx 10.548. $$
  For a $t$ distribution with $95$ degrees of freedom, the rejection region is $R^* = \{T : |T| > 1.985\}$
 
 Since $T^* \in R^*$, we reject the null in favour of the alternative. That is, we have statistically significant evidence that there is a linear association between log PSA levels and log tumour volume. 
 
 
-A 95% confidence interval for $\beta_1$ is 
+A $95\%$ confidence interval for $\beta_1$ is 
 $$ 
-0.7193 \pm 1.985 {\sqrt{\frac{0.6202}{133.359}}}
-= \boxed {(0.5839,  0.8547).}
+0.74992 \pm 1.985 {\sqrt{\frac{0.64654}{127.9176}}}
+\approx \boxed {(0.6088,  0.8911).}
 $$ 
-We are $95\%$ confident that the true population slope lies between $0.5839$ and $0.8547$. Since both variables are logarithmically transformed, this suggests that a 1\% increase in tumour volume is associated with an approximately $0.5839\%$ to $0.8547\%$ increase in PSA levels, on average.
+We are $95\%$ confident that the true population slope lies between $0.6088$ and $0.8911$. Since both variables are logarithmically transformed, this suggests that a $1\%$ increase in PSA level is associated with an approximately $0.6088\%$ to $0.8911\%$ increase in tumour volume, on average.
 
 Furthermore, since the confidence interval contains strictly positive values, there is evidence of a statistically significant positive linear relationship between log tumour volume and log PSA levels at the $5\%$ significance level, further verifying the result found in our hypothesis test.
 
@@ -1297,6 +1177,29 @@ $$
 
 where $\hat{Y}_i$ represents the predicted response for the $i$th observation.
 
+
+To illustrate the application of multiple linear regression in oncology, we again consider the prostate cancer dataset available in the `faraway` package in R. Estimating tumour volume is of clinical interest, as it provides information about the extent of cancer. In particular, we may be interested in determining whether tumour volume can be estimated using patient characteristics and clinical measurements, such as prostate-specific antigen (PSA) levels.
+
+For this analysis, we consider the following variables:
+
+- `lcavol`: the logarithm of tumour volume,
+- `lpsa`: the logarithm of prostate-specific antigen (PSA) level,
+- `lweight`: the logarithm of prostate weight,
+- `age`: the age of the patient, measured in years.
+
+We let $Y_i$ denote the log tumour volume, $x_{i1}$ denote the log PSA level, $x_{i2}$ denote the log prostate weight, and $x_{i3}$ denote the age of the $i$th patient.
+
+The multiple linear regression model is therefore given by
+
+$$
+Y_i=\beta_0+\beta_1x_{i1}+\beta_2x_{i2}
++\beta_3x_{i3}+\varepsilon_i,
+\qquad i=1,\ldots,97.
+$$
+
+Our objective is to investigate the relationship between each of these explanatory variables and log tumour volume while holding the remaining explanatory variables constant. Furthermore, we are interested in determining whether these clinical characteristics can be used collectively to estimate tumour volume.
+
+
 ### Least Squares Estimation of the Regression Coefficients
 
 As in simple linear regression, we estimate the regression coefficients using the method of least squares, which minimizes the sum of squared differences between the observed and predicted responses.
@@ -1313,6 +1216,92 @@ Y_i-\beta_0-\sum_{j=1}^p\beta_jx_{ij}
 $$
 
 Our objective is to find the values of $\beta_0,\beta_1,\ldots,\beta_p$ that minimize this expression.
+
+Before deriving the least squares estimator for multiple linear regression, we introduce some useful properties of matrix differentiation.
+
+Let $\mathbf{x}=(x_1,\ldots,x_n)^T$ be an $n\times 1$ vector. For a scalar-valued function $f(\mathbf{x})$, the derivative with respect to $\mathbf{x}$ is defined as the gradient vector
+
+$$
+\frac{\partial f(\mathbf{x})}{\partial\mathbf{x}}
+=
+\begin{pmatrix}
+\frac{\partial f}{\partial x_1}\\[4pt]
+\frac{\partial f}{\partial x_2}\\
+\vdots\\
+\frac{\partial f}{\partial x_n}
+\end{pmatrix}.
+$$
+
+Let $c$ be a constant scalar, $\mathbf{a}$ be a constant $n\times 1$ vector, and $\mathbf{A}$ be a constant $n\times n$ matrix. The following properties will be useful.
+
+**Property 1: Derivative of a constant**
+
+$$
+\boxed{
+\frac{\partial c}{\partial\mathbf{x}}
+=\mathbf{0}.
+}
+$$
+
+**Property 2: Derivative of a linear form**
+
+$$
+\boxed{
+\frac{\partial(\mathbf{a}^T\mathbf{x})}
+{\partial\mathbf{x}}
+=
+\frac{\partial(\mathbf{x}^T\mathbf{a})}
+{\partial\mathbf{x}}
+=\mathbf{a}.
+}
+$$
+
+To see this, notice that
+
+$$
+\mathbf{a}^T\mathbf{x}
+=\sum_{i=1}^n a_ix_i.
+$$
+
+Differentiating with respect to each component of $\mathbf{x}$ gives
+
+$$
+\frac{\partial(\mathbf{a}^T\mathbf{x})}
+{\partial\mathbf{x}}
+=
+\begin{pmatrix}
+a_1\\
+a_2\\
+\vdots\\
+a_n
+\end{pmatrix}
+=\mathbf{a}.
+$$
+
+**Property 3: Derivative of a quadratic form**
+
+$$
+\boxed{
+\frac{\partial(\mathbf{x}^T\mathbf{A}\mathbf{x})}
+{\partial\mathbf{x}}
+=
+(\mathbf{A}+\mathbf{A}^T)\mathbf{x}.
+}
+$$
+
+In particular, if $\mathbf{A}$ is symmetric, then
+$\mathbf{A}^T=\mathbf{A}$, and hence
+
+$$
+\boxed{
+\frac{\partial(\mathbf{x}^T\mathbf{A}\mathbf{x})}
+{\partial\mathbf{x}}
+=2\mathbf{A}\mathbf{x}.
+}
+$$
+
+
+These properties allow us to differentiate the sum of squared errors with respect to the vector of regression coefficients and obtain the least squares estimator in matrix form.
 
 Using matrix notation, the sum of squared errors becomes
 
@@ -1383,6 +1372,7 @@ $$
 \hat{\mathbf{Y}}=\mathbf{X}\hat{\boldsymbol{\beta}},
 $$
 
+Using R for the prostate cancer data, we obtain $\hat{\beta}_0 = -0.91121$,  $\hat{\beta}_1 = -0.76782$,  $\hat{\beta}_2 = -0.26773$, and  $\hat{\beta}_3 = 0.02092$. Thus, the fitted model is $$\boxed{\hat{Y}_i = -0.91121  - 0.76782 x_{i1} - 0.26773 x_{i2} + 0.02092 x_{i3}}$$
 
 ### Interpretation of the Regression Coefficients
 
@@ -1391,6 +1381,18 @@ The interpretation of the regression coefficients in multiple linear regression 
 The intercept $\beta_0$ represents the expected value of the response variable when all explanatory variables are equal to zero. However, the intercept may not always have a meaningful practical interpretation, particularly when zero is not a realistic value for one or more explanatory variables.
 
 For $j=1,\ldots,p$, the coefficient $\beta_j$ represents the expected change in the response variable associated with a one-unit increase in $x_j$, while holding all other explanatory variables constant. Thus, if $\beta_j>0$, increasing $x_j$ is associated with an increase in the expected response. If $\beta_j<0$, increasing $x_j$ is associated with a decrease in the expected response, after accounting for the remaining explanatory variables.
+
+For the prostate cancer data, we interpret the estimated regression coefficients as follows:
+
+- $\hat{\beta}_0=-0.91121$: The estimated expected log tumour volume is $-0.91121$ when log PSA level, log prostate weight, and patient age are all equal to zero. However, this intercept does not have a meaningful clinical interpretation, since an age of zero is not within the relevant range of the data.
+
+- $\hat{\beta}_1=0.76782$: For every one-unit increase in log PSA level, the expected log tumour volume is estimated to increase by $0.76782$ units, holding log prostate weight and patient age constant.
+
+- $\hat{\beta}_2=-0.26773$: For every one-unit increase in log prostate weight, the expected log tumour volume is estimated to decrease by $0.26773$ units, holding log PSA level and patient age constant.
+
+- $\hat{\beta}_3=0.02092$: For every additional year of patient age, the expected log tumour volume is estimated to increase by $0.02092$ units, holding log PSA level and log prostate weight constant.
+
+The estimated regression coefficients suggest that PSA level and patient age are positively associated with tumour volume, whereas prostate weight is negatively associated with tumour volume, after accounting for the remaining explanatory variables. However, the signs and magnitudes of the estimated regression coefficients alone do not establish whether these associations are statistically significant. To determine this, we conduct hypothesis tests and construct confidence intervals for the population regression coefficients.
 
 
 ### Sampling Distribution of the Least Squares Estimators
@@ -1538,6 +1540,264 @@ Z=
 \sim N(0,1).
 $$
 
+### Hypothesis Testing and Confidence Intervals for the Regression Coefficients
+
+As in simple linear regression, we may be interested in determining whether an explanatory variable is significantly associated with the response variable.
+
+In multiple linear regression, we test whether an individual population regression coefficient is equal to zero while accounting for the remaining explanatory variables.
+
+For the $j$th explanatory variable, we consider the hypotheses $H_0:\beta_j=0$ versus $H_1:\beta_j\neq 0$.
+
+Under the null hypothesis, the $j$th explanatory variable has no linear association with the expected response after accounting for the other explanatory variables in the model.
+
+The population error variance $\sigma^2$ is generally unknown and must be estimated from the data. In multiple linear regression, we estimate $p+1$ coefficients, leaving $n-p-1$ residual degrees of freedom. An unbiased estimator of $\sigma^2$ is therefore
+
+$$
+S^2=\frac{SSE}{n-p-1}.
+$$
+
+Under the normality assumption, we also have
+
+$$
+\frac{(n-p-1)S^2}{\sigma^2}
+=
+\frac{SSE}{\sigma^2}
+\sim\chi^2_{n-p-1}.
+$$
+
+Furthermore, $\hat{\boldsymbol{\beta}}$ and $S^2$ are independent. We omit the proofs of these facts for conciseness.
+
+Combining these results gives
+
+$$
+\boxed{
+T=
+\frac{\hat{\beta}_j-\beta_j}
+{S\sqrt{c_j}}
+\sim t_{n-p-1}.
+}
+$$
+
+The estimated standard error of $\hat{\beta}_j$ is $SE(\hat{\beta}_j)=S\sqrt{c_j}$.
+
+This sampling distribution is used to construct hypothesis tests and confidence intervals for the regression coefficients.
+
+
+Under $H_0:\beta_j=0$, the test statistic becomes
+
+$$
+\boxed{
+T=\frac{\hat{\beta}_j}{SE(\hat{\beta}_j)}.
+}
+$$
+
+Under the null hypothesis, $T\sim t_{n-p-1}.$
+
+For a two-sided hypothesis test at significance level $\alpha$, the rejection region is $R^*=\left\{T:|T|>t_{1-\alpha/2,n-p-1}\right\},$ where $t_{1-\alpha/2,n-p-1}$ is the $(1-\alpha/2)$ quantile of a Student's $t$ distribution with $n-p-1$ degrees of freedom.
+
+If the observed test statistic falls in the rejection region, we reject $H_0$ and conclude that there is statistically significant evidence of an association between the explanatory variable and the expected response, after adjusting for the other variables in the model. Otherwise, we fail to reject $H_0$.
+
+In addition to hypothesis testing, we may wish to construct confidence intervals for the unknown population regression coefficients. To find a $100(1-\alpha)\%$ conidence interval for $\beta_j$, we follow a similar procedure as in SLR.
+
+$$
+P\left(
+-t_{1-\alpha/2,n-p-1}
+\leq
+\frac{\hat{\beta}_j-\beta_j}{SE(\hat{\beta}_j)}
+\leq
+t_{1-\alpha/2,n-p-1}
+\right)
+=1-\alpha.
+$$
+
+Rearranging gives
+
+$$
+P\left(
+\hat{\beta}_j-t_{1-\alpha/2,n-p-1}SE(\hat{\beta}_j)
+\leq\beta_j\leq
+\hat{\beta}_j+t_{1-\alpha/2,n-p-1}SE(\hat{\beta}_j)
+\right)
+=1-\alpha.
+$$
+
+Thus, a $100(1-\alpha)\%$ confidence interval for $\beta_j$ is
+
+$$
+\boxed{
+\hat{\beta}_j
+\pm
+t_{1-\alpha/2,n-p-1}
+SE(\hat{\beta}_j).
+}
+$$
+
+If a two-sided $95\%$ confidence interval for $\beta_j$ does not contain zero, we reject $H_0:\beta_j=0$ in the corresponding two-sided hypothesis test at the $5\%$ significance level. If the interval contains zero, we fail to reject the null hypothesis.
+
+We are interested in determining whether log PSA level, log prostate weight, and patient age are significantly associated with log tumour volume after accounting for the remaining explanatory variables.
+
+For each regression coefficient, we consider the hypotheses
+
+$$
+H_0:\beta_j=0
+\qquad\text{versus}\qquad
+H_1:\beta_j\neq 0,
+\qquad j=0,1,2,3.
+$$
+
+We conduct two-sided hypothesis tests at the $\alpha=0.05$ significance level. Recall that the test statistic is given by
+
+$$
+T=\frac{\hat{\beta}_j}{SE(\hat{\beta}_j)},
+$$
+
+which follows a Student's $t$ distribution with $n-p-1$ degrees of freedom under $H_0$.
+
+Since we have $n=97$ observations and $p=3$ explanatory variables, the degrees of freedom are
+
+$$
+n-p-1=97-3-1=93.
+$$
+
+Therefore, the rejection region is
+
+$$
+R^*=\left\{
+T:|T|>t_{0.975,93}
+\right\}
+=\left\{
+T:|T|>1.9858
+\right\}.
+$$
+
+Using the estimated regression coefficients and their corresponding standard errors obtained in R, we calculate the observed test statistics as follows:
+
+$$
+\begin{aligned}
+T_0&=\frac{-0.91121}{0.81073}
+\approx -1.124,\\[6pt]
+T_1&=\frac{0.76782}{0.07526}
+\approx 10.202,\\[6pt]
+T_2&=\frac{-0.26773}{0.18118}
+\approx -1.478,\\[6pt]
+T_3&=\frac{0.02092}{0.01147}
+\approx 1.824.
+\end{aligned}
+$$
+
+We interpret the results as follows:
+
+- For $\beta_0$, since $|T_0|=1.124<1.9858$, we fail to reject $H_0$. There is insufficient evidence to conclude that the population intercept differs from zero.
+
+- For $\beta_1$, since $|T_1|=10.202>1.9858$, we reject $H_0$. There is statistically significant evidence that log PSA level is associated with log tumour volume, after accounting for log prostate weight and patient age.
+
+- For $\beta_2$, since $|T_2|=1.478<1.9858$, we fail to reject $H_0$. There is insufficient evidence to conclude that log prostate weight is associated with log tumour volume, after accounting for log PSA level and patient age.
+
+- For $\beta_3$, since $|T_3|=1.824<1.9858$, we fail to reject $H_0$. There is insufficient evidence to conclude that patient age is associated with log tumour volume, after accounting for log PSA level and log prostate weight.
+
+Thus, at the $5\%$ significance level, log PSA level is the only explanatory variable that is individually statistically significant in our multiple linear regression model.
+
+In addition to conducting hypothesis tests, we construct $95\%$ confidence intervals for each population regression coefficient.
+
+Recall that a $100(1-\alpha)\%$ confidence interval for $\beta_j$ is given by
+
+$$
+\hat{\beta}_j
+\pm t_{1-\alpha/2,n-p-1}
+SE(\hat{\beta}_j).
+$$
+
+Setting $\alpha=0.05$ and substituting the corresponding critical value gives
+
+$$
+\hat{\beta}_j
+\pm 1.9858SE(\hat{\beta}_j).
+$$
+
+Using the estimated regression coefficients and their corresponding standard errors, we obtain the following confidence intervals:
+
+$$
+\begin{aligned}
+\beta_0:\quad
+&-0.91121\pm 1.9858(0.81073)\\
+&=(-2.5212,\ 0.6987),\\[8pt]
+\beta_1:\quad
+&0.76782\pm 1.9858(0.07526)\\
+&=(0.6184,\ 0.9173),\\[8pt]
+\beta_2:\quad
+&-0.26773\pm 1.9858(0.18118)\\
+&=(-0.6275,\ 0.0921),\\[8pt]
+\beta_3:\quad
+&0.02092\pm 1.9858(0.01147)\\
+&=(-0.0019,\ 0.0437).
+\end{aligned}
+$$
+
+Notice that the confidence interval for $\beta_1$ is the only interval that does not contain zero. This is consistent with the results of our hypothesis tests.
+
+In particular, we estimate with $95\%$ confidence that a one-unit increase in log PSA level is associated with an increase in the expected log tumour volume of between $0.6184$ and $0.9173$ units, holding log prostate weight and patient age constant.
+
+Although the estimated regression coefficients for log prostate weight and patient age suggest negative and positive associations with log tumour volume, respectively, neither association is statistically significant at the $5\%$ significance level. This does not necessarily imply that these variables have no association with tumour volume, but rather that the observed data provide insufficient evidence of such associations after accounting for the remaining explanatory variables.
+
+
+#### Overall Significance of the Regression Model
+
+In addition to testing individual coefficients, we may wish to determine whether the explanatory variables, considered together, help explain variation in the response variable.
+
+This is accomplished using an F-test for the overall significance of the regression model.
+
+We consider the hypotheses $H_0:\beta_1=\beta_2=\cdots=\beta_p=0$ versus $H_1:\text{At least one }\beta_j\neq 0.$
+
+Under $H_0$, the expected response does not depend on any of the explanatory variables, and the model reduces to
+
+$$
+Y_i=\beta_0+\varepsilon_i.
+$$
+
+To construct the test statistic, we compare the sum of squared errors from the full regression model with the sum of squared errors from the reduced, intercept-only model.
+
+Let $SSE_F$ denote the sum of squared errors from the full model and $SSE_R$ denote the sum of squared errors from the reduced model.
+
+The test statistic is
+
+$$
+\boxed{
+F=
+\frac{(SSE_R-SSE_F)/p}
+{SSE_F/(n-p-1)}.
+}
+$$
+
+Under $H_0$ and the normality assumptions, $F\sim F_{p,n-p-1},$ where $F_{p,n-p-1}$ denotes an F-distribution with $p$ numerator degrees of freedom and $n-p-1$ denominator degrees of freedom.
+
+For a hypothesis test at significance level $\alpha$, the rejection region is $R^*=\left\{F:F>F_{1-\alpha;p,n-p-1}\right\}$, where $F_{1-\alpha;p,n-p-1}$ is the $(1-\alpha)$ quantile of the corresponding F-distribution.
+
+If the observed F-statistic falls in the rejection region, we reject $H_0$ and conclude that at least one explanatory variable is linearly associated with the response after accounting for the others.
+
+Note that a significant overall F-test does not imply that every individual regression coefficient is statistically significant.
+
+For the prostate cancer data we consider the hypotheses $H_0:\beta_1=\beta_2=\beta_3=0$ versus
+$H_1:\text{At least one }\beta_j\neq 0$, for $j=1,2,3.$
+
+Under $H_0$, the test statistic follows an F-distribution with $p$ numerator degrees of freedom and $n-p-1$ denominator degrees of freedom. Since $n=97$ and $p=3$, we have $F\sim F_{3,93}$.
+
+We conduct the hypothesis test at the $\alpha=0.05$ significance level. The rejection region is
+
+$$
+R^*=\left\{
+F:F>F_{0.95;3,93}
+\right\}
+=\left\{
+F:F>2.7025
+\right\}.
+$$
+
+Using R, we obtain the observed test statistic $F=39.48$. Since $39.48>2.7025,$ the observed test statistic falls within the rejection region. Therefore, we reject $H_0$ at the $5\%$ significance level.
+
+We conclude that there is statistically significant evidence that at least one of the three explanatory variables is linearly associated with log tumour volume, after accounting for the remaining explanatory variables. Thus, the multiple linear regression model provides a statistically significant improvement over the intercept-only model.
+
+Note that rejecting the null hypothesis in the overall F-test does not imply that every explanatory variable is individually statistically significant. This is consistent with our previous hypothesis tests, in which only log PSA level was found to be individually statistically significant at the $5\%$ significance level.
+
 
 ## Logistic Regression 
 
@@ -1594,61 +1854,8 @@ Notice that logistic regression models the logarithm of the odds as a linear fun
 
 To illustrate the application of logistic regression in oncology, we again consider the prostate cancer dataset available in the `faraway` package in R. Seminal vesicle invasion (SVI) occurs when prostate cancer spreads into the seminal vesicles, which are glands located near the prostate.
 
-We are interested in investigating the relationship between tumour volume and the probability of seminal vesicle invasion. Since seminal vesicle invasion is a binary outcome, logistic regression is appropriate for modelling its probability. We consider the logarithmic transformation of tumour volume as our explanatory variable. Let $x_i$ denote the log tumour volume and $Y_i$ denote the presence of seminal vesicle invasion for patient $i$, where $Y_i=1$ indicates invasion and $Y_i=0$ indicates no invasion. Below are the values of these variables for the 97 men, along with a plot illustrating the relationship between them.
+We are interested in investigating the relationship between tumour volume and the probability of seminal vesicle invasion. Since seminal vesicle invasion is a binary outcome, logistic regression is appropriate for modelling its probability. We consider the logarithmic transformation of tumour volume as our explanatory variable. Let $x_i$ denote the log tumour volume and $Y_i$ denote the presence of seminal vesicle invasion for patient $i$, where $Y_i=1$ indicates invasion and $Y_i=0$ indicates no invasion. Below is a plot illustrating the relationshi p between these variables for 97 men. Exact values can be found in R. 
 
-```{r prostate-logistic-table, echo=FALSE, message=FALSE, warning=FALSE, results='asis'}
-library(faraway)
-library(knitr)
-
-data(prostate, package = "faraway")
-
-# Select variables
-df <- data.frame(
-  lcavol = prostate$lcavol,
-  svi = prostate$svi
-)
-
-# Split into three groups
-n <- nrow(df)
-k <- ceiling(n / 3)
-
-group1 <- df[1:k, ]
-group2 <- df[(k + 1):min(2*k, n), ]
-group3 <- df[(2*k + 1):n, ]
-
-# Pad each group to the same number of rows
-pad <- function(x, k) {
-  if (nrow(x) < k) {
-    x <- rbind(x, data.frame(
-      lcavol = rep(NA, k - nrow(x)),
-      svi = rep(NA, k - nrow(x))
-    ))
-  }
-  x
-}
-
-group1 <- pad(group1, k)
-group2 <- pad(group2, k)
-group3 <- pad(group3, k)
-
-# Combine side by side
-table_data <- data.frame(
-  "Log Tumour Volume" = round(group1$lcavol, 3),
-  "SVI" = group1$svi,
-  "Log Tumour Volume " = round(group2$lcavol, 3),
-  "SVI " = group2$svi,
-  "Log Tumour Volume  " = round(group3$lcavol, 3),
-  "SVI  " = group3$svi,
-  check.names = FALSE
-)
-
-kable(
-  table_data,
-  caption = "Log tumour volume and seminal vesicle invasion for 97 prostate cancer patients.",
-  align = "c",
-  na = ""
-)
-```
 
 ```{r prostate-logistic-plots, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=4.5, fig.align='center', fig.cap="Relationship between log tumour volume and seminal vesicle invasion."}
 library(ggplot2)
@@ -1684,7 +1891,6 @@ p1 <- ggplot(df, aes(x = lcavol, y = svi)) +
 print(p1)
 ```
 
-Table \@ref(tab:prostate-logistic-table) presents the log tumour volumes and seminal vesicle invasion statuses for the 97 patients. Figure \@ref(fig:prostate-logistic-plots) illustrates the relationship between log tumour volume and seminal vesicle invasion. 
 
 ### Estimation of Regression Coefficients
 
@@ -1988,4 +2194,207 @@ $$
 We are $95\%$ confident that the true change in the log-odds of seminal vesicle invasion for a one-unit increase in log tumour volume lies within this interval.
 
 Since the confidence interval for the slope contains zero, this is consistent with failing to reject the null hypothesis at the $5\%$ significance level.
+
+
+### Confusion Matrix
+
+In logistic regression, we may be interested in evaluating how accurately the fitted model predicts binary outcomes. A confusion matrix is a table that compares the predicted classifications with the actual observed outcomes.
+
+Recall that logistic regression estimates the probability $\hat{p}_i=P(Y_i=1\mid x_i)$. To classify observations, we select a probability threshold, commonly $0.5$, such that
+
+$$
+\hat{Y}_i=
+\begin{cases}
+1, & \hat{p}_i\geq 0.5,\\
+0, & \hat{p}_i<0.5.
+\end{cases}
+$$
+
+The confusion matrix consists of four possible outcomes:
+
+| | Predicted $Y=0$ | Predicted $Y=1$ |
+|---|---|---|
+| Actual $Y=0$ | True Negative (TN) | False Positive (FP) |
+| Actual $Y=1$ | False Negative (FN) | True Positive (TP) |
+
+These outcomes can be used to calculate several measures of classification performance:
+
+- **Accuracy:** The proportion of observations correctly classified.
+
+$$
+\text{Accuracy}=\frac{TP+TN}{TP+TN+FP+FN}.
+$$
+
+- **Sensitivity:** The proportion of actual positive observations correctly identified.
+
+$$
+\text{Sensitivity}=\frac{TP}{TP+FN}.
+$$
+
+- **Specificity:** The proportion of actual negative observations correctly identified.
+
+$$
+\text{Specificity}=\frac{TN}{TN+FP}.
+$$
+
+To illustrate this using the prostate cancer dataset, we consider our simple logistic regression model for predicting seminal vesicle invasion (SVI) based on log tumour volume.
+
+Using R, we obtain the confusion matrix.
+
+```{r prostate-simple-logistic-confusion, echo=FALSE, message=FALSE, warning=FALSE}
+library(faraway)
+data(prostate, package = "faraway")
+
+model_logistic <- glm(
+  svi ~ lcavol,
+  data = prostate,
+  family = binomial
+)
+
+# Predicted probabilities
+predicted_prob <- predict(
+  model_logistic,
+  type = "response"
+)
+
+# Predicted classifications
+predicted_class <- ifelse(predicted_prob >= 0.5, 1, 0)
+
+# Confusion matrix
+cm <- table(
+  Actual = factor(prostate$svi, levels = c(0, 1)),
+  Predicted = factor(predicted_class, levels = c(0, 1))
+)
+
+# Classification measures
+TN <- cm[1, 1]
+FP <- cm[1, 2]
+FN <- cm[2, 1]
+TP <- cm[2, 2]
+
+accuracy <- (TP + TN) / sum(cm)
+sensitivity <- TP / (TP + FN)
+specificity <- TN / (TN + FP)
+```
+
+The resulting confusion matrix is displayed in Table \@ref(tab:prostate-simple-confusion-table).
+
+```{r prostate-simple-confusion-table, echo=FALSE, message=FALSE, warning=FALSE}
+library(knitr)
+
+confusion_table <- data.frame(
+  Actual = c("No SVI (0)", "SVI (1)"),
+  `Predicted 0` = c(TN, FN),
+  `Predicted 1` = c(FP, TP),
+  check.names = FALSE
+)
+
+kable(
+  confusion_table,
+  row.names = FALSE,
+  caption = "Confusion matrix for the simple logistic regression model."
+)
+```
+
+Using the fitted model, we obtain an accuracy of $0.866$, a sensitivity of $0.619$, and a specificity of $0.9342$.
+
+These measures describe how well the fitted model classifies patients according to whether seminal vesicle invasion occurs, using log tumour volume as the explanatory variable. In medical applications, sensitivity and specificity are particularly important, since false negatives and false positives may have different clinical consequences.
+
+
+### Multiple Logistic Regression
+
+Similar to how multiple linear regression extends simple linear regression, multiple logistic regression extends simple logistic regression by allowing two or more explanatory variables to be included in the same model. This is particularly useful in oncology, where the probability of an event, such as tumour recurrence or treatment response, may depend on several patient and clinical characteristics.
+
+Suppose we have $n$ independent observations and $p$ explanatory variables. Let $Y_i$ be a binary response variable, where $Y_i=1$ indicates that the event of interest occurs and $Y_i=0$ otherwise.
+
+We assume that
+
+$$
+Y_i\mid\mathbf{x}_i\sim\operatorname{Bernoulli}(p_i),
+$$
+
+where $p_i=P(Y_i=1\mid\mathbf{x}_i)$ and $\mathbf{x}_i=(x_{i1},\ldots,x_{ip})^T$.
+
+The multiple logistic regression model is given by
+
+$$
+\boxed{
+\log\left(\frac{p_i}{1-p_i}\right)
+=\beta_0+\beta_1x_{i1}+\cdots+\beta_px_{ip}.
+}
+$$
+
+Equivalently, the probability of observing the event is
+
+$$
+\boxed{
+p_i=
+\frac{\exp\left(\beta_0+\sum_{j=1}^p\beta_jx_{ij}\right)}
+{1+\exp\left(\beta_0+\sum_{j=1}^p\beta_jx_{ij}\right)}.
+}
+$$
+
+The regression coefficients $\beta_0,\beta_1,\ldots,\beta_p$ are unknown and must be estimated from the observed data.
+
+The coefficient $\beta_j$ represents the change in the log-odds of the event associated with a one-unit increase in the $j$th explanatory variable, holding all other explanatory variables constant.
+
+If $e^{\beta_j}>1$, the odds of the event increase as $x_j$ increases. If $e^{\beta_j}<1$, the odds decrease. If $e^{\beta_j}=1$, the odds remain unchanged.
+
+As in simple logistic regression, the regression coefficients are estimated using the method of maximum likelihood.
+
+Let $y_1,\ldots,y_n$ denote the observed binary responses. Assuming conditional independence, the likelihood function is
+
+$$
+L(\boldsymbol{\beta})
+=\prod_{i=1}^n p_i^{y_i}(1-p_i)^{1-y_i},
+$$
+
+where $\boldsymbol{\beta}=(\beta_0,\beta_1,\ldots,\beta_p)^T$.
+
+Taking natural logarithms and substituting the logistic regression model gives
+
+$$
+\boxed{
+\ell(\boldsymbol{\beta})
+=
+\sum_{i=1}^n
+\left[
+y_i\left(\beta_0+\sum_{j=1}^p\beta_jx_{ij}\right)
+-
+\log\left(
+1+\exp\left(\beta_0+\sum_{j=1}^p\beta_jx_{ij}\right)
+\right)
+\right].
+}
+$$
+
+The maximum likelihood estimator $\hat{\boldsymbol{\beta}}$ is obtained by maximizing this log-likelihood function. Unlike least squares estimation in multiple linear regression, the maximum likelihood estimates generally do not have a closed-form solution and must be obtained using numerical methods.
+
+To determine whether an explanatory variable is significantly associated with the probability of the event, after accounting for the remaining explanatory variables, we consider $H_0:\beta_j=0$ versus $H_1:\beta_j\neq 0$.
+
+We again use the Wald test, with test statistic
+
+$$
+\boxed{
+Z=\frac{\hat{\beta}_j}{SE(\hat{\beta}_j)}.
+}
+$$
+
+Under $H_0$ and suitable large-sample conditions, the test statistic approximately follows a standard normal distribution.
+
+For a two-sided hypothesis test at significance level $\alpha$, the rejection region is
+
+$$
+R^*=\left\{
+Z:|Z|>z_{1-\alpha/2}
+\right\}.
+$$
+
+Similarly, an approximate $100(1-\alpha)\%$ confidence interval for $\beta_j$ is
+
+$$
+\boxed{
+\hat{\beta}_j\pm z_{1-\alpha/2}SE(\hat{\beta}_j).
+}
+$$
 
