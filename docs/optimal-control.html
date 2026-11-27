@@ -274,22 +274,8 @@ div.csl-indent {
 <li class="chapter" data-level="5.2.6" data-path="optimal-control.html"><a href="optimal-control.html#sufficient-conditions"><i class="fa fa-check"></i><b>5.2.6</b> Sufficient conditions</a></li>
 <li class="chapter" data-level="5.2.7" data-path="optimal-control.html"><a href="optimal-control.html#uniqueness"><i class="fa fa-check"></i><b>5.2.7</b> Uniqueness</a></li>
 </ul></li>
-<li class="chapter" data-level="5.3" data-path="optimal-control.html"><a href="optimal-control.html#sec:oc-gompertz"><i class="fa fa-check"></i><b>5.3</b> A Gompertzian Tumor-Growth Model</a></li>
-<li class="chapter" data-level="5.4" data-path="optimal-control.html"><a href="optimal-control.html#sec:oc-gompertz-derivation"><i class="fa fa-check"></i><b>5.4</b> Derivation of the Optimality System for the Gompertzian Model and numerical solution</a>
-<ul>
-<li class="chapter" data-level="5.4.1" data-path="optimal-control.html"><a href="optimal-control.html#hamiltonian-and-adjoint-equation"><i class="fa fa-check"></i><b>5.4.1</b> Hamiltonian and adjoint equation</a></li>
-<li class="chapter" data-level="5.4.2" data-path="optimal-control.html"><a href="optimal-control.html#optimal-control-characterization"><i class="fa fa-check"></i><b>5.4.2</b> Optimal control characterization</a></li>
-<li class="chapter" data-level="5.4.3" data-path="optimal-control.html"><a href="optimal-control.html#the-forwardbackward-sweep-method"><i class="fa fa-check"></i><b>5.4.3</b> The forward–backward sweep method</a></li>
-<li class="chapter" data-level="5.4.4" data-path="optimal-control.html"><a href="optimal-control.html#implementation-in-r"><i class="fa fa-check"></i><b>5.4.4</b> Implementation in R</a></li>
-<li class="chapter" data-level="5.4.5" data-path="optimal-control.html"><a href="optimal-control.html#interactive-example"><i class="fa fa-check"></i><b>5.4.5</b> Interactive example</a></li>
-</ul></li>
-<li class="chapter" data-level="5.5" data-path="optimal-control.html"><a href="optimal-control.html#sec:oc-kuznetsov"><i class="fa fa-check"></i><b>5.5</b> An Optimal Control Approach for the Kuznetsov Model</a>
-<ul>
-<li class="chapter" data-level="5.5.1" data-path="optimal-control.html"><a href="optimal-control.html#why-the-plain-sweep-fails"><i class="fa fa-check"></i><b>5.5.1</b> Why the plain sweep fails</a></li>
-<li class="chapter" data-level="5.5.2" data-path="optimal-control.html"><a href="optimal-control.html#sec:oc-safeguard"><i class="fa fa-check"></i><b>5.5.2</b> A safeguarded sweep</a></li>
-<li class="chapter" data-level="5.5.3" data-path="optimal-control.html"><a href="optimal-control.html#implementation-in-r-1"><i class="fa fa-check"></i><b>5.5.3</b> Implementation in R</a></li>
-<li class="chapter" data-level="5.5.4" data-path="optimal-control.html"><a href="optimal-control.html#interactive-example-onoff-chemotherapy"><i class="fa fa-check"></i><b>5.5.4</b> Interactive example: ON–OFF chemotherapy</a></li>
-</ul></li>
+<li class="chapter" data-level="5.3" data-path="optimal-control.html"><a href="optimal-control.html#a-gompertzian-tumor-growth-model"><i class="fa fa-check"></i><b>5.3</b> A Gompertzian Tumor-Growth Model</a></li>
+<li class="chapter" data-level="5.4" data-path="optimal-control.html"><a href="optimal-control.html#derivation-of-the-optimality-system-for-the-gompertzian-model-and-numerical-solution"><i class="fa fa-check"></i><b>5.4</b> Derivation of the Optimality System for the Gompertzian Model and numerical solution</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html"><i class="fa fa-check"></i><b>6</b> Statistical Methods in Oncology</a>
 <ul>
@@ -340,9 +326,6 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="optimal-control" class="section level1 hasAnchor" number="5">
 <h1><span class="header-section-number">Chapter 5</span> Optimal Control<a href="optimal-control.html#optimal-control" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<!-- Hidden chunks: they run the Kuznetsov code shown in Section "An Optimal
-     Control Approach for the Kuznetsov Model" and compute the numbers quoted
-     in the examples. -->
 <p>Mathematical models of cancer describe how tumor populations evolve over time and how they interact with the immune system, treatment, and their surrounding environment. While these models can provide insight into tumor dynamics and treatment response, they often assume that treatment is prescribed according to a fixed schedule.</p>
 <p>Optimal control theory extends this framework by treating therapy as a time-dependent decision variable. Rather than simply predicting tumor evolution under a prescribed treatment, we seek a treatment strategy that optimizes a specified therapeutic objective.</p>
 <p>In cancer modeling, this objective typically involves balancing tumor reduction against treatment-related toxicity, drug consumption, or damage to healthy tissue. The resulting mathematical problem combines a system of differential equations describing tumor dynamics with an objective functional measuring the
@@ -367,14 +350,14 @@ definitions and theorems.</p>
 <div id="state-equations-controls-and-objective" class="section level3 hasAnchor" number="5.1.1">
 <h3><span class="header-section-number">5.1.1</span> State equations, controls, and objective<a href="optimal-control.html#state-equations-controls-and-objective" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Let <span class="math inline">\(x(t)\in\mathbb{R}^n\)</span> denote the state vector, which may include tumor cells, immune effector cells, and drug concentrations, and let <span class="math inline">\(u(t)\in\mathbb{R}^m\)</span> denote the treatment input, such as a chemotherapy infusion rate, a drug dose, or an immunotherapy input. Treatment is subject to clinical limits, so at each time the control takes values in a set <span class="math inline">\(U\subset\mathbb{R}^m\)</span> of allowed treatment levels. For a single treatment input a common choice is <span class="math inline">\(U=[0,M]\)</span>, where <span class="math inline">\(M\)</span> is the maximum allowable treatment intensity.</p>
-<div class="example">
-<p><span id="exm:oc-kuz-model" class="example"><strong>Example 5.1  (Simplified Kuznetsov model) </strong></span>We use the Kuznetsov model of Section <a href="the-kuznetsov-tumourimmune-model.html#sec:kuznetsov">3.1</a> in the dimensionless form <a href="the-kuznetsov-tumourimmune-model.html#eq:red-ODEs-T">(3.4)</a>–<a href="the-kuznetsov-tumourimmune-model.html#eq:red-ODEs-E">(3.5)</a> of Section <a href="the-kuznetsov-tumourimmune-model.html#sec:resistant">3.4</a>, without immune resistance. One unit of <span class="math inline">\(E\)</span> or <span class="math inline">\(T\)</span> is <span class="math inline">\(10^6\)</span> cells, and one unit of time is <span class="math inline">\(1/(n\cdot10^6)\approx 9.1\)</span> days, with <span class="math inline">\(n\)</span> from Table <a href="the-kuznetsov-tumourimmune-model.html#tab:kuz-param">3.1</a>. We remove the carrying capacity of the tumor (<span class="math inline">\(b=0\)</span>), so that without immune killing the tumor grows exponentially, and add chemotherapy with intensity <span class="math inline">\(u(t)\)</span>:</p>
+<p><strong>Example 1.1 (Simplified Kuznetsov model).</strong></p>
+<p>We use the Kuznetsov model of Section <a href="the-kuznetsov-tumourimmune-model.html#sec:kuznetsov">3.1</a> in the dimensionless form <a href="the-kuznetsov-tumourimmune-model.html#eq:red-ODEs-T">(3.4)</a>–<a href="the-kuznetsov-tumourimmune-model.html#eq:red-ODEs-E">(3.5)</a> of Section <a href="the-kuznetsov-tumourimmune-model.html#sec:resistant">3.4</a>, without immune resistance. One unit of <span class="math inline">\(E\)</span> or <span class="math inline">\(T\)</span> is <span class="math inline">\(10^6\)</span> cells, and one unit of time is <span class="math inline">\(1/(n\cdot10^6)\approx 9.1\)</span> days, with <span class="math inline">\(n\)</span> from Table <a href="the-kuznetsov-tumourimmune-model.html#tab:kuz-param">3.1</a>. We remove the carrying capacity of the tumor (<span class="math inline">\(b=0\)</span>), so that without immune killing the tumor grows exponentially, and add chemotherapy with intensity <span class="math inline">\(u(t)\)</span>:</p>
 <p><span class="math display">\[\begin{aligned}
 E&#39;&amp;=s+\frac{p\,E\,T}{g+T}-m\,E\,T-d\,E, &amp;\qquad E(0)&amp;=E_0,\\
 T&#39;&amp;=a\,T-E\,T-\delta\,u(t)\,T, &amp;\qquad T(0)&amp;=T_0.
-\end{aligned}\]</span></p>
-<p>The parameters <span class="math inline">\(s\)</span>, <span class="math inline">\(p\)</span>, <span class="math inline">\(g\)</span>, <span class="math inline">\(m\)</span>, <span class="math inline">\(d\)</span>, and <span class="math inline">\(a\)</span> have the meanings and dimensionless values of Table <a href="the-kuznetsov-tumourimmune-model.html#tab:red-param">3.2</a>. The new term <span class="math inline">\(-\delta uT\)</span> is the killing of tumor cells by the drug, at rate <span class="math inline">\(\delta\)</span> per unit of treatment intensity. The state is <span class="math inline">\(x=(E,T)^\top\in\mathbb{R}^2\)</span> and the control is scalar. The values used for treatment, cost, and initial conditions are listed in Table <a href="optimal-control.html#tab:oc-kuz-par">5.1</a>.</p>
-</div>
+\end{aligned}\]</span>
+The parameters <span class="math inline">\(s\)</span>, <span class="math inline">\(p\)</span>, <span class="math inline">\(g\)</span>, <span class="math inline">\(m\)</span>, <span class="math inline">\(d\)</span>, and <span class="math inline">\(a\)</span> have the meanings and dimensionless values of Table <a href="the-kuznetsov-tumourimmune-model.html#tab:red-param">3.2</a>. The new term <span class="math inline">\(-\delta uT\)</span> is the killing of tumor cells by the drug, at rate <span class="math inline">\(\delta\)</span> per unit of treatment intensity. The state is <span class="math inline">\(x=(E,T)^\top\in\mathbb{R}^2\)</span> and the control is scalar. The values used for treatment, cost, and initial conditions are listed in Table <a href="optimal-control.html#tab:oc-kuz-par">5.1</a>.
+:::</p>
 <table>
 <caption><span id="tab:oc-kuz-par">Table 5.1: </span> Treatment, cost, and initial values for the Kuznetsov example. The model parameters <span class="math inline">\(s\)</span>, <span class="math inline">\(p\)</span>, <span class="math inline">\(g\)</span>, <span class="math inline">\(m\)</span>, <span class="math inline">\(d\)</span>, and <span class="math inline">\(a\)</span> take the dimensionless values of Table <a href="the-kuznetsov-tumourimmune-model.html#tab:red-param">3.2</a>.</caption>
 <colgroup>
@@ -429,8 +412,8 @@ T&#39;&amp;=a\,T-E\,T-\delta\,u(t)\,T, &amp;\qquad T(0)&amp;=T_0.
 Figure 5.1: Untreated simplified Kuznetsov model with <span class="math inline">\(E_0=s/d\)</span>. Left: a small tumor (<span class="math inline">\(T_0=1\)</span>) oscillates around the dormant state and slowly settles into it, while a larger tumor (<span class="math inline">\(T_0=50\)</span>) escapes; the simulation stops when <span class="math inline">\(T\)</span> exceeds <span class="math inline">\(10^4\)</span>. Right: the same trajectories in the <span class="math inline">\((T,E)\)</span> plane, with the dormant state (filled circle) and the saddle (open circle).
 </p>
 </div>
-<div class="definition">
-<p><span id="def:oc-admissible" class="definition"><strong>Definition 5.1  (Admissible Controls) </strong></span>Let <span class="math inline">\(U\subseteq\mathbb{R}^m\)</span> represent the set of allowable control values. The set of admissible controls is</p>
+<p><strong>Definition: Admissible Controls.</strong></p>
+<p>Let <span class="math inline">\(U\subseteq\mathbb{R}^m\)</span> represent the set of allowable control values. The set of admissible controls is</p>
 <p><span class="math display">\[\mathcal{U}
 =
 \left\{
@@ -441,18 +424,16 @@ u \text{ is Lebesgue measurable}
 <p>For a scalar control with <span class="math inline">\(U=[0,M]\)</span>, the admissible controls satisfy</p>
 <p><span class="math display">\[0\leq u(t)\leq M\]</span></p>
 <p>for almost every <span class="math inline">\(t\in[0,t_f]\)</span>.</p>
-</div>
-<div class="example">
-<p><span id="exm:oc-kuz-admissible" class="example"><strong>Example 5.2  (Admissible chemotherapy schedules) </strong></span>In Example <a href="optimal-control.html#exm:oc-kuz-model">5.1</a> the treatment intensity is measured as a fraction of the maximum tolerated dose, so <span class="math inline">\(U=[0,M]\)</span> with <span class="math inline">\(M=1\)</span>. Every measurable schedule with values in <span class="math inline">\([0,1]\)</span> is admissible. In particular, the <em>ON–OFF schedule</em> that gives the full dose for a time <span class="math inline">\(\tau_{\mathrm{on}}\)</span> and then pauses for a time <span class="math inline">\(\tau_{\mathrm{off}}\)</span>,</p>
+<p><strong>Example 1.3 (Admissible chemotherapy schedules).</strong></p>
+<p>In Example <a href="#exm:oc-kuz-model"><strong>??</strong></a> the treatment intensity is measured as a fraction of the maximum tolerated dose, so <span class="math inline">\(U=[0,M]\)</span> with <span class="math inline">\(M=1\)</span>. Every measurable schedule with values in <span class="math inline">\([0,1]\)</span> is admissible. In particular, the <em>ON–OFF schedule</em> that gives the full dose for a time <span class="math inline">\(\tau_{\mathrm{on}}\)</span> and then pauses for a time <span class="math inline">\(\tau_{\mathrm{off}}\)</span>,</p>
 <p><span class="math display">\[u_{\tau_{\mathrm{off}}}(t)=
 \begin{cases}
 M, &amp; \text{if } t-k(\tau_{\mathrm{on}}+\tau_{\mathrm{off}})\in[0,\tau_{\mathrm{on}}) \text{ for some integer } k\geq0,\\
 0, &amp; \text{otherwise},
 \end{cases}\]</span></p>
-<p>is piecewise constant, hence measurable, and therefore admissible. Continuous treatment at full dose is the case <span class="math inline">\(\tau_{\mathrm{off}}=0\)</span>. Section <a href="optimal-control.html#sec:oc-kuznetsov">5.5</a> compares these schedules with the optimal control.</p>
-</div>
-<div class="definition">
-<p><span id="def:oc-ocp" class="definition"><strong>Definition 5.2  (Optimal Control Problem) </strong></span>Given the functions</p>
+<p>is piecewise constant, hence measurable, and therefore admissible. Continuous treatment at full dose is the case <span class="math inline">\(\tau_{\mathrm{off}}=0\)</span>. Section <a href="#sec:oc-kuznetsov"><strong>??</strong></a> compares these schedules with the optimal control.</p>
+<p><strong>Definition: Optimal Control Problem.</strong></p>
+<p>Given the functions</p>
 <p><span class="math display">\[g:[0,t_f]\times\mathbb{R}^n\times U
 \rightarrow\mathbb{R}^n,\]</span></p>
 <p><span class="math display">\[f:[0,t_f]\times\mathbb{R}^n\times U
@@ -474,24 +455,20 @@ x(0)=x_0,
 0\leq t\leq t_f.\]</span></p>
 <p>Here, <span class="math inline">\(f\)</span> is the running cost, <span class="math inline">\(\phi\)</span> is the terminal cost, and <span class="math inline">\(J\)</span> is the objective functional.</p>
 <p>For each admissible control <span class="math inline">\(u\)</span>, the corresponding solution <span class="math inline">\(x=x(u)\)</span> is called the associated state.</p>
-</div>
-<div class="example">
-<p><span id="exm:oc-kuz-ocp" class="example"><strong>Example 5.3  (An optimal control problem for the Kuznetsov model) </strong></span>For Example <a href="optimal-control.html#exm:oc-kuz-model">5.1</a> we take</p>
+<p><strong>Example 1.5 (An optimal control problem for the Kuznetsov model).</strong>
+For Example <a href="#exm:oc-kuz-model"><strong>??</strong></a> we take</p>
 <p><span class="math display">\[J(u)=\int_0^{t_f}\Bigl(A\,T(t)+\frac{B}{2}\,u(t)^2\Bigr)\,dt,\]</span></p>
-<p>so that the running cost is <span class="math inline">\(f(t,x,u)=A\,T+\tfrac{B}{2}u^2\)</span> and the terminal cost is <span class="math inline">\(\phi=0\)</span>. The first term is the accumulated tumor burden and the second the accumulated burden of treatment. The problem is to minimize <span class="math inline">\(J\)</span> over <span class="math inline">\(u\in\mathcal{U}\)</span> subject to the state equations of Example <a href="optimal-control.html#exm:oc-kuz-model">5.1</a>, with the values of Table <a href="optimal-control.html#tab:oc-kuz-par">5.1</a>.</p>
-</div>
-<div class="definition">
-<p><span id="def:oc-optimal" class="definition"><strong>Definition 5.3  (Optimal Control and Optimal State) </strong></span>An admissible control <span class="math inline">\(u^*\in\mathcal{U}\)</span> is an optimal control if <span class="math inline">\(J(u^*)\)</span> is finite and</p>
+<p>so that the running cost is <span class="math inline">\(f(t,x,u)=A\,T+\tfrac{B}{2}u^2\)</span> and the terminal cost is <span class="math inline">\(\phi=0\)</span>. The first term is the accumulated tumor burden and the second the accumulated burden of treatment. The problem is to minimize <span class="math inline">\(J\)</span> over <span class="math inline">\(u\in\mathcal{U}\)</span> subject to the state equations of Example <a href="#exm:oc-kuz-model"><strong>??</strong></a>, with the values of Table <a href="optimal-control.html#tab:oc-kuz-par">5.1</a>.</p>
+<p><strong>Definition: Optimal Control and Optimal State.</strong></p>
+<p>An admissible control <span class="math inline">\(u^*\in\mathcal{U}\)</span> is an optimal control if <span class="math inline">\(J(u^*)\)</span> is finite and</p>
 <p><span class="math display">\[J(u^*)\leq J(u)
 \qquad
 \text{for all }u\in\mathcal{U}.\]</span></p>
 <p>The corresponding state <span class="math inline">\(x^*=x(u^*)\)</span> is called the optimal state, and the pair <span class="math inline">\((x^*,u^*)\)</span> is called an optimal pair.</p>
-</div>
-<div class="example">
-<p><span id="exm:oc-kuz-optimal" class="example"><strong>Example 5.4  (The optimal control as a benchmark) </strong></span>Since every ON–OFF schedule of Example <a href="optimal-control.html#exm:oc-kuz-admissible">5.2</a> is admissible, Definition <a href="optimal-control.html#def:oc-optimal">5.3</a> gives</p>
-<p><span class="math display">\[J(u^*)\leq J(u_{\tau_{\mathrm{off}}})\qquad\text{for every }\tau_{\mathrm{off}}\geq0 .\]</span></p>
-<p>The optimal control is therefore a benchmark for simpler clinical schedules: no ON–OFF schedule, whatever its pause, can do better. Section <a href="optimal-control.html#sec:oc-kuznetsov">5.5</a> computes <span class="math inline">\(u^*\)</span> and measures how far ON–OFF schedules are from it.</p>
-</div>
+<p><strong>Example 1.7 (The optimal control as a benchmark).</strong></p>
+<p>Since every ON–OFF schedule of Example <a href="#exm:oc-kuz-admissible"><strong>??</strong></a> is admissible, Definition <a href="#def:oc-optimal"><strong>??</strong></a> gives
+<span class="math display">\[J(u^*)\leq J(u_{\tau_{\mathrm{off}}})\qquad\text{for every }\tau_{\mathrm{off}}\geq0 .\]</span></p>
+<p>The optimal control is therefore a benchmark for simpler clinical schedules: no ON–OFF schedule, whatever its pause, can do better. Section <a href="#sec:oc-kuznetsov"><strong>??</strong></a> computes <span class="math inline">\(u^*\)</span> and measures how far ON–OFF schedules are from it.</p>
 </div>
 <div id="components-of-the-objective-functional" class="section level3 hasAnchor" number="5.1.2">
 <h3><span class="header-section-number">5.1.2</span> Components of the objective functional<a href="optimal-control.html#components-of-the-objective-functional" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -539,23 +516,21 @@ x(0)=x_0,
 </tbody>
 </table>
 <p>The coefficients <span class="math inline">\(A\)</span>, <span class="math inline">\(B\)</span>, and <span class="math inline">\(C\)</span> determine the relative importance of the different components of the objective functional. Their appropriate values depend on the model, the scaling of the state variables, and the therapeutic objectives. Consequently, they should be interpreted in the context of the particular application, and sensitivity to their values should be examined.</p>
-<div class="example">
-<p><span id="exm:oc-kuz-weights" class="example"><strong>Example 5.5  (Choosing the weights) </strong></span>The objective functional of Example <a href="optimal-control.html#exm:oc-kuz-ocp">5.3</a> uses the tumor-burden term <span class="math inline">\(A\,T\)</span> and the quadratic treatment term of Table <a href="optimal-control.html#tab:oc-costs">5.2</a>. Because <span class="math inline">\(T\)</span> is measured in units of <span class="math inline">\(10^6\)</span> cells and <span class="math inline">\(u\)</span> is a fraction of the maximum dose, the weights must be read on these scales. With <span class="math inline">\(A=1\)</span> and <span class="math inline">\(B=50\)</span>, one time unit at full dose adds <span class="math inline">\(B/2=25\)</span> to <span class="math inline">\(J\)</span>, as much as one time unit with a tumor of 25 units (<span class="math inline">\(2.5\times10^7\)</span> cells). Adding <span class="math inline">\(-C\,E\)</span> would reward schedules that preserve the immune response, and adding <span class="math inline">\(C\,T(t_f)\)</span> would penalize the tumor left at the end of treatment.</p>
-</div>
+<p><strong>Example 1.8 (Choosing the weights).</strong></p>
+<p>The objective functional of Example <a href="#exm:oc-kuz-ocp"><strong>??</strong></a> uses the tumor-burden term <span class="math inline">\(A\,T\)</span> and the quadratic treatment term of Table <a href="optimal-control.html#tab:oc-costs">5.2</a>. Because <span class="math inline">\(T\)</span> is measured in units of <span class="math inline">\(10^6\)</span> cells and <span class="math inline">\(u\)</span> is a fraction of the maximum dose, the weights must be read on these scales. With <span class="math inline">\(A=1\)</span> and <span class="math inline">\(B=50\)</span>, one time unit at full dose adds <span class="math inline">\(B/2=25\)</span> to <span class="math inline">\(J\)</span>, as much as one time unit with a tumor of 25 units (<span class="math inline">\(2.5\times10^7\)</span> cells). Adding <span class="math inline">\(-C\,E\)</span> would reward schedules that preserve the immune response, and adding <span class="math inline">\(C\,T(t_f)\)</span> would penalize the tumor left at the end of treatment.</p>
 </div>
 <div id="why-use-a-quadratic-treatment-cost" class="section level3 hasAnchor" number="5.1.3">
 <h3><span class="header-section-number">5.1.3</span> Why use a quadratic treatment cost?<a href="optimal-control.html#why-use-a-quadratic-treatment-cost" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>A quadratic treatment cost is frequently used in optimal control models of cancer. For example, including a term <span class="math inline">\(Bu(t)^2/2\)</span> penalizes high treatment intensities more heavily than low ones. This can represent the increasing burden associated with intensive treatment.</p>
 <p>The quadratic formulation also has a mathematical advantage: it produces a strictly convex Hamiltonian with respect to the control when <span class="math inline">\(B&gt;0\)</span> and the remaining dynamics are affine in <span class="math inline">\(u\)</span>. Consequently, the unconstrained optimal control can often be obtained explicitly and then restricted to its admissible interval.</p>
 <p>In contrast, a linear treatment cost may produce bang-bang controls, in which treatment switches between its minimum and maximum allowable levels. Singular controls may also arise and require additional analysis <span class="citation">(<a href="references-1.html#ref-lenhart07">Lenhart and Workman 2007</a>; <a href="references-1.html#ref-schattler15">Schättler and Ledzewicz 2015</a>)</span>.</p>
-<div class="example">
-<p><span id="exm:oc-kuz-linear" class="example"><strong>Example 5.6  (Linear treatment cost and ON--OFF control) </strong></span>If the treatment term in Example <a href="optimal-control.html#exm:oc-kuz-ocp">5.3</a> were <span class="math inline">\(B\,u\)</span> instead of <span class="math inline">\(\tfrac{B}{2}u^2\)</span>, the Hamiltonian (Example <a href="optimal-control.html#exm:oc-kuz-H">5.8</a>) would be linear in <span class="math inline">\(u\)</span>, with coefficient <span class="math inline">\(B-\delta\lambda_T T\)</span>. Minimizing it over <span class="math inline">\([0,M]\)</span> gives the full dose <span class="math inline">\(u=M\)</span> where <span class="math inline">\(B-\delta\lambda_TT&lt;0\)</span> and no drug where <span class="math inline">\(B-\delta\lambda_TT&gt;0\)</span>. The optimal treatment is then of ON–OFF type, but its switching times are determined by the adjoint <span class="math inline">\(\lambda_T\)</span> rather than fixed in advance; a singular arc can occur where <span class="math inline">\(B-\delta\lambda_TT\)</span> vanishes on an interval. With the quadratic cost, the optimal dose can also take intermediate values.</p>
-</div>
+<p><strong>Example 1.9 (Linear treatment cost and ON–OFF control).</strong></p>
+<p>If the treatment term in Example <a href="#exm:oc-kuz-ocp"><strong>??</strong></a> were <span class="math inline">\(B\,u\)</span> instead of <span class="math inline">\(\tfrac{B}{2}u^2\)</span>, the Hamiltonian (Example <a href="#exm:oc-kuz-H"><strong>??</strong></a>) would be linear in <span class="math inline">\(u\)</span>, with coefficient <span class="math inline">\(B-\delta\lambda_T T\)</span>. Minimizing it over <span class="math inline">\([0,M]\)</span> gives the full dose <span class="math inline">\(u=M\)</span> where <span class="math inline">\(B-\delta\lambda_TT&lt;0\)</span> and no drug where <span class="math inline">\(B-\delta\lambda_TT&gt;0\)</span>. The optimal treatment is then of ON–OFF type, but its switching times are determined by the adjoint <span class="math inline">\(\lambda_T\)</span> rather than fixed in advance; a singular arc can occur where <span class="math inline">\(B-\delta\lambda_TT\)</span> vanishes on an interval. With the quadratic cost, the optimal dose can also take intermediate values.</p>
 </div>
 <div id="existence-of-an-optimal-control" class="section level3 hasAnchor" number="5.1.4">
 <h3><span class="header-section-number">5.1.4</span> Existence of an optimal control<a href="optimal-control.html#existence-of-an-optimal-control" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="theorem">
-<p><span id="thm:oc-existence" class="theorem"><strong>Theorem 5.1  (Existence of an Optimal Control; Fleming and Rishel) </strong></span>Consider the optimal control problem in Definition <a href="optimal-control.html#def:oc-ocp">5.2</a> with <span class="math inline">\(\phi=0\)</span>. Suppose the following conditions hold:</p>
+<p><strong>Theorem (Existence of an Optimal Control; Fleming and Rishel).</strong></p>
+<p>Consider the optimal control problem in Definition 1.2 with <span class="math inline">\(\phi=0\)</span>. Suppose the following conditions hold:</p>
 <ol style="list-style-type: decimal">
 <li><p>The set of admissible controls with corresponding state solutions is nonempty.</p></li>
 <li><p>The control set <span class="math inline">\(U\)</span> is closed and convex.</p></li>
@@ -573,20 +548,13 @@ x(0)=x_0,
 </ol>
 <p>Then there exists an optimal control <span class="math inline">\(u^*\in\mathcal{U}\)</span> for which <span class="math inline">\(J(u^*)\)</span> is finite.</p>
 </div>
-<p>Theorem <a href="optimal-control.html#thm:oc-existence">5.1</a> is a special case of the existence results of <span class="citation">Fleming and Rishel (<a href="references-1.html#ref-fleming75">1975</a>)</span>.</p>
-<div class="example">
-<p><span id="exm:oc-kuz-existence" class="example"><strong>Example 5.7  (Existence for the Kuznetsov problem) </strong></span>Theorem <a href="optimal-control.html#thm:oc-existence">5.1</a> applies to the problem of Example <a href="optimal-control.html#exm:oc-kuz-ocp">5.3</a>, although the untreated tumor can grow without bound. First, the states stay positive and bounded on <span class="math inline">\([0,t_f]\)</span> for every admissible <span class="math inline">\(u\)</span>. Writing the tumor equation as</p>
-<p><span class="math display">\[T(t)=T_0\exp\Bigl(\int_0^t\bigl(a-E(\xi)-\delta u(\xi)\bigr)\,d\xi\Bigr)\]</span></p>
-<p>shows that <span class="math inline">\(T&gt;0\)</span>, and <span class="math inline">\(T(t)\leq T_0e^{a t_f}\)</span> as long as <span class="math inline">\(E\geq0\)</span>. Since <span class="math inline">\(E&#39;=s&gt;0\)</span> whenever <span class="math inline">\(E=0\)</span>, the effector cells stay positive. Since <span class="math inline">\(pT/(g+T)&lt;p\)</span> and the terms <span class="math inline">\(-mET\)</span> and <span class="math inline">\(-dE\)</span> are nonpositive, <span class="math inline">\(E&#39;\leq s+pE\)</span>, which gives <span class="math inline">\(E(t)\leq(E_0+s/p)\,e^{p t_f}\)</span>. Hence the state equations have a solution on <span class="math inline">\([0,t_f]\)</span> for every admissible control, so condition 1 holds, and every trajectory stays in a fixed bounded box. The right-hand side may be modified outside a slightly larger box without changing any solution, so the growth bound in condition 3 holds, and it is affine in <span class="math inline">\(u\)</span> because the control enters only through the term <span class="math inline">\(-\delta uT\)</span>. Finally, <span class="math inline">\(U=[0,1]\)</span> is closed and convex, <span class="math inline">\(f=AT+\tfrac{B}{2}u^2\)</span> is convex in <span class="math inline">\(u\)</span>, and <span class="math inline">\(f\geq\tfrac{B}{2}|u|^2\)</span> because <span class="math inline">\(T\geq0\)</span>, so condition 5 holds with exponent 2. Hence an optimal control exists.</p>
-</div>
-</div>
 </div>
 <div id="pontryagins-maximum-principle" class="section level2 hasAnchor" number="5.2">
 <h2><span class="header-section-number">5.2</span> Pontryagin’s Maximum Principle<a href="optimal-control.html#pontryagins-maximum-principle" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="the-hamiltonian-and-adjoint-equations" class="section level3 hasAnchor" number="5.2.1">
 <h3><span class="header-section-number">5.2.1</span> The Hamiltonian and adjoint equations<a href="optimal-control.html#the-hamiltonian-and-adjoint-equations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="definition">
-<p><span id="def:oc-hamiltonian" class="definition"><strong>Definition 5.4  (Hamiltonian) </strong></span>The Hamiltonian associated with the optimal control problem in Definition <a href="optimal-control.html#def:oc-ocp">5.2</a> is</p>
+<p><strong>Definition (Hamiltonian).</strong></p>
+<p>The Hamiltonian associated with the optimal control problem in Definition 1.2 is</p>
 <p><span class="math display">\[H(t,x,u,\lambda)
 =
 f(t,x,u)+\lambda^\top g(t,x,u).\]</span></p>
@@ -598,13 +566,8 @@ f(t,x,u)
 \sum_{i=1}^{n}
 \lambda_i g_i(t,x,u),\]</span></p>
 <p>where <span class="math inline">\(\lambda\in\mathbb{R}^n\)</span> is the vector of adjoint variables, also called costate variables.</p>
-</div>
-<div class="example">
-<p><span id="exm:oc-kuz-H" class="example"><strong>Example 5.8  (Hamiltonian for the Kuznetsov problem) </strong></span>With adjoint variables <span class="math inline">\(\lambda=(\lambda_E,\lambda_T)^\top\)</span>, the Hamiltonian of Example <a href="optimal-control.html#exm:oc-kuz-ocp">5.3</a> is</p>
-<p><span class="math display">\[H=A\,T+\frac{B}{2}u^2+\lambda_E\Bigl(s+\frac{pET}{g+T}-mET-dE\Bigr)+\lambda_T\bigl(aT-ET-\delta uT\bigr).\]</span></p>
-</div>
-<div class="theorem">
-<p><span id="thm:oc-pmp" class="theorem"><strong>Theorem 5.2  (Pontryagin's Maximum Principle) </strong></span>Suppose <span class="math inline">\(u^*\)</span> is an optimal admissible control and <span class="math inline">\(x^*\)</span> is its corresponding state trajectory.</p>
+<p><strong>Theorem (Pontryagin’s Maximum Principle).</strong></p>
+<p>Suppose <span class="math inline">\(u^*\)</span> is an optimal admissible control and <span class="math inline">\(x^*\)</span> is its corresponding state trajectory.</p>
 <p>Under the standard differentiability and regularity assumptions for the normal case, there exists an absolutely continuous adjoint vector <span class="math inline">\(\lambda(t)\)</span> satisfying the following necessary conditions.</p>
 <p><strong>State equations:</strong></p>
 <p><span class="math display">\[x^{*\prime}(t)
@@ -628,22 +591,8 @@ x^*(0)=x_0.\]</span></p>
 \min_{v\in U}
 H(t,x^*,v,\lambda)\]</span></p>
 <p>for almost every <span class="math inline">\(t\in[0,t_f]\)</span>.</p>
-</div>
-<p>The Maximum Principle is due to <span class="citation">Pontryagin et al. (<a href="references-1.html#ref-pontryagin62">1962</a>)</span>; <span class="citation">Lenhart and Workman (<a href="references-1.html#ref-lenhart07">2007</a>)</span> derive these conditions for problems of the form considered here.</p>
-<div class="example">
-<p><span id="exm:oc-kuz-adjoint" class="example"><strong>Example 5.9  (Adjoint equations for the Kuznetsov problem) </strong></span>Differentiating the Hamiltonian of Example <a href="optimal-control.html#exm:oc-kuz-H">5.8</a> with respect to the states, and using <span class="math inline">\(\frac{\partial}{\partial T}\frac{pET}{g+T}=\frac{pgE}{(g+T)^2}\)</span>, gives</p>
-<p><span class="math display">\[\begin{aligned}
-\lambda_E&#39;&amp;=-\frac{\partial H}{\partial E}=-\lambda_E\Bigl(\frac{pT}{g+T}-mT-d\Bigr)+\lambda_T\,T,\\
-\lambda_T&#39;&amp;=-\frac{\partial H}{\partial T}=-A-\lambda_E\Bigl(\frac{pgE}{(g+T)^2}-mE\Bigr)-\lambda_T\bigl(a-E-\delta u\bigr),
-\end{aligned}\]</span></p>
-<p>with the transversality conditions <span class="math inline">\(\lambda_E(t_f)=\lambda_T(t_f)=0\)</span>, since <span class="math inline">\(\phi=0\)</span>. The state equations <span class="math inline">\(x&#39;=\partial H/\partial\lambda\)</span> are those of Example <a href="optimal-control.html#exm:oc-kuz-model">5.1</a>.</p>
-</div>
-<div class="definition">
-<p><span id="def:oc-os" class="definition"><strong>Definition 5.5  (Optimality System) </strong></span>The state equations, the adjoint equations with their transversality conditions, and the characterization of the optimal control obtained from the Hamiltonian minimization condition together form the optimality system.</p>
-</div>
-<div class="example">
-<p><span id="exm:oc-kuz-os-outline" class="example"><strong>Example 5.10  (Optimality system for the Kuznetsov problem) </strong></span>For the Kuznetsov problem, the optimality system consists of the two state equations of Example <a href="optimal-control.html#exm:oc-kuz-model">5.1</a>, the two adjoint equations of Example <a href="optimal-control.html#exm:oc-kuz-adjoint">5.9</a> with their transversality conditions, and the characterization of <span class="math inline">\(u^*\)</span> obtained by minimizing the Hamiltonian over <span class="math inline">\([0,M]\)</span>, which is derived in Examples <a href="optimal-control.html#exm:oc-kuz-interior">5.12</a> and <a href="optimal-control.html#exm:oc-kuz-bounded">5.13</a>. The complete system is written out in Example <a href="optimal-control.html#exm:oc-kuz-os">5.15</a>.</p>
-</div>
+<p><strong>Definition (Optimality System).</strong></p>
+<p>The state equations, the adjoint equations with their transversality conditions, and the characterization of the optimal control obtained from the Hamiltonian minimization condition together form the optimality system.</p>
 </div>
 <div id="interpretation-of-adjoint-variables" class="section level3 hasAnchor" number="5.2.2">
 <h3><span class="header-section-number">5.2.2</span> Interpretation of adjoint variables<a href="optimal-control.html#interpretation-of-adjoint-variables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -651,9 +600,6 @@ H(t,x^*,v,\lambda)\]</span></p>
 <p>Informally, <span class="math inline">\(\lambda_i(t)\)</span> measures how a small change in the state variable <span class="math inline">\(x_i(t)\)</span> affects the optimal value of the objective, with the remaining problem appropriately reoptimized.</p>
 <p>For example, if the tumor adjoint is positive, an increase in tumor burden increases the objective locally. The magnitude of the adjoint helps determine the value of reducing the tumor population through treatment.</p>
 <p>The biological interpretation of an adjoint variable depends on the objective functional. In particular, an immune-cell adjoint need not have the same sign or interpretation as a tumor-cell adjoint.</p>
-<div class="example">
-<p><span id="exm:oc-kuz-interp" class="example"><strong>Example 5.11  (Signs of the Kuznetsov adjoints) </strong></span>In Example <a href="optimal-control.html#exm:oc-kuz-adjoint">5.9</a>, <span class="math inline">\(\lambda_T(t)\)</span> is the marginal cost of one additional unit of tumor at time <span class="math inline">\(t\)</span>, and <span class="math inline">\(\lambda_E(t)\)</span> the marginal cost of one additional unit of effector cells. For the computed solution (Figure <a href="optimal-control.html#fig:oc-kuz-opt">5.4</a>), <span class="math inline">\(\lambda_E\leq0\)</span> on the whole interval: extra effector cells kill tumor cells and so lower the cost. The tumor adjoint is positive except on the short interval <span class="math inline">\(8.58\leq t\leq 8.90\)</span>, where it is slightly negative (its minimum is <span class="math inline">\(-0.0021\)</span>). On this interval an additional tumor cell stimulates enough recruitment of effector cells to lower the total cost slightly. The sign of an adjoint must therefore be read from the model, not assumed.</p>
-</div>
 </div>
 <div id="interior-optimal-controls" class="section level3 hasAnchor" number="5.2.3">
 <h3><span class="header-section-number">5.2.3</span> Interior optimal controls<a href="optimal-control.html#interior-optimal-controls" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -662,13 +608,6 @@ H(t,x^*,v,\lambda)\]</span></p>
 <p>For a scalar control, a necessary second-order condition for a local minimum with respect to the control is</p>
 <p><span class="math display">\[\frac{\partial^2 H}{\partial u^2}\geq 0.\]</span></p>
 <p>For multiple controls, the corresponding condition involves the positive semidefiniteness of the Hessian with respect to the control variables. These conditions characterize interior minimizers. When controls are subject to bounds, the minimization must instead be performed over the admissible interval.</p>
-<div class="example">
-<p><span id="exm:oc-kuz-interior" class="example"><strong>Example 5.12  (Interior control for the Kuznetsov problem) </strong></span>From the Hamiltonian of Example <a href="optimal-control.html#exm:oc-kuz-H">5.8</a>,</p>
-<p><span class="math display">\[\frac{\partial H}{\partial u}=B\,u-\delta\,\lambda_T\,T,\qquad\frac{\partial^2 H}{\partial u^2}=B&gt;0 .\]</span></p>
-<p>The Hamiltonian is strictly convex in <span class="math inline">\(u\)</span>, and on any interval where <span class="math inline">\(0&lt;u^*&lt;M\)</span>,</p>
-<p><span class="math display">\[u^*(t)=\widetilde u(t)=\frac{\delta\,\lambda_T(t)\,T^*(t)}{B}.\]</span></p>
-<p>The dose is proportional to <span class="math inline">\(\lambda_T\,T\)</span>, the marginal cost of the tumor multiplied by the number of tumor cells the drug can act on, and inversely proportional to the price <span class="math inline">\(B\)</span> of treatment.</p>
-</div>
 </div>
 <div id="bounded-optimal-controls" class="section level3 hasAnchor" number="5.2.4">
 <h3><span class="header-section-number">5.2.4</span> Bounded optimal controls<a href="optimal-control.html#bounded-optimal-controls" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -682,11 +621,6 @@ u^*(t)=u_{\max}, &amp; \dfrac{\partial H}{\partial u}&lt;0,
 <p>For a strictly convex quadratic Hamiltonian, solving the first-order condition gives an unconstrained minimizer, denoted by <span class="math inline">\(\widetilde{u}(t)\)</span>. The bounded optimal control is then obtained by projecting this value onto the admissible interval:</p>
 <p><span class="math display">\[u^*(t)=\min\left\{u_{\max},\,\max\{u_{\min},\widetilde{u}(t)\}\right\}.\]</span></p>
 <p>This projection formula is used in the numerical implementations later in the chapter.</p>
-<div class="example">
-<p><span id="exm:oc-kuz-bounded" class="example"><strong>Example 5.13  (Bounded control for the Kuznetsov problem) </strong></span>With <span class="math inline">\(U=[0,M]\)</span>, the projection formula gives</p>
-<p><span class="math display">\[u^*(t)=\min\Bigl\{M,\,\max\Bigl\{0,\,\frac{\delta\,\lambda_T(t)\,T^*(t)}{B}\Bigr\}\Bigr\}.\]</span></p>
-<p>For the values of Table <a href="optimal-control.html#tab:oc-kuz-par">5.1</a>, the upper bound is active at the start of treatment: the computed schedule gives the full dose until <span class="math inline">\(t\approx 0.7\)</span> (about 7 days), after which <span class="math inline">\(\delta\lambda_TT/B\)</span> falls below <span class="math inline">\(M\)</span> (Figure <a href="optimal-control.html#fig:oc-kuz-opt">5.4</a>).</p>
-</div>
 </div>
 <div id="multiple-states-and-multiple-controls" class="section level3 hasAnchor" number="5.2.5">
 <h3><span class="header-section-number">5.2.5</span> Multiple states and multiple controls<a href="optimal-control.html#multiple-states-and-multiple-controls" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -695,33 +629,11 @@ u^*(t)=u_{\max}, &amp; \dfrac{\partial H}{\partial u}&lt;0,
 <p>In matrix notation, this becomes</p>
 <p><span class="math display">\[\lambda&#39;=-\nabla_x f-\left(\frac{\partial g}{\partial x}\right)^\top\lambda.\]</span></p>
 <p>Thus, the adjoint system depends on the transpose of the Jacobian matrix of the state equations. This relationship is particularly useful when deriving optimality systems for cancer models with several interacting tumor and immune-cell populations.</p>
-<div class="example">
-<p><span id="exm:oc-kuz-matrix" class="example"><strong>Example 5.14  (Adjoint system in matrix form) </strong></span>For the Kuznetsov problem, <span class="math inline">\(x=(E,T)^\top\)</span> and <span class="math inline">\(\nabla_x f=(0,A)^\top\)</span>. The Jacobian matrix of the state equations is the Jacobian computed before Proposition <a href="the-kuznetsov-tumourimmune-model.html#prp:kuz-tumorfree">3.1</a>, with <span class="math inline">\(b=0\)</span> and <span class="math inline">\(n=1\)</span> and with the drug term <span class="math inline">\(-\delta u\)</span> added to its last entry, and the matrix form of the adjoint equations reads</p>
-<p><span class="math display">\[\begin{pmatrix}\lambda_E&#39;\\[4pt] \lambda_T&#39;\end{pmatrix}
-=-\begin{pmatrix}0\\[4pt] A\end{pmatrix}
--\begin{pmatrix}
-\dfrac{pT}{g+T}-mT-d &amp; -T\\[10pt]
-\dfrac{pgE}{(g+T)^2}-mE &amp; a-E-\delta u
-\end{pmatrix}
-\begin{pmatrix}\lambda_E\\[4pt] \lambda_T\end{pmatrix},\]</span></p>
-<p>where the matrix is the transpose of the Jacobian. Multiplying out reproduces the adjoint equations of Example <a href="optimal-control.html#exm:oc-kuz-adjoint">5.9</a>. The transpose moves each interaction into the equation of the other adjoint: the killing of tumor cells by effector cells, which gives the entry <span class="math inline">\(\partial T&#39;/\partial E=-T\)</span> of the Jacobian, appears as the term <span class="math inline">\(+\lambda_TT\)</span> in the equation for <span class="math inline">\(\lambda_E\)</span>, and the recruitment of effector cells by the tumor, which gives the entry <span class="math inline">\(\partial E&#39;/\partial T=pgE/(g+T)^2-mE\)</span>, appears in the equation for <span class="math inline">\(\lambda_T\)</span>.</p>
-</div>
-<div class="example">
-<p><span id="exm:oc-kuz-os" class="example"><strong>Example 5.15  (The complete optimality system) </strong></span>Collecting Examples <a href="optimal-control.html#exm:oc-kuz-model">5.1</a>, <a href="optimal-control.html#exm:oc-kuz-adjoint">5.9</a>, and <a href="optimal-control.html#exm:oc-kuz-bounded">5.13</a>, the optimality system for the Kuznetsov problem is</p>
-<p><span class="math display">\[\begin{aligned}
-E&#39;&amp;=s+\frac{pET}{g+T}-mET-dE,\\
-T&#39;&amp;=aT-ET-\delta u^*T,\\
-\lambda_E&#39;&amp;=-\lambda_E\Bigl(\frac{pT}{g+T}-mT-d\Bigr)+\lambda_TT,\\
-\lambda_T&#39;&amp;=-A-\lambda_E\Bigl(\frac{pgE}{(g+T)^2}-mE\Bigr)-\lambda_T(a-E-\delta u^*),\\
-u^*&amp;=\min\Bigl\{M,\,\max\Bigl\{0,\,\frac{\delta\lambda_TT}{B}\Bigr\}\Bigr\},
-\end{aligned}\]</span></p>
-<p>with <span class="math inline">\(E(0)=E_0\)</span>, <span class="math inline">\(T(0)=T_0\)</span>, and <span class="math inline">\(\lambda_E(t_f)=\lambda_T(t_f)=0\)</span>. The two states run forward from <span class="math inline">\(t=0\)</span> and the two adjoints run backward from <span class="math inline">\(t=t_f\)</span>; they are coupled through <span class="math inline">\(u^*\)</span> and through the products <span class="math inline">\(ET\)</span> and <span class="math inline">\(\lambda_TT\)</span>.</p>
-</div>
 </div>
 <div id="sufficient-conditions" class="section level3 hasAnchor" number="5.2.6">
 <h3><span class="header-section-number">5.2.6</span> Sufficient conditions<a href="optimal-control.html#sufficient-conditions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="theorem">
-<p><span id="thm:oc-sufficiency" class="theorem"><strong>Theorem 5.3  (Sufficiency; Mangasarian) </strong></span>Suppose the control set <span class="math inline">\(U\)</span> is convex, the terminal cost <span class="math inline">\(\phi\)</span> is convex and differentiable, and an admissible control <span class="math inline">\(u^*\in\mathcal{U}\)</span> with corresponding state <span class="math inline">\(x^*\)</span> and an absolutely continuous adjoint vector <span class="math inline">\(\lambda\)</span> satisfies the state equations, adjoint equations, transversality condition, and Hamiltonian minimization condition.</p>
+<p><strong>Theorem (Sufficiency; Mangasarian).</strong></p>
+<p>Suppose the control set <span class="math inline">\(U\)</span> is convex, the terminal cost <span class="math inline">\(\phi\)</span> is convex and differentiable, and an admissible control <span class="math inline">\(u^*\in\mathcal{U}\)</span> with corresponding state <span class="math inline">\(x^*\)</span> and an absolutely continuous adjoint vector <span class="math inline">\(\lambda\)</span> satisfies the state equations, adjoint equations, transversality condition, and Hamiltonian minimization condition.</p>
 <p>If, for almost every <span class="math inline">\(t\in[0,t_f]\)</span>, the mapping</p>
 <p><span class="math display">\[(x,u)
 \mapsto
@@ -729,442 +641,22 @@ H(t,x,u,\lambda(t))\]</span></p>
 <p>is convex on <span class="math inline">\(\mathbb{R}^n\times U\)</span>, then <span class="math inline">\(u^*\)</span> is an optimal control.</p>
 <p>If the mapping is strictly convex, then <span class="math inline">\(u^*\)</span> is the unique optimal control.</p>
 </div>
-<p>This sufficiency result is due to <span class="citation">Mangasarian (<a href="references-1.html#ref-mangasarian66">1966</a>)</span>.</p>
-<div class="example">
-<p><span id="exm:oc-kuz-sufficiency" class="example"><strong>Example 5.16  (Sufficiency fails for the Kuznetsov problem) </strong></span>The Hamiltonian of Example <a href="optimal-control.html#exm:oc-kuz-H">5.8</a> is affine in <span class="math inline">\(E\)</span>, so <span class="math inline">\(\partial^2H/\partial E^2=0\)</span>, while</p>
-<p><span class="math display">\[\frac{\partial^2H}{\partial E\,\partial T}=\lambda_E\Bigl(\frac{pg}{(g+T)^2}-m\Bigr)-\lambda_T .\]</span></p>
-<p>Whenever this mixed derivative is nonzero, the Hessian of <span class="math inline">\(H\)</span> with respect to <span class="math inline">\((E,T)\)</span> has determinant <span class="math inline">\(-(\partial^2H/\partial E\,\partial T)^2&lt;0\)</span>, so <span class="math inline">\(H\)</span> is not convex in <span class="math inline">\((x,u)\)</span> and Theorem <a href="optimal-control.html#thm:oc-sufficiency">5.3</a> does not apply. Optimality of the computed solution therefore rests on existence (Example <a href="optimal-control.html#exm:oc-kuz-existence">5.7</a>) together with uniqueness of the solution of the optimality system.</p>
-</div>
-</div>
 <div id="uniqueness" class="section level3 hasAnchor" number="5.2.7">
 <h3><span class="header-section-number">5.2.7</span> Uniqueness<a href="optimal-control.html#uniqueness" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="definition">
-<p><span id="def:oc-uniqueness" class="definition"><strong>Definition 5.6  (Uniqueness of the Optimal Control) </strong></span>An optimal control <span class="math inline">\(u^*\)</span> is unique if every other optimal control <span class="math inline">\(u\)</span> satisfies</p>
+<p><strong>Definition (Uniqueness of the Optimal Control).</strong></p>
+<p>An optimal control <span class="math inline">\(u^*\)</span> is unique if every other optimal control <span class="math inline">\(u\)</span> satisfies</p>
 <p><span class="math display">\[u(t)=u^*(t)
 \qquad
 \text{for almost every }t\in[0,t_f].\]</span></p>
 <p>If the state equations have a unique solution for each admissible control, the corresponding optimal state is also unique.</p>
 </div>
-<div class="example">
-<p><span id="exm:oc-kuz-uniqueness" class="example"><strong>Example 5.17  (Checking uniqueness numerically) </strong></span>Uniqueness of the optimal control is difficult to prove for nonlinear models over long time horizons, and the Kuznetsov problem with <span class="math inline">\(t_f=20\)</span> is no exception. A practical check is to solve the optimality system from several initial guesses. Starting the safeguarded sweep of Section <a href="optimal-control.html#sec:oc-safeguard">5.5.2</a> from full-dose treatment, half-dose treatment, and the ON–OFF schedules with <span class="math inline">\(\tau_{\mathrm{on}}=0.5\)</span> and <span class="math inline">\(\tau_{\mathrm{off}}=0.5\)</span> or <span class="math inline">\(1\)</span> gives the same control and the same value <span class="math inline">\(J=259.65\)</span> in all four cases. This does not prove uniqueness, but it is reassuring.</p>
 </div>
+<div id="a-gompertzian-tumor-growth-model" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> A Gompertzian Tumor-Growth Model<a href="optimal-control.html#a-gompertzian-tumor-growth-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 </div>
-</div>
-<div id="sec:oc-gompertz" class="section level2 hasAnchor" number="5.3">
-<h2><span class="header-section-number">5.3</span> A Gompertzian Tumor-Growth Model<a href="optimal-control.html#sec:oc-gompertz" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>To illustrate the derivation and numerical solution of an optimal treatment strategy, consider a tumor population <span class="math inline">\(N(t)\)</span> that follows Gompertzian growth in the absence of treatment, and let <span class="math inline">\(u(t)\)</span> represent the intensity of a chemotherapy treatment. The controlled model is</p>
-<p><span class="math display">\[\frac{dN}{dt}=rN\ln\left(\frac{1}{N}\right)-\delta u(t)N,\qquad N(0)=N_0,\]</span></p>
-<p>where <span class="math inline">\(r&gt;0\)</span> is the tumor growth parameter, <span class="math inline">\(\delta&gt;0\)</span> represents treatment efficacy, and <span class="math inline">\(0&lt;N_0&lt;1\)</span>. Here, the tumor population is normalized so that the carrying capacity is one. The first term describes Gompertzian tumor growth, while the second represents treatment-induced tumor reduction.</p>
-<div class="proposition">
-<p><span id="prp:oc-gompertz-bounds" class="proposition"><strong>Proposition 5.1  (Bounds on the tumor density) </strong></span>For every admissible control <span class="math inline">\(u\)</span> with <span class="math inline">\(0\leq u\leq M\)</span>, the solution of the Gompertzian model with <span class="math inline">\(0&lt;N_0&lt;1\)</span> satisfies <span class="math inline">\(0&lt;N(t)&lt;1\)</span> for all <span class="math inline">\(t\in[0,t_f]\)</span>.</p>
-</div>
-<div class="proof">
-<p><span id="unlabeled-div-1" class="proof"><em>Proof</em>. </span>Writing the model as <span class="math inline">\(N&#39;=N\bigl(r\ln(1/N)-\delta u\bigr)\)</span> gives</p>
-<p><span class="math display">\[N(t)=N_0\exp\left(\int_0^t\bigl(r\ln(1/N(\xi))-\delta u(\xi)\bigr)\,d\xi\right)&gt;0 .\]</span></p>
-<p>Since <span class="math inline">\(N&#39;\leq rN\ln(1/N)\)</span> and <span class="math inline">\(N\equiv 1\)</span> is an equilibrium of the untreated equation, the comparison principle gives <span class="math inline">\(N(t)&lt;1\)</span>.</p>
-</div>
-<p>We seek a treatment strategy that reduces tumor burden while avoiding unnecessarily intensive chemotherapy. For this purpose, consider the objective functional</p>
-<p><span class="math display">\[J(u)=\int_0^{t_f}\left[AN(t)^2+u(t)^2\right]dt,\]</span></p>
-<p>subject to the state equation and the control constraint <span class="math inline">\(0\leq u(t)\leq M\)</span>. The parameter <span class="math inline">\(A&gt;0\)</span> determines the relative importance of reducing tumor burden, while the quadratic control term penalizes intensive treatment. There is no terminal cost in this formulation. Therefore, the objective measures tumor burden and treatment intensity over the entire treatment period rather than penalizing only the tumor population at the final time.</p>
-<p>Theorem <a href="optimal-control.html#thm:oc-existence">5.1</a> applies to this problem. Take <span class="math inline">\(U=[0,M]\)</span>. Since <span class="math inline">\(0&lt;N(t)&lt;1\)</span> for all <span class="math inline">\(t\)</span> (Proposition <a href="optimal-control.html#prp:oc-gompertz-bounds">5.1</a>) and <span class="math inline">\(0\leq N\ln(1/N)\leq e^{-1}\)</span> on <span class="math inline">\((0,1]\)</span>, the right-hand side <span class="math inline">\(rN\ln(1/N)-\delta uN\)</span> is affine in <span class="math inline">\(u\)</span> and bounded by <span class="math inline">\(r/e+\delta M\)</span>. The integrand <span class="math inline">\(AN^2+u^2\)</span> is convex in <span class="math inline">\(u\)</span> and satisfies <span class="math inline">\(AN^2+u^2\geq |u|^2\)</span>, so condition 5 holds with exponent 2. Hence an optimal control exists.</p>
-</div>
-<div id="sec:oc-gompertz-derivation" class="section level2 hasAnchor" number="5.4">
-<h2><span class="header-section-number">5.4</span> Derivation of the Optimality System for the Gompertzian Model and numerical solution<a href="optimal-control.html#sec:oc-gompertz-derivation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="hamiltonian-and-adjoint-equation" class="section level3 hasAnchor" number="5.4.1">
-<h3><span class="header-section-number">5.4.1</span> Hamiltonian and adjoint equation<a href="optimal-control.html#hamiltonian-and-adjoint-equation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Introducing the adjoint variable <span class="math inline">\(\lambda(t)\)</span>, the Hamiltonian is</p>
-<p><span class="math display">\[H=AN^2+u^2+\lambda\left[rN\ln\left(\frac{1}{N}\right)-\delta uN\right].\]</span></p>
-<p>The adjoint equation is obtained from <span class="math inline">\(\lambda&#39;=-\partial H/\partial N\)</span>. Differentiating the Hamiltonian with respect to <span class="math inline">\(N\)</span> gives</p>
-<p><span class="math display">\[\frac{\partial H}{\partial N}=2AN+\lambda\left[r\ln\left(\frac{1}{N}\right)-r-\delta u\right].\]</span></p>
-<p>Therefore, the adjoint equation is</p>
-<p><span class="math display">\[\lambda&#39;=-2AN-\lambda\left[r\ln\left(\frac{1}{N}\right)-r-\delta u\right].\]</span></p>
-<p>Since the objective functional does not contain a terminal cost, the transversality condition is <span class="math inline">\(\lambda(t_f)=0\)</span>.</p>
-</div>
-<div id="optimal-control-characterization" class="section level3 hasAnchor" number="5.4.2">
-<h3><span class="header-section-number">5.4.2</span> Optimal control characterization<a href="optimal-control.html#optimal-control-characterization" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>The optimality condition is obtained by differentiating the Hamiltonian with respect to <span class="math inline">\(u\)</span>:</p>
-<p><span class="math display">\[\frac{\partial H}{\partial u}=2u-\lambda\delta N.\]</span></p>
-<p>For an interior optimal control, <span class="math inline">\(2u-\lambda\delta N=0\)</span>, which gives the unconstrained optimal control</p>
-<p><span class="math display">\[\widetilde{u}(t)=\frac{\lambda(t)\delta N(t)}{2}.\]</span></p>
-<p>Since the treatment intensity is constrained by <span class="math inline">\(0\leq u(t)\leq M\)</span>, the optimal control is</p>
-<p><span class="math display">\[u^*(t)=\min\left\{M,\,\max\left\{0,\frac{\lambda(t)\delta N(t)}{2}\right\}\right\}.\]</span></p>
-<p>The resulting optimality system consists of the state equation, adjoint equation, and optimal control characterization:</p>
-<p><span class="math display">\[\begin{aligned}
-N&#39;&amp;=rN\ln\left(\frac{1}{N}\right)-\delta u^*N, &amp; N(0)&amp;=N_0,\\
-\lambda&#39;&amp;=-2AN-\lambda\left[r\ln\left(\frac{1}{N}\right)-r-\delta u^*\right], &amp; \lambda(t_f)&amp;=0,\\
-u^*&amp;=\min\left\{M,\,\max\left\{0,\frac{\lambda\delta N}{2}\right\}\right\}.
-\end{aligned}\]</span></p>
-<p>The state and adjoint equations are coupled through the optimal control. Moreover, the state has an initial condition, whereas the adjoint has a terminal condition. Consequently, the system forms a two-point boundary value problem.</p>
-<p>Theorem <a href="optimal-control.html#thm:oc-sufficiency">5.3</a> does not apply directly to this problem. Since <span class="math inline">\(\partial^2\bigl(N\ln(1/N)\bigr)/\partial N^2=-1/N&lt;0\)</span>, the Hamiltonian is not convex in <span class="math inline">\(N\)</span> when <span class="math inline">\(\lambda&gt;0\)</span>. Optimality must therefore be argued through existence, shown in Section <a href="optimal-control.html#sec:oc-gompertz">5.3</a>, together with uniqueness of the solution of the optimality system.</p>
-</div>
-<div id="the-forwardbackward-sweep-method" class="section level3 hasAnchor" number="5.4.3">
-<h3><span class="header-section-number">5.4.3</span> The forward–backward sweep method<a href="optimal-control.html#the-forwardbackward-sweep-method" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>The optimality system is a two-point boundary value problem: the state is specified at the initial time, while the adjoint is specified at the terminal time. The forward–backward sweep method (FBSM) is a numerical approach commonly used to approximate solutions to such systems. It alternates between solving the state equations forward in time and the adjoint equations backward in time, updating the control at each iteration <span class="citation">(<a href="references-1.html#ref-lenhart07">Lenhart and Workman 2007</a>)</span>. A typical implementation consists of the following steps:</p>
-<ol style="list-style-type: decimal">
-<li><p>Discretize the interval <span class="math inline">\([0,t_f]\)</span> into <span class="math inline">\(n\)</span> time steps of size <span class="math inline">\(h=t_f/n\)</span>. Choose an initial guess for the control, such as <span class="math inline">\(u(t)\equiv 0\)</span>.</p></li>
-<li><p>Using the current control, solve the state equations forward in time from the initial condition <span class="math inline">\(x(0)=x_0\)</span>.</p></li>
-<li><p>Using the newly computed state trajectory, solve the adjoint equations backward in time from the terminal condition <span class="math inline">\(\lambda(t_f)\)</span>.</p></li>
-<li><p>Update the control using its optimality characterization. For a quadratic control cost, this typically involves projecting the unconstrained control onto its admissible interval.</p></li>
-<li><p>Relax the control update by taking a weighted average of the new and previous control values:</p>
-<p><span class="math display">\[u_{\mathrm{updated}}=\theta u_{\mathrm{new}}+(1-\theta)u_{\mathrm{old}},\]</span></p>
-<p>where <span class="math inline">\(0&lt;\theta\leq 1\)</span> is a relaxation parameter.</p></li>
-<li><p>Repeat the forward and backward sweeps until the relative changes in the state, adjoint, and control trajectories fall below a prescribed tolerance.</p></li>
-</ol>
-<p>The relaxation step can improve numerical stability and convergence in practice. However, convergence of the method is not guaranteed for every model, time horizon, or initial control guess. The choice of time discretization and relaxation parameter can therefore be important. A common convergence criterion is</p>
-<p><span class="math display">\[\max\left\{\frac{\|u^{(k+1)}-u^{(k)}\|_1}{\max(\|u^{(k+1)}\|_1,\varepsilon)},\frac{\|x^{(k+1)}-x^{(k)}\|_1}{\max(\|x^{(k+1)}\|_1,\varepsilon)},\frac{\|\lambda^{(k+1)}-\lambda^{(k)}\|_1}{\max(\|\lambda^{(k+1)}\|_1,\varepsilon)}\right\}&lt;\mathrm{tol},\]</span></p>
-<p>where <span class="math inline">\(k\)</span> denotes the iteration number, <span class="math inline">\(\mathrm{tol}\)</span> is the prescribed tolerance, and <span class="math inline">\(\varepsilon&gt;0\)</span> is a small number used to avoid division by zero.</p>
-</div>
-<div id="implementation-in-r" class="section level3 hasAnchor" number="5.4.4">
-<h3><span class="header-section-number">5.4.4</span> Implementation in R<a href="optimal-control.html#implementation-in-r" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>For the Gompertzian model, the state and adjoint equations are those of the optimality system above. Both equations can be integrated numerically using the fourth-order Runge–Kutta method (RK4). The state equation is integrated forward from <span class="math inline">\(N(0)=N_0\)</span>, while the adjoint equation is integrated backward from <span class="math inline">\(\lambda(t_f)=0\)</span>. At each iteration, the control is updated by the projection formula. The following R implementation illustrates the forward–backward sweep procedure.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="optimal-control.html#cb17-1" tabindex="-1"></a>fbsm <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">r =</span> <span class="fl">0.3</span>, <span class="at">A =</span> <span class="dv">3</span>, <span class="at">delta =</span> <span class="fl">0.45</span>, <span class="at">N0 =</span> <span class="fl">0.975</span>,</span>
-<span id="cb17-2"><a href="optimal-control.html#cb17-2" tabindex="-1"></a>                 <span class="at">M =</span> <span class="fl">1.0</span>, <span class="at">tf =</span> <span class="dv">20</span>, <span class="at">n =</span> <span class="dv">1000</span>, <span class="at">tol =</span> <span class="dv">1</span>e<span class="sc">-</span><span class="dv">3</span>,</span>
-<span id="cb17-3"><a href="optimal-control.html#cb17-3" tabindex="-1"></a>                 <span class="at">max_iter =</span> <span class="dv">500</span>, <span class="at">theta =</span> <span class="fl">0.5</span>) {</span>
-<span id="cb17-4"><a href="optimal-control.html#cb17-4" tabindex="-1"></a></span>
-<span id="cb17-5"><a href="optimal-control.html#cb17-5" tabindex="-1"></a>  h <span class="ot">&lt;-</span> tf <span class="sc">/</span> n</span>
-<span id="cb17-6"><a href="optimal-control.html#cb17-6" tabindex="-1"></a>  t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, tf, <span class="at">length.out =</span> n <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb17-7"><a href="optimal-control.html#cb17-7" tabindex="-1"></a></span>
-<span id="cb17-8"><a href="optimal-control.html#cb17-8" tabindex="-1"></a>  u   <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb17-9"><a href="optimal-control.html#cb17-9" tabindex="-1"></a>  N   <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb17-10"><a href="optimal-control.html#cb17-10" tabindex="-1"></a>  lam <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb17-11"><a href="optimal-control.html#cb17-11" tabindex="-1"></a></span>
-<span id="cb17-12"><a href="optimal-control.html#cb17-12" tabindex="-1"></a>  <span class="co"># Right-hand side of the state equation</span></span>
-<span id="cb17-13"><a href="optimal-control.html#cb17-13" tabindex="-1"></a>  fN <span class="ot">&lt;-</span> <span class="cf">function</span>(N, u) {</span>
-<span id="cb17-14"><a href="optimal-control.html#cb17-14" tabindex="-1"></a>    r <span class="sc">*</span> N <span class="sc">*</span> <span class="fu">log</span>(<span class="dv">1</span> <span class="sc">/</span> N) <span class="sc">-</span> delta <span class="sc">*</span> u <span class="sc">*</span> N</span>
-<span id="cb17-15"><a href="optimal-control.html#cb17-15" tabindex="-1"></a>  }</span>
-<span id="cb17-16"><a href="optimal-control.html#cb17-16" tabindex="-1"></a></span>
-<span id="cb17-17"><a href="optimal-control.html#cb17-17" tabindex="-1"></a>  <span class="co"># Right-hand side of the adjoint equation</span></span>
-<span id="cb17-18"><a href="optimal-control.html#cb17-18" tabindex="-1"></a>  fl <span class="ot">&lt;-</span> <span class="cf">function</span>(N, lam, u) {</span>
-<span id="cb17-19"><a href="optimal-control.html#cb17-19" tabindex="-1"></a>    <span class="sc">-</span><span class="dv">2</span> <span class="sc">*</span> A <span class="sc">*</span> N <span class="sc">-</span> lam <span class="sc">*</span> (r <span class="sc">*</span> <span class="fu">log</span>(<span class="dv">1</span> <span class="sc">/</span> N) <span class="sc">-</span> r <span class="sc">-</span> delta <span class="sc">*</span> u)</span>
-<span id="cb17-20"><a href="optimal-control.html#cb17-20" tabindex="-1"></a>  }</span>
-<span id="cb17-21"><a href="optimal-control.html#cb17-21" tabindex="-1"></a></span>
-<span id="cb17-22"><a href="optimal-control.html#cb17-22" tabindex="-1"></a>  eps <span class="ot">&lt;-</span> <span class="dv">1</span>e<span class="sc">-</span><span class="dv">12</span></span>
-<span id="cb17-23"><a href="optimal-control.html#cb17-23" tabindex="-1"></a>  err <span class="ot">&lt;-</span> <span class="cn">Inf</span></span>
-<span id="cb17-24"><a href="optimal-control.html#cb17-24" tabindex="-1"></a></span>
-<span id="cb17-25"><a href="optimal-control.html#cb17-25" tabindex="-1"></a>  <span class="cf">for</span> (it <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>max_iter) {</span>
-<span id="cb17-26"><a href="optimal-control.html#cb17-26" tabindex="-1"></a></span>
-<span id="cb17-27"><a href="optimal-control.html#cb17-27" tabindex="-1"></a>    u_old   <span class="ot">&lt;-</span> u</span>
-<span id="cb17-28"><a href="optimal-control.html#cb17-28" tabindex="-1"></a>    N_old   <span class="ot">&lt;-</span> N</span>
-<span id="cb17-29"><a href="optimal-control.html#cb17-29" tabindex="-1"></a>    lam_old <span class="ot">&lt;-</span> lam</span>
-<span id="cb17-30"><a href="optimal-control.html#cb17-30" tabindex="-1"></a></span>
-<span id="cb17-31"><a href="optimal-control.html#cb17-31" tabindex="-1"></a>    <span class="co"># Forward sweep: state equation (RK4)</span></span>
-<span id="cb17-32"><a href="optimal-control.html#cb17-32" tabindex="-1"></a>    N[<span class="dv">1</span>] <span class="ot">&lt;-</span> N0</span>
-<span id="cb17-33"><a href="optimal-control.html#cb17-33" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
-<span id="cb17-34"><a href="optimal-control.html#cb17-34" tabindex="-1"></a>      um <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> (u[i] <span class="sc">+</span> u[i <span class="sc">+</span> <span class="dv">1</span>])</span>
-<span id="cb17-35"><a href="optimal-control.html#cb17-35" tabindex="-1"></a></span>
-<span id="cb17-36"><a href="optimal-control.html#cb17-36" tabindex="-1"></a>      k1 <span class="ot">&lt;-</span> <span class="fu">fN</span>(N[i], u[i])</span>
-<span id="cb17-37"><a href="optimal-control.html#cb17-37" tabindex="-1"></a>      k2 <span class="ot">&lt;-</span> <span class="fu">fN</span>(N[i] <span class="sc">+</span> h <span class="sc">*</span> k1 <span class="sc">/</span> <span class="dv">2</span>, um)</span>
-<span id="cb17-38"><a href="optimal-control.html#cb17-38" tabindex="-1"></a>      k3 <span class="ot">&lt;-</span> <span class="fu">fN</span>(N[i] <span class="sc">+</span> h <span class="sc">*</span> k2 <span class="sc">/</span> <span class="dv">2</span>, um)</span>
-<span id="cb17-39"><a href="optimal-control.html#cb17-39" tabindex="-1"></a>      k4 <span class="ot">&lt;-</span> <span class="fu">fN</span>(N[i] <span class="sc">+</span> h <span class="sc">*</span> k3, u[i <span class="sc">+</span> <span class="dv">1</span>])</span>
-<span id="cb17-40"><a href="optimal-control.html#cb17-40" tabindex="-1"></a></span>
-<span id="cb17-41"><a href="optimal-control.html#cb17-41" tabindex="-1"></a>      N[i <span class="sc">+</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> N[i] <span class="sc">+</span> h <span class="sc">/</span> <span class="dv">6</span> <span class="sc">*</span> (k1 <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> k2 <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> k3 <span class="sc">+</span> k4)</span>
-<span id="cb17-42"><a href="optimal-control.html#cb17-42" tabindex="-1"></a>    }</span>
-<span id="cb17-43"><a href="optimal-control.html#cb17-43" tabindex="-1"></a></span>
-<span id="cb17-44"><a href="optimal-control.html#cb17-44" tabindex="-1"></a>    <span class="co"># Backward sweep: adjoint equation (RK4)</span></span>
-<span id="cb17-45"><a href="optimal-control.html#cb17-45" tabindex="-1"></a>    lam[n <span class="sc">+</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb17-46"><a href="optimal-control.html#cb17-46" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> (n <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span><span class="dv">2</span>) {</span>
-<span id="cb17-47"><a href="optimal-control.html#cb17-47" tabindex="-1"></a>      um <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> (u[i] <span class="sc">+</span> u[i <span class="sc">-</span> <span class="dv">1</span>])</span>
-<span id="cb17-48"><a href="optimal-control.html#cb17-48" tabindex="-1"></a>      Nm <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> (N[i] <span class="sc">+</span> N[i <span class="sc">-</span> <span class="dv">1</span>])</span>
-<span id="cb17-49"><a href="optimal-control.html#cb17-49" tabindex="-1"></a></span>
-<span id="cb17-50"><a href="optimal-control.html#cb17-50" tabindex="-1"></a>      k1 <span class="ot">&lt;-</span> <span class="fu">fl</span>(N[i], lam[i], u[i])</span>
-<span id="cb17-51"><a href="optimal-control.html#cb17-51" tabindex="-1"></a>      k2 <span class="ot">&lt;-</span> <span class="fu">fl</span>(Nm, lam[i] <span class="sc">-</span> h <span class="sc">*</span> k1 <span class="sc">/</span> <span class="dv">2</span>, um)</span>
-<span id="cb17-52"><a href="optimal-control.html#cb17-52" tabindex="-1"></a>      k3 <span class="ot">&lt;-</span> <span class="fu">fl</span>(Nm, lam[i] <span class="sc">-</span> h <span class="sc">*</span> k2 <span class="sc">/</span> <span class="dv">2</span>, um)</span>
-<span id="cb17-53"><a href="optimal-control.html#cb17-53" tabindex="-1"></a>      k4 <span class="ot">&lt;-</span> <span class="fu">fl</span>(N[i <span class="sc">-</span> <span class="dv">1</span>], lam[i] <span class="sc">-</span> h <span class="sc">*</span> k3, u[i <span class="sc">-</span> <span class="dv">1</span>])</span>
-<span id="cb17-54"><a href="optimal-control.html#cb17-54" tabindex="-1"></a></span>
-<span id="cb17-55"><a href="optimal-control.html#cb17-55" tabindex="-1"></a>      lam[i <span class="sc">-</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> lam[i] <span class="sc">-</span> h <span class="sc">/</span> <span class="dv">6</span> <span class="sc">*</span> (k1 <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> k2 <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> k3 <span class="sc">+</span> k4)</span>
-<span id="cb17-56"><a href="optimal-control.html#cb17-56" tabindex="-1"></a>    }</span>
-<span id="cb17-57"><a href="optimal-control.html#cb17-57" tabindex="-1"></a></span>
-<span id="cb17-58"><a href="optimal-control.html#cb17-58" tabindex="-1"></a>    <span class="co"># Optimal control update (projection onto [0, M])</span></span>
-<span id="cb17-59"><a href="optimal-control.html#cb17-59" tabindex="-1"></a>    u_star <span class="ot">&lt;-</span> <span class="fu">pmin</span>(M, <span class="fu">pmax</span>(<span class="dv">0</span>, lam <span class="sc">*</span> delta <span class="sc">*</span> N <span class="sc">/</span> <span class="dv">2</span>))</span>
-<span id="cb17-60"><a href="optimal-control.html#cb17-60" tabindex="-1"></a></span>
-<span id="cb17-61"><a href="optimal-control.html#cb17-61" tabindex="-1"></a>    <span class="co"># Relaxation</span></span>
-<span id="cb17-62"><a href="optimal-control.html#cb17-62" tabindex="-1"></a>    u <span class="ot">&lt;-</span> theta <span class="sc">*</span> u_star <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">-</span> theta) <span class="sc">*</span> u_old</span>
-<span id="cb17-63"><a href="optimal-control.html#cb17-63" tabindex="-1"></a></span>
-<span id="cb17-64"><a href="optimal-control.html#cb17-64" tabindex="-1"></a>    <span class="co"># Relative convergence error</span></span>
-<span id="cb17-65"><a href="optimal-control.html#cb17-65" tabindex="-1"></a>    err_u   <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">abs</span>(u <span class="sc">-</span> u_old))     <span class="sc">/</span> <span class="fu">max</span>(<span class="fu">sum</span>(<span class="fu">abs</span>(u)), eps)</span>
-<span id="cb17-66"><a href="optimal-control.html#cb17-66" tabindex="-1"></a>    err_N   <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">abs</span>(N <span class="sc">-</span> N_old))     <span class="sc">/</span> <span class="fu">max</span>(<span class="fu">sum</span>(<span class="fu">abs</span>(N)), eps)</span>
-<span id="cb17-67"><a href="optimal-control.html#cb17-67" tabindex="-1"></a>    err_lam <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">abs</span>(lam <span class="sc">-</span> lam_old)) <span class="sc">/</span> <span class="fu">max</span>(<span class="fu">sum</span>(<span class="fu">abs</span>(lam)), eps)</span>
-<span id="cb17-68"><a href="optimal-control.html#cb17-68" tabindex="-1"></a></span>
-<span id="cb17-69"><a href="optimal-control.html#cb17-69" tabindex="-1"></a>    err <span class="ot">&lt;-</span> <span class="fu">max</span>(err_u, err_N, err_lam)</span>
-<span id="cb17-70"><a href="optimal-control.html#cb17-70" tabindex="-1"></a></span>
-<span id="cb17-71"><a href="optimal-control.html#cb17-71" tabindex="-1"></a>    <span class="cf">if</span> (err <span class="sc">&lt;</span> tol) <span class="cf">break</span></span>
-<span id="cb17-72"><a href="optimal-control.html#cb17-72" tabindex="-1"></a>  }</span>
-<span id="cb17-73"><a href="optimal-control.html#cb17-73" tabindex="-1"></a></span>
-<span id="cb17-74"><a href="optimal-control.html#cb17-74" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">t =</span> t, <span class="at">N =</span> N, <span class="at">u =</span> u, <span class="at">lam =</span> lam,</span>
-<span id="cb17-75"><a href="optimal-control.html#cb17-75" tabindex="-1"></a>       <span class="at">iterations =</span> it, <span class="at">error =</span> err)</span>
-<span id="cb17-76"><a href="optimal-control.html#cb17-76" tabindex="-1"></a>}</span></code></pre></div>
-<p>The implementation returns the time vector, tumor trajectory, optimal treatment profile, adjoint trajectory, number of iterations, and final convergence error.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="optimal-control.html#cb18-1" tabindex="-1"></a>sol <span class="ot">&lt;-</span> <span class="fu">fbsm</span>()</span>
-<span id="cb18-2"><a href="optimal-control.html#cb18-2" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Iterations:&quot;</span>, sol<span class="sc">$</span>iterations,</span>
-<span id="cb18-3"><a href="optimal-control.html#cb18-3" tabindex="-1"></a>    <span class="st">&quot;  Final error:&quot;</span>, <span class="fu">signif</span>(sol<span class="sc">$</span>error, <span class="dv">3</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
-<pre><code>Iterations: 9   Final error: 0.000497 </code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="optimal-control.html#cb20-1" tabindex="-1"></a>op <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb20-2"><a href="optimal-control.html#cb20-2" tabindex="-1"></a><span class="fu">plot</span>(sol<span class="sc">$</span>t, sol<span class="sc">$</span>N, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>,</span>
-<span id="cb20-3"><a href="optimal-control.html#cb20-3" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Time (days)&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Tumor density N(t)&quot;</span>)</span>
-<span id="cb20-4"><a href="optimal-control.html#cb20-4" tabindex="-1"></a><span class="fu">plot</span>(sol<span class="sc">$</span>t, sol<span class="sc">$</span>u, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">lwd =</span> <span class="dv">2</span>,</span>
-<span id="cb20-5"><a href="optimal-control.html#cb20-5" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">&quot;Time (days)&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Treatment u(t)&quot;</span>)</span></code></pre></div>
-<div class="figure"><span style="display:block;" id="fig:oc-gomp-opt"></span>
-<img src="_main_files/figure-html/oc-gomp-opt-1.png" alt="Optimal tumor density and treatment for the Gompertzian model." width="768" />
-<p class="caption">
-Figure 5.2: Optimal tumor density and treatment for the Gompertzian model.
-</p>
-</div>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="optimal-control.html#cb21-1" tabindex="-1"></a><span class="fu">par</span>(op)</span></code></pre></div>
-<p>The numerical solution should be examined to verify that the control remains within its admissible bounds and that the state and adjoint trajectories satisfy their respective boundary conditions. It is also useful to evaluate the objective functional under the computed treatment strategy and compare it with the objective values obtained under simple alternative strategies, such as no treatment or a constant treatment intensity. Such comparisons provide a practical check on the numerical solution, although they do not independently establish global optimality.</p>
-</div>
-<div id="interactive-example" class="section level3 hasAnchor" number="5.4.5">
-<h3><span class="header-section-number">5.4.5</span> Interactive example<a href="optimal-control.html#interactive-example" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>The Shiny app <code>app_gompertz.R</code> solves the Gompertzian problem with the forward–backward sweep whenever a slider moves. It uses the safeguarded version of the sweep described in Section <a href="optimal-control.html#sec:oc-safeguard">5.5.2</a>, because the plain sweep fails to converge for some parameter values, for example a strong drug combined with a long horizon. The sliders set the weight <span class="math inline">\(A\)</span>, the horizon <span class="math inline">\(t_f\)</span>, the growth rate <span class="math inline">\(r\)</span>, the efficacy <span class="math inline">\(\delta\)</span>, the initial density <span class="math inline">\(N_0\)</span>, and the bound <span class="math inline">\(M\)</span>. The app plots the optimal tumor density, dose, and adjoint, and compares <span class="math inline">\(J(u^*)\)</span> with no treatment and with a constant dose that uses the same total amount of drug. With the <strong>shiny</strong> package installed, run it with</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="optimal-control.html#cb22-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;shiny&quot;</span>)              <span class="co"># once</span></span>
-<span id="cb22-2"><a href="optimal-control.html#cb22-2" tabindex="-1"></a>shiny<span class="sc">::</span><span class="fu">runApp</span>(<span class="st">&quot;scripts/app_gompertz.R&quot;</span>)</span></code></pre></div>
-<div class="figure"><span style="display:block;" id="fig:oc-gomp-weights"></span>
-<img src="_main_files/figure-html/oc-gomp-weights-1.png" alt="Optimal schedules for the Gompertzian model for three values of the weight $A$ (other parameters as in the implementation above). Left: tumor density. Right: optimal dose, with the bound $M=1$ dotted." width="768" />
-<p class="caption">
-Figure 5.3: Optimal schedules for the Gompertzian model for three values of the weight <span class="math inline">\(A\)</span> (other parameters as in the implementation above). Left: tumor density. Right: optimal dose, with the bound <span class="math inline">\(M=1\)</span> dotted.
-</p>
-</div>
-<p>Figure <a href="optimal-control.html#fig:oc-gomp-weights">5.3</a> shows the pattern reported for this model by <span class="citation">Lenhart and Workman (<a href="references-1.html#ref-lenhart07">2007</a>)</span>: a high initial dose that tapers to zero at the end of treatment, at a higher level when the tumor is weighted more heavily. The timing of the dose matters, not only its total amount: for <span class="math inline">\(A=3\)</span> the optimal schedule gives <span class="math inline">\(J=20.628\)</span>, while a constant dose with the same total amount of drug gives <span class="math inline">\(J=21.812\)</span>. Things to explore with the app:</p>
-<ol style="list-style-type: decimal">
-<li>Increase <span class="math inline">\(A\)</span> from 1 to 10. Does the shape of <span class="math inline">\(u^*(t)\)</span> change, or only its level?</li>
-<li>Lower <span class="math inline">\(N_0\)</span> to 0.5. Which part of the schedule changes?</li>
-<li>Lower <span class="math inline">\(M\)</span> until the bound is active over a longer interval, and relate the cut-off to the projection formula.</li>
-<li>Why does the dose fall to zero at <span class="math inline">\(t_f\)</span>? Relate the answer to the transversality condition <span class="math inline">\(\lambda(t_f)=0\)</span>.</li>
-</ol>
-</div>
-</div>
-<div id="sec:oc-kuznetsov" class="section level2 hasAnchor" number="5.5">
-<h2><span class="header-section-number">5.5</span> An Optimal Control Approach for the Kuznetsov Model<a href="optimal-control.html#sec:oc-kuznetsov" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The examples of the previous sections set up the optimal control problem for the simplified Kuznetsov model and derived its optimality system (Example <a href="optimal-control.html#exm:oc-kuz-os">5.15</a>). This section solves the optimality system numerically and compares the optimal control with ON–OFF schedules.</p>
-<div id="why-the-plain-sweep-fails" class="section level3 hasAnchor" number="5.5.1">
-<h3><span class="header-section-number">5.5.1</span> Why the plain sweep fails<a href="optimal-control.html#why-the-plain-sweep-fails" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="example">
-<p><span id="exm:oc-kuz-plain" class="example"><strong>Example 5.18  (The plain sweep fails for the Kuznetsov model) </strong></span>For the Kuznetsov problem, the initial guess <span class="math inline">\(u\equiv0\)</span> cannot be used: without treatment the tumor escapes (Figure <a href="optimal-control.html#fig:oc-kuz-untreated">5.1</a>), <span class="math inline">\(T\)</span> grows by many orders of magnitude over <span class="math inline">\([0,t_f]\)</span>, and the computation breaks down. Starting from full-dose treatment, <span class="math inline">\(u\equiv M\)</span>, avoids this, but the forward–backward sweep with <span class="math inline">\(\theta=0.5\)</span> still does not converge. After 300 iterations the relative change in the control is still 0.99, and the objective keeps oscillating between about 272 and 367 (Figure <a href="optimal-control.html#fig:oc-kuz-conv">5.5</a>). An update computed from the adjoint of one control overshoots, and the next update moves back.</p>
-</div>
-</div>
-<div id="sec:oc-safeguard" class="section level3 hasAnchor" number="5.5.2">
-<h3><span class="header-section-number">5.5.2</span> A safeguarded sweep<a href="optimal-control.html#sec:oc-safeguard" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>The relaxation step of the forward–backward sweep can be made safe by checking the objective functional. The justification rests on a formula for the derivative of <span class="math inline">\(J\)</span> that holds for every admissible control, optimal or not.</p>
-<div class="lemma">
-<p><span id="lem:oc-gradient" class="lemma"><strong>Lemma 5.1  (Derivative of the objective functional) </strong></span>Assume that <span class="math inline">\(f\)</span>, <span class="math inline">\(g\)</span>, and <span class="math inline">\(\phi\)</span> are continuously differentiable. Let <span class="math inline">\(u\)</span> and <span class="math inline">\(l\)</span> be bounded measurable functions such that <span class="math inline">\(u+\varepsilon l\in\mathcal{U}\)</span> for all small <span class="math inline">\(\varepsilon&gt;0\)</span>, let <span class="math inline">\(x\)</span> be the state of <span class="math inline">\(u\)</span>, and let <span class="math inline">\(\lambda\)</span> solve the adjoint equations</p>
-<p><span class="math display">\[\lambda&#39;=-\frac{\partial H}{\partial x}(t,x,u,\lambda),\qquad\lambda(t_f)=\nabla_x\phi(x(t_f)),\]</span></p>
-<p>along <span class="math inline">\((x,u)\)</span>. Then</p>
-<p><span class="math display">\[\lim_{\varepsilon\to0^+}\frac{J(u+\varepsilon l)-J(u)}{\varepsilon}=\int_0^{t_f}\frac{\partial H}{\partial u}\bigl(t,x(t),u(t),\lambda(t)\bigr)\,l(t)\,dt .\]</span></p>
-</div>
-<p>The proof differentiates the state with respect to the control and integrates by parts against the adjoint; it is the first half of the derivation of the Maximum Principle in <span class="citation">Lenhart and Workman (<a href="references-1.html#ref-lenhart07">2007</a>, ch. 1)</span>. In this sense <span class="math inline">\(\partial H/\partial u\)</span> is the gradient of <span class="math inline">\(J\)</span>, and one backward solve of the adjoint equations gives the derivative of <span class="math inline">\(J\)</span> in every direction <span class="math inline">\(l\)</span>.</p>
-<div class="proposition">
-<p><span id="prp:oc-descent" class="proposition"><strong>Proposition 5.2  (The sweep update is a descent direction) </strong></span>Let <span class="math inline">\(U=[u_{\min},u_{\max}]\)</span> and suppose that, along <span class="math inline">\((x,u,\lambda)\)</span>,</p>
-<p><span class="math display">\[\frac{\partial H}{\partial u}=B\bigl(u-\widetilde u(t)\bigr)\]</span></p>
-<p>for a constant <span class="math inline">\(B&gt;0\)</span> and some function <span class="math inline">\(\widetilde u\)</span>, as is the case when <span class="math inline">\(H\)</span> contains the term <span class="math inline">\(\tfrac{B}{2}u^2\)</span> and is otherwise affine in <span class="math inline">\(u\)</span>. Let <span class="math inline">\(\bar u=\min\{u_{\max},\max\{u_{\min},\widetilde u\}\}\)</span> be the updated control of step 4 of the sweep and <span class="math inline">\(\Delta u=\bar u-u\)</span>. Then</p>
-<p><span class="math display">\[\lim_{\varepsilon\to0^+}\frac{J(u+\varepsilon\,\Delta u)-J(u)}{\varepsilon}\leq -B\int_0^{t_f}\Delta u(t)^2\,dt .\]</span></p>
-<p>Consequently, unless <span class="math inline">\(\Delta u=0\)</span> almost everywhere, <span class="math inline">\(J(u+\theta\,\Delta u)&lt;J(u)\)</span> for all sufficiently small <span class="math inline">\(\theta&gt;0\)</span>. Moreover, <span class="math inline">\(u+\theta\,\Delta u\)</span> is admissible for <span class="math inline">\(0\leq\theta\leq1\)</span>.</p>
-</div>
-<div class="proof">
-<p><span id="unlabeled-div-2" class="proof"><em>Proof</em>. </span>Since <span class="math inline">\(\bar u\)</span> is the point of <span class="math inline">\([u_{\min},u_{\max}]\)</span> closest to <span class="math inline">\(\widetilde u\)</span> and <span class="math inline">\(u(t)\)</span> lies in this interval, <span class="math inline">\((\widetilde u-\bar u)(u-\bar u)\leq0\)</span>. Hence, pointwise,</p>
-<p><span class="math display">\[\frac{\partial H}{\partial u}\,\Delta u=-B(\widetilde u-u)(\bar u-u)=B(\widetilde u-\bar u)(u-\bar u)-B(\bar u-u)^2\leq -B\,\Delta u^2 .\]</span></p>
-<p>Integrating and applying Lemma <a href="optimal-control.html#lem:oc-gradient">5.1</a> with <span class="math inline">\(l=\Delta u\)</span> gives the inequality. Finally, <span class="math inline">\(u+\theta\,\Delta u=(1-\theta)u+\theta\bar u\)</span> is a convex combination of two functions with values in <span class="math inline">\(U\)</span>.</p>
-</div>
-<p>The relaxed update of step 5 of the sweep is exactly <span class="math inline">\(u_{\mathrm{updated}}=\theta\bar u+(1-\theta)u=u+\theta\,\Delta u\)</span>. The plain sweep uses a fixed <span class="math inline">\(\theta\)</span>, which may be too long a step. The <em>safeguarded sweep</em> chooses <span class="math inline">\(\theta\)</span> by backtracking, replacing step 5 by the following rule.</p>
-<blockquote>
-<p><strong>Step 5<span class="math inline">\(&#39;\)</span>.</strong> Compute the candidate <span class="math inline">\(u+\theta\,\Delta u\)</span>, solve the state equations for it, and evaluate <span class="math inline">\(J\)</span>. If <span class="math inline">\(J\)</span> has decreased, accept the candidate and set <span class="math inline">\(\theta\leftarrow\min\{\theta_0,2\theta\}\)</span>; otherwise halve <span class="math inline">\(\theta\)</span> and try again.</p>
-</blockquote>
-<p>By Proposition <a href="optimal-control.html#prp:oc-descent">5.2</a>, a small enough <span class="math inline">\(\theta\)</span> lowers <span class="math inline">\(J\)</span> unless <span class="math inline">\(\Delta u=0\)</span>, so every accepted step decreases <span class="math inline">\(J\)</span> and the iteration cannot oscillate. It stops when <span class="math inline">\(\|\Delta u\|_1/\|u\|_1&lt;\mathrm{tol}\)</span>, that is, when <span class="math inline">\(u\)</span> satisfies the control characterization, and hence the optimality system, up to the tolerance. The safeguarded sweep has the same fixed points as the plain sweep. Like any descent method, it finds a solution of the optimality system near its starting point, which need not be the global minimizer when the problem is not convex; Example <a href="optimal-control.html#exm:oc-kuz-uniqueness">5.17</a> describes a practical check.</p>
-</div>
-<div id="implementation-in-r-1" class="section level3 hasAnchor" number="5.5.3">
-<h3><span class="header-section-number">5.5.3</span> Implementation in R<a href="optimal-control.html#implementation-in-r-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="example">
-<p><span id="exm:oc-kuz-fbsm" class="example"><strong>Example 5.19  (Optimal chemotherapy for the Kuznetsov model) </strong></span>The code below implements the safeguarded sweep for the optimality system of Example <a href="optimal-control.html#exm:oc-kuz-os">5.15</a>. It follows the Gompertzian code, with two states and two adjoints instead of one. The parameters are stored in the list <code>kuz_par</code> under the names of Example <a href="optimal-control.html#exm:oc-kuz-model">5.1</a>, with <code>delta</code> for <span class="math inline">\(\delta\)</span>. The forward sweep stops when the tumor exceeds <span class="math inline">\(10^4\)</span> units (<span class="math inline">\(10^{10}\)</span> cells), which we treat as escape, with cost <span class="math inline">\(J=\infty\)</span>. The sweep starts from full-dose treatment (Example <a href="optimal-control.html#exm:oc-kuz-plain">5.18</a>), and setting <code>safeguard = FALSE</code> gives the plain sweep.</p>
-</div>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="optimal-control.html#cb23-1" tabindex="-1"></a>kuz_par <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">s =</span> <span class="fl">0.1181</span>, <span class="at">p =</span> <span class="fl">1.131</span>, <span class="at">g =</span> <span class="fl">20.19</span>, <span class="at">m =</span> <span class="fl">0.00311</span>,</span>
-<span id="cb23-2"><a href="optimal-control.html#cb23-2" tabindex="-1"></a>                <span class="at">d =</span> <span class="fl">0.3743</span>, <span class="at">a =</span> <span class="fl">1.636</span>,          <span class="co"># Kuznetsov et al. (1994)</span></span>
-<span id="cb23-3"><a href="optimal-control.html#cb23-3" tabindex="-1"></a>                <span class="at">delta =</span> <span class="dv">2</span>, <span class="at">M =</span> <span class="dv">1</span>,               <span class="co"># drug kill rate, max dose</span></span>
-<span id="cb23-4"><a href="optimal-control.html#cb23-4" tabindex="-1"></a>                <span class="at">A =</span> <span class="dv">1</span>, <span class="at">B =</span> <span class="dv">50</span>, <span class="at">tf =</span> <span class="dv">20</span>,         <span class="co"># cost weights, horizon</span></span>
-<span id="cb23-5"><a href="optimal-control.html#cb23-5" tabindex="-1"></a>                <span class="at">E0 =</span> <span class="fl">0.1181</span> <span class="sc">/</span> <span class="fl">0.3743</span>, <span class="at">T0 =</span> <span class="dv">50</span>)  <span class="co"># E0 = s / d</span></span>
-<span id="cb23-6"><a href="optimal-control.html#cb23-6" tabindex="-1"></a></span>
-<span id="cb23-7"><a href="optimal-control.html#cb23-7" tabindex="-1"></a>T_fail <span class="ot">&lt;-</span> <span class="dv">1</span>e4   <span class="co"># 10^10 cells: tumor escape, treatment failure</span></span>
-<span id="cb23-8"><a href="optimal-control.html#cb23-8" tabindex="-1"></a></span>
-<span id="cb23-9"><a href="optimal-control.html#cb23-9" tabindex="-1"></a><span class="co"># Right-hand side of the state equations</span></span>
-<span id="cb23-10"><a href="optimal-control.html#cb23-10" tabindex="-1"></a>kuz_rhs <span class="ot">&lt;-</span> <span class="cf">function</span>(E, T, u, pars) {</span>
-<span id="cb23-11"><a href="optimal-control.html#cb23-11" tabindex="-1"></a>  <span class="fu">c</span>(pars<span class="sc">$</span>s <span class="sc">+</span> pars<span class="sc">$</span>p <span class="sc">*</span> E <span class="sc">*</span> T <span class="sc">/</span> (pars<span class="sc">$</span>g <span class="sc">+</span> T) <span class="sc">-</span> pars<span class="sc">$</span>m <span class="sc">*</span> E <span class="sc">*</span> T <span class="sc">-</span> pars<span class="sc">$</span>d <span class="sc">*</span> E,</span>
-<span id="cb23-12"><a href="optimal-control.html#cb23-12" tabindex="-1"></a>    pars<span class="sc">$</span>a <span class="sc">*</span> T <span class="sc">-</span> E <span class="sc">*</span> T <span class="sc">-</span> pars<span class="sc">$</span>delta <span class="sc">*</span> u <span class="sc">*</span> T)</span>
-<span id="cb23-13"><a href="optimal-control.html#cb23-13" tabindex="-1"></a>}</span>
-<span id="cb23-14"><a href="optimal-control.html#cb23-14" tabindex="-1"></a></span>
-<span id="cb23-15"><a href="optimal-control.html#cb23-15" tabindex="-1"></a><span class="co"># Right-hand side of the adjoint equations</span></span>
-<span id="cb23-16"><a href="optimal-control.html#cb23-16" tabindex="-1"></a>kuz_adj <span class="ot">&lt;-</span> <span class="cf">function</span>(E, T, lE, lT, u, pars) {</span>
-<span id="cb23-17"><a href="optimal-control.html#cb23-17" tabindex="-1"></a>  <span class="fu">c</span>(<span class="sc">-</span>lE <span class="sc">*</span> (pars<span class="sc">$</span>p <span class="sc">*</span> T <span class="sc">/</span> (pars<span class="sc">$</span>g <span class="sc">+</span> T) <span class="sc">-</span> pars<span class="sc">$</span>m <span class="sc">*</span> T <span class="sc">-</span> pars<span class="sc">$</span>d) <span class="sc">+</span> lT <span class="sc">*</span> T,</span>
-<span id="cb23-18"><a href="optimal-control.html#cb23-18" tabindex="-1"></a>    <span class="sc">-</span>pars<span class="sc">$</span>A <span class="sc">-</span> lE <span class="sc">*</span> (pars<span class="sc">$</span>p <span class="sc">*</span> pars<span class="sc">$</span>g <span class="sc">*</span> E <span class="sc">/</span> (pars<span class="sc">$</span>g <span class="sc">+</span> T)<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> pars<span class="sc">$</span>m <span class="sc">*</span> E) <span class="sc">-</span></span>
-<span id="cb23-19"><a href="optimal-control.html#cb23-19" tabindex="-1"></a>      lT <span class="sc">*</span> (pars<span class="sc">$</span>a <span class="sc">-</span> E <span class="sc">-</span> pars<span class="sc">$</span>delta <span class="sc">*</span> u))</span>
-<span id="cb23-20"><a href="optimal-control.html#cb23-20" tabindex="-1"></a>}</span>
-<span id="cb23-21"><a href="optimal-control.html#cb23-21" tabindex="-1"></a></span>
-<span id="cb23-22"><a href="optimal-control.html#cb23-22" tabindex="-1"></a><span class="co"># Equilibria of the untreated model with E = a: the dormant state</span></span>
-<span id="cb23-23"><a href="optimal-control.html#cb23-23" tabindex="-1"></a><span class="co"># (about T = 8.24) and the saddle (about T = 238)</span></span>
-<span id="cb23-24"><a href="optimal-control.html#cb23-24" tabindex="-1"></a>kuz_equilibria <span class="ot">&lt;-</span> <span class="cf">function</span>(pars) {</span>
-<span id="cb23-25"><a href="optimal-control.html#cb23-25" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="cf">function</span>(T) pars<span class="sc">$</span>s <span class="sc">+</span> pars<span class="sc">$</span>p <span class="sc">*</span> pars<span class="sc">$</span>a <span class="sc">*</span> T <span class="sc">/</span> (pars<span class="sc">$</span>g <span class="sc">+</span> T) <span class="sc">-</span></span>
-<span id="cb23-26"><a href="optimal-control.html#cb23-26" tabindex="-1"></a>    pars<span class="sc">$</span>m <span class="sc">*</span> pars<span class="sc">$</span>a <span class="sc">*</span> T <span class="sc">-</span> pars<span class="sc">$</span>d <span class="sc">*</span> pars<span class="sc">$</span>a</span>
-<span id="cb23-27"><a href="optimal-control.html#cb23-27" tabindex="-1"></a>  grid <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.01</span>, <span class="dv">2000</span>, <span class="at">length.out =</span> <span class="dv">20001</span>)</span>
-<span id="cb23-28"><a href="optimal-control.html#cb23-28" tabindex="-1"></a>  k <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">diff</span>(<span class="fu">sign</span>(<span class="fu">f</span>(grid))) <span class="sc">!=</span> <span class="dv">0</span>)</span>
-<span id="cb23-29"><a href="optimal-control.html#cb23-29" tabindex="-1"></a>  <span class="fu">vapply</span>(k, <span class="cf">function</span>(i) <span class="fu">uniroot</span>(f, grid[<span class="fu">c</span>(i, i <span class="sc">+</span> <span class="dv">1</span>)], <span class="at">tol =</span> <span class="dv">1</span>e<span class="sc">-</span><span class="dv">10</span>)<span class="sc">$</span>root,</span>
-<span id="cb23-30"><a href="optimal-control.html#cb23-30" tabindex="-1"></a>         <span class="fu">numeric</span>(<span class="dv">1</span>))</span>
-<span id="cb23-31"><a href="optimal-control.html#cb23-31" tabindex="-1"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="optimal-control.html#cb24-1" tabindex="-1"></a><span class="co"># One RK4 step of the state equations; u1, um, u2 are the controls</span></span>
-<span id="cb24-2"><a href="optimal-control.html#cb24-2" tabindex="-1"></a><span class="co"># at the start, middle, and end of the step</span></span>
-<span id="cb24-3"><a href="optimal-control.html#cb24-3" tabindex="-1"></a>kuz_step <span class="ot">&lt;-</span> <span class="cf">function</span>(E, T, u1, um, u2, h, pars) {</span>
-<span id="cb24-4"><a href="optimal-control.html#cb24-4" tabindex="-1"></a>  k1 <span class="ot">&lt;-</span> <span class="fu">kuz_rhs</span>(E, T, u1, pars)</span>
-<span id="cb24-5"><a href="optimal-control.html#cb24-5" tabindex="-1"></a>  k2 <span class="ot">&lt;-</span> <span class="fu">kuz_rhs</span>(E <span class="sc">+</span> h <span class="sc">*</span> k1[<span class="dv">1</span>] <span class="sc">/</span> <span class="dv">2</span>, T <span class="sc">+</span> h <span class="sc">*</span> k1[<span class="dv">2</span>] <span class="sc">/</span> <span class="dv">2</span>, um, pars)</span>
-<span id="cb24-6"><a href="optimal-control.html#cb24-6" tabindex="-1"></a>  k3 <span class="ot">&lt;-</span> <span class="fu">kuz_rhs</span>(E <span class="sc">+</span> h <span class="sc">*</span> k2[<span class="dv">1</span>] <span class="sc">/</span> <span class="dv">2</span>, T <span class="sc">+</span> h <span class="sc">*</span> k2[<span class="dv">2</span>] <span class="sc">/</span> <span class="dv">2</span>, um, pars)</span>
-<span id="cb24-7"><a href="optimal-control.html#cb24-7" tabindex="-1"></a>  k4 <span class="ot">&lt;-</span> <span class="fu">kuz_rhs</span>(E <span class="sc">+</span> h <span class="sc">*</span> k3[<span class="dv">1</span>], T <span class="sc">+</span> h <span class="sc">*</span> k3[<span class="dv">2</span>], u2, pars)</span>
-<span id="cb24-8"><a href="optimal-control.html#cb24-8" tabindex="-1"></a>  <span class="fu">c</span>(E, T) <span class="sc">+</span> h <span class="sc">/</span> <span class="dv">6</span> <span class="sc">*</span> (k1 <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> k2 <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> k3 <span class="sc">+</span> k4)</span>
-<span id="cb24-9"><a href="optimal-control.html#cb24-9" tabindex="-1"></a>}</span>
-<span id="cb24-10"><a href="optimal-control.html#cb24-10" tabindex="-1"></a></span>
-<span id="cb24-11"><a href="optimal-control.html#cb24-11" tabindex="-1"></a><span class="co"># Forward sweep. If piecewise = FALSE, u holds the control at the n + 1</span></span>
-<span id="cb24-12"><a href="optimal-control.html#cb24-12" tabindex="-1"></a><span class="co"># grid points; if TRUE, u holds one constant value for each of the n steps.</span></span>
-<span id="cb24-13"><a href="optimal-control.html#cb24-13" tabindex="-1"></a><span class="co"># Integration stops (T = NA) if the tumor exceeds T_fail.</span></span>
-<span id="cb24-14"><a href="optimal-control.html#cb24-14" tabindex="-1"></a>kuz_forward <span class="ot">&lt;-</span> <span class="cf">function</span>(u, h, pars, <span class="at">piecewise =</span> <span class="cn">FALSE</span>) {</span>
-<span id="cb24-15"><a href="optimal-control.html#cb24-15" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="cf">if</span> (piecewise) <span class="fu">length</span>(u) <span class="cf">else</span> <span class="fu">length</span>(u) <span class="sc">-</span> <span class="dv">1</span></span>
-<span id="cb24-16"><a href="optimal-control.html#cb24-16" tabindex="-1"></a>  E <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA_real_</span>, n <span class="sc">+</span> <span class="dv">1</span>); T <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA_real_</span>, n <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb24-17"><a href="optimal-control.html#cb24-17" tabindex="-1"></a>  E[<span class="dv">1</span>] <span class="ot">&lt;-</span> pars<span class="sc">$</span>E0; T[<span class="dv">1</span>] <span class="ot">&lt;-</span> pars<span class="sc">$</span>T0</span>
-<span id="cb24-18"><a href="optimal-control.html#cb24-18" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
-<span id="cb24-19"><a href="optimal-control.html#cb24-19" tabindex="-1"></a>    x <span class="ot">&lt;-</span> <span class="cf">if</span> (piecewise) <span class="fu">kuz_step</span>(E[i], T[i], u[i], u[i], u[i], h, pars)</span>
-<span id="cb24-20"><a href="optimal-control.html#cb24-20" tabindex="-1"></a>         <span class="cf">else</span> <span class="fu">kuz_step</span>(E[i], T[i], u[i], (u[i] <span class="sc">+</span> u[i <span class="sc">+</span> <span class="dv">1</span>]) <span class="sc">/</span> <span class="dv">2</span>, u[i <span class="sc">+</span> <span class="dv">1</span>],</span>
-<span id="cb24-21"><a href="optimal-control.html#cb24-21" tabindex="-1"></a>                       h, pars)</span>
-<span id="cb24-22"><a href="optimal-control.html#cb24-22" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.finite</span>(x[<span class="dv">2</span>]) <span class="sc">||</span> x[<span class="dv">2</span>] <span class="sc">&gt;</span> T_fail) <span class="cf">break</span>   <span class="co"># escape</span></span>
-<span id="cb24-23"><a href="optimal-control.html#cb24-23" tabindex="-1"></a>    E[i <span class="sc">+</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> x[<span class="dv">1</span>]; T[i <span class="sc">+</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> x[<span class="dv">2</span>]</span>
-<span id="cb24-24"><a href="optimal-control.html#cb24-24" tabindex="-1"></a>  }</span>
-<span id="cb24-25"><a href="optimal-control.html#cb24-25" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">E =</span> E, <span class="at">T =</span> T, <span class="at">escaped =</span> <span class="fu">anyNA</span>(T))</span>
-<span id="cb24-26"><a href="optimal-control.html#cb24-26" tabindex="-1"></a>}</span>
-<span id="cb24-27"><a href="optimal-control.html#cb24-27" tabindex="-1"></a></span>
-<span id="cb24-28"><a href="optimal-control.html#cb24-28" tabindex="-1"></a><span class="co"># Backward sweep (RK4) for the adjoint equations, lambda(tf) = 0</span></span>
-<span id="cb24-29"><a href="optimal-control.html#cb24-29" tabindex="-1"></a>kuz_backward <span class="ot">&lt;-</span> <span class="cf">function</span>(E, T, u, h, pars) {</span>
-<span id="cb24-30"><a href="optimal-control.html#cb24-30" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(u) <span class="sc">-</span> <span class="dv">1</span></span>
-<span id="cb24-31"><a href="optimal-control.html#cb24-31" tabindex="-1"></a>  lE <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n <span class="sc">+</span> <span class="dv">1</span>); lT <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb24-32"><a href="optimal-control.html#cb24-32" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> (n <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span><span class="dv">2</span>) {</span>
-<span id="cb24-33"><a href="optimal-control.html#cb24-33" tabindex="-1"></a>    um <span class="ot">&lt;-</span> (u[i] <span class="sc">+</span> u[i <span class="sc">-</span> <span class="dv">1</span>]) <span class="sc">/</span> <span class="dv">2</span></span>
-<span id="cb24-34"><a href="optimal-control.html#cb24-34" tabindex="-1"></a>    Em <span class="ot">&lt;-</span> (E[i] <span class="sc">+</span> E[i <span class="sc">-</span> <span class="dv">1</span>]) <span class="sc">/</span> <span class="dv">2</span>; Tm <span class="ot">&lt;-</span> (T[i] <span class="sc">+</span> T[i <span class="sc">-</span> <span class="dv">1</span>]) <span class="sc">/</span> <span class="dv">2</span></span>
-<span id="cb24-35"><a href="optimal-control.html#cb24-35" tabindex="-1"></a>    k1 <span class="ot">&lt;-</span> <span class="fu">kuz_adj</span>(E[i], T[i], lE[i], lT[i], u[i], pars)</span>
-<span id="cb24-36"><a href="optimal-control.html#cb24-36" tabindex="-1"></a>    k2 <span class="ot">&lt;-</span> <span class="fu">kuz_adj</span>(Em, Tm, lE[i] <span class="sc">-</span> h <span class="sc">*</span> k1[<span class="dv">1</span>] <span class="sc">/</span> <span class="dv">2</span>, lT[i] <span class="sc">-</span> h <span class="sc">*</span> k1[<span class="dv">2</span>] <span class="sc">/</span> <span class="dv">2</span>,</span>
-<span id="cb24-37"><a href="optimal-control.html#cb24-37" tabindex="-1"></a>                  um, pars)</span>
-<span id="cb24-38"><a href="optimal-control.html#cb24-38" tabindex="-1"></a>    k3 <span class="ot">&lt;-</span> <span class="fu">kuz_adj</span>(Em, Tm, lE[i] <span class="sc">-</span> h <span class="sc">*</span> k2[<span class="dv">1</span>] <span class="sc">/</span> <span class="dv">2</span>, lT[i] <span class="sc">-</span> h <span class="sc">*</span> k2[<span class="dv">2</span>] <span class="sc">/</span> <span class="dv">2</span>,</span>
-<span id="cb24-39"><a href="optimal-control.html#cb24-39" tabindex="-1"></a>                  um, pars)</span>
-<span id="cb24-40"><a href="optimal-control.html#cb24-40" tabindex="-1"></a>    k4 <span class="ot">&lt;-</span> <span class="fu">kuz_adj</span>(E[i <span class="sc">-</span> <span class="dv">1</span>], T[i <span class="sc">-</span> <span class="dv">1</span>], lE[i] <span class="sc">-</span> h <span class="sc">*</span> k3[<span class="dv">1</span>], lT[i] <span class="sc">-</span> h <span class="sc">*</span> k3[<span class="dv">2</span>],</span>
-<span id="cb24-41"><a href="optimal-control.html#cb24-41" tabindex="-1"></a>                  u[i <span class="sc">-</span> <span class="dv">1</span>], pars)</span>
-<span id="cb24-42"><a href="optimal-control.html#cb24-42" tabindex="-1"></a>    lE[i <span class="sc">-</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> lE[i] <span class="sc">-</span> h <span class="sc">/</span> <span class="dv">6</span> <span class="sc">*</span> (k1[<span class="dv">1</span>] <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> k2[<span class="dv">1</span>] <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> k3[<span class="dv">1</span>] <span class="sc">+</span> k4[<span class="dv">1</span>])</span>
-<span id="cb24-43"><a href="optimal-control.html#cb24-43" tabindex="-1"></a>    lT[i <span class="sc">-</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> lT[i] <span class="sc">-</span> h <span class="sc">/</span> <span class="dv">6</span> <span class="sc">*</span> (k1[<span class="dv">2</span>] <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> k2[<span class="dv">2</span>] <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> k3[<span class="dv">2</span>] <span class="sc">+</span> k4[<span class="dv">2</span>])</span>
-<span id="cb24-44"><a href="optimal-control.html#cb24-44" tabindex="-1"></a>  }</span>
-<span id="cb24-45"><a href="optimal-control.html#cb24-45" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">lE =</span> lE, <span class="at">lT =</span> lT)</span>
-<span id="cb24-46"><a href="optimal-control.html#cb24-46" tabindex="-1"></a>}</span>
-<span id="cb24-47"><a href="optimal-control.html#cb24-47" tabindex="-1"></a></span>
-<span id="cb24-48"><a href="optimal-control.html#cb24-48" tabindex="-1"></a><span class="co"># Trapezoidal rule on a uniform grid</span></span>
-<span id="cb24-49"><a href="optimal-control.html#cb24-49" tabindex="-1"></a>trap <span class="ot">&lt;-</span> <span class="cf">function</span>(y, h) h <span class="sc">*</span> (<span class="fu">sum</span>(y) <span class="sc">-</span> (y[<span class="dv">1</span>] <span class="sc">+</span> y[<span class="fu">length</span>(y)]) <span class="sc">/</span> <span class="dv">2</span>)</span>
-<span id="cb24-50"><a href="optimal-control.html#cb24-50" tabindex="-1"></a></span>
-<span id="cb24-51"><a href="optimal-control.html#cb24-51" tabindex="-1"></a><span class="co"># Objective J(u) = int_0^tf (A T + B/2 u^2) dt for a control on the grid</span></span>
-<span id="cb24-52"><a href="optimal-control.html#cb24-52" tabindex="-1"></a>kuz_cost <span class="ot">&lt;-</span> <span class="cf">function</span>(T, u, h, pars) {</span>
-<span id="cb24-53"><a href="optimal-control.html#cb24-53" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">anyNA</span>(T)) <span class="fu">return</span>(<span class="cn">Inf</span>)                    <span class="co"># tumor escaped</span></span>
-<span id="cb24-54"><a href="optimal-control.html#cb24-54" tabindex="-1"></a>  <span class="fu">trap</span>(pars<span class="sc">$</span>A <span class="sc">*</span> T <span class="sc">+</span> pars<span class="sc">$</span>B <span class="sc">/</span> <span class="dv">2</span> <span class="sc">*</span> u<span class="sc">^</span><span class="dv">2</span>, h)</span>
-<span id="cb24-55"><a href="optimal-control.html#cb24-55" tabindex="-1"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="optimal-control.html#cb25-1" tabindex="-1"></a><span class="co"># Forward-backward sweep for the Kuznetsov problem. With safeguard = TRUE,</span></span>
-<span id="cb25-2"><a href="optimal-control.html#cb25-2" tabindex="-1"></a><span class="co"># an update is accepted only if it lowers J (otherwise theta is halved);</span></span>
-<span id="cb25-3"><a href="optimal-control.html#cb25-3" tabindex="-1"></a><span class="co"># with safeguard = FALSE this is the plain sweep with relaxation theta0.</span></span>
-<span id="cb25-4"><a href="optimal-control.html#cb25-4" tabindex="-1"></a>fbsm_kuz <span class="ot">&lt;-</span> <span class="cf">function</span>(pars, <span class="at">n =</span> <span class="dv">1000</span>, <span class="at">tol =</span> <span class="dv">1</span>e<span class="sc">-</span><span class="dv">4</span>, <span class="at">max_iter =</span> <span class="dv">500</span>,</span>
-<span id="cb25-5"><a href="optimal-control.html#cb25-5" tabindex="-1"></a>                     <span class="at">theta0 =</span> <span class="fl">0.5</span>, <span class="at">u0 =</span> <span class="cn">NULL</span>, <span class="at">safeguard =</span> <span class="cn">TRUE</span>) {</span>
-<span id="cb25-6"><a href="optimal-control.html#cb25-6" tabindex="-1"></a>  h <span class="ot">&lt;-</span> pars<span class="sc">$</span>tf <span class="sc">/</span> n</span>
-<span id="cb25-7"><a href="optimal-control.html#cb25-7" tabindex="-1"></a>  t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, pars<span class="sc">$</span>tf, <span class="at">length.out =</span> n <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb25-8"><a href="optimal-control.html#cb25-8" tabindex="-1"></a>  u <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">is.null</span>(u0)) <span class="fu">rep</span>(pars<span class="sc">$</span>M, n <span class="sc">+</span> <span class="dv">1</span>) <span class="cf">else</span> u0   <span class="co"># start from full dose</span></span>
-<span id="cb25-9"><a href="optimal-control.html#cb25-9" tabindex="-1"></a>  st <span class="ot">&lt;-</span> <span class="fu">kuz_forward</span>(u, h, pars)</span>
-<span id="cb25-10"><a href="optimal-control.html#cb25-10" tabindex="-1"></a>  J <span class="ot">&lt;-</span> <span class="fu">kuz_cost</span>(st<span class="sc">$</span>T, u, h, pars)</span>
-<span id="cb25-11"><a href="optimal-control.html#cb25-11" tabindex="-1"></a>  J_hist <span class="ot">&lt;-</span> J</span>
-<span id="cb25-12"><a href="optimal-control.html#cb25-12" tabindex="-1"></a>  theta <span class="ot">&lt;-</span> theta0</span>
-<span id="cb25-13"><a href="optimal-control.html#cb25-13" tabindex="-1"></a>  change <span class="ot">&lt;-</span> <span class="cn">Inf</span></span>
-<span id="cb25-14"><a href="optimal-control.html#cb25-14" tabindex="-1"></a></span>
-<span id="cb25-15"><a href="optimal-control.html#cb25-15" tabindex="-1"></a>  <span class="cf">for</span> (it <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>max_iter) {</span>
-<span id="cb25-16"><a href="optimal-control.html#cb25-16" tabindex="-1"></a>    adj <span class="ot">&lt;-</span> <span class="fu">kuz_backward</span>(st<span class="sc">$</span>E, st<span class="sc">$</span>T, u, h, pars)</span>
-<span id="cb25-17"><a href="optimal-control.html#cb25-17" tabindex="-1"></a>    u_new <span class="ot">&lt;-</span> <span class="fu">pmin</span>(pars<span class="sc">$</span>M, <span class="fu">pmax</span>(<span class="dv">0</span>, pars<span class="sc">$</span>delta <span class="sc">*</span> adj<span class="sc">$</span>lT <span class="sc">*</span> st<span class="sc">$</span>T <span class="sc">/</span> pars<span class="sc">$</span>B))</span>
-<span id="cb25-18"><a href="optimal-control.html#cb25-18" tabindex="-1"></a>    du <span class="ot">&lt;-</span> u_new <span class="sc">-</span> u                          <span class="co"># update direction</span></span>
-<span id="cb25-19"><a href="optimal-control.html#cb25-19" tabindex="-1"></a>    change <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">abs</span>(du)) <span class="sc">/</span> <span class="fu">max</span>(<span class="fu">sum</span>(<span class="fu">abs</span>(u)), <span class="dv">1</span>e<span class="sc">-</span><span class="dv">12</span>)</span>
-<span id="cb25-20"><a href="optimal-control.html#cb25-20" tabindex="-1"></a>    <span class="cf">if</span> (change <span class="sc">&lt;</span> tol) <span class="cf">break</span></span>
-<span id="cb25-21"><a href="optimal-control.html#cb25-21" tabindex="-1"></a></span>
-<span id="cb25-22"><a href="optimal-control.html#cb25-22" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span>safeguard) {                        <span class="co"># plain sweep: always accept</span></span>
-<span id="cb25-23"><a href="optimal-control.html#cb25-23" tabindex="-1"></a>      u <span class="ot">&lt;-</span> u <span class="sc">+</span> theta0 <span class="sc">*</span> du</span>
-<span id="cb25-24"><a href="optimal-control.html#cb25-24" tabindex="-1"></a>      st <span class="ot">&lt;-</span> <span class="fu">kuz_forward</span>(u, h, pars)</span>
-<span id="cb25-25"><a href="optimal-control.html#cb25-25" tabindex="-1"></a>      J <span class="ot">&lt;-</span> <span class="fu">kuz_cost</span>(st<span class="sc">$</span>T, u, h, pars)</span>
-<span id="cb25-26"><a href="optimal-control.html#cb25-26" tabindex="-1"></a>      J_hist <span class="ot">&lt;-</span> <span class="fu">c</span>(J_hist, J)</span>
-<span id="cb25-27"><a href="optimal-control.html#cb25-27" tabindex="-1"></a>      <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.finite</span>(J)) <span class="cf">break</span>               <span class="co"># tumor escaped</span></span>
-<span id="cb25-28"><a href="optimal-control.html#cb25-28" tabindex="-1"></a>      <span class="cf">next</span></span>
-<span id="cb25-29"><a href="optimal-control.html#cb25-29" tabindex="-1"></a>    }</span>
-<span id="cb25-30"><a href="optimal-control.html#cb25-30" tabindex="-1"></a></span>
-<span id="cb25-31"><a href="optimal-control.html#cb25-31" tabindex="-1"></a>    <span class="cf">repeat</span> {                                 <span class="co"># backtracking on theta</span></span>
-<span id="cb25-32"><a href="optimal-control.html#cb25-32" tabindex="-1"></a>      u_try  <span class="ot">&lt;-</span> u <span class="sc">+</span> theta <span class="sc">*</span> du</span>
-<span id="cb25-33"><a href="optimal-control.html#cb25-33" tabindex="-1"></a>      st_try <span class="ot">&lt;-</span> <span class="fu">kuz_forward</span>(u_try, h, pars)</span>
-<span id="cb25-34"><a href="optimal-control.html#cb25-34" tabindex="-1"></a>      J_try  <span class="ot">&lt;-</span> <span class="fu">kuz_cost</span>(st_try<span class="sc">$</span>T, u_try, h, pars)</span>
-<span id="cb25-35"><a href="optimal-control.html#cb25-35" tabindex="-1"></a>      <span class="cf">if</span> (J_try <span class="sc">&lt;</span> J <span class="sc">||</span> theta <span class="sc">&lt;</span> <span class="dv">1</span>e<span class="sc">-</span><span class="dv">8</span>) <span class="cf">break</span></span>
-<span id="cb25-36"><a href="optimal-control.html#cb25-36" tabindex="-1"></a>      theta <span class="ot">&lt;-</span> theta <span class="sc">/</span> <span class="dv">2</span></span>
-<span id="cb25-37"><a href="optimal-control.html#cb25-37" tabindex="-1"></a>    }</span>
-<span id="cb25-38"><a href="optimal-control.html#cb25-38" tabindex="-1"></a>    <span class="cf">if</span> (J_try <span class="sc">&gt;=</span> J) <span class="cf">break</span>                    <span class="co"># no further decrease possible</span></span>
-<span id="cb25-39"><a href="optimal-control.html#cb25-39" tabindex="-1"></a></span>
-<span id="cb25-40"><a href="optimal-control.html#cb25-40" tabindex="-1"></a>    u <span class="ot">&lt;-</span> u_try; st <span class="ot">&lt;-</span> st_try; J <span class="ot">&lt;-</span> J_try</span>
-<span id="cb25-41"><a href="optimal-control.html#cb25-41" tabindex="-1"></a>    J_hist <span class="ot">&lt;-</span> <span class="fu">c</span>(J_hist, J)</span>
-<span id="cb25-42"><a href="optimal-control.html#cb25-42" tabindex="-1"></a>    theta <span class="ot">&lt;-</span> <span class="fu">min</span>(theta0, <span class="dv">2</span> <span class="sc">*</span> theta)</span>
-<span id="cb25-43"><a href="optimal-control.html#cb25-43" tabindex="-1"></a>  }</span>
-<span id="cb25-44"><a href="optimal-control.html#cb25-44" tabindex="-1"></a></span>
-<span id="cb25-45"><a href="optimal-control.html#cb25-45" tabindex="-1"></a>  adj <span class="ot">&lt;-</span> <span class="fu">kuz_backward</span>(st<span class="sc">$</span>E, st<span class="sc">$</span>T, u, h, pars)</span>
-<span id="cb25-46"><a href="optimal-control.html#cb25-46" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">t =</span> t, <span class="at">E =</span> st<span class="sc">$</span>E, <span class="at">T =</span> st<span class="sc">$</span>T, <span class="at">lE =</span> adj<span class="sc">$</span>lE, <span class="at">lT =</span> adj<span class="sc">$</span>lT, <span class="at">u =</span> u,</span>
-<span id="cb25-47"><a href="optimal-control.html#cb25-47" tabindex="-1"></a>       <span class="at">J =</span> J, <span class="at">J_hist =</span> J_hist, <span class="at">iterations =</span> it, <span class="at">change =</span> change)</span>
-<span id="cb25-48"><a href="optimal-control.html#cb25-48" tabindex="-1"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="optimal-control.html#cb26-1" tabindex="-1"></a>kuz_opt <span class="ot">&lt;-</span> <span class="fu">fbsm_kuz</span>(kuz_par)</span>
-<span id="cb26-2"><a href="optimal-control.html#cb26-2" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;J* =&quot;</span>, <span class="fu">round</span>(kuz_opt<span class="sc">$</span>J, <span class="dv">2</span>), <span class="st">&quot;  iterations:&quot;</span>, kuz_opt<span class="sc">$</span>iterations, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
-<pre><code>J* = 259.65   iterations: 140 </code></pre>
-<p>The safeguarded sweep converges in 140 iterations to <span class="math inline">\(J(u^*)=259.65\)</span>, and <span class="math inline">\(J\)</span> decreases at every iteration, while the plain sweep keeps oscillating (Figure <a href="optimal-control.html#fig:oc-kuz-conv">5.5</a>). Figure <a href="optimal-control.html#fig:oc-kuz-opt">5.4</a> shows the solution. The optimal schedule gives the full dose until <span class="math inline">\(t\approx 0.7\)</span> and then decreases. It is zero on the interval <span class="math inline">\(8.58\leq t\leq 8.90\)</span> where <span class="math inline">\(\lambda_T&lt;0\)</span> (Example <a href="optimal-control.html#exm:oc-kuz-interp">5.11</a>), as the projection formula requires, while the effector cells, stimulated by the tumor, rise to their peak <span class="math inline">\(E\approx 1.83\)</span> at <span class="math inline">\(t\approx 10.1\)</span>. As the immune response wanes, a second and lower course of treatment follows, peaking at <span class="math inline">\(u^*\approx 0.40\)</span> near <span class="math inline">\(t\approx 14.7\)</span>, and the dose returns to zero at <span class="math inline">\(t_f\)</span> because <span class="math inline">\(\lambda_T(t_f)=0\)</span>. The schedule uses 6.10 units of drug, compared with 20 for continuous full-dose treatment. The optimal control is therefore itself intermittent: it pauses while the immune system does the work.</p>
-<div class="figure"><span style="display:block;" id="fig:oc-kuz-opt"></span>
-<img src="_main_files/figure-html/oc-kuz-opt-1.png" alt="Optimal control of the simplified Kuznetsov model (Table \@ref(tab:oc-kuz-par)). (a) Optimal dose $u^*$ and the unconstrained minimizer $\delta\lambda_TT/B$, which is cut off at $M=1$. (b) Tumor cells. (c) Effector cells. (d) and (e) Adjoints. (f) Optimal trajectory in the $(T,E)$ plane, with the dormant state (filled) and the saddle (open)." width="816" />
-<p class="caption">
-Figure 5.4: Optimal control of the simplified Kuznetsov model (Table <a href="optimal-control.html#tab:oc-kuz-par">5.1</a>). (a) Optimal dose <span class="math inline">\(u^*\)</span> and the unconstrained minimizer <span class="math inline">\(\delta\lambda_TT/B\)</span>, which is cut off at <span class="math inline">\(M=1\)</span>. (b) Tumor cells. (c) Effector cells. (d) and (e) Adjoints. (f) Optimal trajectory in the <span class="math inline">\((T,E)\)</span> plane, with the dormant state (filled) and the saddle (open).
-</p>
-</div>
-<div class="figure"><span style="display:block;" id="fig:oc-kuz-conv"></span>
-<img src="_main_files/figure-html/oc-kuz-conv-1.png" alt="Objective at each iteration of the forward--backward sweep for the Kuznetsov problem, both started from full-dose treatment. The plain sweep with $\theta=0.5$ oscillates; the safeguarded sweep decreases $J$ at every iteration and converges." width="624" />
-<p class="caption">
-Figure 5.5: Objective at each iteration of the forward–backward sweep for the Kuznetsov problem, both started from full-dose treatment. The plain sweep with <span class="math inline">\(\theta=0.5\)</span> oscillates; the safeguarded sweep decreases <span class="math inline">\(J\)</span> at every iteration and converges.
-</p>
-</div>
-</div>
-<div id="interactive-example-onoff-chemotherapy" class="section level3 hasAnchor" number="5.5.4">
-<h3><span class="header-section-number">5.5.4</span> Interactive example: ON–OFF chemotherapy<a href="optimal-control.html#interactive-example-onoff-chemotherapy" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>The Shiny app <code>app_kuznetsov_onoff.R</code> simulates the ON–OFF schedules of Example <a href="optimal-control.html#exm:oc-kuz-admissible">5.2</a>. Its main slider is the OFF time <span class="math inline">\(\tau_{\mathrm{off}}\in[0,4]\)</span>; further sliders set the ON time, the dose <span class="math inline">\(M\)</span>, the drug kill rate <span class="math inline">\(\delta\)</span>, the initial tumor <span class="math inline">\(T_0\)</span> and effector level <span class="math inline">\(E_0\)</span>, the weight <span class="math inline">\(B\)</span>, and the horizon <span class="math inline">\(t_f\)</span>. The app plots <span class="math inline">\(T(t)\)</span>, <span class="math inline">\(E(t)\)</span>, and <span class="math inline">\(u(t)\)</span> for the ON–OFF schedule and for the optimal control, reports both values of <span class="math inline">\(J\)</span>, and plots <span class="math inline">\(J(u_{\tau_{\mathrm{off}}})\)</span> against <span class="math inline">\(\tau_{\mathrm{off}}\)</span>, shading the OFF times for which the tumor escapes. Run it with</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="optimal-control.html#cb28-1" tabindex="-1"></a>shiny<span class="sc">::</span><span class="fu">runApp</span>(<span class="st">&quot;scripts/app_kuznetsov_onoff.R&quot;</span>)</span></code></pre></div>
-<p>The simulation of an ON–OFF schedule uses a control that is constant on each time step, so that with step <span class="math inline">\(h=0.025\)</span> the switching times fall on grid points:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="optimal-control.html#cb29-1" tabindex="-1"></a><span class="co"># ON-OFF schedule: dose M for ton time units, then a pause of toff</span></span>
-<span id="cb29-2"><a href="optimal-control.html#cb29-2" tabindex="-1"></a>onoff <span class="ot">&lt;-</span> <span class="cf">function</span>(t, M, ton, toff) {</span>
-<span id="cb29-3"><a href="optimal-control.html#cb29-3" tabindex="-1"></a>  <span class="cf">if</span> (toff <span class="sc">&lt;=</span> <span class="dv">0</span>) <span class="fu">return</span>(<span class="fu">rep</span>(M, <span class="fu">length</span>(t)))</span>
-<span id="cb29-4"><a href="optimal-control.html#cb29-4" tabindex="-1"></a>  <span class="fu">ifelse</span>(t <span class="sc">%%</span> (ton <span class="sc">+</span> toff) <span class="sc">&lt;</span> ton, M, <span class="dv">0</span>)</span>
-<span id="cb29-5"><a href="optimal-control.html#cb29-5" tabindex="-1"></a>}</span>
-<span id="cb29-6"><a href="optimal-control.html#cb29-6" tabindex="-1"></a></span>
-<span id="cb29-7"><a href="optimal-control.html#cb29-7" tabindex="-1"></a><span class="co"># Simulate an ON-OFF schedule and evaluate its cost. The control is</span></span>
-<span id="cb29-8"><a href="optimal-control.html#cb29-8" tabindex="-1"></a><span class="co"># constant on each step; with h = 0.025, switching times that are</span></span>
-<span id="cb29-9"><a href="optimal-control.html#cb29-9" tabindex="-1"></a><span class="co"># multiples of 0.025 fall on grid points.</span></span>
-<span id="cb29-10"><a href="optimal-control.html#cb29-10" tabindex="-1"></a>kuz_onoff <span class="ot">&lt;-</span> <span class="cf">function</span>(pars, ton, toff, <span class="at">h =</span> <span class="fl">0.025</span>) {</span>
-<span id="cb29-11"><a href="optimal-control.html#cb29-11" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">round</span>(pars<span class="sc">$</span>tf <span class="sc">/</span> h)</span>
-<span id="cb29-12"><a href="optimal-control.html#cb29-12" tabindex="-1"></a>  t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, pars<span class="sc">$</span>tf, <span class="at">length.out =</span> n <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb29-13"><a href="optimal-control.html#cb29-13" tabindex="-1"></a>  u <span class="ot">&lt;-</span> <span class="fu">onoff</span>(t[<span class="sc">-</span><span class="dv">1</span>] <span class="sc">-</span> h <span class="sc">/</span> <span class="dv">2</span>, pars<span class="sc">$</span>M, ton, toff)    <span class="co"># value on each step</span></span>
-<span id="cb29-14"><a href="optimal-control.html#cb29-14" tabindex="-1"></a>  st <span class="ot">&lt;-</span> <span class="fu">kuz_forward</span>(u, h, pars, <span class="at">piecewise =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb29-15"><a href="optimal-control.html#cb29-15" tabindex="-1"></a>  J <span class="ot">&lt;-</span> <span class="cf">if</span> (st<span class="sc">$</span>escaped) <span class="cn">Inf</span> <span class="cf">else</span></span>
-<span id="cb29-16"><a href="optimal-control.html#cb29-16" tabindex="-1"></a>    <span class="fu">trap</span>(pars<span class="sc">$</span>A <span class="sc">*</span> st<span class="sc">$</span>T, h) <span class="sc">+</span> pars<span class="sc">$</span>B <span class="sc">/</span> <span class="dv">2</span> <span class="sc">*</span> h <span class="sc">*</span> <span class="fu">sum</span>(u<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb29-17"><a href="optimal-control.html#cb29-17" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">t =</span> t, <span class="at">u =</span> u, <span class="at">E =</span> st<span class="sc">$</span>E, <span class="at">T =</span> st<span class="sc">$</span>T, <span class="at">escaped =</span> st<span class="sc">$</span>escaped, <span class="at">J =</span> J,</span>
-<span id="cb29-18"><a href="optimal-control.html#cb29-18" tabindex="-1"></a>       <span class="at">dose =</span> h <span class="sc">*</span> <span class="fu">sum</span>(u))</span>
-<span id="cb29-19"><a href="optimal-control.html#cb29-19" tabindex="-1"></a>}</span></code></pre></div>
-<div class="figure"><span style="display:block;" id="fig:oc-kuz-onoff"></span>
-<img src="_main_files/figure-html/oc-kuz-onoff-1.png" alt="ON--OFF chemotherapy for the simplified Kuznetsov model with $\tau_{\mathrm{on}}=0.5$. Left: tumor cells for three OFF times; the dashed curve is the optimal control. Right: objective $J$ of the ON--OFF schedule as a function of the OFF time, with the optimal value $J(u^*)$ dashed; for OFF times in the shaded region the tumor escapes and $J=\infty$." width="816" />
-<p class="caption">
-Figure 5.6: ON–OFF chemotherapy for the simplified Kuznetsov model with <span class="math inline">\(\tau_{\mathrm{on}}=0.5\)</span>. Left: tumor cells for three OFF times; the dashed curve is the optimal control. Right: objective <span class="math inline">\(J\)</span> of the ON–OFF schedule as a function of the OFF time, with the optimal value <span class="math inline">\(J(u^*)\)</span> dashed; for OFF times in the shaded region the tumor escapes and <span class="math inline">\(J=\infty\)</span>.
-</p>
-</div>
-<p>Figure <a href="optimal-control.html#fig:oc-kuz-onoff">5.6</a> shows the results for <span class="math inline">\(\tau_{\mathrm{on}}=0.5\)</span>, about 4.5 days at full dose. Continuous treatment (<span class="math inline">\(\tau_{\mathrm{off}}=0\)</span>) costs <span class="math inline">\(J=558.4\)</span>, mostly because of the drug. Short pauses lower the cost: the best ON–OFF schedule pauses for <span class="math inline">\(\tau_{\mathrm{off}}=0.45\)</span> (about 4 days) and gives <span class="math inline">\(J=437.1\)</span>, using 10.6 units of drug. Longer pauses let the tumor regrow between doses, and <span class="math inline">\(J\)</span> rises steeply. For <span class="math inline">\(\tau_{\mathrm{off}}&gt;2.09\)</span> (about 19 days) the tumor regrows past the region that the immune system controls during each pause, and it escapes. The optimal control (Example <a href="optimal-control.html#exm:oc-kuz-fbsm">5.19</a>) gives <span class="math inline">\(J(u^*)=259.65\)</span>, which is 41% lower than the best ON–OFF schedule, with 6.1 units of drug. As Example <a href="optimal-control.html#exm:oc-kuz-optimal">5.4</a> predicts, no ON–OFF schedule beats it. Things to explore with the app:</p>
-<ol style="list-style-type: decimal">
-<li>Move the OFF time from 0 to 4 and find the threshold beyond which the tumor escapes. How many days is it?</li>
-<li>Why is the cost high for very short pauses, even though the tumor is smallest there?</li>
-<li>Set the ON time to 1. Does the escape threshold move? Is the best ON–OFF schedule better or worse than with an ON time of 0.5?</li>
-<li>Increase <span class="math inline">\(T_0\)</span> to 100, or <span class="math inline">\(E_0\)</span> to 1. How do the threshold and the best OFF time change, and why?</li>
-<li>Compare the optimal control with the ON–OFF schedule. When does the optimal control pause, and what are the effector cells doing then?</li>
-</ol>
+<div id="derivation-of-the-optimality-system-for-the-gompertzian-model-and-numerical-solution" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> Derivation of the Optimality System for the Gompertzian Model and numerical solution<a href="optimal-control.html#derivation-of-the-optimality-system-for-the-gompertzian-model-and-numerical-solution" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 
-</div>
 </div>
 </div>
             </section>
