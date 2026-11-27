@@ -1,14 +1,17 @@
 # Optimal Control
 
+<!-- Hidden chunks: they run the Kuznetsov code shown in Section "An Optimal
+     Control Approach for the Kuznetsov Model" and compute the numbers quoted
+     in the examples. -->
+
 ```{r oc-kuz-setup, include=FALSE, ref.label=c("oc-kuz-model", "oc-kuz-sweeps", "oc-kuz-onoff-code", "oc-kuz-fbsm")}
 ```
-
 
 ```{r oc-kuz-compute, include=FALSE}
 fmt <- function(x, digits = 2) formatC(x, format = "f", digits = digits, big.mark = ",")
 kp <- kuz_par
 
-# Equilibria 
+# Equilibria of the untreated model and their eigenvalues
 T_eq <- kuz_equilibria(kp)
 kuz_jac <- function(E, T, pars) {
   matrix(c(pars$p * T / (pars$g + T) - pars$m * T - pars$d, -T,
@@ -17,7 +20,7 @@ kuz_jac <- function(E, T, pars) {
 ev_dormant <- eigen(kuz_jac(kp$a, T_eq[1], kp))$values
 ev_free    <- eigen(kuz_jac(kp$s / kp$d, 0, kp))$values
 
-# Optimal control
+# Optimal control: safeguarded sweep, and the plain sweep for comparison
 kuz_opt   <- fbsm_kuz(kp)
 kuz_plain <- fbsm_kuz(kp, safeguard = FALSE, max_iter = 300)
 tt <- kuz_opt$t
@@ -28,7 +31,7 @@ u_peak2 <- max(kuz_opt$u[i_late]); t_peak2 <- tt[i_late][which.max(kuz_opt$u[i_l
 E_peak <- max(kuz_opt$E); t_Epeak <- tt[which.max(kuz_opt$E)]
 dose_opt <- trap(kuz_opt$u, tt[2] - tt[1])
 
-# solved from other initial guesses
+# The same optimality system solved from other initial guesses
 starts <- list(rep(0.5, length(tt)), onoff(tt, 1, 0.5, 0.5),
                onoff(tt, 1, 0.5, 1))
 J_starts <- c(kuz_opt$J, sapply(starts, function(u0) fbsm_kuz(kp, u0 = u0)$J))
@@ -47,7 +50,6 @@ for (k in 1:25) {
 }
 toff_crit <- (lo + hi) / 2
 ```
-
 
 Mathematical models of cancer describe how tumor populations evolve over time and how they interact with the immune system, treatment, and their surrounding environment. While these models can provide insight into tumor dynamics and treatment response, they often assume that treatment is prescribed according to a fixed schedule.
 
@@ -80,8 +82,7 @@ An optimal control problem consists of three main components:
 ### State equations, controls, and objective
 Let $x(t)\in\mathbb{R}^n$ denote the state vector, which may include tumor cells, immune effector cells, and drug concentrations, and let $u(t)\in\mathbb{R}^m$ denote the treatment input, such as a chemotherapy infusion rate, a drug dose, or an immunotherapy input. Treatment is subject to clinical limits, so at each time the control takes values in a set $U\subset\mathbb{R}^m$ of allowed treatment levels. For a single treatment input a common choice is $U=[0,M]$, where $M$ is the maximum allowable treatment intensity.
 
-**Example 1.1 (Simplified Kuznetsov model).**
-
+::: {.example #oc-kuz-model name="Simplified Kuznetsov model"}
 We use the Kuznetsov model of Section \@ref(sec:kuznetsov) in the dimensionless form \@ref(eq:red-ODEs-T)--\@ref(eq:red-ODEs-E) of Section \@ref(sec:resistant), without immune resistance. One unit of $E$ or $T$ is $10^6$ cells, and one unit of time is $1/(n\cdot10^6)\approx 9.1$ days, with $n$ from Table \@ref(tab:kuz-param). We remove the carrying capacity of the tumor ($b=0$), so that without immune killing the tumor grows exponentially, and add chemotherapy with intensity $u(t)$:
 
 $$
@@ -90,6 +91,7 @@ E'&=s+\frac{p\,E\,T}{g+T}-m\,E\,T-d\,E, &\qquad E(0)&=E_0,\\
 T'&=a\,T-E\,T-\delta\,u(t)\,T, &\qquad T(0)&=T_0.
 \end{aligned}
 $$
+
 The parameters $s$, $p$, $g$, $m$, $d$, and $a$ have the meanings and dimensionless values of Table \@ref(tab:red-param). The new term $-\delta uT$ is the killing of tumor cells by the drug, at rate $\delta$ per unit of treatment intensity. The state is $x=(E,T)^\top\in\mathbb{R}^2$ and the control is scalar. The values used for treatment, cost, and initial conditions are listed in Table \@ref(tab:oc-kuz-par).
 :::
 
@@ -129,58 +131,9 @@ points(T_eq, rep(kp$a, 2), pch = c(19, 1), cex = 1.4, lwd = 2)
 text(T_eq, rep(kp$a, 2), c("dormant", "saddle"), pos = 3, cex = 0.8)
 par(op)
 ```
-$$
-\begin{aligned}
-E'&=\sigma+\frac{\rho\,E\,T}{\eta+T}-\mu\,E\,T-\delta_E\,E, &\qquad E(0)&=E_0,\\
-T'&=\alpha\,T-E\,T-\kappa\,u(t)\,T, &\qquad T(0)&=T_0.
-\end{aligned}
-$$
-
-The terms of the first equation are a constant supply of effector cells, recruitment of effector cells stimulated by the tumor, inactivation of effector cells by tumor cells, and natural death. The terms of the second equation are exponential tumor growth, killing of tumor cells by effector cells, and killing by the drug at rate $\kappa$ per unit of treatment intensity. The state is $x=(E,T)^\top$ and the control is scalar, so $n=2$ and $m=1$. The parameter values are listed in Table\ \ref{tab:kuz-par}.
-
-| Parameter | Value | Meaning |
-|:--------------|:------------------------|:--------------------------------------------------|
-| $\sigma$ | 0.1181 | supply rate of effector cells |
-| $\rho$ | 1.131 | maximal recruitment rate of effector cells |
-| $\eta$ | 20.19 | tumor size giving half-maximal recruitment |
-| $\mu$ | 0.00311 | inactivation of effector cells by tumor cells |
-| $\delta_E$ | 0.3743 | death rate of effector cells |
-| $\alpha$ | 1.636 | tumor growth rate |
-| $\kappa$ | 2 | drug kill rate at full dose |
-| $M$ | 1 | maximum dose (fraction of the maximum tolerated dose) |
-| $A$, $B$ | 1, 50 | weights in the objective functional |
-| $t_f$ | 20 | treatment horizon (about 180 days) |
-| $E_0$ | $\sigma/\delta_E\approx 0.316$ | resting level of effector cells |
-| $T_0$ | 50 | initial tumor ($5\times10^7$ cells) |
-
-Table: Parameters of the simplified Kuznetsov model (dimensionless). The first six values are those of \cite{Kuznetsov1994}, with the carrying capacity of the tumor removed. \label{tab:kuz-par}
 
 
-Without treatment ($u\equiv0$), the model has a tumor-free equilibrium $(\sigma/\delta_E,0)$ and two equilibria with $E=\alpha$, at which $T$ solves $\sigma+\rho\alpha T/(\eta+T)-\mu\alpha T-\delta_E\alpha=0$. For the values in Table\ \ref{tab:kuz-par} these are a stable *dormant* state with $T\approx `r f2(T_eq[1])`$ (a stable spiral, with eigenvalues $`r f2(Re(ev_dormant[1]), 3)`\pm `r f2(abs(Im(ev_dormant[1])), 3)`\,i$) and a saddle with $T\approx `r f2(T_eq[2], 1)`$. The tumor-free equilibrium is unstable, with eigenvalue $\alpha-\sigma/\delta_E\approx `r f2(max(ev_free))`$ in the tumor direction. Initial states on one side of the stable manifold of the saddle are attracted to the dormant state; on the other side the tumor grows without bound. Figure\ \ref{fig:kuz-untreated} shows that, with the immune system at its resting level $E_0=\sigma/\delta_E$, a tumor of $T_0=1$ is controlled: it oscillates around the dormant state and slowly settles into it. A tumor of $T_0=50$ escapes. Treatment therefore has a clear aim: to move the state into the region that the immune system controls.
-
-```{r kuz-untreated, echo=FALSE, fig.width=8, fig.height=3.4, fig.cap="Untreated simplified Kuznetsov model with $E_0=\\sigma/\\delta_E$. Left: a small tumor ($T_0=1$) oscillates around the dormant state and slowly settles into it, while a larger tumor ($T_0=50$) escapes; the simulation stops when $T$ exceeds $10^4$. Right: the same trajectories in the $(T,E)$ plane, with the dormant state (filled circle) and the saddle (open circle).\\label{fig:kuz-untreated}"}
-p1 <- kp; p1$tf <- 30; h <- 0.02
-u0 <- rep(0, round(p1$tf / h) + 1); tg <- seq(0, p1$tf, by = h)
-runs <- lapply(c(1, 50), function(T0) { q <- p1; q$T0 <- T0; kuz_forward(u0, h, q) })
-cols <- c("#1f5f9e", "#b2182b")
-op <- par(mfrow = c(1, 2), mar = c(4, 4.5, 1, 1))
-plot(NA, xlim = c(0, 30), ylim = c(0.5, 1e4), log = "y", yaxt = "n",
-     xlab = "Time (1 unit = 9 days)", ylab = expression("Tumor cells " * T))
-axis(2, at = 10^(0:4), labels = c("1", "10", "100", "1000", "1e4"), las = 1)
-abline(h = T_eq, lty = 3, col = "gray50")
-for (k in 1:2) lines(tg, runs[[k]]$T, lwd = 2, col = cols[k])
-legend("topright", bty = "n", lwd = 2, col = cols, cex = 0.85,
-       legend = c(expression(T[0] == 1), expression(T[0] == 50)))
-plot(NA, xlim = c(0.5, 1e4), ylim = c(0, 2.2), log = "x", xaxt = "n",
-     xlab = expression("Tumor cells " * T), ylab = expression("Effector cells " * E))
-axis(1, at = 10^(0:4), labels = c("1", "10", "100", "1000", "1e4"))
-for (k in 1:2) lines(runs[[k]]$T, runs[[k]]$E, lwd = 2, col = cols[k])
-points(T_eq, rep(kp$alpha, 2), pch = c(19, 1), cex = 1.4, lwd = 2)
-text(T_eq, rep(kp$alpha, 2), c("dormant", "saddle"), pos = 3, cex = 0.8)
-par(op)
-```
-**Definition: Admissible Controls.**
-
+::: {.definition #oc-admissible name="Admissible Controls"}
 Let $U\subseteq\mathbb{R}^m$ represent the set of allowable control values. The set of admissible controls is
 
 $$
@@ -200,9 +153,9 @@ $$
 $$
 
 for almost every $t\in[0,t_f]$.
+:::
 
-**Example 1.3 (Admissible chemotherapy schedules).**
-
+::: {.example #oc-kuz-admissible name="Admissible chemotherapy schedules"}
 In Example \@ref(exm:oc-kuz-model) the treatment intensity is measured as a fraction of the maximum tolerated dose, so $U=[0,M]$ with $M=1$. Every measurable schedule with values in $[0,1]$ is admissible. In particular, the *ON--OFF schedule* that gives the full dose for a time $\tau_{\mathrm{on}}$ and then pauses for a time $\tau_{\mathrm{off}}$,
 
 $$
@@ -214,9 +167,9 @@ M, & \text{if } t-k(\tau_{\mathrm{on}}+\tau_{\mathrm{off}})\in[0,\tau_{\mathrm{o
 $$
 
 is piecewise constant, hence measurable, and therefore admissible. Continuous treatment at full dose is the case $\tau_{\mathrm{off}}=0$. Section \@ref(sec:oc-kuznetsov) compares these schedules with the optimal control.
+:::
 
-**Definition: Optimal Control Problem.**
-
+::: {.definition #oc-ocp name="Optimal Control Problem"}
 Given the functions
 
 $$
@@ -259,8 +212,9 @@ $$
 Here, $f$ is the running cost, $\phi$ is the terminal cost, and $J$ is the objective functional.
 
 For each admissible control $u$, the corresponding solution $x=x(u)$ is called the associated state.
+:::
 
-**Example 1.5 (An optimal control problem for the Kuznetsov model).**
+::: {.example #oc-kuz-ocp name="An optimal control problem for the Kuznetsov model"}
 For Example \@ref(exm:oc-kuz-model) we take
 
 $$
@@ -268,9 +222,9 @@ J(u)=\int_0^{t_f}\Bigl(A\,T(t)+\frac{B}{2}\,u(t)^2\Bigr)\,dt,
 $$
 
 so that the running cost is $f(t,x,u)=A\,T+\tfrac{B}{2}u^2$ and the terminal cost is $\phi=0$. The first term is the accumulated tumor burden and the second the accumulated burden of treatment. The problem is to minimize $J$ over $u\in\mathcal{U}$ subject to the state equations of Example \@ref(exm:oc-kuz-model), with the values of Table \@ref(tab:oc-kuz-par).
+:::
 
-**Definition: Optimal Control and Optimal State.**
-
+::: {.definition #oc-optimal name="Optimal Control and Optimal State"}
 An admissible control $u^*\in\mathcal{U}$ is an optimal control if $J(u^*)$ is finite and
 
 $$
@@ -280,19 +234,21 @@ J(u^*)\leq J(u)
 $$
 
 The corresponding state $x^*=x(u^*)$ is called the optimal state, and the pair $(x^*,u^*)$ is called an optimal pair.
+:::
 
-**Example 1.7 (The optimal control as a benchmark).**
-
+::: {.example #oc-kuz-optimal name="The optimal control as a benchmark"}
 Since every ON--OFF schedule of Example \@ref(exm:oc-kuz-admissible) is admissible, Definition \@ref(def:oc-optimal) gives
+
 $$
 J(u^*)\leq J(u_{\tau_{\mathrm{off}}})\qquad\text{for every }\tau_{\mathrm{off}}\geq0 .
 $$
 
 The optimal control is therefore a benchmark for simpler clinical schedules: no ON--OFF schedule, whatever its pause, can do better. Section \@ref(sec:oc-kuznetsov) computes $u^*$ and measures how far ON--OFF schedules are from it.
+:::
 
 ### Components of the objective functional
 
-In cancer models, the running cost may penalize tumor burden, treatment intensity, or other undesirable outcomes. A terminal cost can additionally penalize the remaining tumor population at the end of the treatment period. Some commonly used terms are summarized in Table\ \ref{tab:oc-costs}.
+In cancer models, the running cost may penalize tumor burden, treatment intensity, or other undesirable outcomes. A terminal cost can additionally penalize the remaining tumor population at the end of the treatment period. Some commonly used terms are summarized in Table \@ref(tab:oc-costs).
 
 | Term | Interpretation | Comment |
 |:--------------------------|:--------------------------|:--------------------------------------------------|
@@ -302,13 +258,13 @@ In cancer models, the running cost may penalize tumor burden, treatment intensit
 | $-C\,E(t)$ | Immune response | Rewards larger immune effector populations. |
 | $C\,T(t_f)$ | Terminal tumor burden | Penalizes the remaining tumor population at the end of treatment. |
 
-Table: Common components of objective functionals in cancer treatment models. \label{tab:oc-costs}
+Table: (\#tab:oc-costs) Common components of objective functionals in cancer treatment models.
 
 The coefficients $A$, $B$, and $C$ determine the relative importance of the different components of the objective functional. Their appropriate values depend on the model, the scaling of the state variables, and the therapeutic objectives. Consequently, they should be interpreted in the context of the particular application, and sensitivity to their values should be examined.
 
-**Example 1.8 (Choosing the weights).**
-
+::: {.example #oc-kuz-weights name="Choosing the weights"}
 The objective functional of Example \@ref(exm:oc-kuz-ocp) uses the tumor-burden term $A\,T$ and the quadratic treatment term of Table \@ref(tab:oc-costs). Because $T$ is measured in units of $10^6$ cells and $u$ is a fraction of the maximum dose, the weights must be read on these scales. With $A=1$ and $B=50$, one time unit at full dose adds $B/2=25$ to $J$, as much as one time unit with a tumor of 25 units ($2.5\times10^7$ cells). Adding $-C\,E$ would reward schedules that preserve the immune response, and adding $C\,T(t_f)$ would penalize the tumor left at the end of treatment.
+:::
 
 ### Why use a quadratic treatment cost?
 
@@ -316,17 +272,16 @@ A quadratic treatment cost is frequently used in optimal control models of cance
 
 The quadratic formulation also has a mathematical advantage: it produces a strictly convex Hamiltonian with respect to the control when $B>0$ and the remaining dynamics are affine in $u$. Consequently, the unconstrained optimal control can often be obtained explicitly and then restricted to its admissible interval.
 
-In contrast, a linear treatment cost may produce bang-bang controls, in which treatment switches between its minimum and maximum allowable levels. Singular controls may also arise and require additional analysis \cite{LenhartWorkman2007,SchattlerLedzewicz2015}.
+In contrast, a linear treatment cost may produce bang-bang controls, in which treatment switches between its minimum and maximum allowable levels. Singular controls may also arise and require additional analysis [@lenhart07; @schattler15].
 
-**Example 1.9 (Linear treatment cost and ON--OFF control).**
-
+::: {.example #oc-kuz-linear name="Linear treatment cost and ON--OFF control"}
 If the treatment term in Example \@ref(exm:oc-kuz-ocp) were $B\,u$ instead of $\tfrac{B}{2}u^2$, the Hamiltonian (Example \@ref(exm:oc-kuz-H)) would be linear in $u$, with coefficient $B-\delta\lambda_T T$. Minimizing it over $[0,M]$ gives the full dose $u=M$ where $B-\delta\lambda_TT<0$ and no drug where $B-\delta\lambda_TT>0$. The optimal treatment is then of ON--OFF type, but its switching times are determined by the adjoint $\lambda_T$ rather than fixed in advance; a singular arc can occur where $B-\delta\lambda_TT$ vanishes on an interval. With the quadratic cost, the optimal dose can also take intermediate values.
+:::
 
 ### Existence of an optimal control
 
-**Theorem (Existence of an Optimal Control; Fleming and Rishel).**
-
-Consider the optimal control problem in Definition 1.2 with $\phi=0$. Suppose the following conditions hold:
+::: {.theorem #oc-existence name="Existence of an Optimal Control; Fleming and Rishel"}
+Consider the optimal control problem in Definition \@ref(def:oc-ocp) with $\phi=0$. Suppose the following conditions hold:
 
 1. The set of admissible controls with corresponding state solutions is nonempty.
 
@@ -357,14 +312,26 @@ Consider the optimal control problem in Definition 1.2 with $\phi=0$. Suppose th
    $$
 
 Then there exists an optimal control $u^*\in\mathcal{U}$ for which $J(u^*)$ is finite.
+:::
+
+Theorem \@ref(thm:oc-existence) is a special case of the existence results of @fleming75.
+
+::: {.example #oc-kuz-existence name="Existence for the Kuznetsov problem"}
+Theorem \@ref(thm:oc-existence) applies to the problem of Example \@ref(exm:oc-kuz-ocp), although the untreated tumor can grow without bound. First, the states stay positive and bounded on $[0,t_f]$ for every admissible $u$. Writing the tumor equation as
+
+$$
+T(t)=T_0\exp\Bigl(\int_0^t\bigl(a-E(\xi)-\delta u(\xi)\bigr)\,d\xi\Bigr)
+$$
+
+shows that $T>0$, and $T(t)\leq T_0e^{a t_f}$ as long as $E\geq0$. Since $E'=s>0$ whenever $E=0$, the effector cells stay positive. Since $pT/(g+T)<p$ and the terms $-mET$ and $-dE$ are nonpositive, $E'\leq s+pE$, which gives $E(t)\leq(E_0+s/p)\,e^{p t_f}$. Hence the state equations have a solution on $[0,t_f]$ for every admissible control, so condition 1 holds, and every trajectory stays in a fixed bounded box. The right-hand side may be modified outside a slightly larger box without changing any solution, so the growth bound in condition 3 holds, and it is affine in $u$ because the control enters only through the term $-\delta uT$. Finally, $U=[0,1]$ is closed and convex, $f=AT+\tfrac{B}{2}u^2$ is convex in $u$, and $f\geq\tfrac{B}{2}|u|^2$ because $T\geq0$, so condition 5 holds with exponent 2. Hence an optimal control exists.
+:::
 
 ## Pontryagin's Maximum Principle
 
 ### The Hamiltonian and adjoint equations
 
-**Definition (Hamiltonian).**
-
-The Hamiltonian associated with the optimal control problem in Definition 1.2 is
+::: {.definition #oc-hamiltonian name="Hamiltonian"}
+The Hamiltonian associated with the optimal control problem in Definition \@ref(def:oc-ocp) is
 
 $$
 H(t,x,u,\lambda)
@@ -384,9 +351,17 @@ f(t,x,u)
 $$
 
 where $\lambda\in\mathbb{R}^n$ is the vector of adjoint variables, also called costate variables.
+:::
 
-**Theorem (Pontryagin's Maximum Principle).**
+::: {.example #oc-kuz-H name="Hamiltonian for the Kuznetsov problem"}
+With adjoint variables $\lambda=(\lambda_E,\lambda_T)^\top$, the Hamiltonian of Example \@ref(exm:oc-kuz-ocp) is
 
+$$
+H=A\,T+\frac{B}{2}u^2+\lambda_E\Bigl(s+\frac{pET}{g+T}-mET-dE\Bigr)+\lambda_T\bigl(aT-ET-\delta uT\bigr).
+$$
+:::
+
+::: {.theorem #oc-pmp name="Pontryagin's Maximum Principle"}
 Suppose $u^*$ is an optimal admissible control and $x^*$ is its corresponding state trajectory.
 
 Under the standard differentiability and regularity assumptions for the normal case, there exists an absolutely continuous adjoint vector $\lambda(t)$ satisfying the following necessary conditions.
@@ -429,10 +404,30 @@ H(t,x^*,v,\lambda)
 $$
 
 for almost every $t\in[0,t_f]$.
+:::
 
-**Definition (Optimality System).**
+The Maximum Principle is due to @pontryagin62; @lenhart07 derive these conditions for problems of the form considered here.
 
+::: {.example #oc-kuz-adjoint name="Adjoint equations for the Kuznetsov problem"}
+Differentiating the Hamiltonian of Example \@ref(exm:oc-kuz-H) with respect to the states, and using $\frac{\partial}{\partial T}\frac{pET}{g+T}=\frac{pgE}{(g+T)^2}$, gives
+
+$$
+\begin{aligned}
+\lambda_E'&=-\frac{\partial H}{\partial E}=-\lambda_E\Bigl(\frac{pT}{g+T}-mT-d\Bigr)+\lambda_T\,T,\\
+\lambda_T'&=-\frac{\partial H}{\partial T}=-A-\lambda_E\Bigl(\frac{pgE}{(g+T)^2}-mE\Bigr)-\lambda_T\bigl(a-E-\delta u\bigr),
+\end{aligned}
+$$
+
+with the transversality conditions $\lambda_E(t_f)=\lambda_T(t_f)=0$, since $\phi=0$. The state equations $x'=\partial H/\partial\lambda$ are those of Example \@ref(exm:oc-kuz-model).
+:::
+
+::: {.definition #oc-os name="Optimality System"}
 The state equations, the adjoint equations with their transversality conditions, and the characterization of the optimal control obtained from the Hamiltonian minimization condition together form the optimality system.
+:::
+
+::: {.example #oc-kuz-os-outline name="Optimality system for the Kuznetsov problem"}
+For the Kuznetsov problem, the optimality system consists of the two state equations of Example \@ref(exm:oc-kuz-model), the two adjoint equations of Example \@ref(exm:oc-kuz-adjoint) with their transversality conditions, and the characterization of $u^*$ obtained by minimizing the Hamiltonian over $[0,M]$, which is derived in Examples \@ref(exm:oc-kuz-interior) and \@ref(exm:oc-kuz-bounded). The complete system is written out in Example \@ref(exm:oc-kuz-os).
+:::
 
 ### Interpretation of adjoint variables
 
@@ -443,6 +438,10 @@ Informally, $\lambda_i(t)$ measures how a small change in the state variable $x_
 For example, if the tumor adjoint is positive, an increase in tumor burden increases the objective locally. The magnitude of the adjoint helps determine the value of reducing the tumor population through treatment.
 
 The biological interpretation of an adjoint variable depends on the objective functional. In particular, an immune-cell adjoint need not have the same sign or interpretation as a tumor-cell adjoint.
+
+::: {.example #oc-kuz-interp name="Signs of the Kuznetsov adjoints"}
+In Example \@ref(exm:oc-kuz-adjoint), $\lambda_T(t)$ is the marginal cost of one additional unit of tumor at time $t$, and $\lambda_E(t)$ the marginal cost of one additional unit of effector cells. For the computed solution (Figure \@ref(fig:oc-kuz-opt)), $\lambda_E\leq0$ on the whole interval: extra effector cells kill tumor cells and so lower the cost. The tumor adjoint is positive except on the short interval $`r fmt(lT_neg[1])`\leq t\leq `r fmt(lT_neg[2])`$, where it is slightly negative (its minimum is $`r signif(min(kuz_opt$lT), 2)`$). On this interval an additional tumor cell stimulates enough recruitment of effector cells to lower the total cost slightly. The sign of an adjoint must therefore be read from the model, not assumed.
+:::
 
 ### Interior optimal controls
 
@@ -459,6 +458,22 @@ $$
 $$
 
 For multiple controls, the corresponding condition involves the positive semidefiniteness of the Hessian with respect to the control variables. These conditions characterize interior minimizers. When controls are subject to bounds, the minimization must instead be performed over the admissible interval.
+
+::: {.example #oc-kuz-interior name="Interior control for the Kuznetsov problem"}
+From the Hamiltonian of Example \@ref(exm:oc-kuz-H),
+
+$$
+\frac{\partial H}{\partial u}=B\,u-\delta\,\lambda_T\,T,\qquad\frac{\partial^2 H}{\partial u^2}=B>0 .
+$$
+
+The Hamiltonian is strictly convex in $u$, and on any interval where $0<u^*<M$,
+
+$$
+u^*(t)=\widetilde u(t)=\frac{\delta\,\lambda_T(t)\,T^*(t)}{B}.
+$$
+
+The dose is proportional to $\lambda_T\,T$, the marginal cost of the tumor multiplied by the number of tumor cells the drug can act on, and inversely proportional to the price $B$ of treatment.
+:::
 
 ### Bounded optimal controls
 
@@ -482,6 +497,16 @@ $$
 
 This projection formula is used in the numerical implementations later in the chapter.
 
+::: {.example #oc-kuz-bounded name="Bounded control for the Kuznetsov problem"}
+With $U=[0,M]$, the projection formula gives
+
+$$
+u^*(t)=\min\Bigl\{M,\,\max\Bigl\{0,\,\frac{\delta\,\lambda_T(t)\,T^*(t)}{B}\Bigr\}\Bigr\}.
+$$
+
+For the values of Table \@ref(tab:oc-kuz-par), the upper bound is active at the start of treatment: the computed schedule gives the full dose until $t\approx `r fmt(full_until, 1)`$ (about `r round(9.08 * full_until)` days), after which $\delta\lambda_TT/B$ falls below $M$ (Figure \@ref(fig:oc-kuz-opt)).
+:::
+
 ### Multiple states and multiple controls
 
 For a model with $n$ state variables and $m$ control variables, there is one adjoint equation for each state variable and one pointwise minimization condition for each control variable. The adjoint equation associated with the state variable $x_i$ is
@@ -498,10 +523,41 @@ $$
 
 Thus, the adjoint system depends on the transpose of the Jacobian matrix of the state equations. This relationship is particularly useful when deriving optimality systems for cancer models with several interacting tumor and immune-cell populations.
 
+::: {.example #oc-kuz-matrix name="Adjoint system in matrix form"}
+For the Kuznetsov problem, $x=(E,T)^\top$ and $\nabla_x f=(0,A)^\top$. The Jacobian matrix of the state equations is the Jacobian computed before Proposition \@ref(prp:kuz-tumorfree), with $b=0$ and $n=1$ and with the drug term $-\delta u$ added to its last entry, and the matrix form of the adjoint equations reads
+
+$$
+\begin{pmatrix}\lambda_E'\\[4pt] \lambda_T'\end{pmatrix}
+=-\begin{pmatrix}0\\[4pt] A\end{pmatrix}
+-\begin{pmatrix}
+\dfrac{pT}{g+T}-mT-d & -T\\[10pt]
+\dfrac{pgE}{(g+T)^2}-mE & a-E-\delta u
+\end{pmatrix}
+\begin{pmatrix}\lambda_E\\[4pt] \lambda_T\end{pmatrix},
+$$
+
+where the matrix is the transpose of the Jacobian. Multiplying out reproduces the adjoint equations of Example \@ref(exm:oc-kuz-adjoint). The transpose moves each interaction into the equation of the other adjoint: the killing of tumor cells by effector cells, which gives the entry $\partial T'/\partial E=-T$ of the Jacobian, appears as the term $+\lambda_TT$ in the equation for $\lambda_E$, and the recruitment of effector cells by the tumor, which gives the entry $\partial E'/\partial T=pgE/(g+T)^2-mE$, appears in the equation for $\lambda_T$.
+:::
+
+::: {.example #oc-kuz-os name="The complete optimality system"}
+Collecting Examples \@ref(exm:oc-kuz-model), \@ref(exm:oc-kuz-adjoint), and \@ref(exm:oc-kuz-bounded), the optimality system for the Kuznetsov problem is
+
+$$
+\begin{aligned}
+E'&=s+\frac{pET}{g+T}-mET-dE,\\
+T'&=aT-ET-\delta u^*T,\\
+\lambda_E'&=-\lambda_E\Bigl(\frac{pT}{g+T}-mT-d\Bigr)+\lambda_TT,\\
+\lambda_T'&=-A-\lambda_E\Bigl(\frac{pgE}{(g+T)^2}-mE\Bigr)-\lambda_T(a-E-\delta u^*),\\
+u^*&=\min\Bigl\{M,\,\max\Bigl\{0,\,\frac{\delta\lambda_TT}{B}\Bigr\}\Bigr\},
+\end{aligned}
+$$
+
+with $E(0)=E_0$, $T(0)=T_0$, and $\lambda_E(t_f)=\lambda_T(t_f)=0$. The two states run forward from $t=0$ and the two adjoints run backward from $t=t_f$; they are coupled through $u^*$ and through the products $ET$ and $\lambda_TT$.
+:::
+
 ### Sufficient conditions
 
-**Theorem (Sufficiency; Mangasarian).**
-
+::: {.theorem #oc-sufficiency name="Sufficiency; Mangasarian"}
 Suppose the control set $U$ is convex, the terminal cost $\phi$ is convex and differentiable, and an admissible control $u^*\in\mathcal{U}$ with corresponding state $x^*$ and an absolutely continuous adjoint vector $\lambda$ satisfies the state equations, adjoint equations, transversality condition, and Hamiltonian minimization condition.
 
 If, for almost every $t\in[0,t_f]$, the mapping
@@ -515,11 +571,23 @@ $$
 is convex on $\mathbb{R}^n\times U$, then $u^*$ is an optimal control.
 
 If the mapping is strictly convex, then $u^*$ is the unique optimal control.
+:::
+
+This sufficiency result is due to @mangasarian66.
+
+::: {.example #oc-kuz-sufficiency name="Sufficiency fails for the Kuznetsov problem"}
+The Hamiltonian of Example \@ref(exm:oc-kuz-H) is affine in $E$, so $\partial^2H/\partial E^2=0$, while
+
+$$
+\frac{\partial^2H}{\partial E\,\partial T}=\lambda_E\Bigl(\frac{pg}{(g+T)^2}-m\Bigr)-\lambda_T .
+$$
+
+Whenever this mixed derivative is nonzero, the Hessian of $H$ with respect to $(E,T)$ has determinant $-(\partial^2H/\partial E\,\partial T)^2<0$, so $H$ is not convex in $(x,u)$ and Theorem \@ref(thm:oc-sufficiency) does not apply. Optimality of the computed solution therefore rests on existence (Example \@ref(exm:oc-kuz-existence)) together with uniqueness of the solution of the optimality system.
+:::
 
 ### Uniqueness
 
-**Definition (Uniqueness of the Optimal Control).**
-
+::: {.definition #oc-uniqueness name="Uniqueness of the Optimal Control"}
 An optimal control $u^*$ is unique if every other optimal control $u$ satisfies
 
 $$
@@ -529,10 +597,603 @@ u(t)=u^*(t)
 $$
 
 If the state equations have a unique solution for each admissible control, the corresponding optimal state is also unique.
+:::
 
-## A Gompertzian Tumor-Growth Model
+::: {.example #oc-kuz-uniqueness name="Checking uniqueness numerically"}
+Uniqueness of the optimal control is difficult to prove for nonlinear models over long time horizons, and the Kuznetsov problem with $t_f=20$ is no exception. A practical check is to solve the optimality system from several initial guesses. Starting the safeguarded sweep of Section \@ref(sec:oc-safeguard) from full-dose treatment, half-dose treatment, and the ON--OFF schedules with $\tau_{\mathrm{on}}=0.5$ and $\tau_{\mathrm{off}}=0.5$ or $1$ gives the same control and the same value $J=`r fmt(kuz_opt$J)`$ in all four cases. This does not prove uniqueness, but it is reassuring.
+:::
 
+## A Gompertzian Tumor-Growth Model {#sec:oc-gompertz}
 
-## Derivation of the Optimality System for the Gompertzian Model and numerical solution
+To illustrate the derivation and numerical solution of an optimal treatment strategy, consider a tumor population $N(t)$ that follows Gompertzian growth in the absence of treatment, and let $u(t)$ represent the intensity of a chemotherapy treatment. The controlled model is
 
+$$
+\frac{dN}{dt}=rN\ln\left(\frac{1}{N}\right)-\delta u(t)N,\qquad N(0)=N_0,
+$$
+
+where $r>0$ is the tumor growth parameter, $\delta>0$ represents treatment efficacy, and $0<N_0<1$. Here, the tumor population is normalized so that the carrying capacity is one. The first term describes Gompertzian tumor growth, while the second represents treatment-induced tumor reduction.
+
+::: {.proposition #oc-gompertz-bounds name="Bounds on the tumor density"}
+For every admissible control $u$ with $0\leq u\leq M$, the solution of the Gompertzian model with $0<N_0<1$ satisfies $0<N(t)<1$ for all $t\in[0,t_f]$.
+:::
+
+::: {.proof}
+Writing the model as $N'=N\bigl(r\ln(1/N)-\delta u\bigr)$ gives
+
+$$
+N(t)=N_0\exp\left(\int_0^t\bigl(r\ln(1/N(\xi))-\delta u(\xi)\bigr)\,d\xi\right)>0 .
+$$
+
+Since $N'\leq rN\ln(1/N)$ and $N\equiv 1$ is an equilibrium of the untreated equation, the comparison principle gives $N(t)<1$.
+:::
+
+We seek a treatment strategy that reduces tumor burden while avoiding unnecessarily intensive chemotherapy. For this purpose, consider the objective functional
+
+$$
+J(u)=\int_0^{t_f}\left[AN(t)^2+u(t)^2\right]dt,
+$$
+
+subject to the state equation and the control constraint $0\leq u(t)\leq M$. The parameter $A>0$ determines the relative importance of reducing tumor burden, while the quadratic control term penalizes intensive treatment. There is no terminal cost in this formulation. Therefore, the objective measures tumor burden and treatment intensity over the entire treatment period rather than penalizing only the tumor population at the final time.
+
+Theorem \@ref(thm:oc-existence) applies to this problem. Take $U=[0,M]$. Since $0<N(t)<1$ for all $t$ (Proposition \@ref(prp:oc-gompertz-bounds)) and $0\leq N\ln(1/N)\leq e^{-1}$ on $(0,1]$, the right-hand side $rN\ln(1/N)-\delta uN$ is affine in $u$ and bounded by $r/e+\delta M$. The integrand $AN^2+u^2$ is convex in $u$ and satisfies $AN^2+u^2\geq |u|^2$, so condition 5 holds with exponent 2. Hence an optimal control exists.
+
+## Derivation of the Optimality System for the Gompertzian Model and numerical solution {#sec:oc-gompertz-derivation}
+
+### Hamiltonian and adjoint equation
+
+Introducing the adjoint variable $\lambda(t)$, the Hamiltonian is
+
+$$
+H=AN^2+u^2+\lambda\left[rN\ln\left(\frac{1}{N}\right)-\delta uN\right].
+$$
+
+The adjoint equation is obtained from $\lambda'=-\partial H/\partial N$. Differentiating the Hamiltonian with respect to $N$ gives
+
+$$
+\frac{\partial H}{\partial N}=2AN+\lambda\left[r\ln\left(\frac{1}{N}\right)-r-\delta u\right].
+$$
+
+Therefore, the adjoint equation is
+
+$$
+\lambda'=-2AN-\lambda\left[r\ln\left(\frac{1}{N}\right)-r-\delta u\right].
+$$
+
+Since the objective functional does not contain a terminal cost, the transversality condition is $\lambda(t_f)=0$.
+
+### Optimal control characterization
+
+The optimality condition is obtained by differentiating the Hamiltonian with respect to $u$:
+
+$$
+\frac{\partial H}{\partial u}=2u-\lambda\delta N.
+$$
+
+For an interior optimal control, $2u-\lambda\delta N=0$, which gives the unconstrained optimal control
+
+$$
+\widetilde{u}(t)=\frac{\lambda(t)\delta N(t)}{2}.
+$$
+
+Since the treatment intensity is constrained by $0\leq u(t)\leq M$, the optimal control is
+
+$$
+u^*(t)=\min\left\{M,\,\max\left\{0,\frac{\lambda(t)\delta N(t)}{2}\right\}\right\}.
+$$
+
+The resulting optimality system consists of the state equation, adjoint equation, and optimal control characterization:
+
+$$
+\begin{aligned}
+N'&=rN\ln\left(\frac{1}{N}\right)-\delta u^*N, & N(0)&=N_0,\\
+\lambda'&=-2AN-\lambda\left[r\ln\left(\frac{1}{N}\right)-r-\delta u^*\right], & \lambda(t_f)&=0,\\
+u^*&=\min\left\{M,\,\max\left\{0,\frac{\lambda\delta N}{2}\right\}\right\}.
+\end{aligned}
+$$
+
+The state and adjoint equations are coupled through the optimal control. Moreover, the state has an initial condition, whereas the adjoint has a terminal condition. Consequently, the system forms a two-point boundary value problem.
+
+Theorem \@ref(thm:oc-sufficiency) does not apply directly to this problem. Since $\partial^2\bigl(N\ln(1/N)\bigr)/\partial N^2=-1/N<0$, the Hamiltonian is not convex in $N$ when $\lambda>0$. Optimality must therefore be argued through existence, shown in Section \@ref(sec:oc-gompertz), together with uniqueness of the solution of the optimality system.
+
+### The forward--backward sweep method
+
+The optimality system is a two-point boundary value problem: the state is specified at the initial time, while the adjoint is specified at the terminal time. The forward--backward sweep method (FBSM) is a numerical approach commonly used to approximate solutions to such systems. It alternates between solving the state equations forward in time and the adjoint equations backward in time, updating the control at each iteration [@lenhart07]. A typical implementation consists of the following steps:
+
+1. Discretize the interval $[0,t_f]$ into $n$ time steps of size $h=t_f/n$. Choose an initial guess for the control, such as $u(t)\equiv 0$.
+2. Using the current control, solve the state equations forward in time from the initial condition $x(0)=x_0$.
+3. Using the newly computed state trajectory, solve the adjoint equations backward in time from the terminal condition $\lambda(t_f)$.
+4. Update the control using its optimality characterization. For a quadratic control cost, this typically involves projecting the unconstrained control onto its admissible interval.
+5. Relax the control update by taking a weighted average of the new and previous control values:
+
+   $$
+   u_{\mathrm{updated}}=\theta u_{\mathrm{new}}+(1-\theta)u_{\mathrm{old}},
+   $$
+
+   where $0<\theta\leq 1$ is a relaxation parameter.
+6. Repeat the forward and backward sweeps until the relative changes in the state, adjoint, and control trajectories fall below a prescribed tolerance.
+
+The relaxation step can improve numerical stability and convergence in practice. However, convergence of the method is not guaranteed for every model, time horizon, or initial control guess. The choice of time discretization and relaxation parameter can therefore be important. A common convergence criterion is
+
+$$
+\max\left\{\frac{\|u^{(k+1)}-u^{(k)}\|_1}{\max(\|u^{(k+1)}\|_1,\varepsilon)},\frac{\|x^{(k+1)}-x^{(k)}\|_1}{\max(\|x^{(k+1)}\|_1,\varepsilon)},\frac{\|\lambda^{(k+1)}-\lambda^{(k)}\|_1}{\max(\|\lambda^{(k+1)}\|_1,\varepsilon)}\right\}<\mathrm{tol},
+$$
+
+where $k$ denotes the iteration number, $\mathrm{tol}$ is the prescribed tolerance, and $\varepsilon>0$ is a small number used to avoid division by zero.
+
+### Implementation in R
+
+For the Gompertzian model, the state and adjoint equations are those of the optimality system above. Both equations can be integrated numerically using the fourth-order Runge--Kutta method (RK4). The state equation is integrated forward from $N(0)=N_0$, while the adjoint equation is integrated backward from $\lambda(t_f)=0$. At each iteration, the control is updated by the projection formula. The following R implementation illustrates the forward--backward sweep procedure.
+
+```{r oc-gomp-fbsm}
+fbsm <- function(r = 0.3, A = 3, delta = 0.45, N0 = 0.975,
+                 M = 1.0, tf = 20, n = 1000, tol = 1e-3,
+                 max_iter = 500, theta = 0.5) {
+
+  h <- tf / n
+  t <- seq(0, tf, length.out = n + 1)
+
+  u   <- numeric(n + 1)
+  N   <- numeric(n + 1)
+  lam <- numeric(n + 1)
+
+  # Right-hand side of the state equation
+  fN <- function(N, u) {
+    r * N * log(1 / N) - delta * u * N
+  }
+
+  # Right-hand side of the adjoint equation
+  fl <- function(N, lam, u) {
+    -2 * A * N - lam * (r * log(1 / N) - r - delta * u)
+  }
+
+  eps <- 1e-12
+  err <- Inf
+
+  for (it in 1:max_iter) {
+
+    u_old   <- u
+    N_old   <- N
+    lam_old <- lam
+
+    # Forward sweep: state equation (RK4)
+    N[1] <- N0
+    for (i in 1:n) {
+      um <- 0.5 * (u[i] + u[i + 1])
+
+      k1 <- fN(N[i], u[i])
+      k2 <- fN(N[i] + h * k1 / 2, um)
+      k3 <- fN(N[i] + h * k2 / 2, um)
+      k4 <- fN(N[i] + h * k3, u[i + 1])
+
+      N[i + 1] <- N[i] + h / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
+    }
+
+    # Backward sweep: adjoint equation (RK4)
+    lam[n + 1] <- 0
+    for (i in (n + 1):2) {
+      um <- 0.5 * (u[i] + u[i - 1])
+      Nm <- 0.5 * (N[i] + N[i - 1])
+
+      k1 <- fl(N[i], lam[i], u[i])
+      k2 <- fl(Nm, lam[i] - h * k1 / 2, um)
+      k3 <- fl(Nm, lam[i] - h * k2 / 2, um)
+      k4 <- fl(N[i - 1], lam[i] - h * k3, u[i - 1])
+
+      lam[i - 1] <- lam[i] - h / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
+    }
+
+    # Optimal control update (projection onto [0, M])
+    u_star <- pmin(M, pmax(0, lam * delta * N / 2))
+
+    # Relaxation
+    u <- theta * u_star + (1 - theta) * u_old
+
+    # Relative convergence error
+    err_u   <- sum(abs(u - u_old))     / max(sum(abs(u)), eps)
+    err_N   <- sum(abs(N - N_old))     / max(sum(abs(N)), eps)
+    err_lam <- sum(abs(lam - lam_old)) / max(sum(abs(lam)), eps)
+
+    err <- max(err_u, err_N, err_lam)
+
+    if (err < tol) break
+  }
+
+  list(t = t, N = N, u = u, lam = lam,
+       iterations = it, error = err)
+}
+```
+
+The implementation returns the time vector, tumor trajectory, optimal treatment profile, adjoint trajectory, number of iterations, and final convergence error.
+
+```{r oc-gomp-opt, comment=NA, fig.width=8, fig.height=3.5, fig.cap="Optimal tumor density and treatment for the Gompertzian model."}
+sol <- fbsm()
+cat("Iterations:", sol$iterations,
+    "  Final error:", signif(sol$error, 3), "\n")
+
+op <- par(mfrow = c(1, 2))
+plot(sol$t, sol$N, type = "l", lwd = 2,
+     xlab = "Time (days)", ylab = "Tumor density N(t)")
+plot(sol$t, sol$u, type = "l", lwd = 2,
+     xlab = "Time (days)", ylab = "Treatment u(t)")
+par(op)
+```
+
+The numerical solution should be examined to verify that the control remains within its admissible bounds and that the state and adjoint trajectories satisfy their respective boundary conditions. It is also useful to evaluate the objective functional under the computed treatment strategy and compare it with the objective values obtained under simple alternative strategies, such as no treatment or a constant treatment intensity. Such comparisons provide a practical check on the numerical solution, although they do not independently establish global optimality.
+
+### Interactive example
+
+The Shiny app `app_gompertz.R` solves the Gompertzian problem with the forward--backward sweep whenever a slider moves. It uses the safeguarded version of the sweep described in Section \@ref(sec:oc-safeguard), because the plain sweep fails to converge for some parameter values, for example a strong drug combined with a long horizon. The sliders set the weight $A$, the horizon $t_f$, the growth rate $r$, the efficacy $\delta$, the initial density $N_0$, and the bound $M$. The app plots the optimal tumor density, dose, and adjoint, and compares $J(u^*)$ with no treatment and with a constant dose that uses the same total amount of drug. With the **shiny** package installed, run it with
+
+```{r oc-run-gompertz-app, eval=FALSE}
+install.packages("shiny")              # once
+shiny::runApp("scripts/app_gompertz.R")
+```
+
+```{r oc-gomp-weights, echo=FALSE, fig.width=8, fig.height=3.3, fig.cap="Optimal schedules for the Gompertzian model for three values of the weight $A$ (other parameters as in the implementation above). Left: tumor density. Right: optimal dose, with the bound $M=1$ dotted."}
+Avals <- c(1, 3, 10); gcols <- c("#7fb3d5", "#1f5f9e", "#0b2a4a")
+gs <- lapply(Avals, function(A) fbsm(A = A))
+op <- par(mfrow = c(1, 2), mar = c(4, 4.5, 1, 1))
+plot(NA, xlim = c(0, 20), ylim = c(0, 1), xlab = "Time (days)",
+     ylab = "Tumor density N(t)")
+for (k in 1:3) lines(gs[[k]]$t, gs[[k]]$N, lwd = 2.5, col = gcols[k])
+legend("topright", bty = "n", lwd = 2.5, col = gcols, cex = 0.85,
+       legend = paste("A =", Avals))
+plot(NA, xlim = c(0, 20), ylim = c(0, 1.05), xlab = "Time (days)",
+     ylab = "Treatment u(t)")
+abline(h = 1, lty = 3, col = "gray60")
+for (k in 1:3) lines(gs[[k]]$t, gs[[k]]$u, lwd = 2.5, col = gcols[k])
+par(op)
+```
+
+```{r oc-gomp-constant, include=FALSE}
+# Constant dose with the same total drug as the optimal schedule (A = 3)
+g3 <- gs[[2]]; hg <- g3$t[2] - g3$t[1]
+c3 <- trap(g3$u, hg) / 20
+Nc <- numeric(length(g3$t)); Nc[1] <- 0.975
+fN <- function(N, u) 0.3 * N * log(1 / N) - 0.45 * u * N
+for (i in seq_len(length(Nc) - 1)) {
+  k1 <- fN(Nc[i], c3); k2 <- fN(Nc[i] + hg * k1 / 2, c3)
+  k3 <- fN(Nc[i] + hg * k2 / 2, c3); k4 <- fN(Nc[i] + hg * k3, c3)
+  Nc[i + 1] <- Nc[i] + hg / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
+}
+J3 <- trap(3 * g3$N^2 + g3$u^2, hg)
+Jc3 <- trap(3 * Nc^2 + c3^2, hg)
+```
+
+Figure \@ref(fig:oc-gomp-weights) shows the pattern reported for this model by @lenhart07: a high initial dose that tapers to zero at the end of treatment, at a higher level when the tumor is weighted more heavily. The timing of the dose matters, not only its total amount: for $A=3$ the optimal schedule gives $J=`r fmt(J3, 3)`$, while a constant dose with the same total amount of drug gives $J=`r fmt(Jc3, 3)`$. Things to explore with the app:
+
+1. Increase $A$ from 1 to 10. Does the shape of $u^*(t)$ change, or only its level?
+2. Lower $N_0$ to 0.5. Which part of the schedule changes?
+3. Lower $M$ until the bound is active over a longer interval, and relate the cut-off to the projection formula.
+4. Why does the dose fall to zero at $t_f$? Relate the answer to the transversality condition $\lambda(t_f)=0$.
+
+## An Optimal Control Approach for the Kuznetsov Model {#sec:oc-kuznetsov}
+
+The examples of the previous sections set up the optimal control problem for the simplified Kuznetsov model and derived its optimality system (Example \@ref(exm:oc-kuz-os)). This section solves the optimality system numerically and compares the optimal control with ON--OFF schedules.
+
+### Why the plain sweep fails
+
+::: {.example #oc-kuz-plain name="The plain sweep fails for the Kuznetsov model"}
+For the Kuznetsov problem, the initial guess $u\equiv0$ cannot be used: without treatment the tumor escapes (Figure \@ref(fig:oc-kuz-untreated)), $T$ grows by many orders of magnitude over $[0,t_f]$, and the computation breaks down. Starting from full-dose treatment, $u\equiv M$, avoids this, but the forward--backward sweep with $\theta=0.5$ still does not converge. After `r kuz_plain$iterations` iterations the relative change in the control is still `r fmt(kuz_plain$change)`, and the objective keeps oscillating between about `r round(min(tail(kuz_plain$J_hist, 200)))` and `r round(max(tail(kuz_plain$J_hist, 200)))` (Figure \@ref(fig:oc-kuz-conv)). An update computed from the adjoint of one control overshoots, and the next update moves back.
+:::
+
+### A safeguarded sweep {#sec:oc-safeguard}
+
+The relaxation step of the forward--backward sweep can be made safe by checking the objective functional. The justification rests on a formula for the derivative of $J$ that holds for every admissible control, optimal or not.
+
+::: {.lemma #oc-gradient name="Derivative of the objective functional"}
+Assume that $f$, $g$, and $\phi$ are continuously differentiable. Let $u$ and $l$ be bounded measurable functions such that $u+\varepsilon l\in\mathcal{U}$ for all small $\varepsilon>0$, let $x$ be the state of $u$, and let $\lambda$ solve the adjoint equations
+
+$$
+\lambda'=-\frac{\partial H}{\partial x}(t,x,u,\lambda),\qquad\lambda(t_f)=\nabla_x\phi(x(t_f)),
+$$
+
+along $(x,u)$. Then
+
+$$
+\lim_{\varepsilon\to0^+}\frac{J(u+\varepsilon l)-J(u)}{\varepsilon}=\int_0^{t_f}\frac{\partial H}{\partial u}\bigl(t,x(t),u(t),\lambda(t)\bigr)\,l(t)\,dt .
+$$
+:::
+
+The proof differentiates the state with respect to the control and integrates by parts against the adjoint; it is the first half of the derivation of the Maximum Principle in @lenhart07 [ch. 1]. In this sense $\partial H/\partial u$ is the gradient of $J$, and one backward solve of the adjoint equations gives the derivative of $J$ in every direction $l$.
+
+::: {.proposition #oc-descent name="The sweep update is a descent direction"}
+Let $U=[u_{\min},u_{\max}]$ and suppose that, along $(x,u,\lambda)$,
+
+$$
+\frac{\partial H}{\partial u}=B\bigl(u-\widetilde u(t)\bigr)
+$$
+
+for a constant $B>0$ and some function $\widetilde u$, as is the case when $H$ contains the term $\tfrac{B}{2}u^2$ and is otherwise affine in $u$. Let $\bar u=\min\{u_{\max},\max\{u_{\min},\widetilde u\}\}$ be the updated control of step 4 of the sweep and $\Delta u=\bar u-u$. Then
+
+$$
+\lim_{\varepsilon\to0^+}\frac{J(u+\varepsilon\,\Delta u)-J(u)}{\varepsilon}\leq -B\int_0^{t_f}\Delta u(t)^2\,dt .
+$$
+
+Consequently, unless $\Delta u=0$ almost everywhere, $J(u+\theta\,\Delta u)<J(u)$ for all sufficiently small $\theta>0$. Moreover, $u+\theta\,\Delta u$ is admissible for $0\leq\theta\leq1$.
+:::
+
+::: {.proof}
+Since $\bar u$ is the point of $[u_{\min},u_{\max}]$ closest to $\widetilde u$ and $u(t)$ lies in this interval, $(\widetilde u-\bar u)(u-\bar u)\leq0$. Hence, pointwise,
+
+$$
+\frac{\partial H}{\partial u}\,\Delta u=-B(\widetilde u-u)(\bar u-u)=B(\widetilde u-\bar u)(u-\bar u)-B(\bar u-u)^2\leq -B\,\Delta u^2 .
+$$
+
+Integrating and applying Lemma \@ref(lem:oc-gradient) with $l=\Delta u$ gives the inequality. Finally, $u+\theta\,\Delta u=(1-\theta)u+\theta\bar u$ is a convex combination of two functions with values in $U$.
+:::
+
+The relaxed update of step 5 of the sweep is exactly $u_{\mathrm{updated}}=\theta\bar u+(1-\theta)u=u+\theta\,\Delta u$. The plain sweep uses a fixed $\theta$, which may be too long a step. The *safeguarded sweep* chooses $\theta$ by backtracking, replacing step 5 by the following rule.
+
+> **Step 5$'$.** Compute the candidate $u+\theta\,\Delta u$, solve the state equations for it, and evaluate $J$. If $J$ has decreased, accept the candidate and set $\theta\leftarrow\min\{\theta_0,2\theta\}$; otherwise halve $\theta$ and try again.
+
+By Proposition \@ref(prp:oc-descent), a small enough $\theta$ lowers $J$ unless $\Delta u=0$, so every accepted step decreases $J$ and the iteration cannot oscillate. It stops when $\|\Delta u\|_1/\|u\|_1<\mathrm{tol}$, that is, when $u$ satisfies the control characterization, and hence the optimality system, up to the tolerance. The safeguarded sweep has the same fixed points as the plain sweep. Like any descent method, it finds a solution of the optimality system near its starting point, which need not be the global minimizer when the problem is not convex; Example \@ref(exm:oc-kuz-uniqueness) describes a practical check.
+
+### Implementation in R
+
+::: {.example #oc-kuz-fbsm name="Optimal chemotherapy for the Kuznetsov model"}
+The code below implements the safeguarded sweep for the optimality system of Example \@ref(exm:oc-kuz-os). It follows the Gompertzian code, with two states and two adjoints instead of one. The parameters are stored in the list `kuz_par` under the names of Example \@ref(exm:oc-kuz-model), with `delta` for $\delta$. The forward sweep stops when the tumor exceeds $10^4$ units ($10^{10}$ cells), which we treat as escape, with cost $J=\infty$. The sweep starts from full-dose treatment (Example \@ref(exm:oc-kuz-plain)), and setting `safeguard = FALSE` gives the plain sweep.
+:::
+
+```{r oc-kuz-model, eval=FALSE}
+kuz_par <- list(s = 0.1181, p = 1.131, g = 20.19, m = 0.00311,
+                d = 0.3743, a = 1.636,          # Kuznetsov et al. (1994)
+                delta = 2, M = 1,               # drug kill rate, max dose
+                A = 1, B = 50, tf = 20,         # cost weights, horizon
+                E0 = 0.1181 / 0.3743, T0 = 50)  # E0 = s / d
+
+T_fail <- 1e4   # 10^10 cells: tumor escape, treatment failure
+
+# Right-hand side of the state equations
+kuz_rhs <- function(E, T, u, pars) {
+  c(pars$s + pars$p * E * T / (pars$g + T) - pars$m * E * T - pars$d * E,
+    pars$a * T - E * T - pars$delta * u * T)
+}
+
+# Right-hand side of the adjoint equations
+kuz_adj <- function(E, T, lE, lT, u, pars) {
+  c(-lE * (pars$p * T / (pars$g + T) - pars$m * T - pars$d) + lT * T,
+    -pars$A - lE * (pars$p * pars$g * E / (pars$g + T)^2 - pars$m * E) -
+      lT * (pars$a - E - pars$delta * u))
+}
+
+# Equilibria of the untreated model with E = a: the dormant state
+# (about T = 8.24) and the saddle (about T = 238)
+kuz_equilibria <- function(pars) {
+  f <- function(T) pars$s + pars$p * pars$a * T / (pars$g + T) -
+    pars$m * pars$a * T - pars$d * pars$a
+  grid <- seq(0.01, 2000, length.out = 20001)
+  k <- which(diff(sign(f(grid))) != 0)
+  vapply(k, function(i) uniroot(f, grid[c(i, i + 1)], tol = 1e-10)$root,
+         numeric(1))
+}
+```
+
+```{r oc-kuz-sweeps, eval=FALSE}
+# One RK4 step of the state equations; u1, um, u2 are the controls
+# at the start, middle, and end of the step
+kuz_step <- function(E, T, u1, um, u2, h, pars) {
+  k1 <- kuz_rhs(E, T, u1, pars)
+  k2 <- kuz_rhs(E + h * k1[1] / 2, T + h * k1[2] / 2, um, pars)
+  k3 <- kuz_rhs(E + h * k2[1] / 2, T + h * k2[2] / 2, um, pars)
+  k4 <- kuz_rhs(E + h * k3[1], T + h * k3[2], u2, pars)
+  c(E, T) + h / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
+}
+
+# Forward sweep. If piecewise = FALSE, u holds the control at the n + 1
+# grid points; if TRUE, u holds one constant value for each of the n steps.
+# Integration stops (T = NA) if the tumor exceeds T_fail.
+kuz_forward <- function(u, h, pars, piecewise = FALSE) {
+  n <- if (piecewise) length(u) else length(u) - 1
+  E <- rep(NA_real_, n + 1); T <- rep(NA_real_, n + 1)
+  E[1] <- pars$E0; T[1] <- pars$T0
+  for (i in 1:n) {
+    x <- if (piecewise) kuz_step(E[i], T[i], u[i], u[i], u[i], h, pars)
+         else kuz_step(E[i], T[i], u[i], (u[i] + u[i + 1]) / 2, u[i + 1],
+                       h, pars)
+    if (!is.finite(x[2]) || x[2] > T_fail) break   # escape
+    E[i + 1] <- x[1]; T[i + 1] <- x[2]
+  }
+  list(E = E, T = T, escaped = anyNA(T))
+}
+
+# Backward sweep (RK4) for the adjoint equations, lambda(tf) = 0
+kuz_backward <- function(E, T, u, h, pars) {
+  n <- length(u) - 1
+  lE <- numeric(n + 1); lT <- numeric(n + 1)
+  for (i in (n + 1):2) {
+    um <- (u[i] + u[i - 1]) / 2
+    Em <- (E[i] + E[i - 1]) / 2; Tm <- (T[i] + T[i - 1]) / 2
+    k1 <- kuz_adj(E[i], T[i], lE[i], lT[i], u[i], pars)
+    k2 <- kuz_adj(Em, Tm, lE[i] - h * k1[1] / 2, lT[i] - h * k1[2] / 2,
+                  um, pars)
+    k3 <- kuz_adj(Em, Tm, lE[i] - h * k2[1] / 2, lT[i] - h * k2[2] / 2,
+                  um, pars)
+    k4 <- kuz_adj(E[i - 1], T[i - 1], lE[i] - h * k3[1], lT[i] - h * k3[2],
+                  u[i - 1], pars)
+    lE[i - 1] <- lE[i] - h / 6 * (k1[1] + 2 * k2[1] + 2 * k3[1] + k4[1])
+    lT[i - 1] <- lT[i] - h / 6 * (k1[2] + 2 * k2[2] + 2 * k3[2] + k4[2])
+  }
+  list(lE = lE, lT = lT)
+}
+
+# Trapezoidal rule on a uniform grid
+trap <- function(y, h) h * (sum(y) - (y[1] + y[length(y)]) / 2)
+
+# Objective J(u) = int_0^tf (A T + B/2 u^2) dt for a control on the grid
+kuz_cost <- function(T, u, h, pars) {
+  if (anyNA(T)) return(Inf)                    # tumor escaped
+  trap(pars$A * T + pars$B / 2 * u^2, h)
+}
+```
+
+```{r oc-kuz-fbsm, eval=FALSE}
+# Forward-backward sweep for the Kuznetsov problem. With safeguard = TRUE,
+# an update is accepted only if it lowers J (otherwise theta is halved);
+# with safeguard = FALSE this is the plain sweep with relaxation theta0.
+fbsm_kuz <- function(pars, n = 1000, tol = 1e-4, max_iter = 500,
+                     theta0 = 0.5, u0 = NULL, safeguard = TRUE) {
+  h <- pars$tf / n
+  t <- seq(0, pars$tf, length.out = n + 1)
+  u <- if (is.null(u0)) rep(pars$M, n + 1) else u0   # start from full dose
+  st <- kuz_forward(u, h, pars)
+  J <- kuz_cost(st$T, u, h, pars)
+  J_hist <- J
+  theta <- theta0
+  change <- Inf
+
+  for (it in 1:max_iter) {
+    adj <- kuz_backward(st$E, st$T, u, h, pars)
+    u_new <- pmin(pars$M, pmax(0, pars$delta * adj$lT * st$T / pars$B))
+    du <- u_new - u                          # update direction
+    change <- sum(abs(du)) / max(sum(abs(u)), 1e-12)
+    if (change < tol) break
+
+    if (!safeguard) {                        # plain sweep: always accept
+      u <- u + theta0 * du
+      st <- kuz_forward(u, h, pars)
+      J <- kuz_cost(st$T, u, h, pars)
+      J_hist <- c(J_hist, J)
+      if (!is.finite(J)) break               # tumor escaped
+      next
+    }
+
+    repeat {                                 # backtracking on theta
+      u_try  <- u + theta * du
+      st_try <- kuz_forward(u_try, h, pars)
+      J_try  <- kuz_cost(st_try$T, u_try, h, pars)
+      if (J_try < J || theta < 1e-8) break
+      theta <- theta / 2
+    }
+    if (J_try >= J) break                    # no further decrease possible
+
+    u <- u_try; st <- st_try; J <- J_try
+    J_hist <- c(J_hist, J)
+    theta <- min(theta0, 2 * theta)
+  }
+
+  adj <- kuz_backward(st$E, st$T, u, h, pars)
+  list(t = t, E = st$E, T = st$T, lE = adj$lE, lT = adj$lT, u = u,
+       J = J, J_hist = J_hist, iterations = it, change = change)
+}
+```
+
+```{r oc-kuz-run, comment=NA}
+kuz_opt <- fbsm_kuz(kuz_par)
+cat("J* =", round(kuz_opt$J, 2), "  iterations:", kuz_opt$iterations, "\n")
+```
+
+The safeguarded sweep converges in `r kuz_opt$iterations` iterations to $J(u^*)=`r fmt(kuz_opt$J)`$, and $J$ decreases at every iteration, while the plain sweep keeps oscillating (Figure \@ref(fig:oc-kuz-conv)). Figure \@ref(fig:oc-kuz-opt) shows the solution. The optimal schedule gives the full dose until $t\approx `r fmt(full_until, 1)`$ and then decreases. It is zero on the interval $`r fmt(lT_neg[1])`\leq t\leq `r fmt(lT_neg[2])`$ where $\lambda_T<0$ (Example \@ref(exm:oc-kuz-interp)), as the projection formula requires, while the effector cells, stimulated by the tumor, rise to their peak $E\approx `r fmt(E_peak)`$ at $t\approx `r fmt(t_Epeak, 1)`$. As the immune response wanes, a second and lower course of treatment follows, peaking at $u^*\approx `r fmt(u_peak2)`$ near $t\approx `r fmt(t_peak2, 1)`$, and the dose returns to zero at $t_f$ because $\lambda_T(t_f)=0$. The schedule uses `r fmt(dose_opt)` units of drug, compared with `r fmt(kp$M * kp$tf, 0)` for continuous full-dose treatment. The optimal control is therefore itself intermittent: it pauses while the immune system does the work.
+
+```{r oc-kuz-opt, echo=FALSE, fig.width=8.5, fig.height=5.2, fig.cap="Optimal control of the simplified Kuznetsov model (Table \\@ref(tab:oc-kuz-par)). (a) Optimal dose $u^*$ and the unconstrained minimizer $\\delta\\lambda_TT/B$, which is cut off at $M=1$. (b) Tumor cells. (c) Effector cells. (d) and (e) Adjoints. (f) Optimal trajectory in the $(T,E)$ plane, with the dormant state (filled) and the saddle (open)."}
+o <- kuz_opt; tt_o <- o$t; co <- "#d35400"
+op <- par(mfrow = c(2, 3), mar = c(4, 4.3, 2, 1), cex.main = 1)
+ut <- kp$delta * o$lT * o$T / kp$B
+plot(tt_o, ut, type = "l", lty = 2, col = "gray45", ylim = c(0, max(1.1, max(ut))),
+     xlab = "Time", ylab = "Dose", main = "(a) Dose")
+abline(h = kp$M, lty = 3, col = "gray60")
+lines(tt_o, o$u, lwd = 2.5, col = co)
+legend("topright", bty = "n", cex = 0.8, lty = c(1, 2), lwd = c(2.5, 1),
+       col = c(co, "gray45"), legend = c(expression(u^"*"), expression(delta * lambda[T] * T / B)))
+plot(tt_o, o$T, type = "l", lwd = 2.5, col = co, log = "y", xlab = "Time",
+     ylab = expression(T), main = "(b) Tumor cells")
+abline(h = T_eq[1], lty = 3, col = "gray50")
+plot(tt_o, o$E, type = "l", lwd = 2.5, col = co, xlab = "Time",
+     ylab = expression(E), main = "(c) Effector cells")
+plot(tt_o, o$lT, type = "l", lwd = 2.5, xlab = "Time",
+     ylab = expression(lambda[T]), main = expression("(d) Tumor adjoint " * lambda[T]))
+abline(h = 0, lty = 3, col = "gray50")
+plot(tt_o, o$lE, type = "l", lwd = 2.5, xlab = "Time",
+     ylab = expression(lambda[E]), main = expression("(e) Effector adjoint " * lambda[E]))
+abline(h = 0, lty = 3, col = "gray50")
+plot(o$T, o$E, type = "l", lwd = 2.5, col = co, log = "x",
+     xlim = range(c(o$T, T_eq)), ylim = c(0, max(o$E, kp$a) * 1.1),
+     xlab = expression(T), ylab = expression(E), main = "(f) Phase plane")
+points(T_eq, rep(kp$a, 2), pch = c(19, 1), cex = 1.3, lwd = 2)
+points(o$T[1], o$E[1], pch = 17, col = co, cex = 1.2)
+text(o$T[1], o$E[1], "start", pos = 1, cex = 0.8)
+par(op)
+```
+
+```{r oc-kuz-conv, echo=FALSE, fig.width=6.5, fig.height=3.2, fig.cap="Objective at each iteration of the forward--backward sweep for the Kuznetsov problem, both started from full-dose treatment. The plain sweep with $\\theta=0.5$ oscillates; the safeguarded sweep decreases $J$ at every iteration and converges."}
+op <- par(mar = c(4, 4.3, 1, 1))
+jp <- kuz_plain$J_hist; js <- kuz_opt$J_hist
+plot(seq_along(jp) - 1, jp, type = "l", col = "gray45", lwd = 1.2,
+     ylim = range(c(jp, js)), xlab = "Iteration", ylab = "Objective J")
+lines(seq_along(js) - 1, js, col = "#d35400", lwd = 2.5)
+abline(h = kuz_opt$J, lty = 3, col = "#d35400")
+legend("topright", bty = "n", cex = 0.85, lwd = c(1.2, 2.5),
+       col = c("gray45", "#d35400"), legend = c("plain sweep", "safeguarded sweep"))
+par(op)
+```
+
+### Interactive example: ON--OFF chemotherapy
+
+The Shiny app `app_kuznetsov_onoff.R` simulates the ON--OFF schedules of Example \@ref(exm:oc-kuz-admissible). Its main slider is the OFF time $\tau_{\mathrm{off}}\in[0,4]$; further sliders set the ON time, the dose $M$, the drug kill rate $\delta$, the initial tumor $T_0$ and effector level $E_0$, the weight $B$, and the horizon $t_f$. The app plots $T(t)$, $E(t)$, and $u(t)$ for the ON--OFF schedule and for the optimal control, reports both values of $J$, and plots $J(u_{\tau_{\mathrm{off}}})$ against $\tau_{\mathrm{off}}$, shading the OFF times for which the tumor escapes. Run it with
+
+```{r oc-run-kuznetsov-app, eval=FALSE}
+shiny::runApp("scripts/app_kuznetsov_onoff.R")
+```
+
+The simulation of an ON--OFF schedule uses a control that is constant on each time step, so that with step $h=0.025$ the switching times fall on grid points:
+
+```{r oc-kuz-onoff-code, eval=FALSE}
+# ON-OFF schedule: dose M for ton time units, then a pause of toff
+onoff <- function(t, M, ton, toff) {
+  if (toff <= 0) return(rep(M, length(t)))
+  ifelse(t %% (ton + toff) < ton, M, 0)
+}
+
+# Simulate an ON-OFF schedule and evaluate its cost. The control is
+# constant on each step; with h = 0.025, switching times that are
+# multiples of 0.025 fall on grid points.
+kuz_onoff <- function(pars, ton, toff, h = 0.025) {
+  n <- round(pars$tf / h)
+  t <- seq(0, pars$tf, length.out = n + 1)
+  u <- onoff(t[-1] - h / 2, pars$M, ton, toff)    # value on each step
+  st <- kuz_forward(u, h, pars, piecewise = TRUE)
+  J <- if (st$escaped) Inf else
+    trap(pars$A * st$T, h) + pars$B / 2 * h * sum(u^2)
+  list(t = t, u = u, E = st$E, T = st$T, escaped = st$escaped, J = J,
+       dose = h * sum(u))
+}
+```
+
+```{r oc-kuz-onoff, echo=FALSE, fig.width=8.5, fig.height=3.5, fig.cap="ON--OFF chemotherapy for the simplified Kuznetsov model with $\\tau_{\\mathrm{on}}=0.5$. Left: tumor cells for three OFF times; the dashed curve is the optimal control. Right: objective $J$ of the ON--OFF schedule as a function of the OFF time, with the optimal value $J(u^*)$ dashed; for OFF times in the shaded region the tumor escapes and $J=\\infty$."}
+show <- c(offs[ib], 1.5, 2.5)
+rs <- lapply(show, function(o) kuz_onoff(kp, ton, o))
+cs <- c("#1f5f9e", "#6a51a3", "#b2182b")
+op <- par(mfrow = c(1, 2), mar = c(4, 4.5, 1, 1))
+plot(NA, xlim = c(0, kp$tf), ylim = c(0.05, 1e4), log = "y", yaxt = "n",
+     xlab = "Time (1 unit = 9 days)", ylab = expression("Tumor cells " * T))
+axis(2, at = 10^(-1:4), labels = c("0.1", "1", "10", "100", "1000", "1e4"), las = 1)
+abline(h = T_eq, lty = 3, col = "gray50")
+for (k in 1:3) lines(rs[[k]]$t, rs[[k]]$T, lwd = 2, col = cs[k])
+lines(kuz_opt$t, kuz_opt$T, lwd = 2, lty = 2, col = "#d35400")
+legend("topright", bty = "n", cex = 0.8, lwd = 2, col = c(cs, "#d35400"),
+       lty = c(1, 1, 1, 2),
+       legend = c(sprintf("OFF = %.2f (best)", show[1]), "OFF = 1.5",
+                  "OFF = 2.5 (escape)", "optimal control"))
+ok <- is.finite(J_onoff)
+plot(NA, xlim = c(0, 4), ylim = c(kuz_opt$J / 1.2, max(J_onoff[ok]) * 1.2),
+     log = "y", xlab = "OFF time", ylab = "Objective J")
+usr <- par("usr")
+rect(toff_crit, 10^usr[3], usr[2], 10^usr[4], col = "#fbe3e3", border = NA)
+text((toff_crit + 4) / 2, 10^(usr[3] + 0.85 * (usr[4] - usr[3])),
+     "tumor escapes", col = "#b2182b", cex = 0.85, font = 2)
+lines(offs[ok], J_onoff[ok], lwd = 2.5, col = "#1f5f9e")
+points(offs[ib], J_onoff[ib], pch = 19, col = "#1f5f9e", cex = 1.2)
+abline(h = kuz_opt$J, lty = 2, lwd = 2, col = "#d35400")
+text(0.05, kuz_opt$J, expression(J(u^"*")), adj = c(0, -0.4),
+     col = "#d35400", cex = 0.85)
+par(op)
+```
+
+Figure \@ref(fig:oc-kuz-onoff) shows the results for $\tau_{\mathrm{on}}=0.5$, about 4.5 days at full dose. Continuous treatment ($\tau_{\mathrm{off}}=0$) costs $J=`r fmt(J_onoff[1], 1)`$, mostly because of the drug. Short pauses lower the cost: the best ON--OFF schedule pauses for $\tau_{\mathrm{off}}=`r fmt(offs[ib])`$ (about `r round(9.08 * offs[ib])` days) and gives $J=`r fmt(J_onoff[ib], 1)`$, using `r fmt(onoff_runs[[ib]]$dose, 1)` units of drug. Longer pauses let the tumor regrow between doses, and $J$ rises steeply. For $\tau_{\mathrm{off}}>`r fmt(toff_crit)`$ (about `r round(9.08 * toff_crit)` days) the tumor regrows past the region that the immune system controls during each pause, and it escapes. The optimal control (Example \@ref(exm:oc-kuz-fbsm)) gives $J(u^*)=`r fmt(kuz_opt$J)`$, which is `r round(100 * (1 - kuz_opt$J / J_onoff[ib]))`\% lower than the best ON--OFF schedule, with `r fmt(dose_opt, 1)` units of drug. As Example \@ref(exm:oc-kuz-optimal) predicts, no ON--OFF schedule beats it. Things to explore with the app:
+
+1. Move the OFF time from 0 to 4 and find the threshold beyond which the tumor escapes. How many days is it?
+2. Why is the cost high for very short pauses, even though the tumor is smallest there?
+3. Set the ON time to 1. Does the escape threshold move? Is the best ON--OFF schedule better or worse than with an ON time of 0.5?
+4. Increase $T_0$ to 100, or $E_0$ to 1. How do the threshold and the best OFF time change, and why?
+5. Compare the optimal control with the ON--OFF schedule. When does the optimal control pause, and what are the effector cells doing then?
 

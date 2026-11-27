@@ -274,9 +274,22 @@ div.csl-indent {
 <li class="chapter" data-level="5.2.6" data-path="optimal-control.html"><a href="optimal-control.html#sufficient-conditions"><i class="fa fa-check"></i><b>5.2.6</b> Sufficient conditions</a></li>
 <li class="chapter" data-level="5.2.7" data-path="optimal-control.html"><a href="optimal-control.html#uniqueness"><i class="fa fa-check"></i><b>5.2.7</b> Uniqueness</a></li>
 </ul></li>
-<li class="chapter" data-level="5.3" data-path="optimal-control.html"><a href="optimal-control.html#a-gompertzian-tumor-growth-model"><i class="fa fa-check"></i><b>5.3</b> A Gompertzian Tumor-Growth Model</a></li>
-<li class="chapter" data-level="5.4" data-path="optimal-control.html"><a href="optimal-control.html#derivation-of-the-optimality-system-for-the-gompertzian-model-and-numerical-solution"><i class="fa fa-check"></i><b>5.4</b> Derivation of the Optimality System for the Gompertzian Model and numerical solution</a></li>
-<li class="chapter" data-level="5.5" data-path="optimal-control.html"><a href="optimal-control.html#an-optimal-control-approach-for-the-kuznetsov-model"><i class="fa fa-check"></i><b>5.5</b> An Optimal Control Approach for the Kuznetsov Model</a></li>
+<li class="chapter" data-level="5.3" data-path="optimal-control.html"><a href="optimal-control.html#sec:oc-gompertz"><i class="fa fa-check"></i><b>5.3</b> A Gompertzian Tumor-Growth Model</a></li>
+<li class="chapter" data-level="5.4" data-path="optimal-control.html"><a href="optimal-control.html#sec:oc-gompertz-derivation"><i class="fa fa-check"></i><b>5.4</b> Derivation of the Optimality System for the Gompertzian Model and numerical solution</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="optimal-control.html"><a href="optimal-control.html#hamiltonian-and-adjoint-equation"><i class="fa fa-check"></i><b>5.4.1</b> Hamiltonian and adjoint equation</a></li>
+<li class="chapter" data-level="5.4.2" data-path="optimal-control.html"><a href="optimal-control.html#optimal-control-characterization"><i class="fa fa-check"></i><b>5.4.2</b> Optimal control characterization</a></li>
+<li class="chapter" data-level="5.4.3" data-path="optimal-control.html"><a href="optimal-control.html#the-forwardbackward-sweep-method"><i class="fa fa-check"></i><b>5.4.3</b> The forward–backward sweep method</a></li>
+<li class="chapter" data-level="5.4.4" data-path="optimal-control.html"><a href="optimal-control.html#implementation-in-r"><i class="fa fa-check"></i><b>5.4.4</b> Implementation in R</a></li>
+<li class="chapter" data-level="5.4.5" data-path="optimal-control.html"><a href="optimal-control.html#interactive-example"><i class="fa fa-check"></i><b>5.4.5</b> Interactive example</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="optimal-control.html"><a href="optimal-control.html#sec:oc-kuznetsov"><i class="fa fa-check"></i><b>5.5</b> An Optimal Control Approach for the Kuznetsov Model</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="optimal-control.html"><a href="optimal-control.html#why-the-plain-sweep-fails"><i class="fa fa-check"></i><b>5.5.1</b> Why the plain sweep fails</a></li>
+<li class="chapter" data-level="5.5.2" data-path="optimal-control.html"><a href="optimal-control.html#sec:oc-safeguard"><i class="fa fa-check"></i><b>5.5.2</b> A safeguarded sweep</a></li>
+<li class="chapter" data-level="5.5.3" data-path="optimal-control.html"><a href="optimal-control.html#implementation-in-r-1"><i class="fa fa-check"></i><b>5.5.3</b> Implementation in R</a></li>
+<li class="chapter" data-level="5.5.4" data-path="optimal-control.html"><a href="optimal-control.html#interactive-example-onoff-chemotherapy"><i class="fa fa-check"></i><b>5.5.4</b> Interactive example: ON–OFF chemotherapy</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html"><i class="fa fa-check"></i><b>6</b> Statistical Methods in Oncology</a>
 <ul>
@@ -360,41 +373,25 @@ div.csl-indent {
 <h2><span class="header-section-number">3.2</span> Analysing the Kuznetsov Model<a href="the-kuznetsov-tumourimmune-model.html#analysing-the-kuznetsov-model" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Recall that an equilibrium is a state where both <span class="math inline">\(\frac{dE}{dt}=0\)</span> and <span class="math inline">\(\frac{dT}{dt}=0\)</span>.</p>
 <p>We first consider the case where there are no tumour cells, so <span class="math inline">\(T=0\)</span>. Equation <a href="the-kuznetsov-tumourimmune-model.html#eq:kuznetsov4a">(3.1)</a> becomes</p>
-<p><span class="math display">\[
-\frac{dE}{dt}=s-dE.
-\]</span></p>
+<p><span class="math display">\[\frac{dE}{dt}=s-dE.\]</span></p>
 <p>Setting this equal to zero and solving for <span class="math inline">\(E\)</span>, we get</p>
-<p><span class="math display">\[
-E=\frac{s}{d}.
-\]</span></p>
+<p><span class="math display">\[E=\frac{s}{d}.\]</span></p>
 <p>Thus, the tumour free equilibrium is</p>
-<p><span class="math display">\[
-(E_1,T_1)=(\frac{s}{d},0).
-\]</span></p>
+<p><span class="math display">\[(E_1,T_1)=(\frac{s}{d},0).\]</span></p>
 <p>This equilibrium represents a state in which there are no tumour cells, while effector cells remain present due to the continuous baseline influx <span class="math inline">\(s\)</span>.</p>
 <p>We next consider equilibria where both <span class="math inline">\(T\neq0\)</span> and <span class="math inline">\(E\neq0\)</span>. From equation <a href="the-kuznetsov-tumourimmune-model.html#eq:kuznetsov4b">(3.2)</a>, setting <span class="math inline">\(\frac{dT}{dt}=0\)</span> gives</p>
-<p><span class="math display">\[
-aT(1-bT)-nET=0.
-\]</span></p>
+<p><span class="math display">\[aT(1-bT)-nET=0.\]</span></p>
 <p>Factoring out <span class="math inline">\(T\)</span> gives</p>
-<p><span class="math display">\[
-T(a-abT-nE)=0.
-\]</span></p>
+<p><span class="math display">\[T(a-abT-nE)=0.\]</span></p>
 <p>Since <span class="math inline">\(T\neq0\)</span>, we obtain</p>
-<p><span class="math display">\[
-E=\frac{a}{n}(1-bT).
-\]</span></p>
+<p><span class="math display">\[E=\frac{a}{n}(1-bT).\]</span></p>
 <p>This is the tumour nullcline for positive tumour cell populations.</p>
 <p>Similarly, setting equation <a href="the-kuznetsov-tumourimmune-model.html#eq:kuznetsov4a">(3.1)</a> equal to zero gives</p>
-<p><span class="math display">\[
-s+\frac{pET}{g+T}-mET-dE=0.
-\]</span></p>
+<p><span class="math display">\[s+\frac{pET}{g+T}-mET-dE=0.\]</span></p>
 <p>Solving for <span class="math inline">\(E\)</span>, we get</p>
-<p><span class="math display">\[
-E=
+<p><span class="math display">\[E=
 \frac{s(g+T)}
-{d(g+T)+mT(g+T)-pT}.
-\]</span></p>
+{d(g+T)+mT(g+T)-pT}.\]</span></p>
 <p>This is the effector cell nullcline.</p>
 <p>Therefore, positive equilibrium points occur at the intersections of the two nullclines.</p>
 <p>Depending on the parameter values, the model can have zero, one, two, or three positive equilibrium points.</p>
@@ -469,57 +466,43 @@ a-\frac{ns}{d}
 <p>Also, <span class="math inline">\(\lambda_1= -d =  -0.0412\)</span> and <span class="math inline">\(\lambda_2= a-\frac{ns}{d} \approx 0.1453\)</span>. Since the eigenvalues have opposite signs, <span class="math inline">\((E_1,T_1)\)</span> is a saddle point and is unstable.</p>
 <p>Now consider the case where <span class="math inline">\(E \neq 0\)</span> and <span class="math inline">\(T \neq 0\)</span>. We will use the estimated parameter values to study stability in this case, since the equilibria depend on parameter values.</p>
 <p>Note that equilibria occur at the intersection of the tumour and effector cell nullclines. That is, they occur when
-<span class="math display">\[
-\frac{a}{n}(1-bT)
+<span class="math display">\[\frac{a}{n}(1-bT)
 =
 \frac{s(g+T)}
-{d(g+T)+mT(g+T)-pT}.
-\]</span></p>
+{d(g+T)+mT(g+T)-pT}.\]</span></p>
 <p>Using the estimated values, we get the following equilibria:</p>
-<p><span class="math display">\[
-(E_2,T_2)
+<p><span class="math display">\[(E_2,T_2)
 =
-(1.608\times10^6,\;8.186\times10^6),
-\]</span></p>
-<p><span class="math display">\[
-(E_3,T_3)
+(1.608\times10^6,\;8.186\times10^6),\]</span></p>
+<p><span class="math display">\[(E_3,T_3)
 =
-(7.585\times10^5,\;2.680\times10^8),
-\]</span></p>
+(7.585\times10^5,\;2.680\times10^8),\]</span></p>
 <p>and</p>
-<p><span class="math display">\[
-(E_4,T_4)
+<p><span class="math display">\[(E_4,T_4)
 =
-(1.732\times10^5,\;4.470\times10^8).
-\]</span>
+(1.732\times10^5,\;4.470\times10^8).\]</span>
 Now, we analyse the stability around each equilibrium.</p>
-<p><span class="math display">\[
-J(E_2,T_2)
+<p><span class="math display">\[J(E_2,T_2)
 \approx
 \begin{pmatrix}
 -0.00808 &amp; 0.00447 \\
 -0.90132 &amp; -0.00295
-\end{pmatrix}
-\]</span>
+\end{pmatrix}\]</span>
 has eigenvalues <span class="math inline">\(\lambda_1 \approx -0.00552+0.06342i\)</span>
 and <span class="math inline">\(\lambda_2 \approx -0.00552-0.06342i.\)</span> Both eigenvalues are complex with negative real parts, thus the equilibrium <span class="math inline">\((E_2,T_2)\)</span> is a stable focus.</p>
-<p><span class="math display">\[
-J(E_3,T_3)
+<p><span class="math display">\[J(E_3,T_3)
 \approx
 \begin{pmatrix}
 -0.01714 &amp; -0.000237 \\
 -29.5093 &amp; -0.09649
-\end{pmatrix}
-\]</span>
+\end{pmatrix}\]</span>
 has eigenvalues <span class="math inline">\(\lambda_1\approx0.03576\)</span> and <span class="math inline">\(\lambda_2\approx-0.14936.\)</span> Since the eigenvalues have opposite signs, <span class="math inline">\((E_3,T_3)\)</span> is a saddle point and is unstable.</p>
-<p><span class="math display">\[
-J(E_4,T_4)
+<p><span class="math display">\[J(E_4,T_4)
 \approx
 \begin{pmatrix}
 -0.07505 &amp; -0.0000573 \\
 -49.2175 &amp; -0.16093
-\end{pmatrix}
-\]</span></p>
+\end{pmatrix}\]</span></p>
 <p>has eigenvalues <span class="math inline">\(\lambda_1\approx-0.04970\)</span> and <span class="math inline">\(\lambda_2\approx-0.18628.\)</span></p>
 <p>Since they are both negative, the <span class="math inline">\((E_4,T_4)\)</span> is asymptotically stable.</p>
 <div id="phase-portrait-of-the-original-kuznetsov-model" class="section level3 hasAnchor" number="3.2.1">
@@ -546,24 +529,20 @@ Setting <span class="math inline">\(f(y)=g(y)\)</span> and clearing the denomina
     C_3 y^3 + C_2 y^2 + C_1 y + C_0 = 0, \tag{3.3}
 \end{equation}\]</span>
 with
-<span class="math display">\[
-\begin{aligned}
+<span class="math display">\[\begin{aligned}
     C_0 &amp;= g\left(\frac{s}{a}-d\right), \\
     C_1 &amp;= \frac{s}{a} + p - mg - d + dgb, \\
     C_2 &amp;= -m + (mg+d-p)b, \\
     C_3 &amp;= mb.
-\end{aligned}
-\]</span>
+\end{aligned}\]</span>
 Each positive real root <span class="math inline">\(y^*\)</span> of <a href="the-kuznetsov-tumourimmune-model.html#eq:kuz-cubic">(3.3)</a> corresponds to a biologically admissible tumor-present equilibrium. Rather than solving the cubic directly, we can bound – and in this case pin down – the number of positive roots purely from the <em>signs</em> of its coefficients, using Descartes’ Rule of Signs: the number of positive real roots of a real polynomial is either equal to the number of sign changes in its ordered coefficient sequence, or less than that by an even number.</p>
 <p><strong>Step 1: Sign of <span class="math inline">\(C_3\)</span>.</strong> Since <span class="math inline">\(m,b&gt;0\)</span>, we always have <span class="math inline">\(C_3 = mb&gt;0\)</span>.</p>
 <p><strong>Step 2: Sign of <span class="math inline">\(C_0\)</span>.</strong> Directly from its definition, <span class="math inline">\(C_0&gt;0 \iff s/a &gt; d \iff s/d &gt; a\)</span> – exactly the tumor-free stability condition of Proposition <a href="the-kuznetsov-tumourimmune-model.html#prp:kuz-tumorfree">3.1</a>. So <span class="math inline">\(C_0&lt;0\)</span> precisely when the tumor-free state is unstable, which is the regime of interest, since it is the regime in which a tumor-present equilibrium must exist (by the Intermediate Value Theorem: the cubic <span class="math inline">\(F(y) = C_3y^3+C_2y^2+C_1y+C_0\)</span> satisfies <span class="math inline">\(F(0)=C_0&lt;0\)</span> and <span class="math inline">\(F(y)\to+\infty\)</span> as <span class="math inline">\(y\to\infty\)</span>, so it has at least one positive root).</p>
-<p><strong>Step 3: Sign of <span class="math inline">\(C_2\)</span>.</strong> Suppose effector activation dominates exhaustion in the sense that <span class="math inline">\(p &gt; mg+d\)</span> – this holds for the fitted parameters in Table <a href="the-kuznetsov-tumourimmune-model.html#tab:kuz-param">3.1</a> and is a standing assumption in <span class="citation">(<a href="#ref-kuznetsov94"><strong>kuznetsov94?</strong></a>)</span>. Then <span class="math inline">\(mg+d-p&lt;0\)</span>, so <span class="math inline">\(C_2 = -m + (mg+d-p)b\)</span> is the sum of two negative terms: <span class="math inline">\(C_2&lt;0\)</span> for every <span class="math inline">\(b&gt;0\)</span>.</p>
+<p><strong>Step 3: Sign of <span class="math inline">\(C_2\)</span>.</strong> Suppose effector activation dominates exhaustion in the sense that <span class="math inline">\(p &gt; mg+d\)</span> – this holds for the fitted parameters in Table <a href="the-kuznetsov-tumourimmune-model.html#tab:kuz-param">3.1</a> and is a standing assumption in <span class="citation">(<a href="references-1.html#ref-kuznetsov94">Kuznetsov et al. 1994</a>)</span>. Then <span class="math inline">\(mg+d-p&lt;0\)</span>, so <span class="math inline">\(C_2 = -m + (mg+d-p)b\)</span> is the sum of two negative terms: <span class="math inline">\(C_2&lt;0\)</span> for every <span class="math inline">\(b&gt;0\)</span>.</p>
 <p><strong>Step 4: Sign of <span class="math inline">\(C_1\)</span>.</strong> Under the same condition <span class="math inline">\(p&gt;mg+d\)</span>, and since <span class="math inline">\(s/a&gt;0\)</span> and <span class="math inline">\(dgb&gt;0\)</span>,
-<span class="math display">\[
-C_1 = \frac{s}{a} + \underbrace{(p-mg-d)}_{&gt;0} + dgb &gt; 0.
-\]</span></p>
-<p><strong>Putting it together.</strong> With <span class="math inline">\(C_0&lt;0\)</span>, <span class="math inline">\(C_1&gt;0\)</span>, <span class="math inline">\(C_2&lt;0\)</span>, <span class="math inline">\(C_3&gt;0\)</span>, the ordered coefficient sequence is <span class="math inline">\((+,-,+,-)\)</span> (reading from <span class="math inline">\(C_3\)</span> down to <span class="math inline">\(C_0\)</span>), which has three sign changes. By Descartes’ Rule, the cubic <a href="the-kuznetsov-tumourimmune-model.html#eq:kuz-cubic">(3.3)</a> therefore has either three or one positive real roots. Since we have already shown (Step 2) that at least one positive root always exists in this regime, and since three is the generic, structurally stable count predicted by the sign pattern, the system typically admits <em>three</em> coexistence equilibria – producing, together with the unstable tumor-free state, a total of four steady states and the characteristic bistable “dormant tumor” / “tumor escape” structure that is the central result of <span class="citation">(<a href="#ref-kuznetsov94"><strong>kuznetsov94?</strong></a>)</span>. Descartes’ Rule alone cannot distinguish the three-root case from the (non-generic) one-root case within this sign pattern; a finer tool, a Sturm sequence built from <span class="math inline">\(C_0,C_1,C_2\)</span> and the auxiliary quantities <span class="math inline">\(S=C_2C_1-9C_3C_0\)</span>, <span class="math inline">\(T=2C_2S/R-3C_3S^2/R^2-C_1\)</span>, and <span class="math inline">\(R=2C_2^2-6C_3C_1\)</span>, is needed to certify the exact count in borderline cases; see <span class="citation">(<a href="#ref-kuznetsov94"><strong>kuznetsov94?</strong></a>)</span> for the full Sturm-sequence table.</p>
-<p><strong>Checking the fitted parameters.</strong> Using the values in Table <a href="the-kuznetsov-tumourimmune-model.html#tab:kuz-param">3.1</a>: <span class="math inline">\(mg+d = (0.00311)(20.19)+0.3743 \approx 0.437\)</span>, which is indeed less than <span class="math inline">\(p=1.131\)</span>, confirming Steps 3–4. And <span class="math inline">\(s/d = 0.1181/0.3743 \approx 0.316\)</span>, which is less than <span class="math inline">\(a=1.636\)</span>, confirming the tumor-free state is unstable (Step 2). The sign sequence is therefore <span class="math inline">\((+,-,+,-)\)</span> as derived above, correctly predicting the three coexistence equilibria – the “dormant tumor” state, a saddle, and the “tumor escape” state – that <span class="citation">(<a href="#ref-kuznetsov94"><strong>kuznetsov94?</strong></a>)</span> finds numerically and uses to build their bifurcation diagram and phase portrait.</p>
+<span class="math display">\[C_1 = \frac{s}{a} + \underbrace{(p-mg-d)}_{&gt;0} + dgb &gt; 0.\]</span></p>
+<p><strong>Putting it together.</strong> With <span class="math inline">\(C_0&lt;0\)</span>, <span class="math inline">\(C_1&gt;0\)</span>, <span class="math inline">\(C_2&lt;0\)</span>, <span class="math inline">\(C_3&gt;0\)</span>, the ordered coefficient sequence is <span class="math inline">\((+,-,+,-)\)</span> (reading from <span class="math inline">\(C_3\)</span> down to <span class="math inline">\(C_0\)</span>), which has three sign changes. By Descartes’ Rule, the cubic <a href="the-kuznetsov-tumourimmune-model.html#eq:kuz-cubic">(3.3)</a> therefore has either three or one positive real roots. Since we have already shown (Step 2) that at least one positive root always exists in this regime, and since three is the generic, structurally stable count predicted by the sign pattern, the system typically admits <em>three</em> coexistence equilibria – producing, together with the unstable tumor-free state, a total of four steady states and the characteristic bistable “dormant tumor” / “tumor escape” structure that is the central result of <span class="citation">(<a href="references-1.html#ref-kuznetsov94">Kuznetsov et al. 1994</a>)</span>. Descartes’ Rule alone cannot distinguish the three-root case from the (non-generic) one-root case within this sign pattern; a finer tool, a Sturm sequence built from <span class="math inline">\(C_0,C_1,C_2\)</span> and the auxiliary quantities <span class="math inline">\(S=C_2C_1-9C_3C_0\)</span>, <span class="math inline">\(T=2C_2S/R-3C_3S^2/R^2-C_1\)</span>, and <span class="math inline">\(R=2C_2^2-6C_3C_1\)</span>, is needed to certify the exact count in borderline cases; see <span class="citation">(<a href="references-1.html#ref-kuznetsov94">Kuznetsov et al. 1994</a>)</span> for the full Sturm-sequence table.</p>
+<p><strong>Checking the fitted parameters.</strong> Using the values in Table <a href="the-kuznetsov-tumourimmune-model.html#tab:kuz-param">3.1</a>: <span class="math inline">\(mg+d = (0.00311)(20.19)+0.3743 \approx 0.437\)</span>, which is indeed less than <span class="math inline">\(p=1.131\)</span>, confirming Steps 3–4. And <span class="math inline">\(s/d = 0.1181/0.3743 \approx 0.316\)</span>, which is less than <span class="math inline">\(a=1.636\)</span>, confirming the tumor-free state is unstable (Step 2). The sign sequence is therefore <span class="math inline">\((+,-,+,-)\)</span> as derived above, correctly predicting the three coexistence equilibria – the “dormant tumor” state, a saddle, and the “tumor escape” state – that <span class="citation">(<a href="references-1.html#ref-kuznetsov94">Kuznetsov et al. 1994</a>)</span> finds numerically and uses to build their bifurcation diagram and phase portrait.</p>
 </div>
 <div id="sec:resistant" class="section level2 hasAnchor" number="3.4">
 <h2><span class="header-section-number">3.4</span> Extending the Model: An Immune-Resistant Tumor Subpopulation<a href="the-kuznetsov-tumourimmune-model.html#sec:resistant" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -588,21 +567,17 @@ This is structurally identical to <a href="the-kuznetsov-tumourimmune-model.html
 Figure 3.2: Tumor (<span class="math inline">\(T\)</span>) and effector (<span class="math inline">\(E\)</span>) cells combine into a conjugate (<span class="math inline">\(C\)</span>), which then dissociates leaving either one or no cells damaged (damaged cells marked <span class="math inline">\(\dagger\)</span>). Rates of these reactions are <span class="math inline">\(\gamma_j\)</span> for <span class="math inline">\(j=-1,1,2,3\)</span>: binding (<span class="math inline">\(\gamma_1\)</span>), unbinding without damage (<span class="math inline">\(\gamma_{-1}\)</span>), tumor-cell lysis (<span class="math inline">\(\gamma_2\)</span>), and effector inactivation (<span class="math inline">\(\gamma_3\)</span>).
 </p>
 </div>
-<p>Assuming the conjugate dynamics equilibrate on a fast time scale relative to cell division and death (the same quasi-steady-state argument used in <span class="citation">(<a href="#ref-kuznetsov94"><strong>kuznetsov94?</strong></a>)</span> to derive <a href="the-kuznetsov-tumourimmune-model.html#eq:kuznetsov4a">(3.1)</a> and <a href="the-kuznetsov-tumourimmune-model.html#eq:kuznetsov4b">(3.2)</a> from the underlying reaction scheme), we have <span class="math inline">\(C = \Gamma E T\)</span> with <span class="math inline">\(\Gamma = \gamma_1/(\gamma_{-1}+\gamma_2+\gamma_3)\)</span>. After rescaling by the wild-type reference rate <span class="math inline">\(\gamma_2^{(0)}\Gamma^{(0)}\)</span>, the reduced system <a href="the-kuznetsov-tumourimmune-model.html#eq:red-ODEs-T">(3.4)</a> and <a href="the-kuznetsov-tumourimmune-model.html#eq:red-ODEs-E">(3.5)</a> follows with
+<p>Assuming the conjugate dynamics equilibrate on a fast time scale relative to cell division and death (the same quasi-steady-state argument used in <span class="citation">(<a href="references-1.html#ref-kuznetsov94">Kuznetsov et al. 1994</a>)</span> to derive <a href="the-kuznetsov-tumourimmune-model.html#eq:kuznetsov4a">(3.1)</a> and <a href="the-kuznetsov-tumourimmune-model.html#eq:kuznetsov4b">(3.2)</a> from the underlying reaction scheme), we have <span class="math inline">\(C = \Gamma E T\)</span> with <span class="math inline">\(\Gamma = \gamma_1/(\gamma_{-1}+\gamma_2+\gamma_3)\)</span>. After rescaling by the wild-type reference rate <span class="math inline">\(\gamma_2^{(0)}\Gamma^{(0)}\)</span>, the reduced system <a href="the-kuznetsov-tumourimmune-model.html#eq:red-ODEs-T">(3.4)</a> and <a href="the-kuznetsov-tumourimmune-model.html#eq:red-ODEs-E">(3.5)</a> follows with
 <span class="math display">\[\begin{equation*}
     \theta = \frac{\gamma_2\Gamma}{\gamma_2^{(0)}\Gamma^{(0)}}, \qquad p_T=p\,\frac{\Gamma}{\Gamma^{(0)}}, \qquad m_T = \frac{\gamma_3\Gamma}{\gamma_2^{(0)}\Gamma^{(0)}}.
 \end{equation*}\]</span></p>
 <p>We consider two concrete resistance mechanisms:</p>
 <ul>
 <li><p><strong>Immune checkpoint evasion.</strong> The tumor cell gains a receptor (e.g. PD-L1) that, once an effector is bound, reduces the probability the conjugate resolves in the tumor cell’s death and instead redirects it toward inactivating the effector. Binding itself is unaffected (<span class="math inline">\(\gamma_1=\gamma_1^{(0)}\)</span>, so <span class="math inline">\(\Gamma=\Gamma^{(0)}\)</span>), giving</p>
-<p><span class="math display">\[
-    p_T=p, \qquad m_T = m+\phi(1-\theta),
-\]</span></p>
+<p><span class="math display">\[p_T=p, \qquad m_T = m+\phi(1-\theta),\]</span></p>
 <p>where <span class="math inline">\(\phi\in[0,1]\)</span> is the fraction of failed-lysis events that are redirected into damaging the effector instead.</p></li>
 <li><p><strong>Reduced antigen presentation.</strong> The tumor cell instead lowers the rate at which effectors recognize and bind to it in the first place, <span class="math inline">\(\gamma_1=\theta\gamma_1^{(0)}\)</span>, so <span class="math inline">\(\Gamma=\theta\Gamma^{(0)}\)</span>. This scales both activation and inactivation of effectors proportionally:</p>
-<p><span class="math display">\[
-    p_T=\theta p, \qquad m_T=\theta m.
-\]</span>
+<p><span class="math display">\[p_T=\theta p, \qquad m_T=\theta m.\]</span>
 The distinction between the two mechanisms is therefore whether resistance acts on the <em>outcome</em> of an effector–tumor encounter (checkpoint evasion) or on the <em>rate</em> of encounter itself (reduced antigen presentation). Table <a href="the-kuznetsov-tumourimmune-model.html#tab:red-param">3.2</a> summarizes the parameters of the extended model, reusing the Kuznetsov baseline values from Table <a href="the-kuznetsov-tumourimmune-model.html#tab:kuz-param">3.1</a> for all quantities unrelated to resistance.</p></li>
 </ul>
 
@@ -698,9 +673,7 @@ The distinction between the two mechanisms is therefore whether resistance acts 
 giving the following direct generalization of Proposition <a href="the-kuznetsov-tumourimmune-model.html#prp:kuz-tumorfree">3.1</a>.</p>
 <div class="proposition">
 <p><span id="prp:red-1" class="proposition"><strong>Proposition 3.2  </strong></span>The tumor-free equilibrium <span class="math inline">\(\mathcal{E}_0=(0,s/d)\)</span> of the immune-resistant model <a href="the-kuznetsov-tumourimmune-model.html#eq:red-ODEs-T">(3.4)</a> and <a href="the-kuznetsov-tumourimmune-model.html#eq:red-ODEs-E">(3.5)</a> is stable if and only if
-<span class="math display">\[
-\frac{s}{d} &gt; \frac{a_T}{\theta}.
-\]</span>
+<span class="math display">\[\frac{s}{d} &gt; \frac{a_T}{\theta}.\]</span>
 Setting <span class="math inline">\(\theta=1\)</span> and <span class="math inline">\(a_T=a\)</span> recovers exactly the Kuznetsov condition <span class="math inline">\(s/d&gt;a\)</span> of Proposition <a href="the-kuznetsov-tumourimmune-model.html#prp:kuz-tumorfree">3.1</a>. Since <span class="math inline">\(\theta\le1\)</span> and resistance typically also reduces <span class="math inline">\(a_T\)</span> below <span class="math inline">\(a\)</span>, the net effect of resistance on this threshold depends on whether the growth-rate cost <span class="math inline">\(\zeta\)</span> or the killing-effectiveness benefit <span class="math inline">\(1-\theta\)</span> dominates.</p>
 </div>
 <p>At a tumor-present equilibrium, <span class="math inline">\(T^*\)</span> and <span class="math inline">\(E^*\)</span> satisfy
@@ -715,29 +688,21 @@ Setting <span class="math inline">\(\theta=1\)</span> and <span class="math inli
     F(T^*) = B_3 T^{*3} + B_2 T^{*2} + B_1 T^* + B_0 = 0, \tag{3.7}
 \end{equation}\]</span>
 with coefficients
-<span class="math display">\[
-\begin{aligned}
+<span class="math display">\[\begin{aligned}
     B_0 &amp;= \kappa g\left(s-a_Td\right), \\
     B_1 &amp;= \kappa a_T(p_T-gm_T-d) + a_Tgd + \kappa s, \\
     B_2 &amp;= a_Tm_T(g-\kappa) + a_T(d-p_T), \\
     B_3 &amp;= a_Tm_T.
-\end{aligned}
-\]</span>
+\end{aligned}\]</span>
 One can check directly that <span class="math inline">\(B_i = a_T\kappa\,C_i&#39;\)</span> for <span class="math inline">\(i=0,\dots,3\)</span>, where <span class="math inline">\(C_i&#39;\)</span> denotes the Kuznetsov coefficient <span class="math inline">\(C_i\)</span> of Section <a href="the-kuznetsov-tumourimmune-model.html#sec:kuznetsov">3.1</a> with <span class="math inline">\((a,p,m,b)\)</span> replaced by <span class="math inline">\((a_T,p_T,m_T,1/\kappa)\)</span>. Since multiplying a polynomial by the positive constant <span class="math inline">\(a_T\kappa\)</span> does not change its roots, <a href="the-kuznetsov-tumourimmune-model.html#eq:red-cubic">(3.7)</a> has exactly the same positive-root structure as the Kuznetsov cubic with resistant parameters substituted in – confirming that resistance enters the equilibrium problem only by remapping the same three parameters that already governed the wild-type dynamics. The same four-step sign test from Section <a href="the-kuznetsov-tumourimmune-model.html#sec:kuznetsov">3.1</a> therefore applies verbatim:</p>
 <ul>
 <li><ol style="list-style-type: lower-roman">
 <li><span class="math inline">\(B_3=a_Tm_T&gt;0\)</span> always, since <span class="math inline">\(a_T,m_T&gt;0\)</span>.</li>
 </ol></li>
-<li><ol start="2" style="list-style-type: lower-roman">
-<li><span class="math inline">\(B_0&gt;0 \iff s/d&gt;a_T\)</span>, which (recalling <span class="math inline">\(\theta\le1\)</span>) is implied by, but slightly weaker than, the tumor-free stability condition of Proposition <a href="the-kuznetsov-tumourimmune-model.html#prp:red-1">3.2</a>. We again focus on <span class="math inline">\(B_0&lt;0\)</span>, the regime in which a tumor-present equilibrium is guaranteed to exist.</li>
-</ol></li>
-<li><ol start="3" style="list-style-type: lower-roman">
-<li>If <span class="math inline">\(p_T&gt;m_Tg+d\)</span> (effector activation dominates exhaustion, the same standing assumption used for the wild-type model) and <span class="math inline">\(\kappa&gt;g\)</span>, then <span class="math inline">\(B_2 = a_Tm_T(g-\kappa)+a_T(d-p_T)&lt;0\)</span>, since both terms are negative.</li>
-</ol></li>
-<li><ol start="4" style="list-style-type: lower-roman">
-<li>Under the same condition, <span class="math inline">\(B_1 = \kappa a_T(p_T-gm_T-d)+a_Tgd+\kappa s&gt;0\)</span>, since every term is positive.
+<li>(ii) <span class="math inline">\(B_0&gt;0 \iff s/d&gt;a_T\)</span>, which (recalling <span class="math inline">\(\theta\le1\)</span>) is implied by, but slightly weaker than, the tumor-free stability condition of Proposition <a href="the-kuznetsov-tumourimmune-model.html#prp:red-1">3.2</a>. We again focus on <span class="math inline">\(B_0&lt;0\)</span>, the regime in which a tumor-present equilibrium is guaranteed to exist.</li>
+<li>(iii) If <span class="math inline">\(p_T&gt;m_Tg+d\)</span> (effector activation dominates exhaustion, the same standing assumption used for the wild-type model) and <span class="math inline">\(\kappa&gt;g\)</span>, then <span class="math inline">\(B_2 = a_Tm_T(g-\kappa)+a_T(d-p_T)&lt;0\)</span>, since both terms are negative.</li>
+<li>(iv) Under the same condition, <span class="math inline">\(B_1 = \kappa a_T(p_T-gm_T-d)+a_Tgd+\kappa s&gt;0\)</span>, since every term is positive.
 As before, the sign sequence <span class="math inline">\((+,-,+,-)\)</span> has three sign changes, so Descartes’ Rule predicts either one or three positive roots of <a href="the-kuznetsov-tumourimmune-model.html#eq:red-cubic">(3.7)</a>, with three being the generic case – the hallmark of bistability between a low- and a high-tumor-burden resistant equilibrium. This is exactly the qualitative structure established for the Kuznetsov model in Section <a href="the-kuznetsov-tumourimmune-model.html#sec:kuznetsov">3.1</a>, now shown to persist under both forms of immune resistance considered here, provided effector activation continues to dominate tumor-induced exhaustion (<span class="math inline">\(p_T&gt;m_Tg+d\)</span>) at the resistant phenotype’s parameter values.</li>
-</ol></li>
 </ul>
 <p>The Jacobian at <span class="math inline">\(\mathcal{E}_1\)</span> is
 <span class="math display">\[\begin{equation*}

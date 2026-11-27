@@ -274,9 +274,22 @@ div.csl-indent {
 <li class="chapter" data-level="5.2.6" data-path="optimal-control.html"><a href="optimal-control.html#sufficient-conditions"><i class="fa fa-check"></i><b>5.2.6</b> Sufficient conditions</a></li>
 <li class="chapter" data-level="5.2.7" data-path="optimal-control.html"><a href="optimal-control.html#uniqueness"><i class="fa fa-check"></i><b>5.2.7</b> Uniqueness</a></li>
 </ul></li>
-<li class="chapter" data-level="5.3" data-path="optimal-control.html"><a href="optimal-control.html#a-gompertzian-tumor-growth-model"><i class="fa fa-check"></i><b>5.3</b> A Gompertzian Tumor-Growth Model</a></li>
-<li class="chapter" data-level="5.4" data-path="optimal-control.html"><a href="optimal-control.html#derivation-of-the-optimality-system-for-the-gompertzian-model-and-numerical-solution"><i class="fa fa-check"></i><b>5.4</b> Derivation of the Optimality System for the Gompertzian Model and numerical solution</a></li>
-<li class="chapter" data-level="5.5" data-path="optimal-control.html"><a href="optimal-control.html#an-optimal-control-approach-for-the-kuznetsov-model"><i class="fa fa-check"></i><b>5.5</b> An Optimal Control Approach for the Kuznetsov Model</a></li>
+<li class="chapter" data-level="5.3" data-path="optimal-control.html"><a href="optimal-control.html#sec:oc-gompertz"><i class="fa fa-check"></i><b>5.3</b> A Gompertzian Tumor-Growth Model</a></li>
+<li class="chapter" data-level="5.4" data-path="optimal-control.html"><a href="optimal-control.html#sec:oc-gompertz-derivation"><i class="fa fa-check"></i><b>5.4</b> Derivation of the Optimality System for the Gompertzian Model and numerical solution</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="optimal-control.html"><a href="optimal-control.html#hamiltonian-and-adjoint-equation"><i class="fa fa-check"></i><b>5.4.1</b> Hamiltonian and adjoint equation</a></li>
+<li class="chapter" data-level="5.4.2" data-path="optimal-control.html"><a href="optimal-control.html#optimal-control-characterization"><i class="fa fa-check"></i><b>5.4.2</b> Optimal control characterization</a></li>
+<li class="chapter" data-level="5.4.3" data-path="optimal-control.html"><a href="optimal-control.html#the-forwardbackward-sweep-method"><i class="fa fa-check"></i><b>5.4.3</b> The forward–backward sweep method</a></li>
+<li class="chapter" data-level="5.4.4" data-path="optimal-control.html"><a href="optimal-control.html#implementation-in-r"><i class="fa fa-check"></i><b>5.4.4</b> Implementation in R</a></li>
+<li class="chapter" data-level="5.4.5" data-path="optimal-control.html"><a href="optimal-control.html#interactive-example"><i class="fa fa-check"></i><b>5.4.5</b> Interactive example</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="optimal-control.html"><a href="optimal-control.html#sec:oc-kuznetsov"><i class="fa fa-check"></i><b>5.5</b> An Optimal Control Approach for the Kuznetsov Model</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="optimal-control.html"><a href="optimal-control.html#why-the-plain-sweep-fails"><i class="fa fa-check"></i><b>5.5.1</b> Why the plain sweep fails</a></li>
+<li class="chapter" data-level="5.5.2" data-path="optimal-control.html"><a href="optimal-control.html#sec:oc-safeguard"><i class="fa fa-check"></i><b>5.5.2</b> A safeguarded sweep</a></li>
+<li class="chapter" data-level="5.5.3" data-path="optimal-control.html"><a href="optimal-control.html#implementation-in-r-1"><i class="fa fa-check"></i><b>5.5.3</b> Implementation in R</a></li>
+<li class="chapter" data-level="5.5.4" data-path="optimal-control.html"><a href="optimal-control.html#interactive-example-onoff-chemotherapy"><i class="fa fa-check"></i><b>5.5.4</b> Interactive example: ON–OFF chemotherapy</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html"><i class="fa fa-check"></i><b>6</b> Statistical Methods in Oncology</a>
 <ul>
@@ -539,8 +552,7 @@ is described by <span class="math inline">\(\eta T E\)</span>. Combining tumour 
 \end{pmatrix}\]</span></p>
 <p>This matrix has eigenvalues <span class="math inline">\(\pm i \sqrt{\rho \delta}\)</span>. This indicates oscillatory behaviour around the equilibrium.</p>
 <p>This oscillatory behaviour could indicate the following:</p>
-<p><span class="math display">\[
-\text{More tumour cells}
+<p><span class="math display">\[\text{More tumour cells}
 \longrightarrow
 \text{More immune response}
 \longrightarrow
@@ -549,8 +561,7 @@ is described by <span class="math inline">\(\eta T E\)</span>. Combining tumour 
 \text{Less immune response}
 \longrightarrow
 \text{More tumour cells}
-\longrightarrow \cdots
-\]</span></p>
+\longrightarrow \cdots\]</span></p>
 <div id="phase-portrait-of-the-lotkavolterra-tumourimmune-model" class="section level3 hasAnchor" number="2.7.1">
 <h3><span class="header-section-number">2.7.1</span> Phase portrait of the Lotka–Volterra tumour–immune model<a href="introduction.html#phase-portrait-of-the-lotkavolterra-tumourimmune-model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Figure <a href="introduction.html#fig:intro-lotka-volterra">2.4</a> illustrates the behaviour of the Lotka–Volterra tumour–immune model using the parameter values <span class="math inline">\(\rho=1.1\)</span>, <span class="math inline">\(\eta=0.4\)</span>, <span class="math inline">\(\alpha=0.1\)</span>, and <span class="math inline">\(\delta=0.4\)</span>. Recall that the model has two equilibria: the tumour-free equilibrium <span class="math inline">\((0,0)\)</span> and the coexistence equilibrium <span class="math inline">\((\frac{\delta}{\alpha},\frac{\rho}{\eta})=(4,2.75)\)</span>. The blue curves represent solutions corresponding to different initial tumour and effector cell densities, while the red point represents the coexistence equilibrium.</p>
@@ -610,87 +621,59 @@ Figure 2.4: Phase portrait of the Lotka–Volterra tumour–immune model, illust
 <h3><span class="header-section-number">2.9.3</span> Model Development<a href="introduction.html#model-development" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The model has three separate growth regimes: fast growth, slow growth, and development of the necrotic core. This state of the model depends on the nutrient concentration at <span class="math inline">\(\sigma(0)\)</span>, the center of the tumor.</p>
 <p>The proliferation and nutrient consumption of cells is dictated by:</p>
-<p><span class="math display">\[
-f(\sigma) = \begin{cases} 1, &amp; \hat{\sigma}\leq \sigma, \\ \frac{\sigma}{\hat{\sigma}}, &amp; \sigma_i &lt; \sigma \leq \hat{\sigma}, \\ 0, &amp; \sigma &lt; \sigma_i\end{cases}.
-\]</span></p>
+<p><span class="math display">\[f(\sigma) = \begin{cases} 1, &amp; \hat{\sigma}\leq \sigma, \\ \frac{\sigma}{\hat{\sigma}}, &amp; \sigma_i &lt; \sigma \leq \hat{\sigma}, \\ 0, &amp; \sigma &lt; \sigma_i\end{cases}.\]</span></p>
 <p>The top case is fast growth, where proliferation and nutrient consumption are unhindered. As <span class="math inline">\(\sigma\)</span> falls below a nutrient concentration, slowed growth begins, and the constants are scaled by the proportion of nutrient available. Lastly, <span class="math inline">\(\sigma\)</span> falls below the critical
 nutrient concentration, <span class="math inline">\(\sigma_i\)</span>, and the cell dies from lack of nutrients.</p>
 </div>
 <div id="case-1-fast-growth" class="section level3 hasAnchor" number="2.9.4">
 <h3><span class="header-section-number">2.9.4</span> Case 1: Fast Growth<a href="introduction.html#case-1-fast-growth" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The nutrient concentration can be defined using the diffusion equation in spherical coordinates. Since we assume the problem is axisymmetric and at equilibrium, we are only concerned with the radial coordinate:</p>
-<p><span class="math display">\[
-\frac{k}{r^2}\frac{d}{dr}\left[ r^2\frac{d\sigma}{dr}\right] = A, \quad 0 \leq r \leq R_0.
-\]</span></p>
+<p><span class="math display">\[\frac{k}{r^2}\frac{d}{dr}\left[ r^2\frac{d\sigma}{dr}\right] = A, \quad 0 \leq r \leq R_0.\]</span></p>
 <p>We can solve this equation by dividing by <span class="math inline">\(\frac{k}{r^2}\)</span> and integrating twice,</p>
-<p><span class="math display">\[
-\begin{align}
+<p><span class="math display">\[\begin{align}
 \frac{d}{dr}[r^2\frac{d\sigma}{dr}] &amp;= \frac{Ar^2}{k}\\
 r^2\frac{d\sigma}{dr} &amp;= \frac{Ar^3}{3k}+ c_1\\
 \frac{d\sigma}{dr} &amp;= \frac{Ar}{3k}+\frac{c_1}{r^2}\\
 \sigma(r) &amp;= \frac{Ar^2}{6k}-\frac{c_1}{r} + c_2\\
-\end{align}
-\]</span></p>
+\end{align}\]</span></p>
 <p>For this equation to be valid at <span class="math inline">\(r=0\)</span>, <span class="math inline">\(c_1\)</span> must be zero. Further, we have the constraint on the outer boundary, <span class="math inline">\(\sigma(R_0)=\sigma_\infty\)</span>. This constraint gives us the solution for the nutrient concentration as</p>
-<p><span class="math display">\[
-\begin{align}
+<p><span class="math display">\[\begin{align}
 \sigma(R_0) &amp;= \frac{AR_0^2}{6k} + c_2 = \sigma_\infty \implies c_2 = \sigma_\infty - \frac{AR_0^2}{6k}\\
 \sigma(r) &amp;= \frac{AR_0^2}{6k} + \sigma_\infty - \frac{AR_0^2}{6k}\\
 \sigma(r) &amp;= \sigma_\infty - \frac{A}{6k}(R_0^2- r^2).
-\end{align}
-\]</span></p>
+\end{align}\]</span></p>
 <p>Now, that we have modeled the nutrient concentration we can move to modeling the growth of the tumor as a sphere by modeling how the outer radius, <span class="math inline">\(R_0\)</span>, changes over time with respect to volume gained, <span class="math inline">\(s\)</span>, and volume lost, <span class="math inline">\(\lambda\)</span>,</p>
-<p><span class="math display">\[
-\frac{4\pi}{3}\frac{dR_0^3}{dt} = s\frac{4\pi}{3}R_0^3 - \lambda\frac{4\pi}{3}R_0^3 \implies \frac{dR_0^3}{dt} = (s-\lambda)R_0^3.
-\]</span></p>
+<p><span class="math display">\[\frac{4\pi}{3}\frac{dR_0^3}{dt} = s\frac{4\pi}{3}R_0^3 - \lambda\frac{4\pi}{3}R_0^3 \implies \frac{dR_0^3}{dt} = (s-\lambda)R_0^3.\]</span></p>
 <p>The <span class="math inline">\(\frac{4\pi}{3}\)</span> comes from the equation for the volume of a sphere, but since all terms incorporate it, they cancel out.</p>
 </div>
 <div id="nondimensionalization" class="section level3 hasAnchor" number="2.9.5">
 <h3><span class="header-section-number">2.9.5</span> Nondimensionalization<a href="introduction.html#nondimensionalization" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>One way to study differential equations is through nondimensionalization. This method removes the units from the parameters in the system, so that you can simplify the differential equation. In this case, it offers the ability to merge the nutrient concentration and growth equations. We can start this process by rewriting the radial growth equation we just set up. The derivative is taken with respect to <span class="math inline">\(R_0^3\)</span>, but using chain rule you can write <span class="math inline">\(\frac{dR_0^3}{dt} = 3R_0^2\frac{dR_0}{dt}\)</span>. Then, we can further rewrite</p>
-<p><span class="math display">\[
-\frac{dR_0}{dt} = \frac{s-\lambda}{3}R_0.
-\]</span></p>
+<p><span class="math display">\[\frac{dR_0}{dt} = \frac{s-\lambda}{3}R_0.\]</span></p>
 <p>Now, we can begin nondimensionalizing. We use scaled time as <span class="math inline">\(\tau = st\)</span> and <span class="math inline">\(\xi = BR_0\)</span> where <span class="math inline">\(B = \sqrt{\frac{A}{k\hat{\sigma}}}\)</span>.</p>
 <p>The units of the variables are</p>
-<p><span class="math display">\[
-[\tau] = [s][t] = \text{time}^{-1}\text{time} = \text{no dimension}\\
-[\xi] = \sqrt{\frac{[A]}{[k][\hat{\sigma}]}}[R_0] = \sqrt{\frac{\frac{\text{mol}}{\text{length}^3\text{time}}}{\frac{\text{length}^2}{\text{time}}\frac{\text{mol}}{\text{length}^3}}}\text{length} = \sqrt{\frac{1}{\text{length}^2}}\text{length} = \text{no dimension}
-\]</span></p>
+<p><span class="math display">\[[\tau] = [s][t] = \text{time}^{-1}\text{time} = \text{no dimension}\\
+[\xi] = \sqrt{\frac{[A]}{[k][\hat{\sigma}]}}[R_0] = \sqrt{\frac{\frac{\text{mol}}{\text{length}^3\text{time}}}{\frac{\text{length}^2}{\text{time}}\frac{\text{mol}}{\text{length}^3}}}\text{length} = \sqrt{\frac{1}{\text{length}^2}}\text{length} = \text{no dimension}\]</span></p>
 <p>Now, we see that we have two nondimensional variables, <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\xi\)</span>. Next, we need to do change of variables. To change from <span class="math inline">\(dt\)</span> to <span class="math inline">\(d\tau\)</span>, we see that since <span class="math inline">\(\tau = st\)</span>, <span class="math inline">\(\frac{d\tau}{dt} = s\)</span>. Thus <span class="math inline">\(\frac{dt}{d\tau}=\frac{1}{s}\)</span> by simply inverting the fraction. Next, we change from <span class="math inline">\(\frac{dR_0}{dt}\)</span> to <span class="math inline">\(\frac{dR_0}{d\tau}\)</span></p>
-<p><span class="math display">\[
-\frac{dR_0}{d\tau} = \frac{dR_0}{dt}\frac{dt}{d\tau} = \frac{1}{s}\frac{dR_0}{dt}\implies \frac{dR_0}{dt} = s\frac{dR_0}{d\tau}.
-\]</span>
+<p><span class="math display">\[\frac{dR_0}{d\tau} = \frac{dR_0}{dt}\frac{dt}{d\tau} = \frac{1}{s}\frac{dR_0}{dt}\implies \frac{dR_0}{dt} = s\frac{dR_0}{d\tau}.\]</span>
 We can now do this for <span class="math inline">\(\xi\)</span>, since <span class="math inline">\(\frac{d\xi}{dR_0} = B\)</span>
-<span class="math display">\[
-\frac{d\xi}{d\tau} = \frac{d\xi}{dR_0}\frac{dR_0}{d\tau} = B\frac{dR_0}{d\tau}\implies \frac{dR_0}{d\tau} = \frac{1}{B} \frac{d\xi}{d\tau}.
-\]</span></p>
+<span class="math display">\[\frac{d\xi}{d\tau} = \frac{d\xi}{dR_0}\frac{dR_0}{d\tau} = B\frac{dR_0}{d\tau}\implies \frac{dR_0}{d\tau} = \frac{1}{B} \frac{d\xi}{d\tau}.\]</span></p>
 <p>Now, we can sequentially plug these into the growth equation and derive</p>
-<p><span class="math display">\[
-\begin{align}
+<p><span class="math display">\[\begin{align}
 \frac{dR_0}{dt} &amp;= \frac{s-\lambda}{3}R_0\\
 s\frac{dR_0}{d\tau} &amp;= \frac{s-\lambda}{3}R_0\\
 \frac{s}{B}\frac{d\xi}{d\tau} &amp;= \frac{s-\lambda}{3}R_0\\
 \frac{d\xi}{d\tau} &amp;= \frac{1-\frac{\lambda}{s}}{3}BR_0 = \frac{1-\gamma}{3}\xi
-\end{align}
-\]</span></p>
+\end{align}\]</span></p>
 <p>where <span class="math inline">\(\gamma = \frac{\lambda}{s}\)</span>, another nondimensional parameter. Using separation of variables, we get the solution</p>
-<p><span class="math display">\[
-\xi(\tau) = \xi(0)e^{(1-\gamma)\tau/3}
-\]</span></p>
+<p><span class="math display">\[\xi(\tau) = \xi(0)e^{(1-\gamma)\tau/3}\]</span></p>
 <p>where <span class="math inline">\(\xi(0)\)</span> is the initial value of the scaled outer radius. Now, we see how the nondimensionalization is useful. This system exhibits exponential growth, in the fast growth regime, if <span class="math inline">\(\gamma&lt; 1\)</span>, equivalently <span class="math inline">\(s&gt;\lambda\)</span>, otherwise seen as proliferation being greater than volume loss from apoptosis.</p>
 <p>Now, looking back at the nutrient concentration, we reach <span class="math inline">\(\hat{\sigma}\)</span> when <span class="math inline">\(\sigma(0) = \hat{\sigma}\)</span>. This gives us the expression</p>
-<p><span class="math display">\[
-\hat{\sigma} = \sigma_\infty - \frac{A}{6k}R_0^2.
-\]</span></p>
+<p><span class="math display">\[\hat{\sigma} = \sigma_\infty - \frac{A}{6k}R_0^2.\]</span></p>
 <p>This <span class="math inline">\(R_0\)</span> is critical for understanding when the system changes regimes. So, solving for <span class="math inline">\(R_0^2\)</span>, we can get an expression involving <span class="math inline">\(\xi\)</span>. Since <span class="math inline">\(R_0^2 = \frac{\xi^2}{B^2}\)</span>, we get the equation</p>
-<p><span class="math display">\[
-\frac{k\hat{\sigma}\xi^2}{A} = \frac{6k}{A}(\sigma_\infty-\hat{\sigma})
-\]</span></p>
+<p><span class="math display">\[\frac{k\hat{\sigma}\xi^2}{A} = \frac{6k}{A}(\sigma_\infty-\hat{\sigma})\]</span></p>
 <p>which solves to</p>
-<p><span class="math display">\[
-\xi_s = \sqrt{6(\frac{\sigma_\infty}{\hat{\sigma}}-1)}
-\]</span></p>
+<p><span class="math display">\[\xi_s = \sqrt{6(\frac{\sigma_\infty}{\hat{\sigma}}-1)}\]</span></p>
 <p><span class="math inline">\(\xi_s\)</span> is the critical scaled radius when the system moves from a fast growth only regime to a fast and slow growth regime.</p>
 </div>
 <div id="further-practice" class="section level3 hasAnchor" number="2.9.6">
@@ -707,16 +690,14 @@ Solution to the nutrient diffusion equation
 </summary>
 <p>The solution to the equation becomes</p>
 <span class="math display">\[\sigma(r) = \hat{\sigma}\frac{\hat{R}}{r}\frac{\sinh Br}{\sinh B\hat{R}}, \quad 0\leq r\leq \hat{R},\\
-\sigma(r) = \sigma_\infty + \frac{A}{6k}(r^2-R_0^2)+[\hat{\sigma}-\sigma_\infty-\frac{A}{6k}(\hat{R}^2-R_0^2)]\frac{\hat{R}}{r}\frac{r-R_0}{\hat{R}-R_0}, \quad \hat{R}\leq r\leq R_0. \]</span>
+\sigma(r) = \sigma_\infty + \frac{A}{6k}(r^2-R_0^2)+[\hat{\sigma}-\sigma_\infty-\frac{A}{6k}(\hat{R}^2-R_0^2)]\frac{\hat{R}}{r}\frac{r-R_0}{\hat{R}-R_0}, \quad \hat{R}\leq r\leq R_0.\]</span>
 </details>
 <p>After deriving the two nutrient equations, you can create an expression for <span class="math inline">\(\hat{R}\)</span> by matching <span class="math inline">\(\frac{d\sigma}{dr}\)</span> at <span class="math inline">\(r=\hat{R}\)</span>. <em>Hint: after introducing a scaled variable, <span class="math inline">\(\rho = B\hat{R}\)</span>, you can write <span class="math inline">\(coth = \frac{e^x+e^{-x}}{e^x-e^{-x}} = \frac{e^{2x}+1}{e^{2x}-1}\)</span>.</em></p>
 <details>
 <summary>
 The solution can be found here
 </summary>
-<span class="math display">\[
-\frac{\sigma_\infty}{\hat{\sigma}} -1 = \frac{1}{6}(\xi^2-\rho^2)+[\rho(\rho\coth \rho-1)-\frac{\rho^3}{3}][\frac{1}\rho-\frac{1}\xi].
-\]</span>
+<span class="math display">\[\frac{\sigma_\infty}{\hat{\sigma}} -1 = \frac{1}{6}(\xi^2-\rho^2)+[\rho(\rho\coth \rho-1)-\frac{\rho^3}{3}][\frac{1}\rho-\frac{1}\xi].\]</span>
 </details>
 Next, you can derive the growth equation for the system. <em>Hint: <span class="math inline">\(\lambda\)</span> is constant the entire radius, but <span class="math inline">\(s\)</span> has two separate values.</em>
 <details>
@@ -724,7 +705,7 @@ Next, you can derive the growth equation for the system. <em>Hint: <span class="
 Growth equation!!
 </summary>
 <p>The growth equation is</p>
-<p><span class="math display">\[ \frac{4\pi}{4}\frac{dR_0^3}{dt} = s\frac{4\pi}{3}(R_0^3-\hat{R}^3)-\lambda\frac{4\pi}{3}R_0^3+4\pi s\int_0^{\hat{R}}\frac{\sigma(r)}{\hat{\sigma}r^2}dr\]</span></p>
+<p><span class="math display">\[\frac{4\pi}{4}\frac{dR_0^3}{dt} = s\frac{4\pi}{3}(R_0^3-\hat{R}^3)-\lambda\frac{4\pi}{3}R_0^3+4\pi s\int_0^{\hat{R}}\frac{\sigma(r)}{\hat{\sigma}r^2}dr\]</span></p>
 </details>
 After deriving the growth equation, you can integrate over <span class="math inline">\(\hat{\sigma}\)</span> and perform nondimensionalization to get
 <details>
