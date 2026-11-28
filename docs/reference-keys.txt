@@ -24,12 +24,9 @@ fig:kz-bif-checkpoint
 fig:normal-distributions
 fig:chi-squared-distributions
 fig:t-distributions
-fig:exponential-distributions
-fig:weibull-distributions
-tab:prostate-table
+fig:f-distributions
 fig:prostate-regression
 fig:prostate-diagnostics
-tab:prostate-logistic-table
 fig:prostate-logistic-plots
 welcome
 introduction
@@ -88,8 +85,7 @@ continuous-probability-distributions
 normal-distribution
 chi-squared-distribution
 students-t-distribution
-exponential-distribution
-weibull-distribution
+f-distribution
 simple-linear-regression
 the-simple-linear-regression-model
 least-squares-estimation
@@ -104,6 +100,8 @@ the-multiple-linear-regression-model
 least-squares-estimation-of-the-regression-coefficients
 interpretation-of-the-regression-coefficients
 sampling-distribution-of-the-least-squares-estimators
+hypothesis-testing-and-confidence-intervals-for-the-regression-coefficients
+overall-significance-of-the-regression-model
 logistic-regression
 the-logistic-regression-model
 estimation-of-regression-coefficients
@@ -111,4 +109,6 @@ interpretation-of-regression-coefficients-1
 statistical-inference-in-logistic-regression
 sampling-distribution-of-the-slope-estimator-1
 hypothesis-testing-and-confidence-intervals-for-the-slope-1
+confusion-matrix
+multiple-logistic-regression
 hello

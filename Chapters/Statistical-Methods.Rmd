@@ -86,12 +86,35 @@ Suppose a clinical trial involves $100$ patients receiving a particular cancer t
 
 The expected number of patients who respond is $E(X)=100(0.7)=70$. 
 
-Also, the probability that at least $80$ patients respond to the treatment is
+Also, the probability that more than $72$ patients respond to the treatment is
 
 $$
-P(X \geq 80) = \sum_{x = 80}^{100} \binom{100}{x} (0.7)^x (0.3)^{100-x} \approx 0.01646285
+P(X > 72) = \sum_{x = 73}^{100} \binom{100}{x} (0.7)^x (0.3)^{100-x} \approx 0.2963662
 $$
+Experiment with changing the values of $n$, $p$, and the threshold to investigate how the probability changes.
 
+```{=html}
+<div class="webr-exercise">
+<div class="webr-exercise-header">Binomial Distribution</div>
+
+<textarea class="webr-editor" rows="10">
+# Parameters
+n <- 100
+p <- 0.7
+
+# Calculate P(X > 72)
+pbinom(72, size = n, prob = p, lower.tail = FALSE)
+</textarea>
+
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
+```
 
 
 ### Continuous Probability Distributions
@@ -453,7 +476,38 @@ Note that a linear association between the response and explanatory variables do
 
 To illustrate the application of simple linear regression in oncology, we consider prostate cancer dataset available in the `faraway` package in R. The dataset contains clinical measurements from 97 men with prostate cancer, including tumour volume, prostate-specific antigen (PSA) levels, age, and other patient characteristics. PSA is a protein produced by cells in the prostate gland, and its concentration in the blood is commonly used in the assessment and monitoring of prostate cancer. 
 
-We are interested in investigating the relationship between tumour volume and PSA levels. Since both variables are right-skewed, we consider their logarithmic transformations, which provide a more suitable basis for linear regression. Let \(X_i\) denote the log PSA level and \(Y_i\) denote the log tumour volume of patient \(i\). Below are the plots for the relationship between PSA levels and tumour volumes for 97 men. The exact values can be found in R.  
+We are interested in investigating the relationship between tumour volume and PSA levels. Since both variables are right-skewed, we consider their logarithmic transformations, which provide a more suitable basis for linear regression. Let \(X_i\) denote the log PSA level (`lpsa`) and \(Y_i\) denote the log tumour volume (`lcavol`) of patient \(i\). 
+
+Run the following code to display the observations.
+
+```{=html}
+<div class="webr-exercise">
+<div class="webr-exercise-header">Prostate Cancer Data</div>
+
+<textarea class="webr-editor" rows="10">
+# Load prostate cancer data
+prostate <- read.csv("prostate.csv")
+
+# Define variables
+X <- prostate$lpsa
+Y <- prostate$lcavol
+
+# Display observations
+observations <- data.frame(X, Y)
+
+print(observations)
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
+```
+
+Below are the plots for the relationship between PSA levels and tumour volumes for 97 men. 
 
 ```{r prostate-regression, echo=FALSE, message=FALSE, warning=FALSE, fig.width=11, fig.height=4.5, fig.align='center', fig.cap="Relationship between log tumour volume and log PSA levels, with the fitted regression line and associated residuals."}
 library(faraway)
@@ -655,7 +709,52 @@ $$
 $$
 
 
-We wish to fit the prostate cancer data. We obtain $\bar{x}= 2.478387,$ $\bar{y}= 1.35001,$ $S_{xx}= 127.9176,$ and $S_{xy}= 95.92784$. 
+We wish to fit the prostate cancer data.
+```{=html}
+<div class="webr-exercise">
+<div class="webr-exercise-header">Estimation of SLR Coefficients</div>
+
+<textarea class="webr-editor" rows="20">
+# Load the dataset
+prostate <- read.csv("prostate.csv")
+
+# Define variables
+x <- prostate$lpsa
+y <- prostate$lcavol
+
+# Calculate sample means
+x_bar <- mean(x)
+y_bar <- mean(y)
+
+# Calculate Sxx and Sxy
+Sxx <- sum((x - x_bar)^2)
+Sxy <- sum((x - x_bar) * (y - y_bar))
+
+# Calculate the LSEs
+beta1_hat <- Sxy / Sxx
+beta0_hat <- y_bar - beta1_hat * x_bar
+
+# Display the estimates
+cat("Intercept:", beta0_hat, "\n")
+cat("Slope:", beta1_hat, "\n")
+
+# Alternatively, R can calculate the least-squares estimates directly
+# Verify using R's lm() function
+model <- lm(y ~ x)
+
+coef(model)
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
+```
+
+We obtain $\bar{x}= 2.478387,$ $\bar{y}= 1.35001,$ $S_{xx}= 127.9176,$ and $S_{xy}= 95.92784$. 
 
 Plugging these values into the OLS estimators for $\beta_0$ and $\beta_1$, we get
 $$ 
@@ -819,6 +918,54 @@ $$
 Notice that $0\leq R^2\leq 1$
 
 An $R^2$ value closer to one indicates that the fitted regression model accounts for a greater proportion of the observed variability in the response variable. Conversely, an $R^2$ value closer to zero indicates that the model accounts for relatively little of the observed variability.
+
+```{=html}
+<div class="webr-exercise">
+<div class="webr-exercise-header">Calculating R-Squared</div>
+
+<textarea class="webr-editor" rows="20">
+# Load the dataset
+prostate <- read.csv("prostate.csv")
+
+# Define variables
+x <- prostate$lpsa
+y <- prostate$lcavol
+
+# Calculate sample means
+x_bar <- mean(x)
+y_bar <- mean(y)
+
+# Fit the SLR model
+model <- lm(y ~ x)
+
+# Calculate fitted values
+y_hat <- fitted(model)
+
+# Calculate SSE and SST
+SSE <- sum((y - y_hat)^2)
+SST <- sum((y - y_bar)^2)
+
+# Calculate R-squared
+R_squared <- 1 - SSE / SST
+
+# Display results
+cat("SSE:", SSE, "\n")
+cat("SST:", SST, "\n")
+cat("R-squared:", R_squared, "\n")
+
+# Verify using R
+summary(model)$r.squared
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
+```
+
 
 Using the prostate cancer data, we can compute $SSE \approx 61.4209$ and $SST \approx 133.359$. We get that $R^2 = 1 - \frac{61.4209}{133.359}\approx 0.5394$. This indicates that approximately $53.94\%$ of the total variation in log tumour volume is explained by the linear relationship with log PSA level. The remaining $46.06\%$ of the variation is not explained by the model and may be associated with other factors or random variability.
 
@@ -1077,6 +1224,8 @@ We are $95\%$ confident that the true population slope lies between $0.6088$ and
 
 Furthermore, since the confidence interval contains strictly positive values, there is evidence of a statistically significant positive linear relationship between log tumour volume and log PSA levels at the $5\%$ significance level, further verifying the result found in our hypothesis test.
 
+
+
 ## Multiple Linear Regression
 
 Simple linear regression models the relationship between a continuous response variable and a single explanatory variable. However, in many applications, the response variable may depend on several explanatory variables simultaneously. For example, in oncology, tumour size, patient age, treatment type, and other clinical characteristics may all be associated with a patient's response to treatment.
@@ -1199,6 +1348,39 @@ $$
 
 Our objective is to investigate the relationship between each of these explanatory variables and log tumour volume while holding the remaining explanatory variables constant. Furthermore, we are interested in determining whether these clinical characteristics can be used collectively to estimate tumour volume.
 
+Run the following code to display the observations used in the multiple linear regression model.
+
+```{=html}
+<div class="webr-exercise">
+<div class="webr-exercise-header">Multiple Linear Regression Data</div>
+
+<textarea class="webr-editor" rows="12">
+# Load the dataset
+prostate <- read.csv("prostate.csv")
+
+# Select the variables
+observations <- data.frame(
+  Y = prostate$lcavol,
+  X1 = prostate$lpsa,
+  X2 = prostate$lweight,
+  X3 = prostate$age
+)
+
+# Display all observations
+print(observations)
+
+# Display the number of observations
+cat("Number of observations:", nrow(observations), "\n")
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
+```
 
 ### Least Squares Estimation of the Regression Coefficients
 
@@ -1372,7 +1554,54 @@ $$
 \hat{\mathbf{Y}}=\mathbf{X}\hat{\boldsymbol{\beta}},
 $$
 
-Using R for the prostate cancer data, we obtain $\hat{\beta}_0 = -0.91121$,  $\hat{\beta}_1 = -0.76782$,  $\hat{\beta}_2 = -0.26773$, and  $\hat{\beta}_3 = 0.02092$. Thus, the fitted model is $$\boxed{\hat{Y}_i = -0.91121  - 0.76782 x_{i1} - 0.26773 x_{i2} + 0.02092 x_{i3}}$$
+```{=html}
+<div class="webr-exercise">
+<div class="webr-exercise-header">Estimation of MLR Coefficients</div>
+
+<textarea class="webr-editor" rows="25">
+# Load the dataset
+prostate <- read.csv("prostate.csv")
+
+# Define the response vector
+Y <- as.matrix(prostate$lcavol)
+
+# Define the design matrix
+X <- cbind(
+  1,
+  prostate$lpsa,
+  prostate$lweight,
+  prostate$age
+)
+
+# Calculate X transpose X
+XtX <- t(X) %*% X
+
+# Calculate X transpose Y
+XtY <- t(X) %*% Y
+
+# Calculate the LSEs
+beta_hat <- solve(XtX) %*% XtY
+
+# Display the estimated coefficients
+print(beta_hat)
+
+# Verify using R's lm() function
+model <- lm(lcavol ~ lpsa  + lweight + age,
+            data = prostate)
+
+coef(model)
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
+```
+
+Using R for the prostate cancer data, we obtain $\hat{\beta}_0 = -0.91121$,  $\hat{\beta}_1 = 0.76782$,  $\hat{\beta}_2 = -0.26773$, and  $\hat{\beta}_3 = 0.02092$. Thus, the fitted model is $$\boxed{\hat{Y}_i = -0.91121  + 0.76782 x_{i1} - 0.26773 x_{i2} + 0.02092 x_{i3}}$$
 
 ### Interpretation of the Regression Coefficients
 
@@ -1670,7 +1899,37 @@ T:|T|>1.9858
 \right\}.
 $$
 
-Using the estimated regression coefficients and their corresponding standard errors obtained in R, we calculate the observed test statistics as follows:
+Using the estimated regression coefficients and their corresponding standard errors obtained in R, we calculate the observed test statistics using the R summary as follows:
+
+
+```{=html}
+<div class="webr-exercise">
+<div class="webr-exercise-header">Hypothesis Testing for MLR Coefficients</div>
+
+<textarea class="webr-editor" rows="12">
+# Load the dataset
+prostate <- read.csv("prostate.csv")
+
+# Fit the multiple linear regression model
+model <- lm(
+  lcavol ~ lpsa + lweight + age,
+  data = prostate
+)
+
+# Display the regression summary
+summary(model)
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
+```
+
+
 
 $$
 \begin{aligned}
@@ -1792,6 +2051,43 @@ F:F>2.7025
 \right\}.
 $$
 
+```{=html}
+<div class="webr-exercise">
+<div class="webr-exercise-header">Overall Significance of the MLR Model</div>
+
+<textarea class="webr-editor" rows="16">
+# Load the dataset
+prostate <- read.csv("prostate.csv")
+
+# Fit the MLR model
+model <- lm(lcavol ~ lpsa + age + lweight,
+            data = prostate)
+
+# Display model summary
+summary(model)
+
+# Extract F-statistic and degrees of freedom
+F_info <- summary(model)$fstatistic
+
+# Critical value at alpha = 0.05
+F_critical <- qf(0.95, F_info[2], F_info[3])
+
+# Apply rejection region
+cat("F-statistic:", F_info[1], "\n")
+cat("Critical value:", F_critical, "\n")
+
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
+```
+
+
 Using R, we obtain the observed test statistic $F=39.48$. Since $39.48>2.7025,$ the observed test statistic falls within the rejection region. Therefore, we reject $H_0$ at the $5\%$ significance level.
 
 We conclude that there is statistically significant evidence that at least one of the three explanatory variables is linearly associated with log tumour volume, after accounting for the remaining explanatory variables. Thus, the multiple linear regression model provides a statistically significant improvement over the intercept-only model.
@@ -1854,8 +2150,37 @@ Notice that logistic regression models the logarithm of the odds as a linear fun
 
 To illustrate the application of logistic regression in oncology, we again consider the prostate cancer dataset available in the `faraway` package in R. Seminal vesicle invasion (SVI) occurs when prostate cancer spreads into the seminal vesicles, which are glands located near the prostate.
 
-We are interested in investigating the relationship between tumour volume and the probability of seminal vesicle invasion. Since seminal vesicle invasion is a binary outcome, logistic regression is appropriate for modelling its probability. We consider the logarithmic transformation of tumour volume as our explanatory variable. Let $x_i$ denote the log tumour volume and $Y_i$ denote the presence of seminal vesicle invasion for patient $i$, where $Y_i=1$ indicates invasion and $Y_i=0$ indicates no invasion. Below is a plot illustrating the relationshi p between these variables for 97 men. Exact values can be found in R. 
+We are interested in investigating the relationship between tumour volume and the probability of seminal vesicle invasion. Since seminal vesicle invasion is a binary outcome, logistic regression is appropriate for modelling its probability. We consider the logarithmic transformation of tumour volume as our explanatory variable. Let $x_i$ denote the log tumour volume and $Y_i$ denote the presence of seminal vesicle invasion for patient $i$, where $Y_i=1$ indicates invasion and $Y_i=0$ indicates no invasion. 
+Run the following code to display the observations used in the logistic regression model.
 
+```{=html}
+<div class="webr-exercise">
+<div class="webr-exercise-header">Logistic Regression Data</div>
+
+<textarea class="webr-editor" rows="12">
+# Load the dataset
+prostate <- read.csv("prostate.csv")
+
+# Select the variables
+observations <- data.frame(
+  Y = prostate$svi,
+  X = prostate$lcavol
+)
+
+# Display all observations
+print(observations)
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
+```
+
+Below is a plot illustrating the relationship between these variables for 97 men.
 
 ```{r prostate-logistic-plots, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=4.5, fig.align='center', fig.cap="Relationship between log tumour volume and seminal vesicle invasion."}
 library(ggplot2)
@@ -1983,6 +2308,36 @@ y_i-\frac{\exp(\hat{\beta}_0+\hat{\beta}_1x_i)}
 $$
 
 Unlike the least squares estimators in simple linear regression, these equations do not generally have closed-form solutions. Instead, iterative methods such as the Newton--Raphson algorithm are used to obtain $\hat{\beta}_0$ and $\hat{\beta}_1$.
+
+
+```{=html}
+<div class="webr-exercise">
+<div class="webr-exercise-header">Estimation of Logistic Regression Coefficients</div>
+
+<textarea class="webr-editor" rows="14">
+# Load the dataset
+prostate <- read.csv("prostate.csv")
+
+# Fit the logistic regression model
+model <- glm(
+  svi ~ lcavol,
+  data = prostate,
+  family = binomial(link = "logit")
+)
+
+# Obtain estimated coefficients
+coef(model)
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
+```
+
 
 Using R, we obtain $\hat{\beta}_0=-5.0296$ and $\hat{\beta}_1=1.9798$ for the prostate cancer study. Thus, the fitted logistic regression model is
 
@@ -2178,17 +2533,45 @@ OR_lower <- exp(CI_lower)
 OR_upper <- exp(CI_upper)
 ```
 
-Using R, we obtain $\hat{\beta}_1= 1.9798$ and $SE(\hat{\beta}_1)=1.0429$. Therefore, the observed test statistic is
+```{=html}
+<div class="webr-exercise">
+<div class="webr-exercise-header">Hypothesis Test and Confidence Interval for Logistic Regression</div>
+
+<textarea class="webr-editor" rows="12">
+# Load the dataset
+prostate <- read.csv("prostate.csv")
+
+# Fit logistic regression
+model <- glm(svi ~ lcavol, data = prostate,
+             family = binomial)
+
+# Hypothesis test for coefficients
+summary(model)$coefficients
+
+# 95% Wald confidence intervals
+confint.default(model)
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
+```
+
+Using R, we obtain $\hat{\beta}_1= 1.9798$ and $SE(\hat{\beta}_1)=0.4543$. Therefore, the observed test statistic is
 
 $$
-Z = \frac{1.9798}{1.0429} \approx 1.8984
+Z = \frac{1.9798}{0.45432} \approx 4.357913
 $$
 
-Since $1.8984 \notin R^*$, there is insufficient statistical evidence to conclude that log tumour volume is associated with the log-odds of seminal vesicle invasion.`
+Since $4.357913 \in R^*$, there is sufficient statistical evidence to conclude that log tumour volume is associated with the log-odds of seminal vesicle invasion.`
 
 A $95\%$ confidence interval for $\beta_1$ is 
 $$ 
-1.9798 \pm 1.96 (1.0429)=\boxed{(-0.0643,  4.0239)}
+1.9798 \pm 1.96 (0.4543)=\boxed{(1.0893,  2.8702)}
 $$
 
 We are $95\%$ confident that the true change in the log-odds of seminal vesicle invasion for a one-unit increase in log tumour volume lies within this interval.
@@ -2241,60 +2624,51 @@ To illustrate this using the prostate cancer dataset, we consider our simple log
 
 Using R, we obtain the confusion matrix.
 
-```{r prostate-simple-logistic-confusion, echo=FALSE, message=FALSE, warning=FALSE}
-library(faraway)
-data(prostate, package = "faraway")
 
-model_logistic <- glm(
-  svi ~ lcavol,
-  data = prostate,
-  family = binomial
-)
+```{=html}
+<div class="webr-exercise">
+<div class="webr-exercise-header">Confusion Matrix and Classification Performance</div>
 
-# Predicted probabilities
-predicted_prob <- predict(
-  model_logistic,
-  type = "response"
-)
+<textarea class="webr-editor" rows="20">
+# Load the dataset
+prostate <- read.csv("prostate.csv")
+
+# Fit logistic regression
+model <- glm(svi ~ lcavol, data = prostate,
+             family = binomial)
 
 # Predicted classifications
-predicted_class <- ifelse(predicted_prob >= 0.5, 1, 0)
+predicted <- as.integer(predict(model, type = "response") >= 0.5)
 
 # Confusion matrix
-cm <- table(
-  Actual = factor(prostate$svi, levels = c(0, 1)),
-  Predicted = factor(predicted_class, levels = c(0, 1))
+CM <- table(
+  Actual = factor(prostate$svi, levels = 0:1),
+  Predicted = factor(predicted, levels = 0:1)
 )
 
-# Classification measures
-TN <- cm[1, 1]
-FP <- cm[1, 2]
-FN <- cm[2, 1]
-TP <- cm[2, 2]
+print(CM)
 
-accuracy <- (TP + TN) / sum(cm)
-sensitivity <- TP / (TP + FN)
-specificity <- TN / (TN + FP)
+# Extract outcomes
+TN <- CM[1,1]
+FP <- CM[1,2]
+FN <- CM[2,1]
+TP <- CM[2,2]
+
+# Classification performance
+cat("Accuracy:", (TP + TN) / sum(CM), "\n")
+cat("Sensitivity:", TP / (TP + FN), "\n")
+cat("Specificity:", TN / (TN + FP), "\n")
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
 ```
 
-The resulting confusion matrix is displayed in Table \@ref(tab:prostate-simple-confusion-table).
-
-```{r prostate-simple-confusion-table, echo=FALSE, message=FALSE, warning=FALSE}
-library(knitr)
-
-confusion_table <- data.frame(
-  Actual = c("No SVI (0)", "SVI (1)"),
-  `Predicted 0` = c(TN, FN),
-  `Predicted 1` = c(FP, TP),
-  check.names = FALSE
-)
-
-kable(
-  confusion_table,
-  row.names = FALSE,
-  caption = "Confusion matrix for the simple logistic regression model."
-)
-```
 
 Using the fitted model, we obtain an accuracy of $0.866$, a sensitivity of $0.619$, and a specificity of $0.9342$.
 
@@ -2397,4 +2771,54 @@ $$
 \hat{\beta}_j\pm z_{1-\alpha/2}SE(\hat{\beta}_j).
 }
 $$
+
+Again, consider the prosate cancer data. Let $Y$ denote seminal vesicle invasion, with explanatory variables $x_1$ representing log tumour volume, $x_2$ representing log PSA level , and $x_3$ representing age.
+
+The multiple logistic regression model is
+
+$$
+\log\left(\frac{p_i}{1-p_i}\right)
+= \beta_0+\beta_1x_{i1}+\beta_2x_{i2}+\beta_3x_{i3},
+$$
+
+where $p_i=P(Y_i=1\mid x_{i1},x_{i2},x_{i3})$.
+
+For each coefficient, we test $H_0:\beta_j=0$ versus $H_1:\beta_j\neq 0$. At the $\alpha=0.05$ significance level, we reject $H_0$ if $|Z_j|>z_{0.975}\approx 1.96$.
+
+
+```{=html}
+<div class="webr-exercise">
+<div class="webr-exercise-header">Multiple Logistic Regression: Hypothesis Testing</div>
+
+<textarea class="webr-editor" rows="14">
+# Load the dataset
+prostate <- read.csv("prostate.csv")
+
+# Fit multiple logistic regression
+model <- glm(
+  svi ~ lcavol + lpsa + age,
+  data = prostate,
+  family = binomial
+)
+
+# Display model summary
+summary(model)
+
+# Critical value at alpha = 0.05
+qnorm(0.975)
+
+# 95% Wald confidence intervals
+confint.default(model)
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
+```
+
+At the $\alpha=0.05$ significance level, both log tumour volume and log PSA level are statistically significant predictors of seminal vesicle invasion, with $|Z|=2.188$ and $|Z|=2.604$, respectively. However, age is not statistically significant, since $|Z|=0.814<1.96$. Therefore, we reject $H_0$ for the coefficients of log tumour volume and log PSA level, but fail to reject $H_0$ for age. These results suggest that log tumour volume and log PSA level are positively associated with the odds of seminal vesicle invasion after adjusting for the other variables in the model, whereas there is insufficient evidence of an association with age. This is further shown through the confidence intervals, as the confidence interval for age contains $0$. 
 

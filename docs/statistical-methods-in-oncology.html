@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 6 Statistical Methods in Oncology | sample2</title>
   <meta name="description" content="Chapter 6 Statistical Methods in Oncology | sample2" />
-  <meta name="generator" content="bookdown 0.45 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.48 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 6 Statistical Methods in Oncology | sample2" />
   <meta property="og:type" content="book" />
@@ -51,6 +51,395 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<!-- webR Interactive R Exercise Cells -->
+<!-- Loaded via _output.yml in_header for bookdown::gitbook -->
+
+<style>
+/* ── Loading indicator ── */
+#webr-loading-indicator {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  font-size: 0.85rem;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid #dee2e6;
+  background-color: #f8f8f8;
+  border-top-left-radius: 5px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #212529;
+  font-family: sans-serif;
+}
+#webr-loading-indicator.webr-ready { display: none; }
+#webr-loading-indicator.webr-error {
+  background-color: #f8d7da;
+  border-color: #f1aeb5;
+  color: #58151c;
+}
+
+/* ── Exercise card ── */
+.webr-exercise {
+  margin: 0.5rem 0;
+  border: 1px solid rgba(0,0,0,0.175);
+  border-radius: 0.375rem;
+  overflow: hidden;
+  font-family: sans-serif;
+  font-size: 0.85em;
+  background: #fff;
+}
+
+/* ── Card header ── */
+.webr-exercise-header {
+  padding: 0.25rem 0.6rem;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid rgba(0,0,0,0.175);
+  font-weight: 600;
+  color: #212529;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.webr-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-shrink: 0;
+}
+
+/* ── Run button ── */
+.webr-run-btn {
+  padding: 0.1rem 0.5rem;
+  font-size: 0.8em;
+  color: #fff;
+  background-color: #0d6efd;
+  border: 1px solid #0d6efd;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  font-family: sans-serif;
+  white-space: nowrap;
+  transition: background-color 0.15s;
+}
+.webr-run-btn:hover:not(:disabled) { background-color: #0b5ed7; }
+.webr-run-btn:disabled { opacity: 0.65; cursor: not-allowed; }
+
+/* ── Reset button ── */
+.webr-reset-btn {
+  padding: 0.1rem 0.5rem;
+  font-size: 0.8em;
+  color: #6c757d;
+  background-color: transparent;
+  border: 1px solid #6c757d;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  font-family: sans-serif;
+  white-space: nowrap;
+  transition: background-color 0.15s, color 0.15s;
+}
+.webr-reset-btn:hover { background-color: #6c757d; color: #fff; }
+
+/* ── Textarea code editor ── */
+.webr-editor {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 0.4rem 0.6rem;
+  background: #fff;
+  color: #212529;
+  border: none;
+  border-bottom: 1px solid #dee2e6;
+  resize: vertical;
+  outline: none;
+  overflow: auto;
+}
+.webr-editor:focus {
+  background: #fafcff;
+}
+
+/* ── Hide original controls (moved to header by JS) ── */
+.webr-controls { display: none; }
+
+/* ── Output area ── */
+.webr-output-area {
+  padding: 0.3rem 0.6rem;
+  background: #fff;
+  color: #212529;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border-top: 1px solid #dee2e6;
+  display: none;
+}
+.webr-output-area.webr-has-output { display: block; }
+.webr-output-area.webr-error-output { color: #ad0000; background: #fff8f8; }
+
+/* ── Plot area ── */
+.webr-canvas-area {
+  padding: 0.5rem;
+  background: #fff;
+  text-align: center;
+  display: none;
+  border-top: 1px solid #dee2e6;
+}
+.webr-canvas-area.webr-has-plot { display: block; }
+.webr-canvas-area canvas {
+  max-width: 100%;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+}
+</style>
+
+<div id="webr-loading-indicator">
+  <span id="webr-loading-text">⏳ Loading R engine…</span>
+</div>
+
+<script type="module">
+import { WebR } from 'https://webr.r-wasm.org/latest/webr.mjs';
+
+let webR;
+let webRReady = false;
+
+const indicator     = document.getElementById('webr-loading-indicator');
+const indicatorText = document.getElementById('webr-loading-text');
+
+function setStatus(msg, cssClass) {
+  if (!indicator) return;
+  indicatorText.textContent = msg;
+  indicator.className = cssClass || '';
+}
+
+async function initWebR() {
+  try {
+    webR = new WebR({ interactive: false });
+    await webR.init();
+    setStatus('📦 Installing packages… (first visit only)', '');
+    await webR.installPackages(['ggplot2']);
+    await webR.evalRVoid('suppressMessages(library(ggplot2))');
+
+    // Inline CSV data — no fetch() needed, works with file:// and http://
+    const csvData = {
+      'prostate.csv': `
+"lcavol","lweight","age","lbph","svi","lcp","gleason","pgg45","lpsa"
+-0.5798185,2.7695,50,-1.386294,0,-1.38629,6,0,-0.43078
+-0.9942523,3.3196,58,-1.386294,0,-1.38629,6,0,-0.16252
+-0.5108256,2.6912,74,-1.386294,0,-1.38629,7,20,-0.16252
+-1.2039728,3.2828,58,-1.386294,0,-1.38629,6,0,-0.16252
+0.7514161,3.4324,62,-1.386294,0,-1.38629,6,0,0.37156
+-1.0498221,3.2288,50,-1.386294,0,-1.38629,6,0,0.76547
+0.7371641,3.4735,64,0.615186,0,-1.38629,6,0,0.76547
+0.6931472,3.5395,58,1.536867,0,-1.38629,6,0,0.85442
+-0.7765288,3.5395,47,-1.386294,0,-1.38629,6,0,1.04732
+0.2231436,3.2445,63,-1.386294,0,-1.38629,6,0,1.04732
+0.2546422,3.6041,65,-1.386294,0,-1.38629,6,0,1.26695
+-1.3470736,3.5987,63,1.266948,0,-1.38629,6,0,1.26695
+1.6134299,3.0229,63,-1.386294,0,-0.59784,7,30,1.26695
+1.4770487,2.9982,67,-1.386294,0,-1.38629,7,5,1.34807
+1.2059708,3.442,57,-1.386294,0,-0.43078,7,5,1.39872
+1.5411591,3.0611,66,-1.386294,0,-1.38629,6,0,1.44692
+-0.4155154,3.516,70,1.244155,0,-0.59784,7,30,1.47018
+2.2884862,3.6494,66,-1.386294,0,0.37156,6,0,1.4929
+-0.5621189,3.2677,41,-1.386294,0,-1.38629,6,0,1.55814
+0.1823216,3.8254,70,1.658228,0,-1.38629,6,0,1.59939
+1.1474025,3.4194,59,-1.386294,0,-1.38629,6,0,1.639
+2.0592388,3.501,60,1.474763,0,1.34807,7,20,1.65823
+-0.5447272,3.3759,59,-0.798508,0,-1.38629,6,0,1.69562
+1.7817091,3.4516,63,0.438255,0,1.17865,7,60,1.7138
+0.3852624,3.6674,69,1.599388,0,-1.38629,6,0,1.73166
+1.446919,3.1246,68,0.300105,0,-1.38629,6,0,1.76644
+0.5128236,3.7197,65,-1.386294,0,-0.79851,7,70,1.80006
+-0.4004776,3.866,67,1.816452,0,-1.38629,7,20,1.81645
+1.0402767,3.129,67,0.223144,0,0.04879,7,80,1.84845
+2.4096442,3.3759,65,-1.386294,0,1.61939,6,0,1.89462
+0.2851789,4.0902,65,1.962908,0,-0.79851,6,0,1.92425
+0.1823216,6.1076,65,1.704748,0,-1.38629,6,0,2.00821
+1.2753628,3.0374,71,1.266948,0,-1.38629,6,0,2.00821
+0.0099503,3.2677,54,-1.386294,0,-1.38629,6,0,2.02155
+-0.0100503,3.2169,63,-1.386294,0,-0.79851,6,0,2.04769
+1.3083328,4.1198,64,2.171337,0,-1.38629,7,5,2.08567
+1.4231083,3.6571,73,-0.579818,0,1.65823,8,15,2.15756
+0.4574248,2.3749,64,-1.386294,0,-1.38629,7,15,2.19165
+2.6609586,4.0851,68,1.373716,1,1.83258,7,35,2.21375
+0.7975072,3.0131,56,0.936093,0,-0.16252,7,5,2.27727
+0.6205765,3.142,60,-1.386294,0,-1.38629,9,80,2.29757
+1.442202,3.6826,68,-1.386294,0,-1.38629,7,10,2.30757
+0.5822156,3.866,62,1.713798,0,-0.43078,6,0,2.32728
+1.7715568,3.8969,61,-1.386294,0,0.81093,7,6,2.37491
+1.4861397,3.4095,66,1.7492,0,-0.43078,7,20,2.52172
+1.6639261,3.3928,61,0.615186,0,-1.38629,7,15,2.55334
+2.7278528,3.9954,79,1.879465,1,2.65676,9,100,2.56879
+1.1631508,4.0351,68,1.713798,0,-0.43078,7,40,2.56879
+1.7457155,3.498,43,-1.386294,0,-1.38629,6,0,2.59152
+1.2208299,3.5681,70,1.373716,0,-0.79851,6,0,2.59152
+1.0919233,3.9936,68,-1.386294,0,-1.38629,7,50,2.65676
+1.660131,4.2348,64,2.073172,0,-1.38629,6,0,2.67759
+0.5128236,3.6336,64,1.492904,0,0.04879,7,70,2.68444
+2.1270405,4.1215,68,1.766442,0,1.44692,7,40,2.69124
+3.1535904,3.516,59,-1.386294,0,-1.38629,7,5,2.70471
+1.2669476,4.2801,66,2.122262,0,-1.38629,7,15,2.718
+0.9745596,2.8651,47,-1.386294,0,0.50078,7,4,2.78809
+0.463734,3.7647,49,1.423108,0,-1.38629,6,0,2.79423
+0.5423243,4.1782,70,0.438255,0,-1.38629,7,20,2.80639
+1.0612565,3.8512,61,1.294727,0,-1.38629,7,40,2.81241
+0.4574248,4.5245,73,2.326302,0,-1.38629,6,0,2.842
+1.9974177,3.7197,63,1.619388,1,1.90954,7,40,2.85359
+2.7757088,3.5249,72,-1.386294,0,1.55814,9,95,2.85359
+2.0347056,3.917,66,2.008214,1,2.11021,7,60,2.882
+2.0731719,3.623,64,-1.386294,0,-1.38629,6,0,2.882
+1.458615,3.8362,61,1.321756,0,-0.43078,7,20,2.88759
+2.0228712,3.8785,68,1.783391,0,1.32176,7,70,2.92047
+2.1983351,4.0509,72,2.307573,0,-0.43078,7,10,2.96269
+-0.4462871,4.4085,69,-1.386294,0,-1.38629,6,0,2.96269
+1.1939225,4.7804,72,2.326302,0,-0.79851,7,5,2.97298
+1.8640801,3.5932,60,-1.386294,1,1.32176,7,60,3.01308
+1.1600209,3.3411,77,1.7492,0,-1.38629,7,25,3.03735
+1.2149127,3.8254,69,-1.386294,1,0.22314,7,20,3.05636
+1.8389611,3.2367,60,0.438255,1,1.17865,9,90,3.07501
+2.9992262,3.8491,69,-1.386294,1,1.90954,7,20,3.27526
+3.1411305,3.2638,68,-0.051293,1,2.42037,7,50,3.33755
+2.010895,4.4338,72,2.122262,0,0.50078,7,60,3.39283
+2.5376572,4.3548,78,2.326302,0,-1.38629,7,10,3.4356
+2.6483002,3.5821,69,-1.386294,1,2.584,7,70,3.45789
+2.7794402,3.8232,63,-1.386294,0,0.37156,7,50,3.51304
+1.4678743,3.0704,66,0.559616,0,0.22314,7,40,3.51601
+2.5136561,3.4735,57,0.438255,0,2.32728,7,60,3.53076
+2.6130067,3.8888,77,-0.527633,1,0.55962,7,30,3.5653
+2.677591,3.8384,65,1.115142,0,1.7492,9,70,3.57094
+1.5623463,3.7099,60,1.695616,0,0.81093,7,30,3.58768
+3.3028493,3.519,64,-1.386294,1,2.32728,7,60,3.63099
+2.0241931,3.7317,58,1.638997,0,-1.38629,6,0,3.68009
+1.7316555,3.369,62,-1.386294,1,0.3001,7,30,3.71235
+2.8075938,4.7181,65,-1.386294,1,2.46385,7,60,3.98434
+1.5623463,3.6951,76,0.936093,1,0.81093,7,75,3.9936
+3.246491,4.1018,68,-1.386294,0,-1.38629,6,0,4.02981
+2.5329028,3.6776,61,1.348073,1,-1.38629,7,15,4.12955
+2.8302678,3.8764,68,-1.386294,1,1.32176,7,60,4.38515
+3.8210036,3.8969,44,-1.386294,1,2.16905,7,40,4.68444
+2.9074474,3.3962,52,-1.386294,1,2.46385,7,10,5.14312
+2.8825636,3.7739,68,1.558145,1,1.55814,7,80,5.47751
+3.4719665,3.975,68,0.438255,1,2.90417,7,20,5.58293
+`,
+      'Academic_Performance_A.csv': `student_id,Exam_Score\n1,72\n2,68\n3,85\n4,79\n5,91\n6,74\n7,66\n8,83\n9,77\n10,88\n11,70\n12,65\n13,82\n14,76\n15,90\n16,73\n17,69\n18,84\n19,78\n20,87\n21,71\n22,80\n23,75\n24,92\n25,67`,
+      'sleep_study.csv': `subject_id,hours\n1,7.2\n2,6.8\n3,8.1\n4,7.5\n5,6.5\n6,7.9\n7,7.0\n8,8.3\n9,6.7\n10,7.4\n11,8.0\n12,7.2\n13,6.9\n14,7.8\n15,8.2\n16,7.1\n17,6.6\n18,7.7\n19,8.0\n20,7.3`,
+      'student_admission.csv': `student_id,admitted\n1,1\n2,1\n3,0\n4,1\n5,1\n6,0\n7,1\n8,1\n9,0\n10,1\n11,1\n12,0\n13,1\n14,1\n15,1\n16,0\n17,1\n18,1\n19,0\n20,1\n21,1\n22,1\n23,0\n24,1\n25,1\n26,0\n27,1\n28,1\n29,1\n30,0\n31,1\n32,1\n33,0\n34,1\n35,1\n36,1\n37,0\n38,1\n39,1\n40,0\n41,1\n42,1\n43,1\n44,0\n45,1\n46,1\n47,0\n48,1\n49,1\n50,1\n51,0\n52,1\n53,1\n54,1\n55,0\n56,1\n57,1\n58,0\n59,1\n60,1\n61,1\n62,0\n63,1\n64,1\n65,0\n66,1\n67,1\n68,1\n69,0\n70,1\n71,1\n72,0\n73,1\n74,1\n75,1\n76,0\n77,1\n78,1\n79,0\n80,1`,
+      'plant_yield.csv': `fertilizer_a,fertilizer_b\n52.1,45.3\n48.7,42.8\n55.3,48.1\n49.2,43.6\n53.8,46.9\n47.5,41.2\n56.1,49.4\n50.4,44.7\n54.6,47.5\n48.1,42.3\n51.9,45.8\n53.2,46.1\n49.8,43.9\n55.7,48.6\n50.0,44.2`,
+      'braking_dist.csv': `distance,car\n34.2,X\n36.1,X\n33.8,X\n35.4,X\n34.9,X\n36.7,X\n33.5,X\n35.2,X\n34.6,X\n36.3,X\n33.9,X\n35.8,X\n31.5,Y\n38.4,Y\n29.8,Y\n40.2,Y\n33.1,Y\n37.6,Y\n30.4,Y\n39.7,Y\n32.8,Y\n38.1,Y\n31.2,Y\n40.5,Y`,
+      'ch8-study-methods.csv': `method,score\nLecture,68\nLecture,71\nLecture,75\nLecture,70\nLecture,74\nLecture,77\nLecture,69\nLecture,73\nOnline,72\nOnline,78\nOnline,80\nOnline,75\nOnline,77\nOnline,79\nOnline,74\nOnline,81\nOnline,76\nOnline,77\nGroup,77\nGroup,82\nGroup,84\nGroup,79\nGroup,81\nGroup,83\nGroup,78\nGroup,86\nGroup,80\nGroup,83\nGroup,85\nGroup,82\nTutor,81\nTutor,88\nTutor,90\nTutor,85\nTutor,87\nTutor,91\nTutor,83\nTutor,89\nTutor,86\nSelfStudy,70\nSelfStudy,75\nSelfStudy,78\nSelfStudy,72\nSelfStudy,74\nSelfStudy,77\nSelfStudy,71\nSelfStudy,76\nSelfStudy,73\nSelfStudy,75\nSelfStudy,74`,
+      'ch8-delivery-times.csv': `company,time\nCompanyA,42\nCompanyA,39\nCompanyA,44\nCompanyA,41\nCompanyA,38\nCompanyA,43\nCompanyA,40\nCompanyB,55\nCompanyB,57\nCompanyB,53\nCompanyB,59\nCompanyB,56\nCompanyB,60\nCompanyB,54\nCompanyB,58\nCompanyB,61\nCompanyC,48\nCompanyC,45\nCompanyC,50\nCompanyC,47\nCompanyC,49\nCompanyC,46\nCompanyC,51\nCompanyC,48\nCompanyD,61\nCompanyD,65\nCompanyD,63\nCompanyD,67\nCompanyD,64\nCompanyD,66\nCompanyD,62\nCompanyD,68\nCompanyD,69\nCompanyD,64`,
+      'ch8-fertilizer-yield.csv': `fertilizer,yield\nF1,41\nF1,43\nF1,39\nF1,45\nF1,42\nF1,44\nF1,40\nF1,46\nF2,47\nF2,49\nF2,45\nF2,51\nF2,48\nF2,50\nF2,46\nF2,52\nF2,49\nF2,47\nF3,52\nF3,54\nF3,50\nF3,56\nF3,53\nF3,55\nF3,51\nF3,57\nF3,54\nF3,52\nF3,55\nF3,53\nF4,44\nF4,46\nF4,42\nF4,48\nF4,45\nF4,47\nF4,43\nF4,49\nF4,46`,
+      'heart_rate.csv': `exercise,heartrate\n1.0,85\n1.5,78\n2.0,81\n2.0,78\n2.5,82\n3.0,77\n3.0,80\n3.5,75\n4.0,76\n4.0,72\n4.5,76\n5.0,74\n5.0,72\n5.5,75\n6.0,69\n6.0,72\n6.5,66\n7.0,70\n7.0,67\n7.5,69\n8.0,63\n8.5,66\n9.0,61\n9.5,63\n10.0,59`,
+      'toronto_homes.csv': `size,price\n8,155\n9,177\n10,189\n10,192\n11,205\n12,218\n12,219\n13,231\n13,240\n14,248\n14,252\n15,263\n15,270\n16,273\n16,285\n17,293\n17,299\n18,310\n18,314\n19,321\n19,329\n20,336\n20,350\n21,354\n21,365\n22,371\n22,380\n23,388\n24,403\n25,417`,
+      'co2_annual.csv': `year_code,co2_ppm\n0,369.5\n1,371.1\n2,373.2\n3,375.8\n4,377.5\n5,379.8\n6,381.9\n7,383.8\n8,385.6\n9,387.4`,
+      'marathon_training.csv': `miles,finish_time\n20,298\n22,289\n24,290\n25,282\n25,288\n28,275\n30,271\n30,277\n32,272\n33,264\n35,261\n35,266\n38,259\n38,253\n40,250\n40,254\n42,245\n42,251\n45,239\n45,243\n47,234\n48,237\n50,228\n50,232\n52,223\n53,226\n55,217\n55,221\n57,212\n58,215\n60,206\n62,206\n65,194\n65,200\n70,183`
+    };
+    const enc = new TextEncoder();
+    for (const [fname, content] of Object.entries(csvData)) {
+      await webR.FS.writeFile('/home/web_user/' + fname, enc.encode(content));
+    }
+
+    webRReady = true;
+    setStatus('', 'webr-ready');
+    document.querySelectorAll('.webr-run-btn').forEach(btn => {
+      btn.disabled = false;
+      btn.textContent = '▶ Run';
+    });
+  } catch (e) {
+    setStatus('❌ Failed to load R: ' + e.message, 'webr-error');
+  }
+}
+
+function setupCell(cell) {
+  const textarea  = cell.querySelector('.webr-editor');
+  const runBtn    = cell.querySelector('.webr-run-btn');
+  const resetBtn  = cell.querySelector('.webr-reset-btn');
+  const outArea   = cell.querySelector('.webr-output-area');
+  const canvasDiv = cell.querySelector('.webr-canvas-area');
+  const canvas    = canvasDiv ? canvasDiv.querySelector('canvas') : null;
+  const header    = cell.querySelector('.webr-exercise-header');
+  const origCode  = textarea.value;
+
+  // Auto-size textarea to content
+  function fitHeight() {
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+  }
+  fitHeight();
+  textarea.addEventListener('input', fitHeight);
+
+  // Move buttons into header
+  const btnGroup = document.createElement('div');
+  btnGroup.className = 'webr-btn-group';
+  btnGroup.appendChild(runBtn);
+  btnGroup.appendChild(resetBtn);
+  header.appendChild(btnGroup);
+
+  // Reset
+  resetBtn.addEventListener('click', () => {
+    textarea.value = origCode;
+    fitHeight();
+    outArea.textContent = '';
+    outArea.className = 'webr-output-area';
+    if (canvasDiv) canvasDiv.className = 'webr-canvas-area';
+  });
+
+  // Run
+  runBtn.addEventListener('click', async () => {
+    if (!webRReady) return;
+    runBtn.disabled = true;
+    runBtn.textContent = '⏳';
+    outArea.textContent = '';
+    outArea.className = 'webr-output-area';
+    if (canvasDiv) canvasDiv.className = 'webr-canvas-area';
+
+    try {
+      const code = textarea.value;
+      const shelter = await new webR.Shelter();
+      const captureOpts = { withAutoprint: true };
+      if (canvas) captureOpts.captureGraphics = { width: 504, height: 378, bg: 'white' };
+
+      const result = await shelter.captureR(code, captureOpts);
+      await shelter.purge();
+
+      const lines = result.output
+        .filter(x => x.type === 'stdout' || x.type === 'message')
+        .map(x => x.data)
+        .join('\n')
+        .trimEnd();
+
+      if (lines) {
+        outArea.textContent = lines;
+        outArea.classList.add('webr-has-output');
+      }
+
+      if (canvas && result.images && result.images.length > 0) {
+        canvasDiv.classList.add('webr-has-plot');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 504; canvas.height = 378;
+        ctx.clearRect(0, 0, 504, 378);
+        for (const img of result.images) ctx.drawImage(img, 0, 0, 504, 378);
+      }
+    } catch (e) {
+      outArea.textContent = 'Error: ' + e.message;
+      outArea.classList.add('webr-has-output', 'webr-error-output');
+    }
+
+    runBtn.disabled = false;
+    runBtn.textContent = '▶ Run';
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.webr-exercise').forEach(setupCell);
+  initWebR();
+});
+</script>
 
 
 
@@ -81,6 +470,7 @@ div.csl-indent {
 }
 </style>
 
+<link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
 <body>
@@ -93,6 +483,9 @@ div.csl-indent {
       <nav role="navigation">
 
 <ul class="summary">
+<li class="toc-brand"><a href="./">An Introduction to Mathematical Oncology</a></li>
+
+<li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Welcome</a></li>
 <li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
 <ul>
@@ -183,6 +576,7 @@ div.csl-indent {
 <li class="chapter" data-level="6.3.2" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#least-squares-estimation-of-the-regression-coefficients"><i class="fa fa-check"></i><b>6.3.2</b> Least Squares Estimation of the Regression Coefficients</a></li>
 <li class="chapter" data-level="6.3.3" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#interpretation-of-the-regression-coefficients"><i class="fa fa-check"></i><b>6.3.3</b> Interpretation of the Regression Coefficients</a></li>
 <li class="chapter" data-level="6.3.4" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#sampling-distribution-of-the-least-squares-estimators"><i class="fa fa-check"></i><b>6.3.4</b> Sampling Distribution of the Least Squares Estimators</a></li>
+<li class="chapter" data-level="6.3.5" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#hypothesis-testing-and-confidence-intervals-for-the-regression-coefficients"><i class="fa fa-check"></i><b>6.3.5</b> Hypothesis Testing and Confidence Intervals for the Regression Coefficients</a></li>
 </ul></li>
 <li class="chapter" data-level="6.4" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#logistic-regression"><i class="fa fa-check"></i><b>6.4</b> Logistic Regression</a>
 <ul>
@@ -190,10 +584,15 @@ div.csl-indent {
 <li class="chapter" data-level="6.4.2" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#estimation-of-regression-coefficients"><i class="fa fa-check"></i><b>6.4.2</b> Estimation of Regression Coefficients</a></li>
 <li class="chapter" data-level="6.4.3" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#interpretation-of-regression-coefficients-1"><i class="fa fa-check"></i><b>6.4.3</b> Interpretation of Regression Coefficients</a></li>
 <li class="chapter" data-level="6.4.4" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#statistical-inference-in-logistic-regression"><i class="fa fa-check"></i><b>6.4.4</b> Statistical Inference in Logistic Regression</a></li>
+<li class="chapter" data-level="6.4.5" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#confusion-matrix"><i class="fa fa-check"></i><b>6.4.5</b> Confusion Matrix</a></li>
+<li class="chapter" data-level="6.4.6" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#multiple-logistic-regression"><i class="fa fa-check"></i><b>6.4.6</b> Multiple Logistic Regression</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="hello.html"><a href="hello.html"><i class="fa fa-check"></i><b>7</b> Hello</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li class="toc-footer"><a href="https://github.com/nishanmudalige/UTM_FSU_Mathematical_Statistical_Oncology" target="blank">UTM &amp; FSU Oncology Repository</a></li>
+
 </ul>
 
       </nav>
@@ -268,10 +667,31 @@ P(X=x)=\binom{n}{x}p^x(1-p)^{n-x},
 <span class="math inline">\(E(X)=np\)</span> and <span class="math inline">\(\operatorname{Var}(X)=np(1-p)\)</span>.</p>
 <p>Suppose a clinical trial involves <span class="math inline">\(100\)</span> patients receiving a particular cancer treatment. If each patient independently responds with probability <span class="math inline">\(p=0.7\)</span>, then the number of patients who respond can be modelled as <span class="math inline">\(X\sim\operatorname{Binomial}(100,0.7)\)</span>.</p>
 <p>The expected number of patients who respond is <span class="math inline">\(E(X)=100(0.7)=70\)</span>.</p>
-<p>Also, the probability that at least <span class="math inline">\(80\)</span> patients respond to the treatment is</p>
+<p>Also, the probability that more than <span class="math inline">\(72\)</span> patients respond to the treatment is</p>
 <p><span class="math display">\[
-P(X \geq 80) = \sum_{x = 80}^{100} \binom{100}{x} (0.7)^x (0.3)^{100-x} \approx 0.01646285
-\]</span></p>
+P(X &gt; 72) = \sum_{x = 73}^{100} \binom{100}{x} (0.7)^x (0.3)^{100-x} \approx 0.2963662
+\]</span>
+Experiment with changing the values of <span class="math inline">\(n\)</span>, <span class="math inline">\(p\)</span>, and the threshold to investigate how the probability changes.</p>
+<div class="webr-exercise">
+<div class="webr-exercise-header">Binomial Distribution</div>
+
+<textarea class="webr-editor" rows="10">
+# Parameters
+n <- 100
+p <- 0.7
+
+# Calculate P(X > 72)
+pbinom(72, size = n, prob = p, lower.tail = FALSE)
+</textarea>
+
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
 </div>
 </div>
 <div id="continuous-probability-distributions" class="section level3 hasAnchor" number="6.1.3">
@@ -345,47 +765,39 @@ Figure 6.3: Student’s t-distributions with different degrees of freedom, compa
 </div>
 <p>It is particularly useful for statistical inference when the population variance is unknown. In linear regression, t-tests are commonly used to determine whether regression coefficients differ significantly from zero. For example, researchers may use a t-test to investigate whether a patient’s age is significantly associated with tumour size after accounting for other explanatory variables. We discuss this in further detail later in the chapter.</p>
 </div>
-<div id="exponential-distribution" class="section level4 hasAnchor" number="6.1.3.4">
-<h4><span class="header-section-number">6.1.3.4</span> Exponential Distribution<a href="statistical-methods-in-oncology.html#exponential-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>The exponential distribution is a continuous probability distribution frequently used to model waiting times until an event of interest occurs.</p>
-<p>Let <span class="math inline">\(X\)</span> follow an exponential distribution with rate parameter <span class="math inline">\(\lambda&gt;0\)</span>. We write
-<span class="math inline">\(X\sim\operatorname{Exponential}(\lambda).\)</span></p>
-<p>Its probability density function is</p>
+<div id="f-distribution" class="section level4 hasAnchor" number="6.1.3.4">
+<h4><span class="header-section-number">6.1.3.4</span> F-Distribution<a href="statistical-methods-in-oncology.html#f-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Let <span class="math inline">\(U\)</span> and <span class="math inline">\(V\)</span> be independent chi-squared random variables with <span class="math inline">\(n_1\)</span> and <span class="math inline">\(n_2\)</span> degrees of freedom, respectively. That is,</p>
 <p><span class="math display">\[
-f_X(x)=\lambda e^{-\lambda x},
-\qquad x\geq 0.
+U\sim\chi^2_{n_1}
+\qquad\text{and}\qquad
+V\sim\chi^2_{n_2}.
 \]</span></p>
-<p>The expected value and variance are <span class="math inline">\(E(X)=\frac{1}{\lambda}\)</span> and <span class="math inline">\(\operatorname{Var}(X)=\frac{1}{\lambda^2}.\)</span></p>
-<p>The shape of the exponential distribution depends on its rate parameter, denoted by <span class="math inline">\(\lambda\)</span>. As <span class="math inline">\(\lambda\)</span> increases, the probability density decreases more rapidly, indicating that shorter waiting times become more likely. Conversely, smaller values of <span class="math inline">\(\lambda\)</span> correspond to longer expected waiting times.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:exponential-distributions"></span>
-<img src="_main_files/figure-html/exponential-distributions-1.png" alt="Exponential distributions with different rate parameters." width="768" />
-<p class="caption">
-Figure 6.4: Exponential distributions with different rate parameters.
-</p>
-</div>
-<p>Moreover, the exponential distribution is important in survival analysis because it assumes a constant hazard function, <span class="math inline">\(h(t)=\lambda.\)</span> Suppose researchers are interested in the time between cancer diagnosis and disease recurrence. Under the assumption that the instantaneous recurrence rate remains constant over time, the time until recurrence may be modelled using an exponential distribution. We discuss hazard functions in more detail later in the chapter.</p>
-</div>
-<div id="weibull-distribution" class="section level4 hasAnchor" number="6.1.3.5">
-<h4><span class="header-section-number">6.1.3.5</span> Weibull Distribution<a href="statistical-methods-in-oncology.html#weibull-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>The Weibull distribution is a continuous probability distribution commonly used to model time-to-event data. Unlike the exponential distribution, the Weibull distribution can accommodate hazard functions that increase or decrease over time.</p>
-<p>Let <span class="math inline">\(X\)</span> follow a Weibull distribution with shape parameter <span class="math inline">\(k&gt;0\)</span> and scale parameter <span class="math inline">\(\lambda&gt;0\)</span>. We write <span class="math inline">\(X\sim\operatorname{Weibull}(k,\lambda).\)</span></p>
+<p>Then the random variable</p>
+<p><span class="math display">\[
+X=\frac{U/n_1}{V/n_2}
+\]</span></p>
+<p>follows an F-distribution with <span class="math inline">\(n_1\)</span> numerator degrees of freedom and <span class="math inline">\(n_2\)</span> denominator degrees of freedom. We write <span class="math inline">\(X\sim F_{n_1,n_2}\)</span>.</p>
 <p>Its probability density function is</p>
 <p><span class="math display">\[
 f_X(x)=
-\frac{k}{\lambda}
-\left(\frac{x}{\lambda}\right)^{k-1}
-\exp\left[-\left(\frac{x}{\lambda}\right)^k\right],
-\qquad x\geq 0.
+\frac{\Gamma((n_1+n_2)/2)}
+{\Gamma(n_1/2)\Gamma(n_2/2)}
+\left(\frac{n_1}{n_2}\right)^{n_1/2}
+\frac{x^{n_1/2-1}}
+{\left(1+\frac{n_1}{n_2}x\right)^{(n_1+n_2)/2}},
+\qquad x&gt;0,
 \]</span></p>
-<p>The expected value and variance are <span class="math inline">\(E(X)=\lambda\Gamma\left(1+\frac{1}{k}\right)\)</span> and <span class="math inline">\(\operatorname{Var}(X)=\lambda^2\left[\Gamma\left(1+\frac{2}{k}\right)-\Gamma^2\left(1+\frac{1}{k}\right)\right]\)</span></p>
 <p>where <span class="math inline">\(\Gamma(\cdot)\)</span> denotes the gamma function.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:weibull-distributions"></span>
-<img src="_main_files/figure-html/weibull-distributions-1.png" alt="Weibull distributions with different shape parameters and a fixed scale parameter." width="768" />
+<p>The expected value and variance are <span class="math inline">\(E(X)=\frac{n_2}{n_2-2}\)</span> for <span class="math inline">\(n_2&gt;2\)</span> and <span class="math inline">\(\operatorname{Var}(X)=\frac{2n_2^2(n_1+n_2-2)}{n_1(n_2-2)^2(n_2-4)}\)</span> for <span class="math inline">\(n_2&gt;4.\)</span></p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:f-distributions"></span>
+<img src="_main_files/figure-html/f-distributions-1.png" alt="F-distributions with different numerator and denominator degrees of freedom." width="768" />
 <p class="caption">
-Figure 6.5: Weibull distributions with different shape parameters and a fixed scale parameter.
+Figure 6.4: F-distributions with different numerator and denominator degrees of freedom.
 </p>
 </div>
-<p>The Weibull distribution may be used to model the time from cancer diagnosis to death or disease recurrence when the risk of experiencing the event changes over time. For example, the Weibull distribution may be appropriate when the risk of recurrence decreases as time passes after treatment, provided that this pattern is supported by the observed data.</p>
+<p>The F-distribution is nonnegative and generally right-skewed. Its shape depends on both the numerator and denominator degrees of freedom, becoming increasingly concentrated around one as both degrees of freedom increase.</p>
+<p>The F-distribution is commonly used in hypothesis testing, particularly when comparing population variances, and testing the significance of regression models which is explored later in the chapter.</p>
 </div>
 </div>
 </div>
@@ -413,406 +825,40 @@ Y_i=\beta_0+\beta_1x_i+\varepsilon_i,
 <p>The fitted regression equation is <span class="math inline">\(\hat{Y}_i=\hat{\beta}_0+\hat{\beta}_1x_i,\)</span> where <span class="math inline">\(\hat{Y}_i\)</span> represents the predicted value of the response variable for observation <span class="math inline">\(i\)</span>.</p>
 <p>Note that a linear association between the response and explanatory variables does not imply a causal relationship between them.</p>
 <p>To illustrate the application of simple linear regression in oncology, we consider prostate cancer dataset available in the <code>faraway</code> package in R. The dataset contains clinical measurements from 97 men with prostate cancer, including tumour volume, prostate-specific antigen (PSA) levels, age, and other patient characteristics. PSA is a protein produced by cells in the prostate gland, and its concentration in the blood is commonly used in the assessment and monitoring of prostate cancer.</p>
-<p>We are interested in investigating the relationship between tumour volume and PSA levels. Since both variables are right-skewed, we consider their logarithmic transformations, which provide a more suitable basis for linear regression. Let <span class="math inline">\(X_i\)</span> denote the log tumour volume and <span class="math inline">\(Y_i\)</span> denote the log PSA level of patient <span class="math inline">\(i\)</span>. Below are the values for PSA levels and tumour values for the 97 men, and plots of the relationship between them.</p>
-<table style="width:100%;">
-<caption><span id="tab:prostate-table">Table 6.1: </span>Prostate Cancer Dataset: Log Tumour Volume and Log PSA</caption>
-<colgroup>
-<col width="10%" />
-<col width="13%" />
-<col width="10%" />
-<col width="10%" />
-<col width="13%" />
-<col width="10%" />
-<col width="10%" />
-<col width="13%" />
-<col width="10%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="center">Patient</th>
-<th align="center">Log Volume</th>
-<th align="center">Log PSA</th>
-<th align="center">Patient</th>
-<th align="center">Log Volume</th>
-<th align="center">Log PSA</th>
-<th align="center">Patient</th>
-<th align="center">Log Volume</th>
-<th align="center">Log PSA</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="center">1</td>
-<td align="center">-0.580</td>
-<td align="center">-0.431</td>
-<td align="center">34</td>
-<td align="center">0.010</td>
-<td align="center">2.022</td>
-<td align="center">67</td>
-<td align="center">2.023</td>
-<td align="center">2.920</td>
-</tr>
-<tr class="even">
-<td align="center">2</td>
-<td align="center">-0.994</td>
-<td align="center">-0.163</td>
-<td align="center">35</td>
-<td align="center">-0.010</td>
-<td align="center">2.048</td>
-<td align="center">68</td>
-<td align="center">2.198</td>
-<td align="center">2.963</td>
-</tr>
-<tr class="odd">
-<td align="center">3</td>
-<td align="center">-0.511</td>
-<td align="center">-0.163</td>
-<td align="center">36</td>
-<td align="center">1.308</td>
-<td align="center">2.086</td>
-<td align="center">69</td>
-<td align="center">-0.446</td>
-<td align="center">2.963</td>
-</tr>
-<tr class="even">
-<td align="center">4</td>
-<td align="center">-1.204</td>
-<td align="center">-0.163</td>
-<td align="center">37</td>
-<td align="center">1.423</td>
-<td align="center">2.158</td>
-<td align="center">70</td>
-<td align="center">1.194</td>
-<td align="center">2.973</td>
-</tr>
-<tr class="odd">
-<td align="center">5</td>
-<td align="center">0.751</td>
-<td align="center">0.372</td>
-<td align="center">38</td>
-<td align="center">0.457</td>
-<td align="center">2.192</td>
-<td align="center">71</td>
-<td align="center">1.864</td>
-<td align="center">3.013</td>
-</tr>
-<tr class="even">
-<td align="center">6</td>
-<td align="center">-1.050</td>
-<td align="center">0.765</td>
-<td align="center">39</td>
-<td align="center">2.661</td>
-<td align="center">2.214</td>
-<td align="center">72</td>
-<td align="center">1.160</td>
-<td align="center">3.037</td>
-</tr>
-<tr class="odd">
-<td align="center">7</td>
-<td align="center">0.737</td>
-<td align="center">0.765</td>
-<td align="center">40</td>
-<td align="center">0.798</td>
-<td align="center">2.277</td>
-<td align="center">73</td>
-<td align="center">1.215</td>
-<td align="center">3.056</td>
-</tr>
-<tr class="even">
-<td align="center">8</td>
-<td align="center">0.693</td>
-<td align="center">0.854</td>
-<td align="center">41</td>
-<td align="center">0.621</td>
-<td align="center">2.298</td>
-<td align="center">74</td>
-<td align="center">1.839</td>
-<td align="center">3.075</td>
-</tr>
-<tr class="odd">
-<td align="center">9</td>
-<td align="center">-0.777</td>
-<td align="center">1.047</td>
-<td align="center">42</td>
-<td align="center">1.442</td>
-<td align="center">2.308</td>
-<td align="center">75</td>
-<td align="center">2.999</td>
-<td align="center">3.275</td>
-</tr>
-<tr class="even">
-<td align="center">10</td>
-<td align="center">0.223</td>
-<td align="center">1.047</td>
-<td align="center">43</td>
-<td align="center">0.582</td>
-<td align="center">2.327</td>
-<td align="center">76</td>
-<td align="center">3.141</td>
-<td align="center">3.338</td>
-</tr>
-<tr class="odd">
-<td align="center">11</td>
-<td align="center">0.255</td>
-<td align="center">1.267</td>
-<td align="center">44</td>
-<td align="center">1.772</td>
-<td align="center">2.375</td>
-<td align="center">77</td>
-<td align="center">2.011</td>
-<td align="center">3.393</td>
-</tr>
-<tr class="even">
-<td align="center">12</td>
-<td align="center">-1.347</td>
-<td align="center">1.267</td>
-<td align="center">45</td>
-<td align="center">1.486</td>
-<td align="center">2.522</td>
-<td align="center">78</td>
-<td align="center">2.538</td>
-<td align="center">3.436</td>
-</tr>
-<tr class="odd">
-<td align="center">13</td>
-<td align="center">1.613</td>
-<td align="center">1.267</td>
-<td align="center">46</td>
-<td align="center">1.664</td>
-<td align="center">2.553</td>
-<td align="center">79</td>
-<td align="center">2.648</td>
-<td align="center">3.458</td>
-</tr>
-<tr class="even">
-<td align="center">14</td>
-<td align="center">1.477</td>
-<td align="center">1.348</td>
-<td align="center">47</td>
-<td align="center">2.728</td>
-<td align="center">2.569</td>
-<td align="center">80</td>
-<td align="center">2.779</td>
-<td align="center">3.513</td>
-</tr>
-<tr class="odd">
-<td align="center">15</td>
-<td align="center">1.206</td>
-<td align="center">1.399</td>
-<td align="center">48</td>
-<td align="center">1.163</td>
-<td align="center">2.569</td>
-<td align="center">81</td>
-<td align="center">1.468</td>
-<td align="center">3.516</td>
-</tr>
-<tr class="even">
-<td align="center">16</td>
-<td align="center">1.541</td>
-<td align="center">1.447</td>
-<td align="center">49</td>
-<td align="center">1.746</td>
-<td align="center">2.592</td>
-<td align="center">82</td>
-<td align="center">2.514</td>
-<td align="center">3.531</td>
-</tr>
-<tr class="odd">
-<td align="center">17</td>
-<td align="center">-0.416</td>
-<td align="center">1.470</td>
-<td align="center">50</td>
-<td align="center">1.221</td>
-<td align="center">2.592</td>
-<td align="center">83</td>
-<td align="center">2.613</td>
-<td align="center">3.565</td>
-</tr>
-<tr class="even">
-<td align="center">18</td>
-<td align="center">2.288</td>
-<td align="center">1.493</td>
-<td align="center">51</td>
-<td align="center">1.092</td>
-<td align="center">2.657</td>
-<td align="center">84</td>
-<td align="center">2.678</td>
-<td align="center">3.571</td>
-</tr>
-<tr class="odd">
-<td align="center">19</td>
-<td align="center">-0.562</td>
-<td align="center">1.558</td>
-<td align="center">52</td>
-<td align="center">1.660</td>
-<td align="center">2.678</td>
-<td align="center">85</td>
-<td align="center">1.562</td>
-<td align="center">3.588</td>
-</tr>
-<tr class="even">
-<td align="center">20</td>
-<td align="center">0.182</td>
-<td align="center">1.599</td>
-<td align="center">53</td>
-<td align="center">0.513</td>
-<td align="center">2.684</td>
-<td align="center">86</td>
-<td align="center">3.303</td>
-<td align="center">3.631</td>
-</tr>
-<tr class="odd">
-<td align="center">21</td>
-<td align="center">1.147</td>
-<td align="center">1.639</td>
-<td align="center">54</td>
-<td align="center">2.127</td>
-<td align="center">2.691</td>
-<td align="center">87</td>
-<td align="center">2.024</td>
-<td align="center">3.680</td>
-</tr>
-<tr class="even">
-<td align="center">22</td>
-<td align="center">2.059</td>
-<td align="center">1.658</td>
-<td align="center">55</td>
-<td align="center">3.154</td>
-<td align="center">2.705</td>
-<td align="center">88</td>
-<td align="center">1.732</td>
-<td align="center">3.712</td>
-</tr>
-<tr class="odd">
-<td align="center">23</td>
-<td align="center">-0.545</td>
-<td align="center">1.696</td>
-<td align="center">56</td>
-<td align="center">1.267</td>
-<td align="center">2.718</td>
-<td align="center">89</td>
-<td align="center">2.808</td>
-<td align="center">3.984</td>
-</tr>
-<tr class="even">
-<td align="center">24</td>
-<td align="center">1.782</td>
-<td align="center">1.714</td>
-<td align="center">57</td>
-<td align="center">0.975</td>
-<td align="center">2.788</td>
-<td align="center">90</td>
-<td align="center">1.562</td>
-<td align="center">3.994</td>
-</tr>
-<tr class="odd">
-<td align="center">25</td>
-<td align="center">0.385</td>
-<td align="center">1.732</td>
-<td align="center">58</td>
-<td align="center">0.464</td>
-<td align="center">2.794</td>
-<td align="center">91</td>
-<td align="center">3.246</td>
-<td align="center">4.030</td>
-</tr>
-<tr class="even">
-<td align="center">26</td>
-<td align="center">1.447</td>
-<td align="center">1.766</td>
-<td align="center">59</td>
-<td align="center">0.542</td>
-<td align="center">2.806</td>
-<td align="center">92</td>
-<td align="center">2.533</td>
-<td align="center">4.130</td>
-</tr>
-<tr class="odd">
-<td align="center">27</td>
-<td align="center">0.513</td>
-<td align="center">1.800</td>
-<td align="center">60</td>
-<td align="center">1.061</td>
-<td align="center">2.812</td>
-<td align="center">93</td>
-<td align="center">2.830</td>
-<td align="center">4.385</td>
-</tr>
-<tr class="even">
-<td align="center">28</td>
-<td align="center">-0.400</td>
-<td align="center">1.816</td>
-<td align="center">61</td>
-<td align="center">0.457</td>
-<td align="center">2.842</td>
-<td align="center">94</td>
-<td align="center">3.821</td>
-<td align="center">4.684</td>
-</tr>
-<tr class="odd">
-<td align="center">29</td>
-<td align="center">1.040</td>
-<td align="center">1.848</td>
-<td align="center">62</td>
-<td align="center">1.997</td>
-<td align="center">2.854</td>
-<td align="center">95</td>
-<td align="center">2.907</td>
-<td align="center">5.143</td>
-</tr>
-<tr class="even">
-<td align="center">30</td>
-<td align="center">2.410</td>
-<td align="center">1.895</td>
-<td align="center">63</td>
-<td align="center">2.776</td>
-<td align="center">2.854</td>
-<td align="center">96</td>
-<td align="center">2.883</td>
-<td align="center">5.478</td>
-</tr>
-<tr class="odd">
-<td align="center">31</td>
-<td align="center">0.285</td>
-<td align="center">1.924</td>
-<td align="center">64</td>
-<td align="center">2.035</td>
-<td align="center">2.882</td>
-<td align="center">97</td>
-<td align="center">3.472</td>
-<td align="center">5.583</td>
-</tr>
-<tr class="even">
-<td align="center">32</td>
-<td align="center">0.182</td>
-<td align="center">2.008</td>
-<td align="center">65</td>
-<td align="center">2.073</td>
-<td align="center">2.882</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-</tr>
-<tr class="odd">
-<td align="center">33</td>
-<td align="center">1.275</td>
-<td align="center">2.008</td>
-<td align="center">66</td>
-<td align="center">1.459</td>
-<td align="center">2.888</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-</tr>
-</tbody>
-</table>
+<p>We are interested in investigating the relationship between tumour volume and PSA levels. Since both variables are right-skewed, we consider their logarithmic transformations, which provide a more suitable basis for linear regression. Let <span class="math inline">\(X_i\)</span> denote the log PSA level (<code>lpsa</code>) and <span class="math inline">\(Y_i\)</span> denote the log tumour volume (<code>lcavol</code>) of patient <span class="math inline">\(i\)</span>.</p>
+<p>Run the following code to display the observations.</p>
+<div class="webr-exercise">
+<div class="webr-exercise-header">Prostate Cancer Data</div>
+
+<textarea class="webr-editor" rows="10">
+# Load prostate cancer data
+prostate <- read.csv("prostate.csv")
+
+# Define variables
+X <- prostate$lpsa
+Y <- prostate$lcavol
+
+# Display observations
+observations <- data.frame(X, Y)
+
+print(observations)
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
+<p>Below are the plots for the relationship between PSA levels and tumour volumes for 97 men.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:prostate-regression"></span>
 <img src="_main_files/figure-html/prostate-regression-1.png" alt="Relationship between log tumour volume and log PSA levels, with the fitted regression line and associated residuals." width="1056" />
 <p class="caption">
-Figure 6.6: Relationship between log tumour volume and log PSA levels, with the fitted regression line and associated residuals.
+Figure 6.5: Relationship between log tumour volume and log PSA levels, with the fitted regression line and associated residuals.
 </p>
 </div>
-<p>Figure (a) illustrates the fitted least squares regression line, which describes the estimated linear relationship between log tumour volume and log PSA levels. Each point represents an observed log PSA level for a given log tumour volume, while the red line represents the predicted log PSA level. Figure (b) additionally displays the residuals, represented by the green vertical segments. Each residual measures the difference between an observed log PSA level and its predicted value under the fitted regression model.</p>
+<p>Figure (a) illustrates the fitted least squares regression line, which describes the estimated linear relationship between log tumour volume and log PSA levels. Each point represents an observed log tumour volume for a given log PSA level, while the red line represents the predicted log tumour volume. Figure (b) additionally displays the residuals, represented by the green vertical segments. Each residual measures the difference between an observed log tumour volume and its predicted value under the fitted regression model.</p>
 <p>We demonstrate how to obtain the fitted regression line and to further analyse if a linear association between log tumour volume and log PSA levels is statistically significant.</p>
 </div>
 <div id="least-squares-estimation" class="section level3 hasAnchor" number="6.2.2">
@@ -925,15 +971,57 @@ where <span class="math inline">\(S_{xx}=\sum_{i=1}^{n}(x_i-\bar{x})^2\)</span> 
 <p><span class="math display">\[
 \hat{Y}_i=\hat{\beta}_0+\hat{\beta}_1x_i.
 \]</span></p>
-<p>We wish to fit the prostate cancer data. Using Table <a href="statistical-methods-in-oncology.html#tab:prostate-table">6.1</a>, we obtain <span class="math inline">\(\bar{x}= 1.35001,\)</span> <span class="math inline">\(\bar{y}= 2.478387,\)</span> <span class="math inline">\(S_{xx}= 133.359,\)</span> and <span class="math inline">\(S_{xy}= 95.92784\)</span>.</p>
+<p>We wish to fit the prostate cancer data.</p>
+<div class="webr-exercise">
+<div class="webr-exercise-header">Estimation of SLR Coefficients</div>
+
+<textarea class="webr-editor" rows="20">
+# Load the dataset
+prostate <- read.csv("prostate.csv")
+
+# Define variables
+x <- prostate$lpsa
+y <- prostate$lcavol
+
+# Calculate sample means
+x_bar <- mean(x)
+y_bar <- mean(y)
+
+# Calculate Sxx and Sxy
+Sxx <- sum((x - x_bar)^2)
+Sxy <- sum((x - x_bar) * (y - y_bar))
+
+# Calculate the LSEs
+beta1_hat <- Sxy / Sxx
+beta0_hat <- y_bar - beta1_hat * x_bar
+
+# Display the estimates
+cat("Intercept:", beta0_hat, "\n")
+cat("Slope:", beta1_hat, "\n")
+
+# Alternatively, R can calculate the least-squares estimates directly
+# Verify using R's lm() function
+model <- lm(y ~ x)
+
+coef(model)
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
+<p>We obtain <span class="math inline">\(\bar{x}= 2.478387,\)</span> <span class="math inline">\(\bar{y}= 1.35001,\)</span> <span class="math inline">\(S_{xx}= 127.9176,\)</span> and <span class="math inline">\(S_{xy}= 95.92784\)</span>.</p>
 <p>Plugging these values into the OLS estimators for <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>, we get
 <span class="math display">\[
-\hat{\beta_1} = \frac{S_{xy}}{S_{xx}}=\frac{95.92784}{133.359} \approx 0.7193
+\hat{\beta_1} = \frac{S_{xy}}{S_{xx}}=\frac{95.92784}{127.9176} \approx 0.74992
 \]</span>
 <span class="math display">\[
-\hat{\beta_0}= \bar{Y}- \hat{\beta_1}\bar{x}= 2.478387 - (0.7193)(1.35001) \approx 1.5073
+\hat{\beta_0}= \bar{Y}- \hat{\beta_1}\bar{x}= 1.35001 - (0.74992)(2.478387) \approx -0.50858
 \]</span>
-Hence, the estimated regression line is <span class="math inline">\(\boxed{\hat{Y_i} = 1.5073 + 0.7193x_i}\)</span></p>
+Hence, the estimated regression line is <span class="math inline">\(\boxed{\hat{Y_i} = -0.50858 + 0.74992x_i}\)</span></p>
 </div>
 <div id="interpretation-of-regression-coefficients" class="section level3 hasAnchor" number="6.2.3">
 <h3><span class="header-section-number">6.2.3</span> Interpretation of Regression Coefficients<a href="statistical-methods-in-oncology.html#interpretation-of-regression-coefficients" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -942,24 +1030,24 @@ Hence, the estimated regression line is <span class="math inline">\(\boxed{\hat{
 <p>The slope <span class="math inline">\(\beta_1\)</span> represents the change in the expected response variable associated with a one-unit increase in the explanatory variable. A positive slope indicates that the expected response increases as the explanatory variable increases, while a negative slope indicates that the expected response decreases.</p>
 <p>Using the prostate cancer dataset, we obtain the following fitted regression model:</p>
 <p><span class="math display">\[
-\widehat{\log(\text{PSA})}
+\widehat{\log(\text{Tumour Volume})}
 =
-1.5073+0.7193\log(\text{Tumour Volume}),
+-0.50858+0.74992\log(\text{PSA}),
 \]</span></p>
 <p>where PSA denotes prostate-specific antigen levels and tumour volume is measured in <span class="math inline">\(\text{cm}^3\)</span>.</p>
-<p>The estimated intercept is <span class="math inline">\(\hat{\beta}_0=1.5073\)</span>, indicating that when tumour volume is <span class="math inline">\(1\text{ cm}^3\)</span>, the predicted log PSA level is <span class="math inline">\(1.5073\)</span>. Exponentiating, we obtain <span class="math inline">\(e^{1.5073}\approx 4.51\)</span>. Thus, when tumour volume is <span class="math inline">\(1\text{ cm}^3\)</span>, the model predicts a PSA level of approximately <span class="math inline">\(4.51\)</span> on the original scale.</p>
-<p>The estimated slope is <span class="math inline">\(\hat{\beta}_1=0.7193\)</span>. Since both variables are logarithmically transformed, a <span class="math inline">\(1\%\)</span> increase in tumour volume is associated with an approximately <span class="math inline">\(0.7193\%\)</span> increase in the predicted PSA level, according to the fitted model.</p>
-<p>For example, a patient with a tumour volume of <span class="math inline">\(5\text{ cm}^3\)</span> would have a predicted log PSA level of</p>
+<p>The estimated intercept is <span class="math inline">\(\hat{\beta}_0=-0.50858\)</span>, indicating that when PSA level is <span class="math inline">\(1\)</span> on the original scale, the predicted log tumour volume is <span class="math inline">\(-0.50858\)</span>. Exponentiating, we obtain <span class="math inline">\(e^{-0.50858}\approx 0.60\)</span>. Thus, when PSA level is <span class="math inline">\(1\)</span>, the model predicts a median tumour volume of approximately <span class="math inline">\(0.60\text{ cm}^3\)</span> on the original scale.</p>
+<p>The estimated slope is <span class="math inline">\(\hat{\beta}_1=0.74992\)</span>. Since both variables are logarithmically transformed, a <span class="math inline">\(1\%\)</span> increase in PSA level is associated with an approximately <span class="math inline">\(0.74992\%\)</span> increase in the predicted tumour volume, according to the fitted model.</p>
+<p>For example, a patient with a PSA level of <span class="math inline">\(5\)</span> would have a predicted log tumour volume of</p>
 <p><span class="math display">\[
-\widehat{\log(\text{PSA})}
-=1.5073+0.7193\log(5)
-\approx 2.665.
+\widehat{\log(\text{Tumour Volume})}
+=-0.50858+0.74992\log(5)
+\approx 0.6984.
 \]</span></p>
 <p>Exponentiating gives</p>
 <p><span class="math display">\[
-\widehat{\text{PSA}}=e^{2.665}\approx 14.37.
+\widehat{\text{Tumour Volume}}=e^{0.6984}\approx 2.01\text{ cm}^3.
 \]</span></p>
-<p>Thus, the model predicts a median PSA level of approximately <span class="math inline">\(14.37\)</span> on the original scale for a patient with a tumour volume of <span class="math inline">\(5\text{ cm}^3\)</span>.</p>
+<p>Thus, the model predicts a median tumour volume of approximately <span class="math inline">\(2.01\text{ cm}^3\)</span> on the original scale for a patient with a PSA level of <span class="math inline">\(5\)</span>.</p>
 </div>
 <div id="assumptions-of-simple-linear-regression" class="section level3 hasAnchor" number="6.2.4">
 <h3><span class="header-section-number">6.2.4</span> Assumptions of Simple Linear Regression<a href="statistical-methods-in-oncology.html#assumptions-of-simple-linear-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -967,7 +1055,7 @@ Hence, the estimated regression line is <span class="math inline">\(\boxed{\hat{
 <p><strong>1. Linearity</strong></p>
 <p>The expected response is assumed to be a linear function of the explanatory variable. If the true relationship is nonlinear, the linear model may provide an inadequate description of the data.</p>
 <p>Linearity can be assessed using a scatterplot of the response against the explanatory variable, or a plot of residuals against fitted values. If the linearity assumption is reasonable, the residuals should be randomly scattered around zero without a systematic pattern. A pattern may indicate that a nonlinear model is more appropriate.</p>
-<p>For the prostate cancer dataset, the scatterplot in Figure <a href="statistical-methods-in-oncology.html#fig:prostate-regression">6.6</a> suggests a positive relationship between log tumour volume and log PSA levels. The residual plot in Figure <a href="statistical-methods-in-oncology.html#fig:prostate-diagnostics">6.7</a> appears to be randomly scattered, thus the linearity assumption appears reasonable.</p>
+<p>For the prostate cancer dataset, the scatterplot in Figure <a href="statistical-methods-in-oncology.html#fig:prostate-regression">6.5</a> suggests a positive relationship between log PSA levels and log tumour volume. The residual plot in Figure <a href="statistical-methods-in-oncology.html#fig:prostate-diagnostics">6.6</a> can be examined for systematic patterns to assess whether the linearity assumption is reasonable.</p>
 <p><strong>2. Independence</strong></p>
 <p>The error terms are assumed to be independent across observations.</p>
 <p>Independence is primarily assessed by examining how the data were collected. This assumption may be violated when repeated measurements are collected from the same patient, or when observations are correlated due to shared characteristics or clinical settings.</p>
@@ -975,17 +1063,15 @@ Hence, the estimated regression line is <span class="math inline">\(\boxed{\hat{
 <p><strong>3. Constant Variance (Homoscedasticity)</strong></p>
 <p>The variance of the errors is assumed to be constant across all values of the explanatory variable. If the variability of the errors changes with the explanatory variable, the model exhibits heteroscedasticity.</p>
 <p>This assumption can be assessed using a plot of residuals against fitted values. Under constant variance, the vertical spread of the residuals should remain approximately the same across the range of fitted values.</p>
-<p>For the prostate cancer dataset, the spread of residuals appears relatively consistent across fitted values in Figure <a href="statistical-methods-in-oncology.html#fig:prostate-diagnostics">6.7</a>, suggesting that the constant variance assumption is reasonable.</p>
+<p>For the prostate cancer dataset, the spread of residuals across fitted values in Figure <a href="statistical-methods-in-oncology.html#fig:prostate-diagnostics">6.6</a> can be examined to assess whether the constant variance assumption is reasonable.</p>
 <p><strong>4. Normality of Errors</strong></p>
 <p>The error terms are assumed to follow a normal distribution. That is, <span class="math inline">\(\varepsilon_i\sim N(0,\sigma^2).\)</span> Note that the normality assumption is not required to calculate the least squares estimates. However, it is used to justify hypothesis tests and confidence intervals.</p>
 <p>Normality can be assessed using a normal Q-Q plot of the residuals. If the errors are approximately normally distributed, the points should lie reasonably close to the reference line. Substantial departures from this line may indicate violations of normality.</p>
-<p>We may also use the Shapiro-Wilk test, which is a statistical test used to assess whether a sample is consistent with a normal distribution. The null hypothesis states that the errors follow a normal distribution, while the alternative hypothesis states that the errors do not follow a normal distribution. A p-value less than 0.05 suggests evidence against normality, while a p-value greater than 0.05 indicates insufficient evidence to reject normality.</p>
-<p>For the prostate cancer dataset, the normal Q-Q plot in Figure <a href="statistical-methods-in-oncology.html#fig:prostate-diagnostics">6.7</a> shows that most residuals lie reasonably close to the reference line, with some deviations in the tails. The Shapiro-Wilk test results in a p-value of 0.1419, failing to reject the alternative. Thus, the normality assumption appears reasonable for this example, though not perfect.</p>
-<p>Overall, the diagnostic results suggest that the assumptions of simple linear regression are reasonably plausible for the log-transformed prostate cancer dataset, although some minor deviations are present.</p>
+<p>For the prostate cancer dataset, the normal Q-Q plot in Figure <a href="statistical-methods-in-oncology.html#fig:prostate-diagnostics">6.6</a> can be used to examine how closely the residuals follow the reference line. Since it is approximately linear with minor deviations, the normality assumption is reasonable</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:prostate-diagnostics"></span>
 <img src="_main_files/figure-html/prostate-diagnostics-1.png" alt="Diagnostic plots for the regression model relating log tumour volume to log PSA levels." width="960" />
 <p class="caption">
-Figure 6.7: Diagnostic plots for the regression model relating log tumour volume to log PSA levels.
+Figure 6.6: Diagnostic plots for the regression model relating log tumour volume to log PSA levels.
 </p>
 </div>
 </div>
@@ -1011,7 +1097,51 @@ SSE=\sum_{i=1}^{n}(Y_i-\hat{Y}_i)^2.
 \]</span></p>
 <p>Notice that <span class="math inline">\(0\leq R^2\leq 1\)</span></p>
 <p>An <span class="math inline">\(R^2\)</span> value closer to one indicates that the fitted regression model accounts for a greater proportion of the observed variability in the response variable. Conversely, an <span class="math inline">\(R^2\)</span> value closer to zero indicates that the model accounts for relatively little of the observed variability.</p>
-<p>Using the prostate cancer data in Table <a href="statistical-methods-in-oncology.html#tab:prostate-table">6.1</a>, we can compute <span class="math inline">\(SSE = 58.91476\)</span> and <span class="math inline">\(SST = 127.9176\)</span>. We get that <span class="math inline">\(R^2 = 1 - \frac{58.91476}{127.9176}= 0.5394319\)</span>. This indicates that approximately <span class="math inline">\(53.94\%\)</span> of the total variation in log PSA levels is explained by the linear relationship with log tumour volume. The remaining <span class="math inline">\(46.06\%\)</span> of the variation is not explained by the model and may be associated with other factors or random variability.</p>
+<div class="webr-exercise">
+<div class="webr-exercise-header">Calculating R-Squared</div>
+
+<textarea class="webr-editor" rows="20">
+# Load the dataset
+prostate <- read.csv("prostate.csv")
+
+# Define variables
+x <- prostate$lpsa
+y <- prostate$lcavol
+
+# Calculate sample means
+x_bar <- mean(x)
+y_bar <- mean(y)
+
+# Fit the SLR model
+model <- lm(y ~ x)
+
+# Calculate fitted values
+y_hat <- fitted(model)
+
+# Calculate SSE and SST
+SSE <- sum((y - y_hat)^2)
+SST <- sum((y - y_bar)^2)
+
+# Calculate R-squared
+R_squared <- 1 - SSE / SST
+
+# Display results
+cat("SSE:", SSE, "\n")
+cat("SST:", SST, "\n")
+cat("R-squared:", R_squared, "\n")
+
+# Verify using R
+summary(model)$r.squared
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
+<p>Using the prostate cancer data, we can compute <span class="math inline">\(SSE \approx 61.4209\)</span> and <span class="math inline">\(SST \approx 133.359\)</span>. We get that <span class="math inline">\(R^2 = 1 - \frac{61.4209}{133.359}\approx 0.5394\)</span>. This indicates that approximately <span class="math inline">\(53.94\%\)</span> of the total variation in log tumour volume is explained by the linear relationship with log PSA level. The remaining <span class="math inline">\(46.06\%\)</span> of the variation is not explained by the model and may be associated with other factors or random variability.</p>
 </div>
 <div id="statistical-inference-in-simple-linear-regression" class="section level3 hasAnchor" number="6.2.6">
 <h3><span class="header-section-number">6.2.6</span> Statistical Inference in Simple Linear Regression<a href="statistical-methods-in-oncology.html#statistical-inference-in-simple-linear-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -1196,16 +1326,16 @@ t_{n-2,1-\alpha/2}
 \frac{\hat{\sigma}}{\sqrt{S_{xx}}}.
 }
 \]</span>
-Suppose we wanted to test <span class="math inline">\(H_0:\beta_1=0\)</span> against <span class="math inline">\(H_1:\beta_1\neq 0\)</span> for the prostate cancer data, at the <span class="math inline">\(0.05\)</span> significance level. Recall, <span class="math inline">\(\hat{\beta_1} = 0.7193\)</span>, <span class="math inline">\(S_{xx}= 133.359\)</span>, and <span class="math inline">\(SSE = 58.91476\)</span>. Also, <span class="math inline">\(n=97\)</span>, so <span class="math inline">\(\hat{\sigma}^2 = \frac{58.91476}{95} \approx 0.6202.\)</span> Putting this together,</p>
-<p><span class="math display">\[T^* = \frac{0.7193}{\sqrt{\frac{0.6202}{133.359}}} \approx 10.5476. \]</span>
+Suppose we wanted to test <span class="math inline">\(H_0:\beta_1=0\)</span> against <span class="math inline">\(H_1:\beta_1\neq 0\)</span> for the prostate cancer data, at the <span class="math inline">\(0.05\)</span> significance level. Recall, <span class="math inline">\(\hat{\beta_1} = 0.74992\)</span>, <span class="math inline">\(S_{xx}= 127.9176\)</span>, and <span class="math inline">\(SSE \approx 61.4209\)</span>. Also, <span class="math inline">\(n=97\)</span>, so <span class="math inline">\(\hat{\sigma}^2 = \frac{61.4209}{95} \approx 0.64654.\)</span> Putting this together,</p>
+<p><span class="math display">\[T^* = \frac{0.74992}{\sqrt{\frac{0.64654}{127.9176}}} \approx 10.548. \]</span>
 For a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(95\)</span> degrees of freedom, the rejection region is <span class="math inline">\(R^* = \{T : |T| &gt; 1.985\}\)</span></p>
 <p>Since <span class="math inline">\(T^* \in R^*\)</span>, we reject the null in favour of the alternative. That is, we have statistically significant evidence that there is a linear association between log PSA levels and log tumour volume.</p>
-<p>A 95% confidence interval for <span class="math inline">\(\beta_1\)</span> is
+<p>A <span class="math inline">\(95\%\)</span> confidence interval for <span class="math inline">\(\beta_1\)</span> is
 <span class="math display">\[
-0.7193 \pm 1.985 {\sqrt{\frac{0.6202}{133.359}}}
-= \boxed {(0.5839,  0.8547).}
+0.74992 \pm 1.985 {\sqrt{\frac{0.64654}{127.9176}}}
+\approx \boxed {(0.6088,  0.8911).}
 \]</span>
-We are <span class="math inline">\(95\%\)</span> confident that the true population slope lies between <span class="math inline">\(0.5839\)</span> and <span class="math inline">\(0.8547\)</span>. Since both variables are logarithmically transformed, this suggests that a 1% increase in tumour volume is associated with an approximately <span class="math inline">\(0.5839\%\)</span> to <span class="math inline">\(0.8547\%\)</span> increase in PSA levels, on average.</p>
+We are <span class="math inline">\(95\%\)</span> confident that the true population slope lies between <span class="math inline">\(0.6088\)</span> and <span class="math inline">\(0.8911\)</span>. Since both variables are logarithmically transformed, this suggests that a <span class="math inline">\(1\%\)</span> increase in PSA level is associated with an approximately <span class="math inline">\(0.6088\%\)</span> to <span class="math inline">\(0.8911\%\)</span> increase in tumour volume, on average.</p>
 <p>Furthermore, since the confidence interval contains strictly positive values, there is evidence of a statistically significant positive linear relationship between log tumour volume and log PSA levels at the <span class="math inline">\(5\%\)</span> significance level, further verifying the result found in our hypothesis test.</p>
 </div>
 </div>
@@ -1293,6 +1423,52 @@ Here, <span class="math inline">\(\mathbf{X}\)</span> is called the design matri
 }
 \]</span></p>
 <p>where <span class="math inline">\(\hat{Y}_i\)</span> represents the predicted response for the <span class="math inline">\(i\)</span>th observation.</p>
+<p>To illustrate the application of multiple linear regression in oncology, we again consider the prostate cancer dataset available in the <code>faraway</code> package in R. Estimating tumour volume is of clinical interest, as it provides information about the extent of cancer. In particular, we may be interested in determining whether tumour volume can be estimated using patient characteristics and clinical measurements, such as prostate-specific antigen (PSA) levels.</p>
+<p>For this analysis, we consider the following variables:</p>
+<ul>
+<li><code>lcavol</code>: the logarithm of tumour volume,</li>
+<li><code>lpsa</code>: the logarithm of prostate-specific antigen (PSA) level,</li>
+<li><code>lweight</code>: the logarithm of prostate weight,</li>
+<li><code>age</code>: the age of the patient, measured in years.</li>
+</ul>
+<p>We let <span class="math inline">\(Y_i\)</span> denote the log tumour volume, <span class="math inline">\(x_{i1}\)</span> denote the log PSA level, <span class="math inline">\(x_{i2}\)</span> denote the log prostate weight, and <span class="math inline">\(x_{i3}\)</span> denote the age of the <span class="math inline">\(i\)</span>th patient.</p>
+<p>The multiple linear regression model is therefore given by</p>
+<p><span class="math display">\[
+Y_i=\beta_0+\beta_1x_{i1}+\beta_2x_{i2}
++\beta_3x_{i3}+\varepsilon_i,
+\qquad i=1,\ldots,97.
+\]</span></p>
+<p>Our objective is to investigate the relationship between each of these explanatory variables and log tumour volume while holding the remaining explanatory variables constant. Furthermore, we are interested in determining whether these clinical characteristics can be used collectively to estimate tumour volume.</p>
+<p>Run the following code to display the observations used in the multiple linear regression model.</p>
+<div class="webr-exercise">
+<div class="webr-exercise-header">Multiple Linear Regression Data</div>
+
+<textarea class="webr-editor" rows="12">
+# Load the dataset
+prostate <- read.csv("prostate.csv")
+
+# Select the variables
+observations <- data.frame(
+  Y = prostate$lcavol,
+  X1 = prostate$lpsa,
+  X2 = prostate$lweight,
+  X3 = prostate$age
+)
+
+# Display all observations
+print(observations)
+
+# Display the number of observations
+cat("Number of observations:", nrow(observations), "\n")
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
 </div>
 <div id="least-squares-estimation-of-the-regression-coefficients" class="section level3 hasAnchor" number="6.3.2">
 <h3><span class="header-section-number">6.3.2</span> Least Squares Estimation of the Regression Coefficients<a href="statistical-methods-in-oncology.html#least-squares-estimation-of-the-regression-coefficients" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -1306,6 +1482,74 @@ Y_i-\beta_0-\sum_{j=1}^p\beta_jx_{ij}
 \right)^2.
 \]</span></p>
 <p>Our objective is to find the values of <span class="math inline">\(\beta_0,\beta_1,\ldots,\beta_p\)</span> that minimize this expression.</p>
+<p>Before deriving the least squares estimator for multiple linear regression, we introduce some useful properties of matrix differentiation.</p>
+<p>Let <span class="math inline">\(\mathbf{x}=(x_1,\ldots,x_n)^T\)</span> be an <span class="math inline">\(n\times 1\)</span> vector. For a scalar-valued function <span class="math inline">\(f(\mathbf{x})\)</span>, the derivative with respect to <span class="math inline">\(\mathbf{x}\)</span> is defined as the gradient vector</p>
+<p><span class="math display">\[
+\frac{\partial f(\mathbf{x})}{\partial\mathbf{x}}
+=
+\begin{pmatrix}
+\frac{\partial f}{\partial x_1}\\[4pt]
+\frac{\partial f}{\partial x_2}\\
+\vdots\\
+\frac{\partial f}{\partial x_n}
+\end{pmatrix}.
+\]</span></p>
+<p>Let <span class="math inline">\(c\)</span> be a constant scalar, <span class="math inline">\(\mathbf{a}\)</span> be a constant <span class="math inline">\(n\times 1\)</span> vector, and <span class="math inline">\(\mathbf{A}\)</span> be a constant <span class="math inline">\(n\times n\)</span> matrix. The following properties will be useful.</p>
+<p><strong>Property 1: Derivative of a constant</strong></p>
+<p><span class="math display">\[
+\boxed{
+\frac{\partial c}{\partial\mathbf{x}}
+=\mathbf{0}.
+}
+\]</span></p>
+<p><strong>Property 2: Derivative of a linear form</strong></p>
+<p><span class="math display">\[
+\boxed{
+\frac{\partial(\mathbf{a}^T\mathbf{x})}
+{\partial\mathbf{x}}
+=
+\frac{\partial(\mathbf{x}^T\mathbf{a})}
+{\partial\mathbf{x}}
+=\mathbf{a}.
+}
+\]</span></p>
+<p>To see this, notice that</p>
+<p><span class="math display">\[
+\mathbf{a}^T\mathbf{x}
+=\sum_{i=1}^n a_ix_i.
+\]</span></p>
+<p>Differentiating with respect to each component of <span class="math inline">\(\mathbf{x}\)</span> gives</p>
+<p><span class="math display">\[
+\frac{\partial(\mathbf{a}^T\mathbf{x})}
+{\partial\mathbf{x}}
+=
+\begin{pmatrix}
+a_1\\
+a_2\\
+\vdots\\
+a_n
+\end{pmatrix}
+=\mathbf{a}.
+\]</span></p>
+<p><strong>Property 3: Derivative of a quadratic form</strong></p>
+<p><span class="math display">\[
+\boxed{
+\frac{\partial(\mathbf{x}^T\mathbf{A}\mathbf{x})}
+{\partial\mathbf{x}}
+=
+(\mathbf{A}+\mathbf{A}^T)\mathbf{x}.
+}
+\]</span></p>
+<p>In particular, if <span class="math inline">\(\mathbf{A}\)</span> is symmetric, then
+<span class="math inline">\(\mathbf{A}^T=\mathbf{A}\)</span>, and hence</p>
+<p><span class="math display">\[
+\boxed{
+\frac{\partial(\mathbf{x}^T\mathbf{A}\mathbf{x})}
+{\partial\mathbf{x}}
+=2\mathbf{A}\mathbf{x}.
+}
+\]</span></p>
+<p>These properties allow us to differentiate the sum of squared errors with respect to the vector of regression coefficients and obtain the least squares estimator in matrix form.</p>
 <p>Using matrix notation, the sum of squared errors becomes</p>
 <p><span class="math display">\[
 SSE(\boldsymbol{\beta})
@@ -1359,12 +1603,65 @@ SSE(\boldsymbol{\beta})
 <p><span class="math display">\[
 \hat{\mathbf{Y}}=\mathbf{X}\hat{\boldsymbol{\beta}},
 \]</span></p>
+<div class="webr-exercise">
+<div class="webr-exercise-header">Estimation of MLR Coefficients</div>
+
+<textarea class="webr-editor" rows="25">
+# Load the dataset
+prostate <- read.csv("prostate.csv")
+
+# Define the response vector
+Y <- as.matrix(prostate$lcavol)
+
+# Define the design matrix
+X <- cbind(
+  1,
+  prostate$lpsa,
+  prostate$lweight,
+  prostate$age
+)
+
+# Calculate X transpose X
+XtX <- t(X) %*% X
+
+# Calculate X transpose Y
+XtY <- t(X) %*% Y
+
+# Calculate the LSEs
+beta_hat <- solve(XtX) %*% XtY
+
+# Display the estimated coefficients
+print(beta_hat)
+
+# Verify using R's lm() function
+model <- lm(lcavol ~ lpsa  + lweight + age,
+            data = prostate)
+
+coef(model)
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
+<p>Using R for the prostate cancer data, we obtain <span class="math inline">\(\hat{\beta}_0 = -0.91121\)</span>, <span class="math inline">\(\hat{\beta}_1 = 0.76782\)</span>, <span class="math inline">\(\hat{\beta}_2 = -0.26773\)</span>, and <span class="math inline">\(\hat{\beta}_3 = 0.02092\)</span>. Thus, the fitted model is <span class="math display">\[\boxed{\hat{Y}_i = -0.91121  + 0.76782 x_{i1} - 0.26773 x_{i2} + 0.02092 x_{i3}}\]</span></p>
 </div>
 <div id="interpretation-of-the-regression-coefficients" class="section level3 hasAnchor" number="6.3.3">
 <h3><span class="header-section-number">6.3.3</span> Interpretation of the Regression Coefficients<a href="statistical-methods-in-oncology.html#interpretation-of-the-regression-coefficients" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>The interpretation of the regression coefficients in multiple linear regression is similar to that in simple linear regression. Each coefficient describes the relationship between its corresponding explanatory variable and the response while holding all other explanatory variables constant.</p>
 <p>The intercept <span class="math inline">\(\beta_0\)</span> represents the expected value of the response variable when all explanatory variables are equal to zero. However, the intercept may not always have a meaningful practical interpretation, particularly when zero is not a realistic value for one or more explanatory variables.</p>
 <p>For <span class="math inline">\(j=1,\ldots,p\)</span>, the coefficient <span class="math inline">\(\beta_j\)</span> represents the expected change in the response variable associated with a one-unit increase in <span class="math inline">\(x_j\)</span>, while holding all other explanatory variables constant. Thus, if <span class="math inline">\(\beta_j&gt;0\)</span>, increasing <span class="math inline">\(x_j\)</span> is associated with an increase in the expected response. If <span class="math inline">\(\beta_j&lt;0\)</span>, increasing <span class="math inline">\(x_j\)</span> is associated with a decrease in the expected response, after accounting for the remaining explanatory variables.</p>
+<p>For the prostate cancer data, we interpret the estimated regression coefficients as follows:</p>
+<ul>
+<li><p><span class="math inline">\(\hat{\beta}_0=-0.91121\)</span>: The estimated expected log tumour volume is <span class="math inline">\(-0.91121\)</span> when log PSA level, log prostate weight, and patient age are all equal to zero. However, this intercept does not have a meaningful clinical interpretation, since an age of zero is not within the relevant range of the data.</p></li>
+<li><p><span class="math inline">\(\hat{\beta}_1=0.76782\)</span>: For every one-unit increase in log PSA level, the expected log tumour volume is estimated to increase by <span class="math inline">\(0.76782\)</span> units, holding log prostate weight and patient age constant.</p></li>
+<li><p><span class="math inline">\(\hat{\beta}_2=-0.26773\)</span>: For every one-unit increase in log prostate weight, the expected log tumour volume is estimated to decrease by <span class="math inline">\(0.26773\)</span> units, holding log PSA level and patient age constant.</p></li>
+<li><p><span class="math inline">\(\hat{\beta}_3=0.02092\)</span>: For every additional year of patient age, the expected log tumour volume is estimated to increase by <span class="math inline">\(0.02092\)</span> units, holding log PSA level and log prostate weight constant.</p></li>
+</ul>
+<p>The estimated regression coefficients suggest that PSA level and patient age are positively associated with tumour volume, whereas prostate weight is negatively associated with tumour volume, after accounting for the remaining explanatory variables. However, the signs and magnitudes of the estimated regression coefficients alone do not establish whether these associations are statistically significant. To determine this, we conduct hypothesis tests and construct confidence intervals for the population regression coefficients.</p>
 </div>
 <div id="sampling-distribution-of-the-least-squares-estimators" class="section level3 hasAnchor" number="6.3.4">
 <h3><span class="header-section-number">6.3.4</span> Sampling Distribution of the Least Squares Estimators<a href="statistical-methods-in-oncology.html#sampling-distribution-of-the-least-squares-estimators" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -1481,6 +1778,250 @@ Z=
 \sim N(0,1).
 \]</span></p>
 </div>
+<div id="hypothesis-testing-and-confidence-intervals-for-the-regression-coefficients" class="section level3 hasAnchor" number="6.3.5">
+<h3><span class="header-section-number">6.3.5</span> Hypothesis Testing and Confidence Intervals for the Regression Coefficients<a href="statistical-methods-in-oncology.html#hypothesis-testing-and-confidence-intervals-for-the-regression-coefficients" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>As in simple linear regression, we may be interested in determining whether an explanatory variable is significantly associated with the response variable.</p>
+<p>In multiple linear regression, we test whether an individual population regression coefficient is equal to zero while accounting for the remaining explanatory variables.</p>
+<p>For the <span class="math inline">\(j\)</span>th explanatory variable, we consider the hypotheses <span class="math inline">\(H_0:\beta_j=0\)</span> versus <span class="math inline">\(H_1:\beta_j\neq 0\)</span>.</p>
+<p>Under the null hypothesis, the <span class="math inline">\(j\)</span>th explanatory variable has no linear association with the expected response after accounting for the other explanatory variables in the model.</p>
+<p>The population error variance <span class="math inline">\(\sigma^2\)</span> is generally unknown and must be estimated from the data. In multiple linear regression, we estimate <span class="math inline">\(p+1\)</span> coefficients, leaving <span class="math inline">\(n-p-1\)</span> residual degrees of freedom. An unbiased estimator of <span class="math inline">\(\sigma^2\)</span> is therefore</p>
+<p><span class="math display">\[
+S^2=\frac{SSE}{n-p-1}.
+\]</span></p>
+<p>Under the normality assumption, we also have</p>
+<p><span class="math display">\[
+\frac{(n-p-1)S^2}{\sigma^2}
+=
+\frac{SSE}{\sigma^2}
+\sim\chi^2_{n-p-1}.
+\]</span></p>
+<p>Furthermore, <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> and <span class="math inline">\(S^2\)</span> are independent. We omit the proofs of these facts for conciseness.</p>
+<p>Combining these results gives</p>
+<p><span class="math display">\[
+\boxed{
+T=
+\frac{\hat{\beta}_j-\beta_j}
+{S\sqrt{c_j}}
+\sim t_{n-p-1}.
+}
+\]</span></p>
+<p>The estimated standard error of <span class="math inline">\(\hat{\beta}_j\)</span> is <span class="math inline">\(SE(\hat{\beta}_j)=S\sqrt{c_j}\)</span>.</p>
+<p>This sampling distribution is used to construct hypothesis tests and confidence intervals for the regression coefficients.</p>
+<p>Under <span class="math inline">\(H_0:\beta_j=0\)</span>, the test statistic becomes</p>
+<p><span class="math display">\[
+\boxed{
+T=\frac{\hat{\beta}_j}{SE(\hat{\beta}_j)}.
+}
+\]</span></p>
+<p>Under the null hypothesis, <span class="math inline">\(T\sim t_{n-p-1}.\)</span></p>
+<p>For a two-sided hypothesis test at significance level <span class="math inline">\(\alpha\)</span>, the rejection region is <span class="math inline">\(R^*=\left\{T:|T|&gt;t_{1-\alpha/2,n-p-1}\right\},\)</span> where <span class="math inline">\(t_{1-\alpha/2,n-p-1}\)</span> is the <span class="math inline">\((1-\alpha/2)\)</span> quantile of a Student’s <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n-p-1\)</span> degrees of freedom.</p>
+<p>If the observed test statistic falls in the rejection region, we reject <span class="math inline">\(H_0\)</span> and conclude that there is statistically significant evidence of an association between the explanatory variable and the expected response, after adjusting for the other variables in the model. Otherwise, we fail to reject <span class="math inline">\(H_0\)</span>.</p>
+<p>In addition to hypothesis testing, we may wish to construct confidence intervals for the unknown population regression coefficients. To find a <span class="math inline">\(100(1-\alpha)\%\)</span> conidence interval for <span class="math inline">\(\beta_j\)</span>, we follow a similar procedure as in SLR.</p>
+<p><span class="math display">\[
+P\left(
+-t_{1-\alpha/2,n-p-1}
+\leq
+\frac{\hat{\beta}_j-\beta_j}{SE(\hat{\beta}_j)}
+\leq
+t_{1-\alpha/2,n-p-1}
+\right)
+=1-\alpha.
+\]</span></p>
+<p>Rearranging gives</p>
+<p><span class="math display">\[
+P\left(
+\hat{\beta}_j-t_{1-\alpha/2,n-p-1}SE(\hat{\beta}_j)
+\leq\beta_j\leq
+\hat{\beta}_j+t_{1-\alpha/2,n-p-1}SE(\hat{\beta}_j)
+\right)
+=1-\alpha.
+\]</span></p>
+<p>Thus, a <span class="math inline">\(100(1-\alpha)\%\)</span> confidence interval for <span class="math inline">\(\beta_j\)</span> is</p>
+<p><span class="math display">\[
+\boxed{
+\hat{\beta}_j
+\pm
+t_{1-\alpha/2,n-p-1}
+SE(\hat{\beta}_j).
+}
+\]</span></p>
+<p>If a two-sided <span class="math inline">\(95\%\)</span> confidence interval for <span class="math inline">\(\beta_j\)</span> does not contain zero, we reject <span class="math inline">\(H_0:\beta_j=0\)</span> in the corresponding two-sided hypothesis test at the <span class="math inline">\(5\%\)</span> significance level. If the interval contains zero, we fail to reject the null hypothesis.</p>
+<p>We are interested in determining whether log PSA level, log prostate weight, and patient age are significantly associated with log tumour volume after accounting for the remaining explanatory variables.</p>
+<p>For each regression coefficient, we consider the hypotheses</p>
+<p><span class="math display">\[
+H_0:\beta_j=0
+\qquad\text{versus}\qquad
+H_1:\beta_j\neq 0,
+\qquad j=0,1,2,3.
+\]</span></p>
+<p>We conduct two-sided hypothesis tests at the <span class="math inline">\(\alpha=0.05\)</span> significance level. Recall that the test statistic is given by</p>
+<p><span class="math display">\[
+T=\frac{\hat{\beta}_j}{SE(\hat{\beta}_j)},
+\]</span></p>
+<p>which follows a Student’s <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n-p-1\)</span> degrees of freedom under <span class="math inline">\(H_0\)</span>.</p>
+<p>Since we have <span class="math inline">\(n=97\)</span> observations and <span class="math inline">\(p=3\)</span> explanatory variables, the degrees of freedom are</p>
+<p><span class="math display">\[
+n-p-1=97-3-1=93.
+\]</span></p>
+<p>Therefore, the rejection region is</p>
+<p><span class="math display">\[
+R^*=\left\{
+T:|T|&gt;t_{0.975,93}
+\right\}
+=\left\{
+T:|T|&gt;1.9858
+\right\}.
+\]</span></p>
+<p>Using the estimated regression coefficients and their corresponding standard errors obtained in R, we calculate the observed test statistics using the R summary as follows:</p>
+<div class="webr-exercise">
+<div class="webr-exercise-header">Hypothesis Testing for MLR Coefficients</div>
+
+<textarea class="webr-editor" rows="12">
+# Load the dataset
+prostate <- read.csv("prostate.csv")
+
+# Fit the multiple linear regression model
+model <- lm(
+  lcavol ~ lpsa + lweight + age,
+  data = prostate
+)
+
+# Display the regression summary
+summary(model)
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
+<p><span class="math display">\[
+\begin{aligned}
+T_0&amp;=\frac{-0.91121}{0.81073}
+\approx -1.124,\\[6pt]
+T_1&amp;=\frac{0.76782}{0.07526}
+\approx 10.202,\\[6pt]
+T_2&amp;=\frac{-0.26773}{0.18118}
+\approx -1.478,\\[6pt]
+T_3&amp;=\frac{0.02092}{0.01147}
+\approx 1.824.
+\end{aligned}
+\]</span></p>
+<p>We interpret the results as follows:</p>
+<ul>
+<li><p>For <span class="math inline">\(\beta_0\)</span>, since <span class="math inline">\(|T_0|=1.124&lt;1.9858\)</span>, we fail to reject <span class="math inline">\(H_0\)</span>. There is insufficient evidence to conclude that the population intercept differs from zero.</p></li>
+<li><p>For <span class="math inline">\(\beta_1\)</span>, since <span class="math inline">\(|T_1|=10.202&gt;1.9858\)</span>, we reject <span class="math inline">\(H_0\)</span>. There is statistically significant evidence that log PSA level is associated with log tumour volume, after accounting for log prostate weight and patient age.</p></li>
+<li><p>For <span class="math inline">\(\beta_2\)</span>, since <span class="math inline">\(|T_2|=1.478&lt;1.9858\)</span>, we fail to reject <span class="math inline">\(H_0\)</span>. There is insufficient evidence to conclude that log prostate weight is associated with log tumour volume, after accounting for log PSA level and patient age.</p></li>
+<li><p>For <span class="math inline">\(\beta_3\)</span>, since <span class="math inline">\(|T_3|=1.824&lt;1.9858\)</span>, we fail to reject <span class="math inline">\(H_0\)</span>. There is insufficient evidence to conclude that patient age is associated with log tumour volume, after accounting for log PSA level and log prostate weight.</p></li>
+</ul>
+<p>Thus, at the <span class="math inline">\(5\%\)</span> significance level, log PSA level is the only explanatory variable that is individually statistically significant in our multiple linear regression model.</p>
+<p>In addition to conducting hypothesis tests, we construct <span class="math inline">\(95\%\)</span> confidence intervals for each population regression coefficient.</p>
+<p>Recall that a <span class="math inline">\(100(1-\alpha)\%\)</span> confidence interval for <span class="math inline">\(\beta_j\)</span> is given by</p>
+<p><span class="math display">\[
+\hat{\beta}_j
+\pm t_{1-\alpha/2,n-p-1}
+SE(\hat{\beta}_j).
+\]</span></p>
+<p>Setting <span class="math inline">\(\alpha=0.05\)</span> and substituting the corresponding critical value gives</p>
+<p><span class="math display">\[
+\hat{\beta}_j
+\pm 1.9858SE(\hat{\beta}_j).
+\]</span></p>
+<p>Using the estimated regression coefficients and their corresponding standard errors, we obtain the following confidence intervals:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\beta_0:\quad
+&amp;-0.91121\pm 1.9858(0.81073)\\
+&amp;=(-2.5212,\ 0.6987),\\[8pt]
+\beta_1:\quad
+&amp;0.76782\pm 1.9858(0.07526)\\
+&amp;=(0.6184,\ 0.9173),\\[8pt]
+\beta_2:\quad
+&amp;-0.26773\pm 1.9858(0.18118)\\
+&amp;=(-0.6275,\ 0.0921),\\[8pt]
+\beta_3:\quad
+&amp;0.02092\pm 1.9858(0.01147)\\
+&amp;=(-0.0019,\ 0.0437).
+\end{aligned}
+\]</span></p>
+<p>Notice that the confidence interval for <span class="math inline">\(\beta_1\)</span> is the only interval that does not contain zero. This is consistent with the results of our hypothesis tests.</p>
+<p>In particular, we estimate with <span class="math inline">\(95\%\)</span> confidence that a one-unit increase in log PSA level is associated with an increase in the expected log tumour volume of between <span class="math inline">\(0.6184\)</span> and <span class="math inline">\(0.9173\)</span> units, holding log prostate weight and patient age constant.</p>
+<p>Although the estimated regression coefficients for log prostate weight and patient age suggest negative and positive associations with log tumour volume, respectively, neither association is statistically significant at the <span class="math inline">\(5\%\)</span> significance level. This does not necessarily imply that these variables have no association with tumour volume, but rather that the observed data provide insufficient evidence of such associations after accounting for the remaining explanatory variables.</p>
+<div id="overall-significance-of-the-regression-model" class="section level4 hasAnchor" number="6.3.5.1">
+<h4><span class="header-section-number">6.3.5.1</span> Overall Significance of the Regression Model<a href="statistical-methods-in-oncology.html#overall-significance-of-the-regression-model" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>In addition to testing individual coefficients, we may wish to determine whether the explanatory variables, considered together, help explain variation in the response variable.</p>
+<p>This is accomplished using an F-test for the overall significance of the regression model.</p>
+<p>We consider the hypotheses <span class="math inline">\(H_0:\beta_1=\beta_2=\cdots=\beta_p=0\)</span> versus <span class="math inline">\(H_1:\text{At least one }\beta_j\neq 0.\)</span></p>
+<p>Under <span class="math inline">\(H_0\)</span>, the expected response does not depend on any of the explanatory variables, and the model reduces to</p>
+<p><span class="math display">\[
+Y_i=\beta_0+\varepsilon_i.
+\]</span></p>
+<p>To construct the test statistic, we compare the sum of squared errors from the full regression model with the sum of squared errors from the reduced, intercept-only model.</p>
+<p>Let <span class="math inline">\(SSE_F\)</span> denote the sum of squared errors from the full model and <span class="math inline">\(SSE_R\)</span> denote the sum of squared errors from the reduced model.</p>
+<p>The test statistic is</p>
+<p><span class="math display">\[
+\boxed{
+F=
+\frac{(SSE_R-SSE_F)/p}
+{SSE_F/(n-p-1)}.
+}
+\]</span></p>
+<p>Under <span class="math inline">\(H_0\)</span> and the normality assumptions, <span class="math inline">\(F\sim F_{p,n-p-1},\)</span> where <span class="math inline">\(F_{p,n-p-1}\)</span> denotes an F-distribution with <span class="math inline">\(p\)</span> numerator degrees of freedom and <span class="math inline">\(n-p-1\)</span> denominator degrees of freedom.</p>
+<p>For a hypothesis test at significance level <span class="math inline">\(\alpha\)</span>, the rejection region is <span class="math inline">\(R^*=\left\{F:F&gt;F_{1-\alpha;p,n-p-1}\right\}\)</span>, where <span class="math inline">\(F_{1-\alpha;p,n-p-1}\)</span> is the <span class="math inline">\((1-\alpha)\)</span> quantile of the corresponding F-distribution.</p>
+<p>If the observed F-statistic falls in the rejection region, we reject <span class="math inline">\(H_0\)</span> and conclude that at least one explanatory variable is linearly associated with the response after accounting for the others.</p>
+<p>Note that a significant overall F-test does not imply that every individual regression coefficient is statistically significant.</p>
+<p>For the prostate cancer data we consider the hypotheses <span class="math inline">\(H_0:\beta_1=\beta_2=\beta_3=0\)</span> versus
+<span class="math inline">\(H_1:\text{At least one }\beta_j\neq 0\)</span>, for <span class="math inline">\(j=1,2,3.\)</span></p>
+<p>Under <span class="math inline">\(H_0\)</span>, the test statistic follows an F-distribution with <span class="math inline">\(p\)</span> numerator degrees of freedom and <span class="math inline">\(n-p-1\)</span> denominator degrees of freedom. Since <span class="math inline">\(n=97\)</span> and <span class="math inline">\(p=3\)</span>, we have <span class="math inline">\(F\sim F_{3,93}\)</span>.</p>
+<p>We conduct the hypothesis test at the <span class="math inline">\(\alpha=0.05\)</span> significance level. The rejection region is</p>
+<p><span class="math display">\[
+R^*=\left\{
+F:F&gt;F_{0.95;3,93}
+\right\}
+=\left\{
+F:F&gt;2.7025
+\right\}.
+\]</span></p>
+<div class="webr-exercise">
+<div class="webr-exercise-header">Overall Significance of the MLR Model</div>
+
+<textarea class="webr-editor" rows="16">
+# Load the dataset
+prostate <- read.csv("prostate.csv")
+
+# Fit the MLR model
+model <- lm(lcavol ~ lpsa + age + lweight,
+            data = prostate)
+
+# Display model summary
+summary(model)
+
+# Extract F-statistic and degrees of freedom
+F_info <- summary(model)$fstatistic
+
+# Critical value at alpha = 0.05
+F_critical <- qf(0.95, F_info[2], F_info[3])
+
+# Apply rejection region
+cat("F-statistic:", F_info[1], "\n")
+cat("Critical value:", F_critical, "\n")
+
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
+<p>Using R, we obtain the observed test statistic <span class="math inline">\(F=39.48\)</span>. Since <span class="math inline">\(39.48&gt;2.7025,\)</span> the observed test statistic falls within the rejection region. Therefore, we reject <span class="math inline">\(H_0\)</span> at the <span class="math inline">\(5\%\)</span> significance level.</p>
+<p>We conclude that there is statistically significant evidence that at least one of the three explanatory variables is linearly associated with log tumour volume, after accounting for the remaining explanatory variables. Thus, the multiple linear regression model provides a statistically significant improvement over the intercept-only model.</p>
+<p>Note that rejecting the null hypothesis in the overall F-test does not imply that every explanatory variable is individually statistically significant. This is consistent with our previous hypothesis tests, in which only log PSA level was found to be individually statistically significant at the <span class="math inline">\(5\%\)</span> significance level.</p>
+</div>
+</div>
 </div>
 <div id="logistic-regression" class="section level2 hasAnchor" number="6.4">
 <h2><span class="header-section-number">6.4</span> Logistic Regression<a href="statistical-methods-in-oncology.html#logistic-regression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -1520,301 +2061,39 @@ p_i=\frac{\exp(\beta_0+\beta_1x_i)}{1+\exp(\beta_0+\beta_1x_i)},
 <p>Unlike probabilities, which range from <span class="math inline">\(0\)</span> to <span class="math inline">\(1\)</span>, odds range from <span class="math inline">\(0\)</span> to infinity. Odds greater than <span class="math inline">\(1\)</span> indicate that success is more likely than failure, while odds less than <span class="math inline">\(1\)</span> indicate that failure is more likely than success.</p>
 <p>Notice that logistic regression models the logarithm of the odds as a linear function of the explanatory variable.</p>
 <p>To illustrate the application of logistic regression in oncology, we again consider the prostate cancer dataset available in the <code>faraway</code> package in R. Seminal vesicle invasion (SVI) occurs when prostate cancer spreads into the seminal vesicles, which are glands located near the prostate.</p>
-<p>We are interested in investigating the relationship between tumour volume and the probability of seminal vesicle invasion. Since seminal vesicle invasion is a binary outcome, logistic regression is appropriate for modelling its probability. We consider the logarithmic transformation of tumour volume as our explanatory variable. Let <span class="math inline">\(x_i\)</span> denote the log tumour volume and <span class="math inline">\(Y_i\)</span> denote the presence of seminal vesicle invasion for patient <span class="math inline">\(i\)</span>, where <span class="math inline">\(Y_i=1\)</span> indicates invasion and <span class="math inline">\(Y_i=0\)</span> indicates no invasion. Below are the values of these variables for the 97 men, along with a plot illustrating the relationship between them.</p>
-<table style="width:100%;">
-<caption><span id="tab:prostate-logistic-table">Table 6.2: </span>Log tumour volume and seminal vesicle invasion for 97 prostate cancer patients.</caption>
-<colgroup>
-<col width="24%" />
-<col width="6%" />
-<col width="25%" />
-<col width="7%" />
-<col width="26%" />
-<col width="8%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="center">Log Tumour Volume</th>
-<th align="center">SVI</th>
-<th align="center">Log Tumour Volume</th>
-<th align="center">SVI</th>
-<th align="center">Log Tumour Volume</th>
-<th align="center">SVI</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="center">-0.580</td>
-<td align="center">0</td>
-<td align="center">0.010</td>
-<td align="center">0</td>
-<td align="center">2.023</td>
-<td align="center">0</td>
-</tr>
-<tr class="even">
-<td align="center">-0.994</td>
-<td align="center">0</td>
-<td align="center">-0.010</td>
-<td align="center">0</td>
-<td align="center">2.198</td>
-<td align="center">0</td>
-</tr>
-<tr class="odd">
-<td align="center">-0.511</td>
-<td align="center">0</td>
-<td align="center">1.308</td>
-<td align="center">0</td>
-<td align="center">-0.446</td>
-<td align="center">0</td>
-</tr>
-<tr class="even">
-<td align="center">-1.204</td>
-<td align="center">0</td>
-<td align="center">1.423</td>
-<td align="center">0</td>
-<td align="center">1.194</td>
-<td align="center">0</td>
-</tr>
-<tr class="odd">
-<td align="center">0.751</td>
-<td align="center">0</td>
-<td align="center">0.457</td>
-<td align="center">0</td>
-<td align="center">1.864</td>
-<td align="center">1</td>
-</tr>
-<tr class="even">
-<td align="center">-1.050</td>
-<td align="center">0</td>
-<td align="center">2.661</td>
-<td align="center">1</td>
-<td align="center">1.160</td>
-<td align="center">0</td>
-</tr>
-<tr class="odd">
-<td align="center">0.737</td>
-<td align="center">0</td>
-<td align="center">0.798</td>
-<td align="center">0</td>
-<td align="center">1.215</td>
-<td align="center">1</td>
-</tr>
-<tr class="even">
-<td align="center">0.693</td>
-<td align="center">0</td>
-<td align="center">0.621</td>
-<td align="center">0</td>
-<td align="center">1.839</td>
-<td align="center">1</td>
-</tr>
-<tr class="odd">
-<td align="center">-0.777</td>
-<td align="center">0</td>
-<td align="center">1.442</td>
-<td align="center">0</td>
-<td align="center">2.999</td>
-<td align="center">1</td>
-</tr>
-<tr class="even">
-<td align="center">0.223</td>
-<td align="center">0</td>
-<td align="center">0.582</td>
-<td align="center">0</td>
-<td align="center">3.141</td>
-<td align="center">1</td>
-</tr>
-<tr class="odd">
-<td align="center">0.255</td>
-<td align="center">0</td>
-<td align="center">1.772</td>
-<td align="center">0</td>
-<td align="center">2.011</td>
-<td align="center">0</td>
-</tr>
-<tr class="even">
-<td align="center">-1.347</td>
-<td align="center">0</td>
-<td align="center">1.486</td>
-<td align="center">0</td>
-<td align="center">2.538</td>
-<td align="center">0</td>
-</tr>
-<tr class="odd">
-<td align="center">1.613</td>
-<td align="center">0</td>
-<td align="center">1.664</td>
-<td align="center">0</td>
-<td align="center">2.648</td>
-<td align="center">1</td>
-</tr>
-<tr class="even">
-<td align="center">1.477</td>
-<td align="center">0</td>
-<td align="center">2.728</td>
-<td align="center">1</td>
-<td align="center">2.779</td>
-<td align="center">0</td>
-</tr>
-<tr class="odd">
-<td align="center">1.206</td>
-<td align="center">0</td>
-<td align="center">1.163</td>
-<td align="center">0</td>
-<td align="center">1.468</td>
-<td align="center">0</td>
-</tr>
-<tr class="even">
-<td align="center">1.541</td>
-<td align="center">0</td>
-<td align="center">1.746</td>
-<td align="center">0</td>
-<td align="center">2.514</td>
-<td align="center">0</td>
-</tr>
-<tr class="odd">
-<td align="center">-0.416</td>
-<td align="center">0</td>
-<td align="center">1.221</td>
-<td align="center">0</td>
-<td align="center">2.613</td>
-<td align="center">1</td>
-</tr>
-<tr class="even">
-<td align="center">2.288</td>
-<td align="center">0</td>
-<td align="center">1.092</td>
-<td align="center">0</td>
-<td align="center">2.678</td>
-<td align="center">0</td>
-</tr>
-<tr class="odd">
-<td align="center">-0.562</td>
-<td align="center">0</td>
-<td align="center">1.660</td>
-<td align="center">0</td>
-<td align="center">1.562</td>
-<td align="center">0</td>
-</tr>
-<tr class="even">
-<td align="center">0.182</td>
-<td align="center">0</td>
-<td align="center">0.513</td>
-<td align="center">0</td>
-<td align="center">3.303</td>
-<td align="center">1</td>
-</tr>
-<tr class="odd">
-<td align="center">1.147</td>
-<td align="center">0</td>
-<td align="center">2.127</td>
-<td align="center">0</td>
-<td align="center">2.024</td>
-<td align="center">0</td>
-</tr>
-<tr class="even">
-<td align="center">2.059</td>
-<td align="center">0</td>
-<td align="center">3.154</td>
-<td align="center">0</td>
-<td align="center">1.732</td>
-<td align="center">1</td>
-</tr>
-<tr class="odd">
-<td align="center">-0.545</td>
-<td align="center">0</td>
-<td align="center">1.267</td>
-<td align="center">0</td>
-<td align="center">2.808</td>
-<td align="center">1</td>
-</tr>
-<tr class="even">
-<td align="center">1.782</td>
-<td align="center">0</td>
-<td align="center">0.975</td>
-<td align="center">0</td>
-<td align="center">1.562</td>
-<td align="center">1</td>
-</tr>
-<tr class="odd">
-<td align="center">0.385</td>
-<td align="center">0</td>
-<td align="center">0.464</td>
-<td align="center">0</td>
-<td align="center">3.246</td>
-<td align="center">0</td>
-</tr>
-<tr class="even">
-<td align="center">1.447</td>
-<td align="center">0</td>
-<td align="center">0.542</td>
-<td align="center">0</td>
-<td align="center">2.533</td>
-<td align="center">1</td>
-</tr>
-<tr class="odd">
-<td align="center">0.513</td>
-<td align="center">0</td>
-<td align="center">1.061</td>
-<td align="center">0</td>
-<td align="center">2.830</td>
-<td align="center">1</td>
-</tr>
-<tr class="even">
-<td align="center">-0.400</td>
-<td align="center">0</td>
-<td align="center">0.457</td>
-<td align="center">0</td>
-<td align="center">3.821</td>
-<td align="center">1</td>
-</tr>
-<tr class="odd">
-<td align="center">1.040</td>
-<td align="center">0</td>
-<td align="center">1.997</td>
-<td align="center">1</td>
-<td align="center">2.907</td>
-<td align="center">1</td>
-</tr>
-<tr class="even">
-<td align="center">2.410</td>
-<td align="center">0</td>
-<td align="center">2.776</td>
-<td align="center">0</td>
-<td align="center">2.883</td>
-<td align="center">1</td>
-</tr>
-<tr class="odd">
-<td align="center">0.285</td>
-<td align="center">0</td>
-<td align="center">2.035</td>
-<td align="center">1</td>
-<td align="center">3.472</td>
-<td align="center">1</td>
-</tr>
-<tr class="even">
-<td align="center">0.182</td>
-<td align="center">0</td>
-<td align="center">2.073</td>
-<td align="center">0</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-</tr>
-<tr class="odd">
-<td align="center">1.275</td>
-<td align="center">0</td>
-<td align="center">1.459</td>
-<td align="center">0</td>
-<td align="center">NA</td>
-<td align="center">NA</td>
-</tr>
-</tbody>
-</table>
+<p>We are interested in investigating the relationship between tumour volume and the probability of seminal vesicle invasion. Since seminal vesicle invasion is a binary outcome, logistic regression is appropriate for modelling its probability. We consider the logarithmic transformation of tumour volume as our explanatory variable. Let <span class="math inline">\(x_i\)</span> denote the log tumour volume and <span class="math inline">\(Y_i\)</span> denote the presence of seminal vesicle invasion for patient <span class="math inline">\(i\)</span>, where <span class="math inline">\(Y_i=1\)</span> indicates invasion and <span class="math inline">\(Y_i=0\)</span> indicates no invasion.
+Run the following code to display the observations used in the logistic regression model.</p>
+<div class="webr-exercise">
+<div class="webr-exercise-header">Logistic Regression Data</div>
+
+<textarea class="webr-editor" rows="12">
+# Load the dataset
+prostate <- read.csv("prostate.csv")
+
+# Select the variables
+observations <- data.frame(
+  Y = prostate$svi,
+  X = prostate$lcavol
+)
+
+# Display all observations
+print(observations)
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
+<p>Below is a plot illustrating the relationship between these variables for 97 men.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:prostate-logistic-plots"></span>
 <img src="_main_files/figure-html/prostate-logistic-plots-1.png" alt="Relationship between log tumour volume and seminal vesicle invasion." width="960" />
 <p class="caption">
-Figure 6.8: Relationship between log tumour volume and seminal vesicle invasion.
+Figure 6.7: Relationship between log tumour volume and seminal vesicle invasion.
 </p>
 </div>
-<p>Table <a href="statistical-methods-in-oncology.html#tab:prostate-logistic-table">6.2</a> presents the log tumour volumes and seminal vesicle invasion statuses for the 97 patients. Figure <a href="statistical-methods-in-oncology.html#fig:prostate-logistic-plots">6.8</a> illustrates the relationship between log tumour volume and seminal vesicle invasion.</p>
 </div>
 <div id="estimation-of-regression-coefficients" class="section level3 hasAnchor" number="6.4.2">
 <h3><span class="header-section-number">6.4.2</span> Estimation of Regression Coefficients<a href="statistical-methods-in-oncology.html#estimation-of-regression-coefficients" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -1891,6 +2170,31 @@ y_i-\frac{\exp(\hat{\beta}_0+\hat{\beta}_1x_i)}
 }
 \]</span></p>
 <p>Unlike the least squares estimators in simple linear regression, these equations do not generally have closed-form solutions. Instead, iterative methods such as the Newton–Raphson algorithm are used to obtain <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span>.</p>
+<div class="webr-exercise">
+<div class="webr-exercise-header">Estimation of Logistic Regression Coefficients</div>
+
+<textarea class="webr-editor" rows="14">
+# Load the dataset
+prostate <- read.csv("prostate.csv")
+
+# Fit the logistic regression model
+model <- glm(
+  svi ~ lcavol,
+  data = prostate,
+  family = binomial(link = "logit")
+)
+
+# Obtain estimated coefficients
+coef(model)
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
 <p>Using R, we obtain <span class="math inline">\(\hat{\beta}_0=-5.0296\)</span> and <span class="math inline">\(\hat{\beta}_1=1.9798\)</span> for the prostate cancer study. Thus, the fitted logistic regression model is</p>
 <p><span class="math display">\[
 \log\left(\frac{\hat{p}_i}{1-\hat{p}_i}\right)
@@ -2019,19 +2323,253 @@ H_1:\beta_1\neq 0.
 Z^*=\frac{\hat{\beta}_1}{SE(\hat{\beta}_1)},
 \]</span></p>
 <p>which approximately follows a standard normal distribution under <span class="math inline">\(H_0\)</span>. The rejection region is <span class="math inline">\(R^*=\{z : |z|&gt;z_{1-\alpha/2}=z_{0.975}=1.96\}\)</span></p>
-<p>Using R, we obtain <span class="math inline">\(\hat{\beta}_1= 1.9798\)</span> and <span class="math inline">\(SE(\hat{\beta}_1)=1.0429\)</span>. Therefore, the observed test statistic is</p>
+<div class="webr-exercise">
+<div class="webr-exercise-header">Hypothesis Test and Confidence Interval for Logistic Regression</div>
+
+<textarea class="webr-editor" rows="12">
+# Load the dataset
+prostate <- read.csv("prostate.csv")
+
+# Fit logistic regression
+model <- glm(svi ~ lcavol, data = prostate,
+             family = binomial)
+
+# Hypothesis test for coefficients
+summary(model)$coefficients
+
+# 95% Wald confidence intervals
+confint.default(model)
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
+<p>Using R, we obtain <span class="math inline">\(\hat{\beta}_1= 1.9798\)</span> and <span class="math inline">\(SE(\hat{\beta}_1)=0.4543\)</span>. Therefore, the observed test statistic is</p>
 <p><span class="math display">\[
-Z = \frac{1.9798}{1.0429} \approx 1.8984
+Z = \frac{1.9798}{0.45432} \approx 4.357913
 \]</span></p>
-<p>Since <span class="math inline">\(1.8984 \notin R^*\)</span>, there is insufficient statistical evidence to conclude that log tumour volume is associated with the log-odds of seminal vesicle invasion.`</p>
+<p>Since <span class="math inline">\(4.357913 \in R^*\)</span>, there is sufficient statistical evidence to conclude that log tumour volume is associated with the log-odds of seminal vesicle invasion.`</p>
 <p>A <span class="math inline">\(95\%\)</span> confidence interval for <span class="math inline">\(\beta_1\)</span> is
 <span class="math display">\[
-1.9798 \pm 1.96 (1.0429)=\boxed{(-0.0643,  4.0239)}
+1.9798 \pm 1.96 (0.4543)=\boxed{(1.0893,  2.8702)}
 \]</span></p>
 <p>We are <span class="math inline">\(95\%\)</span> confident that the true change in the log-odds of seminal vesicle invasion for a one-unit increase in log tumour volume lies within this interval.</p>
 <p>Since the confidence interval for the slope contains zero, this is consistent with failing to reject the null hypothesis at the <span class="math inline">\(5\%\)</span> significance level.</p>
-
 </div>
+</div>
+<div id="confusion-matrix" class="section level3 hasAnchor" number="6.4.5">
+<h3><span class="header-section-number">6.4.5</span> Confusion Matrix<a href="statistical-methods-in-oncology.html#confusion-matrix" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In logistic regression, we may be interested in evaluating how accurately the fitted model predicts binary outcomes. A confusion matrix is a table that compares the predicted classifications with the actual observed outcomes.</p>
+<p>Recall that logistic regression estimates the probability <span class="math inline">\(\hat{p}_i=P(Y_i=1\mid x_i)\)</span>. To classify observations, we select a probability threshold, commonly <span class="math inline">\(0.5\)</span>, such that</p>
+<p><span class="math display">\[
+\hat{Y}_i=
+\begin{cases}
+1, &amp; \hat{p}_i\geq 0.5,\\
+0, &amp; \hat{p}_i&lt;0.5.
+\end{cases}
+\]</span></p>
+<p>The confusion matrix consists of four possible outcomes:</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Predicted <span class="math inline">\(Y=0\)</span></th>
+<th>Predicted <span class="math inline">\(Y=1\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Actual <span class="math inline">\(Y=0\)</span></td>
+<td>True Negative (TN)</td>
+<td>False Positive (FP)</td>
+</tr>
+<tr class="even">
+<td>Actual <span class="math inline">\(Y=1\)</span></td>
+<td>False Negative (FN)</td>
+<td>True Positive (TP)</td>
+</tr>
+</tbody>
+</table>
+<p>These outcomes can be used to calculate several measures of classification performance:</p>
+<ul>
+<li><strong>Accuracy:</strong> The proportion of observations correctly classified.</li>
+</ul>
+<p><span class="math display">\[
+\text{Accuracy}=\frac{TP+TN}{TP+TN+FP+FN}.
+\]</span></p>
+<ul>
+<li><strong>Sensitivity:</strong> The proportion of actual positive observations correctly identified.</li>
+</ul>
+<p><span class="math display">\[
+\text{Sensitivity}=\frac{TP}{TP+FN}.
+\]</span></p>
+<ul>
+<li><strong>Specificity:</strong> The proportion of actual negative observations correctly identified.</li>
+</ul>
+<p><span class="math display">\[
+\text{Specificity}=\frac{TN}{TN+FP}.
+\]</span></p>
+<p>To illustrate this using the prostate cancer dataset, we consider our simple logistic regression model for predicting seminal vesicle invasion (SVI) based on log tumour volume.</p>
+<p>Using R, we obtain the confusion matrix.</p>
+<div class="webr-exercise">
+<div class="webr-exercise-header">Confusion Matrix and Classification Performance</div>
+
+<textarea class="webr-editor" rows="20">
+# Load the dataset
+prostate <- read.csv("prostate.csv")
+
+# Fit logistic regression
+model <- glm(svi ~ lcavol, data = prostate,
+             family = binomial)
+
+# Predicted classifications
+predicted <- as.integer(predict(model, type = "response") >= 0.5)
+
+# Confusion matrix
+CM <- table(
+  Actual = factor(prostate$svi, levels = 0:1),
+  Predicted = factor(predicted, levels = 0:1)
+)
+
+print(CM)
+
+# Extract outcomes
+TN <- CM[1,1]
+FP <- CM[1,2]
+FN <- CM[2,1]
+TP <- CM[2,2]
+
+# Classification performance
+cat("Accuracy:", (TP + TN) / sum(CM), "\n")
+cat("Sensitivity:", TP / (TP + FN), "\n")
+cat("Specificity:", TN / (TN + FP), "\n")
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
+<p>Using the fitted model, we obtain an accuracy of <span class="math inline">\(0.866\)</span>, a sensitivity of <span class="math inline">\(0.619\)</span>, and a specificity of <span class="math inline">\(0.9342\)</span>.</p>
+<p>These measures describe how well the fitted model classifies patients according to whether seminal vesicle invasion occurs, using log tumour volume as the explanatory variable. In medical applications, sensitivity and specificity are particularly important, since false negatives and false positives may have different clinical consequences.</p>
+</div>
+<div id="multiple-logistic-regression" class="section level3 hasAnchor" number="6.4.6">
+<h3><span class="header-section-number">6.4.6</span> Multiple Logistic Regression<a href="statistical-methods-in-oncology.html#multiple-logistic-regression" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Similar to how multiple linear regression extends simple linear regression, multiple logistic regression extends simple logistic regression by allowing two or more explanatory variables to be included in the same model. This is particularly useful in oncology, where the probability of an event, such as tumour recurrence or treatment response, may depend on several patient and clinical characteristics.</p>
+<p>Suppose we have <span class="math inline">\(n\)</span> independent observations and <span class="math inline">\(p\)</span> explanatory variables. Let <span class="math inline">\(Y_i\)</span> be a binary response variable, where <span class="math inline">\(Y_i=1\)</span> indicates that the event of interest occurs and <span class="math inline">\(Y_i=0\)</span> otherwise.</p>
+<p>We assume that</p>
+<p><span class="math display">\[
+Y_i\mid\mathbf{x}_i\sim\operatorname{Bernoulli}(p_i),
+\]</span></p>
+<p>where <span class="math inline">\(p_i=P(Y_i=1\mid\mathbf{x}_i)\)</span> and <span class="math inline">\(\mathbf{x}_i=(x_{i1},\ldots,x_{ip})^T\)</span>.</p>
+<p>The multiple logistic regression model is given by</p>
+<p><span class="math display">\[
+\boxed{
+\log\left(\frac{p_i}{1-p_i}\right)
+=\beta_0+\beta_1x_{i1}+\cdots+\beta_px_{ip}.
+}
+\]</span></p>
+<p>Equivalently, the probability of observing the event is</p>
+<p><span class="math display">\[
+\boxed{
+p_i=
+\frac{\exp\left(\beta_0+\sum_{j=1}^p\beta_jx_{ij}\right)}
+{1+\exp\left(\beta_0+\sum_{j=1}^p\beta_jx_{ij}\right)}.
+}
+\]</span></p>
+<p>The regression coefficients <span class="math inline">\(\beta_0,\beta_1,\ldots,\beta_p\)</span> are unknown and must be estimated from the observed data.</p>
+<p>The coefficient <span class="math inline">\(\beta_j\)</span> represents the change in the log-odds of the event associated with a one-unit increase in the <span class="math inline">\(j\)</span>th explanatory variable, holding all other explanatory variables constant.</p>
+<p>If <span class="math inline">\(e^{\beta_j}&gt;1\)</span>, the odds of the event increase as <span class="math inline">\(x_j\)</span> increases. If <span class="math inline">\(e^{\beta_j}&lt;1\)</span>, the odds decrease. If <span class="math inline">\(e^{\beta_j}=1\)</span>, the odds remain unchanged.</p>
+<p>As in simple logistic regression, the regression coefficients are estimated using the method of maximum likelihood.</p>
+<p>Let <span class="math inline">\(y_1,\ldots,y_n\)</span> denote the observed binary responses. Assuming conditional independence, the likelihood function is</p>
+<p><span class="math display">\[
+L(\boldsymbol{\beta})
+=\prod_{i=1}^n p_i^{y_i}(1-p_i)^{1-y_i},
+\]</span></p>
+<p>where <span class="math inline">\(\boldsymbol{\beta}=(\beta_0,\beta_1,\ldots,\beta_p)^T\)</span>.</p>
+<p>Taking natural logarithms and substituting the logistic regression model gives</p>
+<p><span class="math display">\[
+\boxed{
+\ell(\boldsymbol{\beta})
+=
+\sum_{i=1}^n
+\left[
+y_i\left(\beta_0+\sum_{j=1}^p\beta_jx_{ij}\right)
+-
+\log\left(
+1+\exp\left(\beta_0+\sum_{j=1}^p\beta_jx_{ij}\right)
+\right)
+\right].
+}
+\]</span></p>
+<p>The maximum likelihood estimator <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> is obtained by maximizing this log-likelihood function. Unlike least squares estimation in multiple linear regression, the maximum likelihood estimates generally do not have a closed-form solution and must be obtained using numerical methods.</p>
+<p>To determine whether an explanatory variable is significantly associated with the probability of the event, after accounting for the remaining explanatory variables, we consider <span class="math inline">\(H_0:\beta_j=0\)</span> versus <span class="math inline">\(H_1:\beta_j\neq 0\)</span>.</p>
+<p>We again use the Wald test, with test statistic</p>
+<p><span class="math display">\[
+\boxed{
+Z=\frac{\hat{\beta}_j}{SE(\hat{\beta}_j)}.
+}
+\]</span></p>
+<p>Under <span class="math inline">\(H_0\)</span> and suitable large-sample conditions, the test statistic approximately follows a standard normal distribution.</p>
+<p>For a two-sided hypothesis test at significance level <span class="math inline">\(\alpha\)</span>, the rejection region is</p>
+<p><span class="math display">\[
+R^*=\left\{
+Z:|Z|&gt;z_{1-\alpha/2}
+\right\}.
+\]</span></p>
+<p>Similarly, an approximate <span class="math inline">\(100(1-\alpha)\%\)</span> confidence interval for <span class="math inline">\(\beta_j\)</span> is</p>
+<p><span class="math display">\[
+\boxed{
+\hat{\beta}_j\pm z_{1-\alpha/2}SE(\hat{\beta}_j).
+}
+\]</span></p>
+<p>Again, consider the prosate cancer data. Let <span class="math inline">\(Y\)</span> denote seminal vesicle invasion, with explanatory variables <span class="math inline">\(x_1\)</span> representing log tumour volume, <span class="math inline">\(x_2\)</span> representing log PSA level , and <span class="math inline">\(x_3\)</span> representing age.</p>
+<p>The multiple logistic regression model is</p>
+<p><span class="math display">\[
+\log\left(\frac{p_i}{1-p_i}\right)
+= \beta_0+\beta_1x_{i1}+\beta_2x_{i2}+\beta_3x_{i3},
+\]</span></p>
+<p>where <span class="math inline">\(p_i=P(Y_i=1\mid x_{i1},x_{i2},x_{i3})\)</span>.</p>
+<p>For each coefficient, we test <span class="math inline">\(H_0:\beta_j=0\)</span> versus <span class="math inline">\(H_1:\beta_j\neq 0\)</span>. At the <span class="math inline">\(\alpha=0.05\)</span> significance level, we reject <span class="math inline">\(H_0\)</span> if <span class="math inline">\(|Z_j|&gt;z_{0.975}\approx 1.96\)</span>.</p>
+<div class="webr-exercise">
+<div class="webr-exercise-header">Multiple Logistic Regression: Hypothesis Testing</div>
+
+<textarea class="webr-editor" rows="14">
+# Load the dataset
+prostate <- read.csv("prostate.csv")
+
+# Fit multiple logistic regression
+model <- glm(
+  svi ~ lcavol + lpsa + age,
+  data = prostate,
+  family = binomial
+)
+
+# Display model summary
+summary(model)
+
+# Critical value at alpha = 0.05
+qnorm(0.975)
+
+# 95% Wald confidence intervals
+confint.default(model)
+</textarea>
+
+<div class="webr-controls">
+<button class="webr-run-btn" disabled>Run</button>
+<button class="webr-reset-btn">Reset</button>
+</div>
+
+<div class="webr-output-area"></div>
+</div>
+<p>At the <span class="math inline">\(\alpha=0.05\)</span> significance level, both log tumour volume and log PSA level are statistically significant predictors of seminal vesicle invasion, with <span class="math inline">\(|Z|=2.188\)</span> and <span class="math inline">\(|Z|=2.604\)</span>, respectively. However, age is not statistically significant, since <span class="math inline">\(|Z|=0.814&lt;1.96\)</span>. Therefore, we reject <span class="math inline">\(H_0\)</span> for the coefficients of log tumour volume and log PSA level, but fail to reject <span class="math inline">\(H_0\)</span> for age. These results suggest that log tumour volume and log PSA level are positively associated with the odds of seminal vesicle invasion after adjusting for the other variables in the model, whereas there is insufficient evidence of an association with age. This is further shown through the confidence intervals, as the confidence interval for age contains <span class="math inline">\(0\)</span>.</p>
+
 </div>
 </div>
 </div>
@@ -2055,17 +2593,7 @@ Z = \frac{1.9798}{1.0429} \approx 1.8984
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
-  "sharing": {
-    "github": false,
-    "facebook": true,
-    "twitter": true,
-    "linkedin": false,
-    "weibo": false,
-    "instapaper": false,
-    "vk": false,
-    "whatsapp": false,
-    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-  },
+  "sharing": false,
   "fontsettings": {
     "theme": "white",
     "family": "sans",
@@ -2090,7 +2618,8 @@ gitbook.start({
   },
   "toc": {
     "collapse": "subsection"
-  }
+  },
+  "info": false
 });
 });
 </script>

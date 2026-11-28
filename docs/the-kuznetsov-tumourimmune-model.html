@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 3 The Kuznetsov Tumour–Immune Model | sample2</title>
   <meta name="description" content="Chapter 3 The Kuznetsov Tumour–Immune Model | sample2" />
-  <meta name="generator" content="bookdown 0.45 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.48 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 3 The Kuznetsov Tumour–Immune Model | sample2" />
   <meta property="og:type" content="book" />
@@ -51,6 +51,395 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<!-- webR Interactive R Exercise Cells -->
+<!-- Loaded via _output.yml in_header for bookdown::gitbook -->
+
+<style>
+/* ── Loading indicator ── */
+#webr-loading-indicator {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  font-size: 0.85rem;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid #dee2e6;
+  background-color: #f8f8f8;
+  border-top-left-radius: 5px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #212529;
+  font-family: sans-serif;
+}
+#webr-loading-indicator.webr-ready { display: none; }
+#webr-loading-indicator.webr-error {
+  background-color: #f8d7da;
+  border-color: #f1aeb5;
+  color: #58151c;
+}
+
+/* ── Exercise card ── */
+.webr-exercise {
+  margin: 0.5rem 0;
+  border: 1px solid rgba(0,0,0,0.175);
+  border-radius: 0.375rem;
+  overflow: hidden;
+  font-family: sans-serif;
+  font-size: 0.85em;
+  background: #fff;
+}
+
+/* ── Card header ── */
+.webr-exercise-header {
+  padding: 0.25rem 0.6rem;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid rgba(0,0,0,0.175);
+  font-weight: 600;
+  color: #212529;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.webr-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-shrink: 0;
+}
+
+/* ── Run button ── */
+.webr-run-btn {
+  padding: 0.1rem 0.5rem;
+  font-size: 0.8em;
+  color: #fff;
+  background-color: #0d6efd;
+  border: 1px solid #0d6efd;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  font-family: sans-serif;
+  white-space: nowrap;
+  transition: background-color 0.15s;
+}
+.webr-run-btn:hover:not(:disabled) { background-color: #0b5ed7; }
+.webr-run-btn:disabled { opacity: 0.65; cursor: not-allowed; }
+
+/* ── Reset button ── */
+.webr-reset-btn {
+  padding: 0.1rem 0.5rem;
+  font-size: 0.8em;
+  color: #6c757d;
+  background-color: transparent;
+  border: 1px solid #6c757d;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  font-family: sans-serif;
+  white-space: nowrap;
+  transition: background-color 0.15s, color 0.15s;
+}
+.webr-reset-btn:hover { background-color: #6c757d; color: #fff; }
+
+/* ── Textarea code editor ── */
+.webr-editor {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 0.4rem 0.6rem;
+  background: #fff;
+  color: #212529;
+  border: none;
+  border-bottom: 1px solid #dee2e6;
+  resize: vertical;
+  outline: none;
+  overflow: auto;
+}
+.webr-editor:focus {
+  background: #fafcff;
+}
+
+/* ── Hide original controls (moved to header by JS) ── */
+.webr-controls { display: none; }
+
+/* ── Output area ── */
+.webr-output-area {
+  padding: 0.3rem 0.6rem;
+  background: #fff;
+  color: #212529;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border-top: 1px solid #dee2e6;
+  display: none;
+}
+.webr-output-area.webr-has-output { display: block; }
+.webr-output-area.webr-error-output { color: #ad0000; background: #fff8f8; }
+
+/* ── Plot area ── */
+.webr-canvas-area {
+  padding: 0.5rem;
+  background: #fff;
+  text-align: center;
+  display: none;
+  border-top: 1px solid #dee2e6;
+}
+.webr-canvas-area.webr-has-plot { display: block; }
+.webr-canvas-area canvas {
+  max-width: 100%;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+}
+</style>
+
+<div id="webr-loading-indicator">
+  <span id="webr-loading-text">⏳ Loading R engine…</span>
+</div>
+
+<script type="module">
+import { WebR } from 'https://webr.r-wasm.org/latest/webr.mjs';
+
+let webR;
+let webRReady = false;
+
+const indicator     = document.getElementById('webr-loading-indicator');
+const indicatorText = document.getElementById('webr-loading-text');
+
+function setStatus(msg, cssClass) {
+  if (!indicator) return;
+  indicatorText.textContent = msg;
+  indicator.className = cssClass || '';
+}
+
+async function initWebR() {
+  try {
+    webR = new WebR({ interactive: false });
+    await webR.init();
+    setStatus('📦 Installing packages… (first visit only)', '');
+    await webR.installPackages(['ggplot2']);
+    await webR.evalRVoid('suppressMessages(library(ggplot2))');
+
+    // Inline CSV data — no fetch() needed, works with file:// and http://
+    const csvData = {
+      'prostate.csv': `
+"lcavol","lweight","age","lbph","svi","lcp","gleason","pgg45","lpsa"
+-0.5798185,2.7695,50,-1.386294,0,-1.38629,6,0,-0.43078
+-0.9942523,3.3196,58,-1.386294,0,-1.38629,6,0,-0.16252
+-0.5108256,2.6912,74,-1.386294,0,-1.38629,7,20,-0.16252
+-1.2039728,3.2828,58,-1.386294,0,-1.38629,6,0,-0.16252
+0.7514161,3.4324,62,-1.386294,0,-1.38629,6,0,0.37156
+-1.0498221,3.2288,50,-1.386294,0,-1.38629,6,0,0.76547
+0.7371641,3.4735,64,0.615186,0,-1.38629,6,0,0.76547
+0.6931472,3.5395,58,1.536867,0,-1.38629,6,0,0.85442
+-0.7765288,3.5395,47,-1.386294,0,-1.38629,6,0,1.04732
+0.2231436,3.2445,63,-1.386294,0,-1.38629,6,0,1.04732
+0.2546422,3.6041,65,-1.386294,0,-1.38629,6,0,1.26695
+-1.3470736,3.5987,63,1.266948,0,-1.38629,6,0,1.26695
+1.6134299,3.0229,63,-1.386294,0,-0.59784,7,30,1.26695
+1.4770487,2.9982,67,-1.386294,0,-1.38629,7,5,1.34807
+1.2059708,3.442,57,-1.386294,0,-0.43078,7,5,1.39872
+1.5411591,3.0611,66,-1.386294,0,-1.38629,6,0,1.44692
+-0.4155154,3.516,70,1.244155,0,-0.59784,7,30,1.47018
+2.2884862,3.6494,66,-1.386294,0,0.37156,6,0,1.4929
+-0.5621189,3.2677,41,-1.386294,0,-1.38629,6,0,1.55814
+0.1823216,3.8254,70,1.658228,0,-1.38629,6,0,1.59939
+1.1474025,3.4194,59,-1.386294,0,-1.38629,6,0,1.639
+2.0592388,3.501,60,1.474763,0,1.34807,7,20,1.65823
+-0.5447272,3.3759,59,-0.798508,0,-1.38629,6,0,1.69562
+1.7817091,3.4516,63,0.438255,0,1.17865,7,60,1.7138
+0.3852624,3.6674,69,1.599388,0,-1.38629,6,0,1.73166
+1.446919,3.1246,68,0.300105,0,-1.38629,6,0,1.76644
+0.5128236,3.7197,65,-1.386294,0,-0.79851,7,70,1.80006
+-0.4004776,3.866,67,1.816452,0,-1.38629,7,20,1.81645
+1.0402767,3.129,67,0.223144,0,0.04879,7,80,1.84845
+2.4096442,3.3759,65,-1.386294,0,1.61939,6,0,1.89462
+0.2851789,4.0902,65,1.962908,0,-0.79851,6,0,1.92425
+0.1823216,6.1076,65,1.704748,0,-1.38629,6,0,2.00821
+1.2753628,3.0374,71,1.266948,0,-1.38629,6,0,2.00821
+0.0099503,3.2677,54,-1.386294,0,-1.38629,6,0,2.02155
+-0.0100503,3.2169,63,-1.386294,0,-0.79851,6,0,2.04769
+1.3083328,4.1198,64,2.171337,0,-1.38629,7,5,2.08567
+1.4231083,3.6571,73,-0.579818,0,1.65823,8,15,2.15756
+0.4574248,2.3749,64,-1.386294,0,-1.38629,7,15,2.19165
+2.6609586,4.0851,68,1.373716,1,1.83258,7,35,2.21375
+0.7975072,3.0131,56,0.936093,0,-0.16252,7,5,2.27727
+0.6205765,3.142,60,-1.386294,0,-1.38629,9,80,2.29757
+1.442202,3.6826,68,-1.386294,0,-1.38629,7,10,2.30757
+0.5822156,3.866,62,1.713798,0,-0.43078,6,0,2.32728
+1.7715568,3.8969,61,-1.386294,0,0.81093,7,6,2.37491
+1.4861397,3.4095,66,1.7492,0,-0.43078,7,20,2.52172
+1.6639261,3.3928,61,0.615186,0,-1.38629,7,15,2.55334
+2.7278528,3.9954,79,1.879465,1,2.65676,9,100,2.56879
+1.1631508,4.0351,68,1.713798,0,-0.43078,7,40,2.56879
+1.7457155,3.498,43,-1.386294,0,-1.38629,6,0,2.59152
+1.2208299,3.5681,70,1.373716,0,-0.79851,6,0,2.59152
+1.0919233,3.9936,68,-1.386294,0,-1.38629,7,50,2.65676
+1.660131,4.2348,64,2.073172,0,-1.38629,6,0,2.67759
+0.5128236,3.6336,64,1.492904,0,0.04879,7,70,2.68444
+2.1270405,4.1215,68,1.766442,0,1.44692,7,40,2.69124
+3.1535904,3.516,59,-1.386294,0,-1.38629,7,5,2.70471
+1.2669476,4.2801,66,2.122262,0,-1.38629,7,15,2.718
+0.9745596,2.8651,47,-1.386294,0,0.50078,7,4,2.78809
+0.463734,3.7647,49,1.423108,0,-1.38629,6,0,2.79423
+0.5423243,4.1782,70,0.438255,0,-1.38629,7,20,2.80639
+1.0612565,3.8512,61,1.294727,0,-1.38629,7,40,2.81241
+0.4574248,4.5245,73,2.326302,0,-1.38629,6,0,2.842
+1.9974177,3.7197,63,1.619388,1,1.90954,7,40,2.85359
+2.7757088,3.5249,72,-1.386294,0,1.55814,9,95,2.85359
+2.0347056,3.917,66,2.008214,1,2.11021,7,60,2.882
+2.0731719,3.623,64,-1.386294,0,-1.38629,6,0,2.882
+1.458615,3.8362,61,1.321756,0,-0.43078,7,20,2.88759
+2.0228712,3.8785,68,1.783391,0,1.32176,7,70,2.92047
+2.1983351,4.0509,72,2.307573,0,-0.43078,7,10,2.96269
+-0.4462871,4.4085,69,-1.386294,0,-1.38629,6,0,2.96269
+1.1939225,4.7804,72,2.326302,0,-0.79851,7,5,2.97298
+1.8640801,3.5932,60,-1.386294,1,1.32176,7,60,3.01308
+1.1600209,3.3411,77,1.7492,0,-1.38629,7,25,3.03735
+1.2149127,3.8254,69,-1.386294,1,0.22314,7,20,3.05636
+1.8389611,3.2367,60,0.438255,1,1.17865,9,90,3.07501
+2.9992262,3.8491,69,-1.386294,1,1.90954,7,20,3.27526
+3.1411305,3.2638,68,-0.051293,1,2.42037,7,50,3.33755
+2.010895,4.4338,72,2.122262,0,0.50078,7,60,3.39283
+2.5376572,4.3548,78,2.326302,0,-1.38629,7,10,3.4356
+2.6483002,3.5821,69,-1.386294,1,2.584,7,70,3.45789
+2.7794402,3.8232,63,-1.386294,0,0.37156,7,50,3.51304
+1.4678743,3.0704,66,0.559616,0,0.22314,7,40,3.51601
+2.5136561,3.4735,57,0.438255,0,2.32728,7,60,3.53076
+2.6130067,3.8888,77,-0.527633,1,0.55962,7,30,3.5653
+2.677591,3.8384,65,1.115142,0,1.7492,9,70,3.57094
+1.5623463,3.7099,60,1.695616,0,0.81093,7,30,3.58768
+3.3028493,3.519,64,-1.386294,1,2.32728,7,60,3.63099
+2.0241931,3.7317,58,1.638997,0,-1.38629,6,0,3.68009
+1.7316555,3.369,62,-1.386294,1,0.3001,7,30,3.71235
+2.8075938,4.7181,65,-1.386294,1,2.46385,7,60,3.98434
+1.5623463,3.6951,76,0.936093,1,0.81093,7,75,3.9936
+3.246491,4.1018,68,-1.386294,0,-1.38629,6,0,4.02981
+2.5329028,3.6776,61,1.348073,1,-1.38629,7,15,4.12955
+2.8302678,3.8764,68,-1.386294,1,1.32176,7,60,4.38515
+3.8210036,3.8969,44,-1.386294,1,2.16905,7,40,4.68444
+2.9074474,3.3962,52,-1.386294,1,2.46385,7,10,5.14312
+2.8825636,3.7739,68,1.558145,1,1.55814,7,80,5.47751
+3.4719665,3.975,68,0.438255,1,2.90417,7,20,5.58293
+`,
+      'Academic_Performance_A.csv': `student_id,Exam_Score\n1,72\n2,68\n3,85\n4,79\n5,91\n6,74\n7,66\n8,83\n9,77\n10,88\n11,70\n12,65\n13,82\n14,76\n15,90\n16,73\n17,69\n18,84\n19,78\n20,87\n21,71\n22,80\n23,75\n24,92\n25,67`,
+      'sleep_study.csv': `subject_id,hours\n1,7.2\n2,6.8\n3,8.1\n4,7.5\n5,6.5\n6,7.9\n7,7.0\n8,8.3\n9,6.7\n10,7.4\n11,8.0\n12,7.2\n13,6.9\n14,7.8\n15,8.2\n16,7.1\n17,6.6\n18,7.7\n19,8.0\n20,7.3`,
+      'student_admission.csv': `student_id,admitted\n1,1\n2,1\n3,0\n4,1\n5,1\n6,0\n7,1\n8,1\n9,0\n10,1\n11,1\n12,0\n13,1\n14,1\n15,1\n16,0\n17,1\n18,1\n19,0\n20,1\n21,1\n22,1\n23,0\n24,1\n25,1\n26,0\n27,1\n28,1\n29,1\n30,0\n31,1\n32,1\n33,0\n34,1\n35,1\n36,1\n37,0\n38,1\n39,1\n40,0\n41,1\n42,1\n43,1\n44,0\n45,1\n46,1\n47,0\n48,1\n49,1\n50,1\n51,0\n52,1\n53,1\n54,1\n55,0\n56,1\n57,1\n58,0\n59,1\n60,1\n61,1\n62,0\n63,1\n64,1\n65,0\n66,1\n67,1\n68,1\n69,0\n70,1\n71,1\n72,0\n73,1\n74,1\n75,1\n76,0\n77,1\n78,1\n79,0\n80,1`,
+      'plant_yield.csv': `fertilizer_a,fertilizer_b\n52.1,45.3\n48.7,42.8\n55.3,48.1\n49.2,43.6\n53.8,46.9\n47.5,41.2\n56.1,49.4\n50.4,44.7\n54.6,47.5\n48.1,42.3\n51.9,45.8\n53.2,46.1\n49.8,43.9\n55.7,48.6\n50.0,44.2`,
+      'braking_dist.csv': `distance,car\n34.2,X\n36.1,X\n33.8,X\n35.4,X\n34.9,X\n36.7,X\n33.5,X\n35.2,X\n34.6,X\n36.3,X\n33.9,X\n35.8,X\n31.5,Y\n38.4,Y\n29.8,Y\n40.2,Y\n33.1,Y\n37.6,Y\n30.4,Y\n39.7,Y\n32.8,Y\n38.1,Y\n31.2,Y\n40.5,Y`,
+      'ch8-study-methods.csv': `method,score\nLecture,68\nLecture,71\nLecture,75\nLecture,70\nLecture,74\nLecture,77\nLecture,69\nLecture,73\nOnline,72\nOnline,78\nOnline,80\nOnline,75\nOnline,77\nOnline,79\nOnline,74\nOnline,81\nOnline,76\nOnline,77\nGroup,77\nGroup,82\nGroup,84\nGroup,79\nGroup,81\nGroup,83\nGroup,78\nGroup,86\nGroup,80\nGroup,83\nGroup,85\nGroup,82\nTutor,81\nTutor,88\nTutor,90\nTutor,85\nTutor,87\nTutor,91\nTutor,83\nTutor,89\nTutor,86\nSelfStudy,70\nSelfStudy,75\nSelfStudy,78\nSelfStudy,72\nSelfStudy,74\nSelfStudy,77\nSelfStudy,71\nSelfStudy,76\nSelfStudy,73\nSelfStudy,75\nSelfStudy,74`,
+      'ch8-delivery-times.csv': `company,time\nCompanyA,42\nCompanyA,39\nCompanyA,44\nCompanyA,41\nCompanyA,38\nCompanyA,43\nCompanyA,40\nCompanyB,55\nCompanyB,57\nCompanyB,53\nCompanyB,59\nCompanyB,56\nCompanyB,60\nCompanyB,54\nCompanyB,58\nCompanyB,61\nCompanyC,48\nCompanyC,45\nCompanyC,50\nCompanyC,47\nCompanyC,49\nCompanyC,46\nCompanyC,51\nCompanyC,48\nCompanyD,61\nCompanyD,65\nCompanyD,63\nCompanyD,67\nCompanyD,64\nCompanyD,66\nCompanyD,62\nCompanyD,68\nCompanyD,69\nCompanyD,64`,
+      'ch8-fertilizer-yield.csv': `fertilizer,yield\nF1,41\nF1,43\nF1,39\nF1,45\nF1,42\nF1,44\nF1,40\nF1,46\nF2,47\nF2,49\nF2,45\nF2,51\nF2,48\nF2,50\nF2,46\nF2,52\nF2,49\nF2,47\nF3,52\nF3,54\nF3,50\nF3,56\nF3,53\nF3,55\nF3,51\nF3,57\nF3,54\nF3,52\nF3,55\nF3,53\nF4,44\nF4,46\nF4,42\nF4,48\nF4,45\nF4,47\nF4,43\nF4,49\nF4,46`,
+      'heart_rate.csv': `exercise,heartrate\n1.0,85\n1.5,78\n2.0,81\n2.0,78\n2.5,82\n3.0,77\n3.0,80\n3.5,75\n4.0,76\n4.0,72\n4.5,76\n5.0,74\n5.0,72\n5.5,75\n6.0,69\n6.0,72\n6.5,66\n7.0,70\n7.0,67\n7.5,69\n8.0,63\n8.5,66\n9.0,61\n9.5,63\n10.0,59`,
+      'toronto_homes.csv': `size,price\n8,155\n9,177\n10,189\n10,192\n11,205\n12,218\n12,219\n13,231\n13,240\n14,248\n14,252\n15,263\n15,270\n16,273\n16,285\n17,293\n17,299\n18,310\n18,314\n19,321\n19,329\n20,336\n20,350\n21,354\n21,365\n22,371\n22,380\n23,388\n24,403\n25,417`,
+      'co2_annual.csv': `year_code,co2_ppm\n0,369.5\n1,371.1\n2,373.2\n3,375.8\n4,377.5\n5,379.8\n6,381.9\n7,383.8\n8,385.6\n9,387.4`,
+      'marathon_training.csv': `miles,finish_time\n20,298\n22,289\n24,290\n25,282\n25,288\n28,275\n30,271\n30,277\n32,272\n33,264\n35,261\n35,266\n38,259\n38,253\n40,250\n40,254\n42,245\n42,251\n45,239\n45,243\n47,234\n48,237\n50,228\n50,232\n52,223\n53,226\n55,217\n55,221\n57,212\n58,215\n60,206\n62,206\n65,194\n65,200\n70,183`
+    };
+    const enc = new TextEncoder();
+    for (const [fname, content] of Object.entries(csvData)) {
+      await webR.FS.writeFile('/home/web_user/' + fname, enc.encode(content));
+    }
+
+    webRReady = true;
+    setStatus('', 'webr-ready');
+    document.querySelectorAll('.webr-run-btn').forEach(btn => {
+      btn.disabled = false;
+      btn.textContent = '▶ Run';
+    });
+  } catch (e) {
+    setStatus('❌ Failed to load R: ' + e.message, 'webr-error');
+  }
+}
+
+function setupCell(cell) {
+  const textarea  = cell.querySelector('.webr-editor');
+  const runBtn    = cell.querySelector('.webr-run-btn');
+  const resetBtn  = cell.querySelector('.webr-reset-btn');
+  const outArea   = cell.querySelector('.webr-output-area');
+  const canvasDiv = cell.querySelector('.webr-canvas-area');
+  const canvas    = canvasDiv ? canvasDiv.querySelector('canvas') : null;
+  const header    = cell.querySelector('.webr-exercise-header');
+  const origCode  = textarea.value;
+
+  // Auto-size textarea to content
+  function fitHeight() {
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+  }
+  fitHeight();
+  textarea.addEventListener('input', fitHeight);
+
+  // Move buttons into header
+  const btnGroup = document.createElement('div');
+  btnGroup.className = 'webr-btn-group';
+  btnGroup.appendChild(runBtn);
+  btnGroup.appendChild(resetBtn);
+  header.appendChild(btnGroup);
+
+  // Reset
+  resetBtn.addEventListener('click', () => {
+    textarea.value = origCode;
+    fitHeight();
+    outArea.textContent = '';
+    outArea.className = 'webr-output-area';
+    if (canvasDiv) canvasDiv.className = 'webr-canvas-area';
+  });
+
+  // Run
+  runBtn.addEventListener('click', async () => {
+    if (!webRReady) return;
+    runBtn.disabled = true;
+    runBtn.textContent = '⏳';
+    outArea.textContent = '';
+    outArea.className = 'webr-output-area';
+    if (canvasDiv) canvasDiv.className = 'webr-canvas-area';
+
+    try {
+      const code = textarea.value;
+      const shelter = await new webR.Shelter();
+      const captureOpts = { withAutoprint: true };
+      if (canvas) captureOpts.captureGraphics = { width: 504, height: 378, bg: 'white' };
+
+      const result = await shelter.captureR(code, captureOpts);
+      await shelter.purge();
+
+      const lines = result.output
+        .filter(x => x.type === 'stdout' || x.type === 'message')
+        .map(x => x.data)
+        .join('\n')
+        .trimEnd();
+
+      if (lines) {
+        outArea.textContent = lines;
+        outArea.classList.add('webr-has-output');
+      }
+
+      if (canvas && result.images && result.images.length > 0) {
+        canvasDiv.classList.add('webr-has-plot');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 504; canvas.height = 378;
+        ctx.clearRect(0, 0, 504, 378);
+        for (const img of result.images) ctx.drawImage(img, 0, 0, 504, 378);
+      }
+    } catch (e) {
+      outArea.textContent = 'Error: ' + e.message;
+      outArea.classList.add('webr-has-output', 'webr-error-output');
+    }
+
+    runBtn.disabled = false;
+    runBtn.textContent = '▶ Run';
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.webr-exercise').forEach(setupCell);
+  initWebR();
+});
+</script>
 
 
 
@@ -81,6 +470,7 @@ div.csl-indent {
 }
 </style>
 
+<link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
 <body>
@@ -93,6 +483,9 @@ div.csl-indent {
       <nav role="navigation">
 
 <ul class="summary">
+<li class="toc-brand"><a href="./">An Introduction to Mathematical Oncology</a></li>
+
+<li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Welcome</a></li>
 <li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a>
 <ul>
@@ -183,6 +576,7 @@ div.csl-indent {
 <li class="chapter" data-level="6.3.2" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#least-squares-estimation-of-the-regression-coefficients"><i class="fa fa-check"></i><b>6.3.2</b> Least Squares Estimation of the Regression Coefficients</a></li>
 <li class="chapter" data-level="6.3.3" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#interpretation-of-the-regression-coefficients"><i class="fa fa-check"></i><b>6.3.3</b> Interpretation of the Regression Coefficients</a></li>
 <li class="chapter" data-level="6.3.4" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#sampling-distribution-of-the-least-squares-estimators"><i class="fa fa-check"></i><b>6.3.4</b> Sampling Distribution of the Least Squares Estimators</a></li>
+<li class="chapter" data-level="6.3.5" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#hypothesis-testing-and-confidence-intervals-for-the-regression-coefficients"><i class="fa fa-check"></i><b>6.3.5</b> Hypothesis Testing and Confidence Intervals for the Regression Coefficients</a></li>
 </ul></li>
 <li class="chapter" data-level="6.4" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#logistic-regression"><i class="fa fa-check"></i><b>6.4</b> Logistic Regression</a>
 <ul>
@@ -190,10 +584,15 @@ div.csl-indent {
 <li class="chapter" data-level="6.4.2" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#estimation-of-regression-coefficients"><i class="fa fa-check"></i><b>6.4.2</b> Estimation of Regression Coefficients</a></li>
 <li class="chapter" data-level="6.4.3" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#interpretation-of-regression-coefficients-1"><i class="fa fa-check"></i><b>6.4.3</b> Interpretation of Regression Coefficients</a></li>
 <li class="chapter" data-level="6.4.4" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#statistical-inference-in-logistic-regression"><i class="fa fa-check"></i><b>6.4.4</b> Statistical Inference in Logistic Regression</a></li>
+<li class="chapter" data-level="6.4.5" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#confusion-matrix"><i class="fa fa-check"></i><b>6.4.5</b> Confusion Matrix</a></li>
+<li class="chapter" data-level="6.4.6" data-path="statistical-methods-in-oncology.html"><a href="statistical-methods-in-oncology.html#multiple-logistic-regression"><i class="fa fa-check"></i><b>6.4.6</b> Multiple Logistic Regression</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="hello.html"><a href="hello.html"><i class="fa fa-check"></i><b>7</b> Hello</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li class="toc-footer"><a href="https://github.com/nishanmudalige/UTM_FSU_Mathematical_Statistical_Oncology" target="blank">UTM &amp; FSU Oncology Repository</a></li>
+
 </ul>
 
       </nav>
@@ -614,10 +1013,16 @@ One can check directly that <span class="math inline">\(B_i = a_T\kappa\,C_i&#39
 <li><ol style="list-style-type: lower-roman">
 <li><span class="math inline">\(B_3=a_Tm_T&gt;0\)</span> always, since <span class="math inline">\(a_T,m_T&gt;0\)</span>.</li>
 </ol></li>
-<li>(ii) <span class="math inline">\(B_0&gt;0 \iff s/d&gt;a_T\)</span>, which (recalling <span class="math inline">\(\theta\le1\)</span>) is implied by, but slightly weaker than, the tumor-free stability condition of Proposition <a href="the-kuznetsov-tumourimmune-model.html#prp:red-1">3.2</a>. We again focus on <span class="math inline">\(B_0&lt;0\)</span>, the regime in which a tumor-present equilibrium is guaranteed to exist.</li>
-<li>(iii) If <span class="math inline">\(p_T&gt;m_Tg+d\)</span> (effector activation dominates exhaustion, the same standing assumption used for the wild-type model) and <span class="math inline">\(\kappa&gt;g\)</span>, then <span class="math inline">\(B_2 = a_Tm_T(g-\kappa)+a_T(d-p_T)&lt;0\)</span>, since both terms are negative.</li>
-<li>(iv) Under the same condition, <span class="math inline">\(B_1 = \kappa a_T(p_T-gm_T-d)+a_Tgd+\kappa s&gt;0\)</span>, since every term is positive.
+<li><ol start="2" style="list-style-type: lower-roman">
+<li><span class="math inline">\(B_0&gt;0 \iff s/d&gt;a_T\)</span>, which (recalling <span class="math inline">\(\theta\le1\)</span>) is implied by, but slightly weaker than, the tumor-free stability condition of Proposition <a href="the-kuznetsov-tumourimmune-model.html#prp:red-1">3.2</a>. We again focus on <span class="math inline">\(B_0&lt;0\)</span>, the regime in which a tumor-present equilibrium is guaranteed to exist.</li>
+</ol></li>
+<li><ol start="3" style="list-style-type: lower-roman">
+<li>If <span class="math inline">\(p_T&gt;m_Tg+d\)</span> (effector activation dominates exhaustion, the same standing assumption used for the wild-type model) and <span class="math inline">\(\kappa&gt;g\)</span>, then <span class="math inline">\(B_2 = a_Tm_T(g-\kappa)+a_T(d-p_T)&lt;0\)</span>, since both terms are negative.</li>
+</ol></li>
+<li><ol start="4" style="list-style-type: lower-roman">
+<li>Under the same condition, <span class="math inline">\(B_1 = \kappa a_T(p_T-gm_T-d)+a_Tgd+\kappa s&gt;0\)</span>, since every term is positive.
 As before, the sign sequence <span class="math inline">\((+,-,+,-)\)</span> has three sign changes, so Descartes’ Rule predicts either one or three positive roots of <a href="the-kuznetsov-tumourimmune-model.html#eq:red-cubic">(3.7)</a>, with three being the generic case – the hallmark of bistability between a low- and a high-tumor-burden resistant equilibrium. This is exactly the qualitative structure established for the Kuznetsov model in Section <a href="the-kuznetsov-tumourimmune-model.html#sec:kuznetsov">3.1</a>, now shown to persist under both forms of immune resistance considered here, provided effector activation continues to dominate tumor-induced exhaustion (<span class="math inline">\(p_T&gt;m_Tg+d\)</span>) at the resistant phenotype’s parameter values.</li>
+</ol></li>
 </ul>
 <p>The Jacobian at <span class="math inline">\(\mathcal{E}_1\)</span> is
 <span class="math display">\[\begin{equation*}
@@ -700,17 +1105,7 @@ Figure 3.6: Bifurcation diagram of the extended Kuznetsov model under immune che
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
-  "sharing": {
-    "github": false,
-    "facebook": true,
-    "twitter": true,
-    "linkedin": false,
-    "weibo": false,
-    "instapaper": false,
-    "vk": false,
-    "whatsapp": false,
-    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-  },
+  "sharing": false,
   "fontsettings": {
     "theme": "white",
     "family": "sans",
@@ -735,7 +1130,8 @@ gitbook.start({
   },
   "toc": {
     "collapse": "subsection"
-  }
+  },
+  "info": false
 });
 });
 </script>
